@@ -1,0 +1,460 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Type.Rel.Order</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('type', 'koshucode-baala-type', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-Rel-Order.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Type-Rel-Order.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-type-0.199.0.0: Additional data types for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Type.Rel.Order</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Ordering</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Portion of list</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Portion of relation</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Ordered relation.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:relBodyOrder"
+	    >relBodyOrder</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
+	    >GetTermNames</a
+	    > he) =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; he -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [[c]]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Portion"
+	    >Portion</a
+	    > = <a href="#v:Portion"
+	    >Portion</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:portionTop"
+		>portionTop</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		></li
+	      ><li
+	      ><a href="#v:portionMiddle"
+		>portionMiddle</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		></li
+	      ><li
+	      ><a href="#v:portionBottom"
+		>portionBottom</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		></li
+	      ><li
+	      ><a href="#v:portionParts"
+		>portionParts</a
+		> :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		>]</li
+	      ><li
+	      ><a href="#v:portionPer"
+		>portionPer</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		></li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><a href="#v:nullPortion"
+	    >nullPortion</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="Koshucode-Baala-Type-Rel-Order.html#t:Portion"
+	    >Portion</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:takePortion"
+	    >takePortion</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="Koshucode-Baala-Type-Rel-Order.html#t:Portion"
+	    >Portion</a
+	    > -&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RelPortion"
+	    >RelPortion</a
+	    > = ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="Koshucode-Baala-Type-Rel-Order.html#t:Portion"
+	    >Portion</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:takeRelPortion"
+	    >takeRelPortion</a
+	    > :: (<a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
+	    >GetTermNames</a
+	    > he, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c) =&gt; <a href="Koshucode-Baala-Type-Rel-Order.html#t:RelPortion"
+	    >RelPortion</a
+	    > -&gt; he -&gt; [[c]] -&gt; [[c]]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Ordering</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relBodyOrder" class="def"
+	    >relBodyOrder</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
+	    >GetTermNames</a
+	    > he) =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; he -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [[c]] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-Order.html#relBodyOrder');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sort relation body according to order specification.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Portion of list</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Portion" class="def"
+	    >Portion</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Rel-Order.html#Portion');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Portion description.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:Portion" class="def"
+		  >Portion</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:portionTop" class="def"
+			>portionTop</a
+			> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+			>Maybe</a
+			> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+			>Int</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Top <em
+			  >N</em
+			  > elements.</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:portionMiddle" class="def"
+			>portionMiddle</a
+			> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+			>Maybe</a
+			> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+			>Int</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Middle <em
+			  >N</em
+			  > elements.</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:portionBottom" class="def"
+			>portionBottom</a
+			> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+			>Maybe</a
+			> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+			>Int</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Bottom <em
+			  >N</em
+			  > elements.</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:portionParts" class="def"
+			>portionParts</a
+			> :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+			>Int</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Indecies of <em
+			  >N</em
+			  > chunks.</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:portionPer" class="def"
+			>portionPer</a
+			> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+			>Maybe</a
+			> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+			>Int</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Divided <em
+			  >N</em
+			  > chunks.</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Portion" class="caption collapser" onclick="toggleSection('i:Portion')"
+	    >Instances</p
+	    ><div id="section.i:Portion" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Type-Rel-Order.html#t:Portion"
+		      >Portion</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Rel-Order.html#line-43');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Type-Rel-Order.html#t:Portion"
+		      >Portion</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Rel-Order.html#line-43');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Type-Rel-Order.html#t:Portion"
+		      >Portion</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Rel-Order.html#line-43');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > <a href="Koshucode-Baala-Type-Rel-Order.html#t:Portion"
+		      >Portion</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Rel-Order.html#line-45');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nullPortion" class="def"
+	    >nullPortion</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="Koshucode-Baala-Type-Rel-Order.html#t:Portion"
+	    >Portion</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Rel-Order.html#nullPortion');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test portion is not effective.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:takePortion" class="def"
+	    >takePortion</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="Koshucode-Baala-Type-Rel-Order.html#t:Portion"
+	    >Portion</a
+	    > -&gt; [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-Order.html#takePortion');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take portion of list.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Portion of relation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RelPortion" class="def"
+	    >RelPortion</a
+	    > = ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="Koshucode-Baala-Type-Rel-Order.html#t:Portion"
+	    >Portion</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Type-Rel-Order.html#RelPortion');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Portion description for relation.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:takeRelPortion" class="def"
+	    >takeRelPortion</a
+	    > :: (<a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
+	    >GetTermNames</a
+	    > he, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c) =&gt; <a href="Koshucode-Baala-Type-Rel-Order.html#t:RelPortion"
+	    >RelPortion</a
+	    > -&gt; he -&gt; [[c]] -&gt; [[c]] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-Order.html#takeRelPortion');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take effective (non-null) portion of relation body.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.196.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.199.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -195,6 +195,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ><li class="src short"
 	  ><a href="#v:gatherToAssoc"
 	    >gatherToAssoc</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > k =&gt; [(k, v)] -&gt; [(k, [v])]</li
+	  ><li class="src short"
+	  ><a href="#v:gatherToAssocOrder"
+	    >gatherToAssocOrder</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
 	    > k =&gt; [(k, v)] -&gt; [(k, [v])]</li
@@ -673,6 +679,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 </code
 		></strong
 	      >[(1,&quot;ca&quot;), (2,&quot;b&quot;)]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:gatherToAssocOrder" class="def"
+	    >gatherToAssocOrder</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > k =&gt; [(k, v)] -&gt; [(k, [v])] <a onclick="showSource('src/Koshucode-Baala-Base-List-Assoc.html#gatherToAssocOrder');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Gather values of duplicable associations.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>gatherToAssocOrder [(1 :: Int, 'a'), (2, 'b'), (1, 'c')]
+</code
+		></strong
+	      >[(1,&quot;ac&quot;),(2,&quot;b&quot;)]
 </pre
 	    ></div
 	  ></div

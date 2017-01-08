@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.196.0.0
+@version 0.199.0.0
 
 
 -- | Exit process.
@@ -465,6 +465,40 @@ instance Koshucode.Baala.Overture.Name.String.GetName (Koshucode.Baala.Overture.
 instance GHC.Show.Show (Koshucode.Baala.Overture.Fn.Fn2 a b c)
 instance GHC.Classes.Eq (Koshucode.Baala.Overture.Fn.Fn2 a b c)
 instance GHC.Classes.Ord (Koshucode.Baala.Overture.Fn.Fn2 a b c)
+
+
+-- | Value of some types.
+module Koshucode.Baala.Overture.Value
+
+-- | Value of some types.
+data Value
+
+-- | Empty
+VEmpty :: Value
+
+-- | Boolean
+VBool :: Bool -> Value
+
+-- | Integer
+VInt :: Int -> Value
+
+-- | Integer
+VInteger :: Integer -> Value
+
+-- | Text
+VStr :: String -> Value
+
+-- | Strict text
+VTx :: Text -> Value
+
+-- | Lazy text
+VTz :: Text -> Value
+
+-- | List of values
+VList :: [Value] -> Value
+instance GHC.Classes.Ord Koshucode.Baala.Overture.Value.Value
+instance GHC.Classes.Eq Koshucode.Baala.Overture.Value.Value
+instance GHC.Show.Show Koshucode.Baala.Overture.Value.Value
 
 
 -- | Derivied types.

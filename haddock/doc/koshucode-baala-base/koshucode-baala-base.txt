@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.196.0.0
+@version 0.199.0.0
 
 
 -- | Suffix and prefix.
@@ -214,16 +214,35 @@ sequenceSnd :: (Monad m) => [(a, m b)] -> m [(a, b)]
 -- | Reexport list.
 module Koshucode.Baala.Base.Prelude.Import
 
+-- | When you want to acquire a resource, do some work with it, and then
+--   release the resource, it is a good idea to use <a>bracket</a>, because
+--   <a>bracket</a> will install the necessary exception handler to release
+--   the resource in the event that an exception is raised during the
+--   computation. If an exception is raised, then <a>bracket</a> will
+--   re-raise the exception (after performing the release).
+--   
+--   A common example is opening a file:
+--   
+--   <pre>
+--   bracket
+--     (openFile "filename" ReadMode)
+--     (hClose)
+--     (\fileHandle -&gt; do { ... })
+--   </pre>
+--   
+--   The arguments to <a>bracket</a> are in this order so that we can
+--   partially apply it, e.g.:
+--   
+--   <pre>
+--   withFile name mode = bracket (openFile name mode) hClose
+--   </pre>
+bracket :: IO a -> (a -> IO b) -> (a -> IO c) -> IO c
+
 -- | Composition of monadic functions.
 (<.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
 
 -- | Left-to-right Kleisli composition of monads.
 (>=>) :: Monad m => (a -> m b) -> (b -> m c) -> a -> m c
-
--- | Evaluate each monadic action in the structure from left to right, and
---   collect the results. For a version that ignores the results see
---   <a>sequence_</a>.
-sequence :: Traversable t => forall (m :: * -> *) a. Monad m => t (m a) -> m (t a)
 
 -- | This generalizes the list-based <tt>filter</tt> function.
 filterM :: Monad m => (a -> m Bool) -> [a] -> m [a]
@@ -254,6 +273,18 @@ filterM :: Monad m => (a -> m Bool) -> [a] -> m [a]
 --   Note: <a>foldM</a> is the same as <a>foldlM</a>
 foldM :: (Foldable t, Monad m) => (b -> a -> m b) -> b -> t a -> m b
 
+-- | <tt><a>guard</a> b</tt> is <tt><a>pure</a> ()</tt> if <tt>b</tt> is
+--   <a>True</a>, and <a>empty</a> if <tt>b</tt> is <a>False</a>.
+guard :: Alternative f => Bool -> f ()
+
+-- | Evaluate each monadic action in the structure from left to right, and
+--   collect the results. For a version that ignores the results see
+--   <a>sequence_</a>.
+sequence :: Traversable t => forall (m :: * -> *) a. Monad m => t (m a) -> m (t a)
+
+-- | The reverse of <a>when</a>.
+unless :: Applicative f => Bool -> f () -> f ()
+
 -- | Conditional execution of <a>Applicative</a> expressions. For example,
 --   
 --   <pre>
@@ -263,13 +294,6 @@ foldM :: (Foldable t, Monad m) => (b -> a -> m b) -> b -> t a -> m b
 --   will output the string <tt>Debugging</tt> if the Boolean value
 --   <tt>debug</tt> is <a>True</a>, and otherwise do nothing.
 when :: Applicative f => Bool -> f () -> f ()
-
--- | The reverse of <a>when</a>.
-unless :: Applicative f => Bool -> f () -> f ()
-
--- | <tt><a>guard</a> b</tt> is <tt><a>pure</a> ()</tt> if <tt>b</tt> is
---   <a>True</a>, and <a>empty</a> if <tt>b</tt> is <a>False</a>.
-guard :: Alternative f => Bool -> f ()
 
 -- | Strict bytestring.
 type Bs = ByteString
@@ -1238,10 +1262,18 @@ splitBy :: (a -> Bool) -> SplitList3e a
 -- | Divide list into sublists of given length.
 --   
 --   <pre>
---   &gt;&gt;&gt; chunks 2 "abcdefg"
---   ["ab","cd","ef","g"]
+--   &gt;&gt;&gt; dividePer 7 ['a' .. 'z']
+--   ["abcdefg", "hijklmn", "opqrstu", "vwxyz"]
 --   </pre>
-chunks :: Int -> [a] -> [[a]]
+dividePer :: Int -> [a] -> [[a]]
+
+-- | Divide list into <i>N</i> portions.
+--   
+--   <pre>
+--   &gt;&gt;&gt; divideInto 4 ['a' .. 'z']
+--   ["abcdefg", "hijklmn", "opqrstu", "vwxyz"]
+--   </pre>
+divideInto :: Int -> [a] -> [[a]]
 
 -- | Divide list.
 --   
@@ -1747,6 +1779,22 @@ takeFirst :: [a] -> [a]
 --   </pre>
 takeLast :: [a] -> [a]
 
+-- | Take middle <i>N</i> elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; (`takeMiddle` ['A' .. 'Z']) &lt;$&gt; [-1 .. 7 :: Int]
+--   ["", "", "M", "MN", "LMN", "LMNO", "KLMNO", "KLMNOP", "JKLMNOP"]
+--   </pre>
+takeMiddle :: Int -> [a] -> [a]
+
+-- | Take <i>N</i> elements at the end of the list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeEnd 3 "ABCDEFG"
+--   "EFG"
+--   </pre>
+takeEnd :: Int -> [a] -> [a]
+
 -- | Take elements at odd positions, i.e., first, third, ...
 --   
 --   <pre>
@@ -1788,6 +1836,14 @@ takeFill :: a -> Int -> [a] -> [a]
 --     [0,0,6,7,8]
 --   </pre>
 takeTailFill :: a -> Int -> [a] -> [a]
+
+-- | Take indexed chunks from <i>N</i> chunks.
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeChunks 20 [10, 0, 19, 20] [0 .. 98 :: Int]
+--   [[50,51,52,53,54], [0,1,2,3,4], [95,96,97,98], []]
+--   </pre>
+takeChunks :: Int -> [Int] -> [a] -> [[a]]
 
 -- | Make singleton list.
 --   
@@ -1979,6 +2035,14 @@ gatherToMapSwap :: (Ord k) => [(v, k)] -> Map k [v]
 --   </pre>
 gatherToAssoc :: (Ord k) => [(k, v)] -> [(k, [v])]
 
+-- | Gather values of duplicable associations.
+--   
+--   <pre>
+--   &gt;&gt;&gt; gatherToAssocOrder [(1 :: Int, 'a'), (2, 'b'), (1, 'c')]
+--   [(1,"ac"),(2,"b")]
+--   </pre>
+gatherToAssocOrder :: (Ord k) => [(k, v)] -> [(k, [v])]
+
 
 -- | Additional prelude.
 module Koshucode.Baala.Base.Prelude
@@ -2085,14 +2149,11 @@ progAndArgs :: IO (String, [String])
 -- | Retrieve via HTTP.
 module Koshucode.Baala.Base.IO.Http
 
--- | URI.
-type UriText = String
-
 -- | Pair of protocol name and proxy URI.
-type HttpProxy = (String, Maybe UriText)
+type HttpProxy = (String, Maybe IOPath)
 
 -- | Get HTTP content as lazy bytestring.
-uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) Bz)
+uriContent :: [HttpProxy] -> IOPath -> IO (Either (Int, String) Bz)
 
 -- | Text message of HTTP exception.
 httpExceptionSummary :: HttpException -> String
@@ -2672,7 +2733,7 @@ bracketTable :: (Eq a) => [(b, (Test a, Test a))] -> GetBracket b a
 --   &gt;&gt;&gt; conv ["&gt; aa", "/&gt; bb", "//- cc", "///cc", "//- dd", "//- ee", "/- ff"]
 --   Right "&gt; aa ( &gt; bb ( - cc cc | - dd | - ee ) | - ff )"
 --   </pre>
-indentBranch :: (a -> Maybe Int) -> Test a -> a -> a -> a -> [[a]] -> Ab [[a]]
+indentBranch :: (Eq a) => (a -> Maybe Int) -> Test a -> a -> a -> a -> [[a]] -> Ab [[a]]
 instance GHC.Classes.Ord b => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Bracket.Bracket b)
 instance GHC.Classes.Eq b => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Bracket.Bracket b)
 instance GHC.Show.Show b => GHC.Show.Show (Koshucode.Baala.Base.Code.Bracket.Bracket b)
@@ -2691,14 +2752,29 @@ TreeL :: z -> RawTree b y z
 --   and subtrees.
 TreeB :: b -> y -> [RawTree b y z] -> RawTree b y z
 
--- | Map function to all leaves.
-treeMapL :: (z1 -> z2) -> RawTree b y z1 -> RawTree b y z2
+-- | Height of tree.
+--   
+--   <pre>
+--   &gt;&gt;&gt; treeHeight $ TreeB () "Y1" [TreeL "Z1", TreeL "Z2", TreeB () "Y2" [TreeL "Z3"]]
+--   3
+--   </pre>
+treeHeight :: RawTree b y z -> Int
 
--- | Map function to all branches.
-treeMapB :: (b -> y -> [RawTree b y z] -> RawTree b y z) -> Map (RawTree b y z)
+-- | Collect branch elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; treeListY $ TreeB () "Y1" [TreeL "Z1", TreeL "Z2", TreeB () "Y2" [TreeL "Z3"]]
+--   ["Y1","Y2"]
+--   </pre>
+treeListY :: RawTree b y z -> [y]
 
--- | Collect leaves in tree.
-treeLeaves :: RawTree b y z -> [z]
+-- | Collect leaf elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; treeListZ $ TreeB () "Y1" [TreeL "Z1", TreeL "Z2", TreeB () "Y2" [TreeL "Z3"]]
+--   ["Z1","Z2","Z3"]
+--   </pre>
+treeListZ :: RawTree b y z -> [z]
 
 -- | Convert tree to path list.
 --   
@@ -2707,6 +2783,15 @@ treeLeaves :: RawTree b y z -> [z]
 --   [(["Y1"],"Z1"), (["Y1"],"Z2"), (["Y1","Y2"],"Z3")]
 --   </pre>
 treePaths :: RawTree b y z -> [([y], z)]
+
+-- | Map function to tree elements.
+treeMap :: (b1 -> b2) -> (y1 -> y2) -> (z1 -> z2) -> RawTree b1 y1 z1 -> RawTree b2 y2 z2
+
+-- | Map function to branch element.
+treeMapY :: (y1 -> y2) -> RawTree b y1 z -> RawTree b y2 z
+
+-- | Map function to leaf element.
+treeMapZ :: (z1 -> z2) -> RawTree b y z1 -> RawTree b y z2
 
 -- | Simplify tree by removing double brackets, like <tt>((a))</tt> to
 --   <tt>(a)</tt>.
@@ -2717,43 +2802,56 @@ treePaths :: RawTree b y z -> [([y], z)]
 --   </pre>
 undouble :: Test b -> Map (RawTree b y z)
 
--- | Pretty print for single raw tree. Branches are marked usign right
---   arrow (<tt>&gt;</tt>), and leaves are marked using hyphen
+-- | Divide branch into leaves and branches.
+partitionLB :: [RawTree b y z] -> ([RawTree b y z], [RawTree b y z])
+
+-- | Convert single raw tree to printable lines. Branches are marked usign
+--   right arrow (<tt>&gt;</tt>), and leaves are marked using hyphen
 --   (<tt>-</tt>).
+ppRawTree :: (Show b, Show y, Show z) => RawTree b y z -> [String]
+
+-- | Convert multiple raw trees to printable lines.
+ppRawTrees :: (Show b, Show y, Show z) => [RawTree b y z] -> [String]
+
+-- | Pretty print raw tree.
 --   
 --   <pre>
---   &gt;&gt;&gt; mapM_ putStrLn $ ppRawTree $ TreeB () "Y1" [TreeL "Z1", TreeB () "Y2" [TreeL "Z2", TreeL "Z3"]]
+--   &gt;&gt;&gt; printTree $ TreeB () "Y1" [TreeL "Z1", TreeB () "Y2" [TreeL "Z2", TreeL "Z3"]]
+--   Height of tree      = 3
+--   Number of branches  = 2
+--   Number of leaves    = 3
+--   .
 --   &gt; () "Y1"
 --     - "Z1"
 --     &gt; () "Y2"
 --       - "Z2"
 --       - "Z3"
 --   </pre>
-ppRawTree :: (Show b, Show y, Show z) => RawTree b y z -> [String]
+printTree :: (Show b, Show y, Show z) => RawTree b y z -> IO ()
 
--- | Pretty print for multiple raw trees.
-ppRawTrees :: (Show b, Show y, Show z) => [RawTree b y z] -> [String]
+-- | Pretty print raw trees.
+printTrees :: (Show b, Show y, Show z) => [RawTree b y z] -> IO ()
 
 -- | Tree with open/close brackets.
 type CodeTree b a = RawTree b (Maybe (a, a)) a
 
 -- | Convert code elements to a single code tree.
-codeTree :: (Ord p, GetCodePos a) => GetBracket p a -> Bracket p -> p -> [a] -> Ab (CodeTree p a)
+codeTree :: (Ord b, GetCodePos a) => GetBracket b a -> Bracket b -> b -> [a] -> Ab (CodeTree b a)
 
 -- | Convert code elements to code trees.
-codeTrees :: (Ord p, GetCodePos a) => GetBracket p a -> Bracket p -> [a] -> Ab [CodeTree p a]
+codeTrees :: (Ord b, GetCodePos a) => GetBracket b a -> Bracket b -> [a] -> Ab [CodeTree b a]
 
 -- | Wrap trees into single tree.
-codeTreeWrap :: p -> [CodeTree p a] -> CodeTree p a
+codeTreeWrap :: b -> [CodeTree b a] -> CodeTree b a
 
 -- | Mapping function for <a>CodeTree</a>.
 codeTreeFmap :: (a -> b) -> CodeTree p a -> CodeTree p b
 
 -- | Convert tree to list of tokens.
-untree :: CodeTree p a -> [a]
+untree :: CodeTree b a -> [a]
 
 -- | Convert tree to list of tokens.
-untrees :: [CodeTree p a] -> [a]
+untrees :: [CodeTree b a] -> [a]
 instance (GHC.Classes.Ord b, GHC.Classes.Ord y, GHC.Classes.Ord z) => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Tree.RawTree b y z)
 instance (GHC.Classes.Eq b, GHC.Classes.Eq y, GHC.Classes.Eq z) => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Tree.RawTree b y z)
 instance (GHC.Show.Show b, GHC.Show.Show y, GHC.Show.Show z) => GHC.Show.Show (Koshucode.Baala.Base.Code.Tree.RawTree b y z)

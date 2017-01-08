@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.196.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.199.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -58,50 +58,54 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Control.Monad</a
+	    >Control.Exception</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Data.ByteString</a
+	    >Control.Monad</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Data.ByteString.Lazy</a
+	    >Data.ByteString</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Data.ByteString.Lazy.UTF8</a
+	    >Data.ByteString.Lazy</a
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >Data.Default</a
+	    >Data.ByteString.Lazy.UTF8</a
 	    ></li
 	  ><li
 	  ><a href="#g:6"
-	    >Data.List</a
+	    >Data.Default</a
 	    ></li
 	  ><li
 	  ><a href="#g:7"
-	    >Data.Map</a
+	    >Data.List</a
 	    ></li
 	  ><li
 	  ><a href="#g:8"
-	    >Data.Maybe</a
+	    >Data.Map</a
 	    ></li
 	  ><li
 	  ><a href="#g:9"
-	    >Data.Tuple</a
+	    >Data.Maybe</a
 	    ></li
 	  ><li
 	  ><a href="#g:10"
-	    >System.Exit</a
+	    >Data.Tuple</a
 	    ></li
 	  ><li
 	  ><a href="#g:11"
-	    >System.IO</a
+	    >System.Exit</a
 	    ></li
 	  ><li
 	  ><a href="#g:12"
+	    >System.IO</a
+	    ></li
+	  ><li
+	  ><a href="#g:13"
 	    >Text.PrettyPrint</a
 	    ></li
 	  ></ul
@@ -119,6 +123,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><a href="#v:bracket"
+	    >bracket</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > a -&gt; (a -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > b) -&gt; (a -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > c) -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > c</li
+	  ><li class="src short"
 	  ><a href="#v:-60-.-62-"
 	    >(&lt;.&gt;)</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
@@ -130,16 +146,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
 	    >Monad</a
 	    > m =&gt; (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c</li
-	  ><li class="src short"
-	  ><a href="#v:sequence"
-	    >sequence</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Traversable.html#t:Traversable"
-	    >Traversable</a
-	    > t =&gt; <span class="keyword"
-	    >forall</span
-	    > m a. <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
-	    >Monad</a
-	    > m =&gt; t (m a) -&gt; m (t a)</li
 	  ><li class="src short"
 	  ><a href="#v:filterM"
 	    >filterM</a
@@ -157,13 +163,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Monad</a
 	    > m) =&gt; (b -&gt; a -&gt; m b) -&gt; b -&gt; t a -&gt; m b</li
 	  ><li class="src short"
-	  ><a href="#v:when"
-	    >when</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Applicative.html#t:Applicative"
-	    >Applicative</a
+	  ><a href="#v:guard"
+	    >guard</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Applicative.html#t:Alternative"
+	    >Alternative</a
 	    > f =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; f () -&gt; f ()</li
+	    > -&gt; f ()</li
+	  ><li class="src short"
+	  ><a href="#v:sequence"
+	    >sequence</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Traversable.html#t:Traversable"
+	    >Traversable</a
+	    > t =&gt; <span class="keyword"
+	    >forall</span
+	    > m a. <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; t (m a) -&gt; m (t a)</li
 	  ><li class="src short"
 	  ><a href="#v:unless"
 	    >unless</a
@@ -173,13 +189,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Bool</a
 	    > -&gt; f () -&gt; f ()</li
 	  ><li class="src short"
-	  ><a href="#v:guard"
-	    >guard</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Applicative.html#t:Alternative"
-	    >Alternative</a
+	  ><a href="#v:when"
+	    >when</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Applicative.html#t:Applicative"
+	    >Applicative</a
 	    > f =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; f ()</li
+	    > -&gt; f () -&gt; f ()</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
@@ -412,6 +428,95 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	></div
       ><div id="interface"
       ><h1 id="g:1"
+	>Control.Exception</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:bracket" class="def"
+	    >bracket</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+		  >IO</a
+		  > a</td
+		><td class="doc"
+		><p
+		  >computation to run first (&quot;acquire resource&quot;)</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; (a -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+		  >IO</a
+		  > b)</td
+		><td class="doc"
+		><p
+		  >computation to run last (&quot;release resource&quot;)</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; (a -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+		  >IO</a
+		  > c)</td
+		><td class="doc"
+		><p
+		  >computation to run in-between</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+		  >IO</a
+		  > c</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >When you want to acquire a resource, do some work with it, and
+ then release the resource, it is a good idea to use <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:bracket"
+		>bracket</a
+		></code
+	      >,
+ because <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:bracket"
+		>bracket</a
+		></code
+	      > will install the necessary exception handler to
+ release the resource in the event that an exception is raised
+ during the computation.  If an exception is raised, then <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:bracket"
+		>bracket</a
+		></code
+	      > will
+ re-raise the exception (after performing the release).</p
+	    ><p
+	    >A common example is opening a file:</p
+	    ><pre
+	    >bracket
+  (openFile &quot;filename&quot; ReadMode)
+  (hClose)
+  (\fileHandle -&gt; do { ... })</pre
+	    ><p
+	    >The arguments to <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:bracket"
+		>bracket</a
+		></code
+	      > are in this order so that we can partially apply
+ it, e.g.:</p
+	    ><pre
+	    >withFile name mode = bracket (openFile name mode) hClose</pre
+	    ></div
+	  ></div
+	><h1 id="g:2"
 	>Control.Monad</h1
 	><div class="top"
 	><p class="src"
@@ -445,28 +550,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><div class="doc"
 	  ><p
 	    >Left-to-right Kleisli composition of monads.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:sequence" class="def"
-	    >sequence</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Traversable.html#t:Traversable"
-	    >Traversable</a
-	    > t =&gt; <span class="keyword"
-	    >forall</span
-	    > m a. <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
-	    >Monad</a
-	    > m =&gt; t (m a) -&gt; m (t a)</p
-	  ><div class="doc"
-	  ><p
-	    >Evaluate each monadic action in the structure from left to
- right, and collect the results. For a version that ignores the
- results see <code
-	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Foldable.html#v:sequence_"
-		>sequence_</a
-		></code
-	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -542,55 +625,6 @@ function' are not commutative.</p
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:when" class="def"
-	    >when</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Applicative.html#t:Applicative"
-	    >Applicative</a
-	    > f =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    > -&gt; f () -&gt; f ()</p
-	  ><div class="doc"
-	  ><p
-	    >Conditional execution of <code
-	      ><a href="http://hackage.haskell.org/package/base/docs/Control-Applicative.html#t:Applicative"
-		>Applicative</a
-		></code
-	      > expressions. For example,</p
-	    ><pre
-	    >when debug (putStrLn &quot;Debugging&quot;)</pre
-	    ><p
-	    >will output the string <code
-	      >Debugging</code
-	      > if the Boolean value <code
-	      >debug</code
-	      >
- is <code
-	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#v:True"
-		>True</a
-		></code
-	      >, and otherwise do nothing.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:unless" class="def"
-	    >unless</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Applicative.html#t:Applicative"
-	    >Applicative</a
-	    > f =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    > -&gt; f () -&gt; f ()</p
-	  ><div class="doc"
-	  ><p
-	    >The reverse of <code
-	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:when"
-		>when</a
-		></code
-	      >.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
 	  ><a name="v:guard" class="def"
 	    >guard</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Applicative.html#t:Alternative"
@@ -632,7 +666,78 @@ function' are not commutative.</p
 	      >.</p
 	    ></div
 	  ></div
-	><h1 id="g:2"
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sequence" class="def"
+	    >sequence</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Traversable.html#t:Traversable"
+	    >Traversable</a
+	    > t =&gt; <span class="keyword"
+	    >forall</span
+	    > m a. <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; t (m a) -&gt; m (t a)</p
+	  ><div class="doc"
+	  ><p
+	    >Evaluate each monadic action in the structure from left to
+ right, and collect the results. For a version that ignores the
+ results see <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Foldable.html#v:sequence_"
+		>sequence_</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unless" class="def"
+	    >unless</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Applicative.html#t:Applicative"
+	    >Applicative</a
+	    > f =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; f () -&gt; f ()</p
+	  ><div class="doc"
+	  ><p
+	    >The reverse of <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:when"
+		>when</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:when" class="def"
+	    >when</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Applicative.html#t:Applicative"
+	    >Applicative</a
+	    > f =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; f () -&gt; f ()</p
+	  ><div class="doc"
+	  ><p
+	    >Conditional execution of <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Control-Applicative.html#t:Applicative"
+		>Applicative</a
+		></code
+	      > expressions. For example,</p
+	    ><pre
+	    >when debug (putStrLn &quot;Debugging&quot;)</pre
+	    ><p
+	    >will output the string <code
+	      >Debugging</code
+	      > if the Boolean value <code
+	      >debug</code
+	      >
+ is <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#v:True"
+		>True</a
+		></code
+	      >, and otherwise do nothing.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
 	>Data.ByteString</h1
 	><div class="top"
 	><p class="src"
@@ -650,7 +755,7 @@ function' are not commutative.</p
 	    >Strict bytestring.</p
 	    ></div
 	  ></div
-	><h1 id="g:3"
+	><h1 id="g:4"
 	>Data.ByteString.Lazy</h1
 	><div class="top"
 	><p class="src"
@@ -668,7 +773,7 @@ function' are not commutative.</p
 	    >Lazy bytestring.</p
 	    ></div
 	  ></div
-	><h1 id="g:4"
+	><h1 id="g:5"
 	>Data.ByteString.Lazy.UTF8</h1
 	><div class="top"
 	><p class="src"
@@ -708,7 +813,7 @@ function' are not commutative.</p
 	      >.</p
 	    ></div
 	  ></div
-	><h1 id="g:5"
+	><h1 id="g:6"
 	>Data.Default</h1
 	><div class="top"
 	><p class="src"
@@ -824,7 +929,7 @@ function' are not commutative.</p
 	      ></div
 	    ></div
 	  ></div
-	><h1 id="g:6"
+	><h1 id="g:7"
 	>Data.List</h1
 	><div class="top"
 	><p class="src"
@@ -1051,7 +1156,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
  to supply their own equality test.</p
 	    ></div
 	  ></div
-	><h1 id="g:7"
+	><h1 id="g:8"
 	>Data.Map</h1
 	><div class="top"
 	><p class="src"
@@ -1077,7 +1182,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	      > module.</p
 	    ></div
 	  ></div
-	><h1 id="g:8"
+	><h1 id="g:9"
 	>Data.Maybe</h1
 	><div class="top"
 	><p class="src"
@@ -1431,7 +1536,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	      ></div
 	    ></div
 	  ></div
-	><h1 id="g:9"
+	><h1 id="g:10"
 	>Data.Tuple</h1
 	><div class="top"
 	><p class="src"
@@ -1443,7 +1548,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    >Swap the components of a pair.</p
 	    ></div
 	  ></div
-	><h1 id="g:10"
+	><h1 id="g:11"
 	>System.Exit</h1
 	><div class="top"
 	><p class="src"
@@ -1684,7 +1789,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
  exception will not cause the process itself to exit.</p
 	    ></div
 	  ></div
-	><h1 id="g:11"
+	><h1 id="g:12"
 	>System.IO</h1
 	><div class="top"
 	><p class="src"
@@ -1698,7 +1803,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    >A handle managing output to the Haskell program's standard output channel.</p
 	    ></div
 	  ></div
-	><h1 id="g:12"
+	><h1 id="g:13"
 	>Text.PrettyPrint</h1
 	><div class="top"
 	><p class="src"

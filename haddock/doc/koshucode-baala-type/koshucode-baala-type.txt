@@ -6,15 +6,11 @@
 --   
 --   Additional data types for Koshucode
 @package koshucode-baala-type
-@version 0.196.0.0
+@version 0.199.0.0
 
 
 -- | Common properties of judgements and relations.
 module Koshucode.Baala.Type.Judge.JudgeClass
-
--- | Name of judgement class, in other words, name of propositional
---   function.
-type JudgeClass = String
 
 -- | Get judge class.
 class GetClass a
@@ -1481,6 +1477,48 @@ instance GHC.Show.Show Koshucode.Baala.Type.Type.Type
 instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Type.Type.Type
 
 
+-- | Ordered relation.
+module Koshucode.Baala.Type.Rel.Order
+
+-- | Sort relation body according to order specification.
+relBodyOrder :: (Ord c, GetTermNames he) => [TermName] -> he -> Map [[c]]
+
+-- | Portion description.
+data Portion
+Portion :: Maybe Int -> Maybe Int -> Maybe Int -> [Int] -> Maybe Int -> Portion
+
+-- | Top <i>N</i> elements.
+[portionTop] :: Portion -> Maybe Int
+
+-- | Middle <i>N</i> elements.
+[portionMiddle] :: Portion -> Maybe Int
+
+-- | Bottom <i>N</i> elements.
+[portionBottom] :: Portion -> Maybe Int
+
+-- | Indecies of <i>N</i> chunks.
+[portionParts] :: Portion -> [Int]
+
+-- | Divided <i>N</i> chunks.
+[portionPer] :: Portion -> Maybe Int
+
+-- | Test portion is not effective.
+nullPortion :: Test Portion
+
+-- | Take portion of list.
+takePortion :: (Ord a) => Portion -> [a] -> [a]
+
+-- | Portion description for relation.
+type RelPortion = ([TermName], Portion)
+
+-- | Take effective (non-null) portion of relation body.
+takeRelPortion :: (GetTermNames he, Ord c) => RelPortion -> he -> [[c]] -> [[c]]
+instance GHC.Classes.Ord Koshucode.Baala.Type.Rel.Order.Portion
+instance GHC.Classes.Eq Koshucode.Baala.Type.Rel.Order.Portion
+instance GHC.Show.Show Koshucode.Baala.Type.Rel.Order.Portion
+instance Data.Default.Class.Default Koshucode.Baala.Type.Rel.Order.Portion
+
+
 -- | Term picker is a data for picking target terms based on input heading
 --   terms.
 module Koshucode.Baala.Type.Rel.TermPicker
@@ -1764,9 +1802,6 @@ JudgeRel :: JudgeClass -> (Rel c) -> JudgeRel c
 
 -- | Sort head and body of relation.
 relSort :: (Ord c) => Map (Rel c)
-
--- | Sort relation body according to order specification.
-relBodyOrder :: (Ord c) => [TermName] -> Head -> Map [[c]]
 
 -- | The nullary empty relation. In other words, relational constant that
 --   has no terms and no tuples.

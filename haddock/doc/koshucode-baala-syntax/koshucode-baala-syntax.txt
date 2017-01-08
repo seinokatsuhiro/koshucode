@@ -6,11 +6,15 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.196.0.0
+@version 0.199.0.0
 
 
 -- | Term types and related functions.
 module Koshucode.Baala.Syntax.Symbol.Term
+
+-- | Name of judgement class, in other words, name of propositional
+--   function.
+type JudgeClass = String
 
 -- | Term type: pair of term name and content.
 type Term c = (TermName, c)
@@ -200,6 +204,85 @@ angleQuote :: StringMap
 --   Just "\n"
 --   </pre>
 angleTexts :: [(String, String)]
+
+
+-- | Subtree filter.
+module Koshucode.Baala.Syntax.Subtree.Filter
+
+-- | Subtree filter.
+data SubtreeFilter
+
+-- | Identity
+SubtreeId :: SubtreeFilter
+
+-- | Equality
+SubtreeEq :: String -> SubtreeFilter
+
+-- | Glob
+SubtreeKeep :: String -> Pattern -> SubtreeFilter
+
+-- | Anti-glob
+SubtreeOmit :: String -> Pattern -> SubtreeFilter
+
+-- | Filter chain
+SubtreeChain :: SubtreeFilter -> SubtreeFilter -> SubtreeFilter
+
+-- | Identity filter.
+subtreeId :: SubtreeFilter
+
+-- | Equal filter.
+subtreeEq :: String -> SubtreeFilter
+
+-- | Glob filter.
+subtreeKeep :: String -> SubtreeFilter
+
+-- | Anti-glob filter.
+subtreeOmit :: String -> SubtreeFilter
+
+-- | Filter chain.
+subtreeChain :: Bin SubtreeFilter
+
+-- | Filter strings by subtree filter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter subtreeId ["foo", "bar", "foobar"]
+--   ["foo","bar","foobar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (SubtreeEq "bar") ["foo", "bar", "foobar"]
+--   ["bar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (subtreeKeep "foo*") ["foo", "bar", "foobar"]
+--   ["foo","foobar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (subtreeKeep "*bar") ["foo", "bar", "foobar"]
+--   ["bar","foobar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
+--   ["bar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
+--   ["bar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (subtreeKeep "foo*" O.++ subtreeOmit "*bar") ["foo", "bar", "foobar"]
+--   ["foo"]
+--   </pre>
+subtreeFilter :: SubtreeFilter -> Map [String]
+subtreeFilterOn :: (a -> Maybe String) -> SubtreeFilter -> Map [a]
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Subtree.Filter.SubtreeFilter
+instance GHC.Show.Show Koshucode.Baala.Syntax.Subtree.Filter.SubtreeFilter
+instance GHC.Base.Monoid Koshucode.Baala.Syntax.Subtree.Filter.SubtreeFilter
 
 
 -- | Parameter type.
@@ -928,12 +1011,6 @@ module Koshucode.Baala.Syntax.Symbol
 -- | Subtree.
 module Koshucode.Baala.Syntax.Subtree.Subtree
 
--- | Subtree.
-type Subtree = RawTree [SubtreePattern] String String
-
--- | Subtree output.
-type SubtreeOutput = RawTree [SubtreePattern] String (SubtreeTerm, String)
-
 -- | Subtree pattern.
 data SubtreePattern
 
@@ -941,19 +1018,19 @@ data SubtreePattern
 SubtreeL :: SubtreeTerm -> SubtreeFilter -> SubtreePattern
 
 -- | Branch
-SubtreeB :: SubtreeFilter -> [SubtreePattern] -> SubtreePattern
+SubtreeB :: SubtreeTerm -> SubtreeFilter -> [SubtreePattern] -> SubtreePattern
 
 -- | Recursive branch
 SubtreeR :: SubtreeFilter -> [SubtreePattern] -> SubtreePattern
 
--- | Create non-termination leaf pattern.
+-- | Create non-termification leaf pattern.
 subtreeL :: SubtreeFilter -> SubtreePattern
 
--- | Termination of subtree content.
+-- | Termification of subtree content.
 data SubtreeTerm
 SubtreeNone :: SubtreeTerm
-SubtreeText :: [String] -> TermName -> SubtreeTerm
-SubtreeSeq :: TermName -> SubtreeTerm
+SubtreeText :: [JudgeClass] -> TermName -> SubtreeTerm
+SubtreeSeq :: [JudgeClass] -> TermName -> SubtreeTerm
 
 -- | Create text term.
 subtreeText :: (ToTermName n) => String -> n -> SubtreeTerm
@@ -961,12 +1038,18 @@ subtreeText :: (ToTermName n) => String -> n -> SubtreeTerm
 -- | Create text term.
 subtreeTexts :: (ToTermName n) => [String] -> n -> SubtreeTerm
 
+-- | Subtree.
+type Subtree a = RawTree [SubtreePattern] a a
+
+-- | Subtree with termified elements.
+type SubtreeOutput a = RawTree [SubtreePattern] (SubtreeTerm, a) (SubtreeTerm, a)
+
 -- | Select subtree.
 --   
 --   <pre>
 --   &gt;&gt;&gt; let tree = B.TreeB [] "Y1" [B.TreeL "Z1", B.TreeL "Z2", B.TreeB [] "Y2" [B.TreeL "Z3"]]
 --   
---   &gt;&gt;&gt; O.putLines $ B.ppRawTree tree
+--   &gt;&gt;&gt; B.printTree tree
 --   &gt; [] "Y1"
 --     - "Z1"
 --     - "Z2"
@@ -975,111 +1058,43 @@ subtreeTexts :: (ToTermName n) => [String] -> n -> SubtreeTerm
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeB (subtreeEq "Y1") [subtreeL (subtreeEq "Z1")]] [tree])
---   &gt; [] "Y1"
+--   &gt;&gt;&gt; B.printTrees $ subtree [SubtreeB SubtreeNone (S.subtreeEq "Y1") [subtreeL (S.subtreeEq "Z1")]] [tree]
+--   &gt; [] (SubtreeNone,"Y1")
 --     - (SubtreeNone,"Z1")
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeR (subtreeId) [subtreeL (subtreeEq "Z3")]] [tree])
---   &gt; [] "Y1"
---     &gt; [] "Y2"
+--   &gt;&gt;&gt; B.printTrees $ subtree [SubtreeR (S.subtreeId) [subtreeL (S.subtreeEq "Z3")]] [tree]
+--   &gt; [] (SubtreeNone,"Y1")
+--     &gt; [] (SubtreeNone,"Y2")
 --       - (SubtreeNone,"Z3")
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeR (subtreeId) [subtreeL (subtreeEq "Z1")]] [tree])
---   &gt; [] "Y1"
+--   &gt;&gt;&gt; B.printTrees $ subtree [SubtreeR (S.subtreeId) [subtreeL (S.subtreeEq "Z1")]] [tree]
+--   &gt; [] (SubtreeNone,"Y1")
 --     - (SubtreeNone,"Z1")
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeB (subtreeId) [SubtreeL (subtreeText "A" "/z") (subtreeEq "Z1")]] [tree])
---   &gt; [] "Y1"
+--   &gt;&gt;&gt; B.printTrees $ subtree [SubtreeB (subtreeText "A" "/y") (S.subtreeId) [SubtreeL (subtreeText "A" "/z") (S.subtreeEq "Z1")]] [tree]
+--   &gt; [] (SubtreeText ["A"] (TermName EQ "y"),"Y1")
 --     - (SubtreeText ["A"] (TermName EQ "z"),"Z1")
 --   </pre>
-subtree :: [SubtreePattern] -> [Subtree] -> [SubtreeOutput]
+subtree :: [SubtreePattern] -> [Subtree String] -> [SubtreeOutput String]
+
+-- | Select subtree with string getter.
+subtreeWith :: (a -> String) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
 
 -- | Select subtree.
-subtreeOne :: [SubtreePattern] -> Map [Subtree]
+subtreeOne :: [SubtreePattern] -> Map [Subtree String]
 
--- | Subtree filter.
-data SubtreeFilter
-
--- | Identity
-SubtreeId :: SubtreeFilter
-
--- | Equality
-SubtreeEq :: String -> SubtreeFilter
-
--- | Glob
-SubtreeKeep :: String -> Pattern -> SubtreeFilter
-
--- | Anti-glob
-SubtreeOmit :: String -> Pattern -> SubtreeFilter
-
--- | Filter chain
-SubtreeChain :: SubtreeFilter -> SubtreeFilter -> SubtreeFilter
-
--- | Identity filter.
-subtreeId :: SubtreeFilter
-
--- | Equal filter.
-subtreeEq :: String -> SubtreeFilter
-
--- | Glob filter.
-subtreeKeep :: String -> SubtreeFilter
-
--- | Anti-glob filter.
-subtreeOmit :: String -> SubtreeFilter
-
--- | Filter chain.
-subtreeChain :: Bin SubtreeFilter
-
--- | Filter strings by subtree filter.
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter subtreeId ["foo", "bar", "foobar"]
---   ["foo","bar","foobar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (SubtreeEq "bar") ["foo", "bar", "foobar"]
---   ["bar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (subtreeKeep "foo*") ["foo", "bar", "foobar"]
---   ["foo","foobar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (subtreeKeep "*bar") ["foo", "bar", "foobar"]
---   ["bar","foobar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
---   ["bar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
---   ["bar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (subtreeKeep "foo*" O.++ subtreeOmit "*bar") ["foo", "bar", "foobar"]
---   ["foo"]
---   </pre>
-subtreeFilter :: SubtreeFilter -> Map [String]
+-- | Extract data from subtree.
+subtreeData :: SubtreeOutput Value -> [(JudgeClass, [Term Value])]
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Subtree.Subtree.SubtreePattern
 instance GHC.Show.Show Koshucode.Baala.Syntax.Subtree.Subtree.SubtreePattern
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Subtree.Subtree.SubtreeFilter
-instance GHC.Show.Show Koshucode.Baala.Syntax.Subtree.Subtree.SubtreeFilter
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Subtree.Subtree.SubtreeTerm
 instance GHC.Show.Show Koshucode.Baala.Syntax.Subtree.Subtree.SubtreeTerm
-instance GHC.Base.Monoid Koshucode.Baala.Syntax.Subtree.Subtree.SubtreeFilter
 
 
 -- | Directory tree.
@@ -1107,7 +1122,98 @@ module Koshucode.Baala.Syntax.Subtree.DirTree
 --           - "Subtree.hs"
 --       - "Syntax.hs"
 --   </pre>
-dirTrees :: [FilePath] -> FilePath -> [SubtreePattern] -> IO [Subtree]
+dirTrees :: [FilePath] -> FilePath -> [SubtreePattern] -> IO [Subtree String]
+
+
+-- | XML tree.
+module Koshucode.Baala.Syntax.Subtree.Xml
+
+-- | XML token.
+data XmlToken s
+
+-- | Open tag
+XmlOpen :: s -> XmlToken s
+
+-- | Close tag
+XmlClose :: s -> XmlToken s
+
+-- | Terminal token
+XmlTerm :: (XmlTerm s) -> XmlToken s
+
+-- | Terminal of XML tree.
+type XmlTerm s = (XmlKey s, s)
+
+-- | Key data of XML tree.
+data XmlKey s
+
+-- | Element node
+XmlElem :: s -> XmlKey s
+
+-- | Attribute of element
+XmlAttr :: s -> XmlKey s
+
+-- | Text node
+XmlText :: XmlKey s
+
+-- | Comment node
+XmlComment :: XmlKey s
+
+-- | Tokenize XML document.
+--   
+--   <pre>
+--   &gt;&gt;&gt; xmlTokens "&lt;hello&gt;wonderful&lt;/world&gt;"
+--   [XmlOpen "hello", XmlTerm (XmlText, "wonderful"), XmlClose "hello"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; xmlTokens "&lt;a x='xx' y='yy'&gt;"
+--   [XmlOpen "a", XmlTerm (XmlAttr "x", "xx"), XmlTerm (XmlAttr "y", "yy"), XmlClose "a"]
+--   </pre>
+xmlTokens :: (StringLike s) => s -> [XmlToken s]
+
+-- | XML tree.
+type XmlTree s = Subtree (XmlTerm s)
+
+-- | Convert XML tokens to XML tree.
+xmlTrees :: (Ord s, StringLike s) => [XmlToken s] -> Ab [XmlTree s]
+
+-- | Decode XML trees.
+--   
+--   <pre>
+--   &gt;&gt;&gt; B.printTrees =&lt;&lt; B.abortLeft (xmlDecode "&lt;hello&gt;wonderful&lt;/world&gt;")
+--   &gt; () (XmlElem "hello","hello")
+--     - (XmlText,"wonderful")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; B.printTrees =&lt;&lt; B.abortLeft (xmlDecode "&lt;a x='xx' y='yy'&gt;")
+--   &gt; () (XmlElem "a","a")
+--     - (XmlAttr "x","xx")
+--     - (XmlAttr "y","yy")
+--   </pre>
+xmlDecode :: (Ord s, StringLike s) => s -> Ab [XmlTree s]
+
+-- | XML output tree.
+type XmlTreeOutput s = SubtreeOutput (XmlTerm s)
+
+-- | Judgement material.
+type RawJudge c = (JudgeClass, [Term c])
+
+-- | Calculate subtree of XML tree.
+xmlSubtree :: [SubtreePattern] -> [XmlTree String] -> [XmlTreeOutput String]
+
+-- | Extract data from XML output tree.
+xmlData :: XmlTreeOutput String -> [RawJudge Value]
+
+-- | Calculate XML subtree and extract data.
+xmlSubtreeData :: [SubtreePattern] -> [XmlTree String] -> [RawJudge Value]
+instance GHC.Classes.Ord s => GHC.Classes.Ord (Koshucode.Baala.Syntax.Subtree.Xml.XmlToken s)
+instance GHC.Classes.Eq s => GHC.Classes.Eq (Koshucode.Baala.Syntax.Subtree.Xml.XmlToken s)
+instance GHC.Show.Show s => GHC.Show.Show (Koshucode.Baala.Syntax.Subtree.Xml.XmlToken s)
+instance GHC.Classes.Ord s => GHC.Classes.Ord (Koshucode.Baala.Syntax.Subtree.Xml.XmlKey s)
+instance GHC.Classes.Eq s => GHC.Classes.Eq (Koshucode.Baala.Syntax.Subtree.Xml.XmlKey s)
+instance GHC.Show.Show s => GHC.Show.Show (Koshucode.Baala.Syntax.Subtree.Xml.XmlKey s)
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Syntax.Subtree.Xml.XmlToken s)
 
 
 -- | Tokens in Koshucode.

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.196.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.199.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -62,7 +62,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Filter</a
+	    >Conversion</a
 	    ></li
 	  ></ul
 	></div
@@ -80,36 +80,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Subtree"
-	    >Subtree</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
-	    >RawTree</a
-	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
-	    >SubtreePattern</a
-	    >] <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:SubtreeOutput"
-	    >SubtreeOutput</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
-	    >RawTree</a
-	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
-	    >SubtreePattern</a
-	    >] <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > (<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
-	    >SubtreeTerm</a
-	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >)</li
-	  ><li class="src short"
-	  ><span class="keyword"
 	    >data</span
 	    > <a href="#t:SubtreePattern"
 	    >SubtreePattern</a
@@ -119,13 +89,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		>SubtreeL</a
 		> <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
 		>SubtreeTerm</a
-		> <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
+		> <a href="Koshucode-Baala-Syntax-Subtree-Filter.html#t:SubtreeFilter"
 		>SubtreeFilter</a
 		></li
 	      ><li
 	      >| <a href="#v:SubtreeB"
 		>SubtreeB</a
-		> <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
+		> <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
+		>SubtreeTerm</a
+		> <a href="Koshucode-Baala-Syntax-Subtree-Filter.html#t:SubtreeFilter"
 		>SubtreeFilter</a
 		> [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
 		>SubtreePattern</a
@@ -133,7 +105,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ><li
 	      >| <a href="#v:SubtreeR"
 		>SubtreeR</a
-		> <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
+		> <a href="Koshucode-Baala-Syntax-Subtree-Filter.html#t:SubtreeFilter"
 		>SubtreeFilter</a
 		> [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
 		>SubtreePattern</a
@@ -143,7 +115,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><a href="#v:subtreeL"
 	    >subtreeL</a
-	    > :: <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
+	    > :: <a href="Koshucode-Baala-Syntax-Subtree-Filter.html#t:SubtreeFilter"
 	    >SubtreeFilter</a
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
 	    >SubtreePattern</a
@@ -161,15 +133,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ><li
 	      >| <a href="#v:SubtreeText"
 		>SubtreeText</a
-		> [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
+		> [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:JudgeClass"
+		>JudgeClass</a
 		>] <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 		>TermName</a
 		></li
 	      ><li
 	      >| <a href="#v:SubtreeSeq"
 		>SubtreeSeq</a
-		> <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+		> [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:JudgeClass"
+		>JudgeClass</a
+		>] <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 		>TermName</a
 		></li
 	      ></ul
@@ -195,15 +169,55 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >SubtreeTerm</a
 	    ></li
 	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Subtree"
+	    >Subtree</a
+	    > a = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    >RawTree</a
+	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
+	    >SubtreePattern</a
+	    >] a a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SubtreeOutput"
+	    >SubtreeOutput</a
+	    > a = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    >RawTree</a
+	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
+	    >SubtreePattern</a
+	    >] (<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
+	    >SubtreeTerm</a
+	    >, a) (<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
+	    >SubtreeTerm</a
+	    >, a)</li
+	  ><li class="src short"
 	  ><a href="#v:subtree"
 	    >subtree</a
 	    > :: [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
 	    >SubtreePattern</a
 	    >] -&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:Subtree"
 	    >Subtree</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    >] -&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeOutput"
 	    >SubtreeOutput</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:subtreeWith"
+	    >subtreeWith</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >) -&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
+	    >SubtreePattern</a
+	    >] -&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:Subtree"
+	    >Subtree</a
+	    > a] -&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeOutput"
+	    >SubtreeOutput</a
+	    > a]</li
 	  ><li class="src short"
 	  ><a href="#v:subtreeOne"
 	    >subtreeOne</a
@@ -213,144 +227,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Map</a
 	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:Subtree"
 	    >Subtree</a
-	    >]</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >data</span
-	    > <a href="#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    ><ul class="subs"
-	    ><li
-	      >= <a href="#v:SubtreeId"
-		>SubtreeId</a
-		></li
-	      ><li
-	      >| <a href="#v:SubtreeEq"
-		>SubtreeEq</a
-		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		></li
-	      ><li
-	      >| <a href="#v:SubtreeKeep"
-		>SubtreeKeep</a
-		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		> Pattern</li
-	      ><li
-	      >| <a href="#v:SubtreeOmit"
-		>SubtreeOmit</a
-		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		> Pattern</li
-	      ><li
-	      >| <a href="#v:SubtreeChain"
-		>SubtreeChain</a
-		> <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-		>SubtreeFilter</a
-		> <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-		>SubtreeFilter</a
-		></li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:subtreeId"
-	    >subtreeId</a
-	    > :: <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:subtreeEq"
-	    >subtreeEq</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:subtreeKeep"
-	    >subtreeKeep</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:subtreeOmit"
-	    >subtreeOmit</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:subtreeChain"
-	    >subtreeChain</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
-	    >Bin</a
-	    > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:subtreeFilter"
-	    >subtreeFilter</a
-	    > :: <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:subtreeData"
+	    >subtreeData</a
+	    > :: <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeOutput"
+	    >SubtreeOutput</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Value.html#t:Value"
+	    >Value</a
+	    > -&gt; [(<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:JudgeClass"
+	    >JudgeClass</a
+	    >, [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Value.html#t:Value"
+	    >Value</a
+	    >])]</li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
 	>Pattern</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Subtree" class="def"
-	    >Subtree</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
-	    >RawTree</a
-	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
-	    >SubtreePattern</a
-	    >] <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#Subtree');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Subtree.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:SubtreeOutput" class="def"
-	    >SubtreeOutput</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
-	    >RawTree</a
-	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
-	    >SubtreePattern</a
-	    >] <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > (<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
-	    >SubtreeTerm</a
-	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#SubtreeOutput');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Subtree output.</p
-	    ></div
-	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -374,7 +272,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  >SubtreeL</a
 		  > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
 		  >SubtreeTerm</a
-		  > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
+		  > <a href="Koshucode-Baala-Syntax-Subtree-Filter.html#t:SubtreeFilter"
 		  >SubtreeFilter</a
 		  ></td
 		><td class="doc"
@@ -386,7 +284,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ><td class="src"
 		><a name="v:SubtreeB" class="def"
 		  >SubtreeB</a
-		  > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
+		  > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
+		  >SubtreeTerm</a
+		  > <a href="Koshucode-Baala-Syntax-Subtree-Filter.html#t:SubtreeFilter"
 		  >SubtreeFilter</a
 		  > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
 		  >SubtreePattern</a
@@ -400,7 +300,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ><td class="src"
 		><a name="v:SubtreeR" class="def"
 		  >SubtreeR</a
-		  > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
+		  > <a href="Koshucode-Baala-Syntax-Subtree-Filter.html#t:SubtreeFilter"
 		  >SubtreeFilter</a
 		  > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
 		  >SubtreePattern</a
@@ -425,7 +325,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
 		      >SubtreePattern</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#line-42');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#line-34');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -439,7 +339,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
 		      >SubtreePattern</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#line-42');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#line-34');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -453,7 +353,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:subtreeL" class="def"
 	    >subtreeL</a
-	    > :: <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
+	    > :: <a href="Koshucode-Baala-Syntax-Subtree-Filter.html#t:SubtreeFilter"
 	    >SubtreeFilter</a
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
 	    >SubtreePattern</a
@@ -462,7 +362,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Create non-termination leaf pattern.</p
+	    >Create non-termification leaf pattern.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -476,7 +376,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Termination of subtree content.</p
+	    >Termification of subtree content.</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -494,8 +394,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ><td class="src"
 		><a name="v:SubtreeText" class="def"
 		  >SubtreeText</a
-		  > [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
+		  > [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:JudgeClass"
+		  >JudgeClass</a
 		  >] <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 		  >TermName</a
 		  ></td
@@ -506,7 +406,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ><td class="src"
 		><a name="v:SubtreeSeq" class="def"
 		  >SubtreeSeq</a
-		  > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+		  > [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:JudgeClass"
+		  >JudgeClass</a
+		  >] <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 		  >TermName</a
 		  ></td
 		><td class="doc empty"
@@ -527,7 +429,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
 		      >SubtreeTerm</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#line-53');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#line-45');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -541,7 +443,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
 		      >SubtreeTerm</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#line-53');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#line-45');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -587,6 +489,48 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Create text term.</p
 	    ></div
 	  ></div
+	><h1 id="g:2"
+	>Conversion</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Subtree" class="def"
+	    >Subtree</a
+	    > a = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    >RawTree</a
+	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
+	    >SubtreePattern</a
+	    >] a a <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#Subtree');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Subtree.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SubtreeOutput" class="def"
+	    >SubtreeOutput</a
+	    > a = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    >RawTree</a
+	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
+	    >SubtreePattern</a
+	    >] (<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
+	    >SubtreeTerm</a
+	    >, a) (<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeTerm"
+	    >SubtreeTerm</a
+	    >, a) <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#SubtreeOutput');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Subtree with termified elements.</p
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:subtree" class="def"
@@ -595,8 +539,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >SubtreePattern</a
 	    >] -&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:Subtree"
 	    >Subtree</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    >] -&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeOutput"
 	    >SubtreeOutput</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#subtree');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -615,7 +563,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>O.putLines $ B.ppRawTree tree
+		>B.printTree tree
 </code
 		></strong
 	      >&gt; [] &quot;Y1&quot;
@@ -629,10 +577,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeB (subtreeEq &quot;Y1&quot;) [subtreeL (subtreeEq &quot;Z1&quot;)]] [tree])
+		>B.printTrees $ subtree [SubtreeB SubtreeNone (S.subtreeEq &quot;Y1&quot;) [subtreeL (S.subtreeEq &quot;Z1&quot;)]] [tree]
 </code
 		></strong
-	      >&gt; [] &quot;Y1&quot;
+	      >&gt; [] (SubtreeNone,&quot;Y1&quot;)
   - (SubtreeNone,&quot;Z1&quot;)
 </pre
 	    ><pre class="screen"
@@ -640,11 +588,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeR (subtreeId) [subtreeL (subtreeEq &quot;Z3&quot;)]] [tree])
+		>B.printTrees $ subtree [SubtreeR (S.subtreeId) [subtreeL (S.subtreeEq &quot;Z3&quot;)]] [tree]
 </code
 		></strong
-	      >&gt; [] &quot;Y1&quot;
-  &gt; [] &quot;Y2&quot;
+	      >&gt; [] (SubtreeNone,&quot;Y1&quot;)
+  &gt; [] (SubtreeNone,&quot;Y2&quot;)
     - (SubtreeNone,&quot;Z3&quot;)
 </pre
 	    ><pre class="screen"
@@ -652,10 +600,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeR (subtreeId) [subtreeL (subtreeEq &quot;Z1&quot;)]] [tree])
+		>B.printTrees $ subtree [SubtreeR (S.subtreeId) [subtreeL (S.subtreeEq &quot;Z1&quot;)]] [tree]
 </code
 		></strong
-	      >&gt; [] &quot;Y1&quot;
+	      >&gt; [] (SubtreeNone,&quot;Y1&quot;)
   - (SubtreeNone,&quot;Z1&quot;)
 </pre
 	    ><pre class="screen"
@@ -663,12 +611,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeB (subtreeId) [SubtreeL (subtreeText &quot;A&quot; &quot;/z&quot;) (subtreeEq &quot;Z1&quot;)]] [tree])
+		>B.printTrees $ subtree [SubtreeB (subtreeText &quot;A&quot; &quot;/y&quot;) (S.subtreeId) [SubtreeL (subtreeText &quot;A&quot; &quot;/z&quot;) (S.subtreeEq &quot;Z1&quot;)]] [tree]
 </code
 		></strong
-	      >&gt; [] &quot;Y1&quot;
+	      >&gt; [] (SubtreeText [&quot;A&quot;] (TermName EQ &quot;y&quot;),&quot;Y1&quot;)
   - (SubtreeText [&quot;A&quot;] (TermName EQ &quot;z&quot;),&quot;Z1&quot;)
 </pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:subtreeWith" class="def"
+	    >subtreeWith</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >) -&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
+	    >SubtreePattern</a
+	    >] -&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:Subtree"
+	    >Subtree</a
+	    > a] -&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeOutput"
+	    >SubtreeOutput</a
+	    > a] <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#subtreeWith');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Select subtree with string getter.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -681,6 +649,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Map</a
 	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:Subtree"
 	    >Subtree</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#subtreeOne');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -689,302 +659,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Select subtree.</p
 	    ></div
 	  ></div
-	><h1 id="g:2"
-	>Filter</h1
 	><div class="top"
 	><p class="src"
-	  ><span class="keyword"
-	    >data</span
-	    > <a name="t:SubtreeFilter" class="def"
-	    >SubtreeFilter</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#SubtreeFilter');" href="javascript:void(0);" class="link"
+	  ><a name="v:subtreeData" class="def"
+	    >subtreeData</a
+	    > :: <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeOutput"
+	    >SubtreeOutput</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Value.html#t:Value"
+	    >Value</a
+	    > -&gt; [(<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:JudgeClass"
+	    >JudgeClass</a
+	    >, [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Value.html#t:Value"
+	    >Value</a
+	    >])] <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#subtreeData');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Subtree filter.</p
-	    ></div
-	  ><div class="subs constructors"
-	  ><p class="caption"
-	    >Constructors</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		><a name="v:SubtreeId" class="def"
-		  >SubtreeId</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Identity</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:SubtreeEq" class="def"
-		  >SubtreeEq</a
-		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Equality</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:SubtreeKeep" class="def"
-		  >SubtreeKeep</a
-		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  > Pattern</td
-		><td class="doc"
-		><p
-		  >Glob</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:SubtreeOmit" class="def"
-		  >SubtreeOmit</a
-		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  > Pattern</td
-		><td class="doc"
-		><p
-		  >Anti-glob</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:SubtreeChain" class="def"
-		  >SubtreeChain</a
-		  > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-		  >SubtreeFilter</a
-		  > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-		  >SubtreeFilter</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Filter chain</p
-		  ></td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:SubtreeFilter" class="caption collapser" onclick="toggleSection('i:SubtreeFilter')"
-	    >Instances</p
-	    ><div id="section.i:SubtreeFilter" class="show"
-	    ><table
-	      ><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-		      >Eq</a
-		      > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-		      >SubtreeFilter</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#line-153');" href="javascript:void(0);" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
-		      >Show</a
-		      > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-		      >SubtreeFilter</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#line-153');" href="javascript:void(0);" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#t:Monoid"
-		      >Monoid</a
-		      > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-		      >SubtreeFilter</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#line-155');" href="javascript:void(0);" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:subtreeId" class="def"
-	    >subtreeId</a
-	    > :: <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#subtreeId');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Identity filter.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:subtreeEq" class="def"
-	    >subtreeEq</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#subtreeEq');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Equal filter.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:subtreeKeep" class="def"
-	    >subtreeKeep</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#subtreeKeep');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Glob filter.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:subtreeOmit" class="def"
-	    >subtreeOmit</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#subtreeOmit');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Anti-glob filter.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:subtreeChain" class="def"
-	    >subtreeChain</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
-	    >Bin</a
-	    > <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#subtreeChain');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Filter chain.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:subtreeFilter" class="def"
-	    >subtreeFilter</a
-	    > :: <a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreeFilter"
-	    >SubtreeFilter</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Subtree.html#subtreeFilter');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Filter strings by subtree filter.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>subtreeFilter subtreeId [&quot;foo&quot;, &quot;bar&quot;, &quot;foobar&quot;]
-</code
-		></strong
-	      >[&quot;foo&quot;,&quot;bar&quot;,&quot;foobar&quot;]
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>subtreeFilter (SubtreeEq &quot;bar&quot;) [&quot;foo&quot;, &quot;bar&quot;, &quot;foobar&quot;]
-</code
-		></strong
-	      >[&quot;bar&quot;]
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>subtreeFilter (subtreeKeep &quot;foo*&quot;) [&quot;foo&quot;, &quot;bar&quot;, &quot;foobar&quot;]
-</code
-		></strong
-	      >[&quot;foo&quot;,&quot;foobar&quot;]
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>subtreeFilter (subtreeKeep &quot;*bar&quot;) [&quot;foo&quot;, &quot;bar&quot;, &quot;foobar&quot;]
-</code
-		></strong
-	      >[&quot;bar&quot;,&quot;foobar&quot;]
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>subtreeFilter (subtreeOmit &quot;foo*&quot;) [&quot;foo&quot;, &quot;bar&quot;, &quot;foobar&quot;]
-</code
-		></strong
-	      >[&quot;bar&quot;]
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>subtreeFilter (subtreeOmit &quot;foo*&quot;) [&quot;foo&quot;, &quot;bar&quot;, &quot;foobar&quot;]
-</code
-		></strong
-	      >[&quot;bar&quot;]
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>subtreeFilter (subtreeKeep &quot;foo*&quot; O.++ subtreeOmit &quot;*bar&quot;) [&quot;foo&quot;, &quot;bar&quot;, &quot;foobar&quot;]
-</code
-		></strong
-	      >[&quot;foo&quot;]
-</pre
+	    >Extract data from subtree.</p
 	    ></div
 	  ></div
 	></div

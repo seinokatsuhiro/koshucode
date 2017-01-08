@@ -6,7 +6,7 @@
 --   
 --   Facility for implementing relation-mapping operators
 @package koshucode-baala-rop
-@version 0.196.0.0
+@version 0.199.0.0
 
 
 -- | Message list.
@@ -117,12 +117,29 @@ diffHead :: [Head] -> Ab a
 --   </ul>
 notNestRel :: (GetTermNames t) => t -> Head -> Ab a
 
+-- | <ul>
+--   <li><i>BUG: Unknown tag</i></li>
+--   </ul>
+unkTag :: Ab a
+
 
 -- | Get parameters of relmap operator.
 module Koshucode.Baala.Rop.Base.Get.Get
 
 -- | Type for getting something from relmap intermidiate data.
 type RopGet a c = Intmed c  Intermediate relmap -> String  Parameter name, e.g., @\"-term\"@ -> Ab a  Parameter value
+
+-- | No-names version of <a>RopGet</a>.
+type RopGet0 a c = Intmed c -> Ab a
+
+-- | 2-names version of <a>RopGet</a>.
+type RopGet2 a c = Intmed c -> String -> String -> Ab a
+
+-- | 3-names version of <a>RopGet</a>.
+type RopGet3 a c = Intmed c -> String -> String -> String -> Ab a
+
+-- | 4-names version of <a>RopGet</a>.
+type RopGet4 a c = Intmed c -> String -> String -> String -> String -> Ab a
 
 -- | Get trees from relmap parameter. This is the most basic getter because
 --   relmap parameters are syntactically represented as tree list.
@@ -138,10 +155,14 @@ getWithAb :: ([Tree] -> Ab b) -> RopGet b c
 getTree :: RopGet Tree c
 
 -- | Test usage tag.
-getTag :: Intmed c -> ParaTag -> Bool
-
--- | Get usage tags.
-getTags :: Intmed c -> [ParaTag]
+--   
+--   <pre>
+--   case Rop.getTag med of
+--     t | t "foo"   -&gt; ...
+--       | t "bar"   -&gt; ...
+--       | otherwise -&gt; Msg.unkTag
+--   </pre>
+getTag :: Intmed c -> Test ParaTag
 
 -- | Get <tt>True</tt> when parameter is given, <tt>False</tt> otherwise.
 getSwitch :: RopGet Bool c
@@ -216,8 +237,11 @@ getContents :: (CContent c) => RopGet [c] c
 -- | Get relmap parameter as filler content, i.e., given content or empty.
 getFiller :: (CContent c) => RopGet c c
 
--- | Get decimal integer content.
-getInt :: (CContent c) => RopGet DecimalInteger c
+-- | Get int content.
+getInt :: (CContent c) => RopGet Int c
+
+-- | Get integer content.
+getInteger :: (CContent c) => RopGet Integer c
 
 -- | Get list of content terms.
 getNamedContentTerms :: (CContent c) => RopGet [Term c] c
@@ -250,6 +274,20 @@ getOptCoxTerms :: (CContent c) => (TermName -> c) -> RopGet [TermCox c] c
 
 -- | Get <tt>-let</tt> style parameter as set of derived functions.
 getLet :: (CContent c) => RopGet (CopSet c) c
+
+-- | Get count-type portion parameter.
+getPotionCount :: (CContent c) => RopGet4 ([TermName], Portion) c
+
+-- | <a>getPotionCount</a> with regular parameter names: <tt>-order</tt>,
+--   <tt>-top</tt>, <tt>-mid</tt>, and <tt>-bot</tt>.
+getPotionCountR :: (CContent c) => RopGet0 ([TermName], Portion) c
+
+-- | Get ratio-type portion parameter.
+getPotionRatio :: (CContent c) => RopGet3 ([TermName], Portion) c
+
+-- | <a>getPotionRatio</a> with regular parameter names: <tt>-order</tt>,
+--   <tt>-part</tt>, and <tt>-of</tt>.
+getPotionRatioR :: (CContent c) => RopGet0 ([TermName], Portion) c
 
 
 -- | Definition of relmap operators.

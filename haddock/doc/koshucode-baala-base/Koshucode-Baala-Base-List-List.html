@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.196.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.199.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -119,6 +119,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >takeLast</a
 	    > :: [a] -&gt; [a]</li
 	  ><li class="src short"
+	  ><a href="#v:takeMiddle"
+	    >takeMiddle</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:takeEnd"
+	    >takeEnd</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
 	  ><a href="#v:takeOdd"
 	    >takeOdd</a
 	    > :: [a] -&gt; [a]</li
@@ -138,6 +150,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
 	    > -&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:takeChunks"
+	    >takeChunks</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] -&gt; [a] -&gt; [[a]]</li
 	  ><li class="src short"
 	  ><a href="#v:list1"
 	    >list1</a
@@ -357,6 +377,58 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:takeMiddle" class="def"
+	    >takeMiddle</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#takeMiddle');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take middle <em
+	      >N</em
+	      > elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>(`takeMiddle` ['A' .. 'Z']) &lt;$&gt; [-1 .. 7 :: Int]
+</code
+		></strong
+	      >[&quot;&quot;, &quot;&quot;, &quot;M&quot;, &quot;MN&quot;, &quot;LMN&quot;, &quot;LMNO&quot;, &quot;KLMNO&quot;, &quot;KLMNOP&quot;, &quot;JKLMNOP&quot;]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:takeEnd" class="def"
+	    >takeEnd</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#takeEnd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take <em
+	      >N</em
+	      > elements at the end of the list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>takeEnd 3 &quot;ABCDEFG&quot;
+</code
+		></strong
+	      >&quot;EFG&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:takeOdd" class="def"
 	    >takeOdd</a
 	    > :: [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#takeOdd');" href="javascript:void(0);" class="link"
@@ -468,6 +540,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 </code
 		></strong
 	      >  [0,0,6,7,8]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:takeChunks" class="def"
+	    >takeChunks</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] -&gt; [a] -&gt; [[a]] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#takeChunks');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take indexed chunks from <em
+	      >N</em
+	      > chunks.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>takeChunks 20 [10, 0, 19, 20] [0 .. 98 :: Int]
+</code
+		></strong
+	      >[[50,51,52,53,54], [0,1,2,3,4], [95,96,97,98], []]
 </pre
 	    ></div
 	  ></div

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-cox-0.196.0.0: Relation-mapping operators with content calculations</p
+      >koshucode-baala-rop-cox-0.199.0.0: Relation-mapping operators with content calculations</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -66,6 +66,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    ></li
 	  ><li
 	  ><a href="#g:3"
+	    >maybe with restriction</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
 	    >compose-maybe</a
 	    ></li
 	  ></ul
@@ -152,6 +156,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > -&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
 	    > c</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:MeetOnly"
+	    >MeetOnly</a
+	    > c = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Order.html#t:RelPortion"
+	    >RelPortion</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:relmapMaybeOnly"
+	    >relmapMaybeOnly</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="Koshucode-Baala-Rop-Cox-Empty.html#t:MeetOnly"
+	    >MeetOnly</a
+	    > c, c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:consComposeMaybe"
 	    >consComposeMaybe</a
@@ -257,13 +289,59 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    ><strong
-	      >maybe R -share /P ... -fill E</strong
-	      ></p
-	    ><p
-	    >Meet input and given relation.
-   It keeps input tuples of which counterparts are totally negated.</p
+	  ><dl
+	    ><dt
+	      >maybe <em
+		>R</em
+		> -share <em
+		>/P</em
+		> ... -fill <em
+		>E</em
+		></dt
+	      ><dd
+	      >Meet input and given relation <em
+		>R</em
+		>.
+     It keeps input tuples of which counterparts are totally negated.</dd
+	      ><dt
+	      >maybe <em
+		>R</em
+		> -only <em
+		>E</em
+		> -order <em
+		>/P</em
+		> ... -top <em
+		>N</em
+		> -mid <em
+		>N</em
+		> -bot <em
+		>N</em
+		></dt
+	      ><dd
+	      >Maybe with restriction by <em
+		>E</em
+		> and limit to <em
+		>N</em
+		> tuples.</dd
+	      ><dt
+	      >maybe <em
+		>R</em
+		> -only <em
+		>E</em
+		> -order <em
+		>/P</em
+		> ... -part <em
+		>N</em
+		> -of <em
+		>N</em
+		></dt
+	      ><dd
+	      >Maybe with restriction by <em
+		>E</em
+		> and take <em
+		>N</em
+		>'th part.</dd
+	      ></dl
 	    ></div
 	  ></div
 	><div class="top"
@@ -317,6 +395,56 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    ></div
 	  ></div
 	><h1 id="g:3"
+	>maybe with restriction</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:MeetOnly" class="def"
+	    >MeetOnly</a
+	    > c = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Order.html#t:RelPortion"
+	    >RelPortion</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Empty.html#MeetOnly');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parameter for <code
+	      >meet -only</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapMaybeOnly" class="def"
+	    >relmapMaybeOnly</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="Koshucode-Baala-Rop-Cox-Empty.html#t:MeetOnly"
+	    >MeetOnly</a
+	    > c, c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Empty.html#relmapMaybeOnly');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create <code
+	      >maybe</code
+	      >-with-restriction relmap.</p
+	    ></div
+	  ></div
+	><h1 id="g:4"
 	>compose-maybe</h1
 	><div class="top"
 	><p class="src"

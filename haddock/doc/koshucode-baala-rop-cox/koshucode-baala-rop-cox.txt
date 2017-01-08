@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.196.0.0
+@version 0.199.0.0
 
 
 -- | Relmap operators for dec type.
@@ -383,10 +383,17 @@ consBoth :: (CContent c) => RopCons c
 -- | Create <tt>both</tt> relmap.
 relmapBoth :: (Ord c, CRel c) => Intmed c -> SharedTerms -> c -> Map (Relmap c)
 
--- | <b>maybe R -share /P ... -fill E</b>
---   
---   Meet input and given relation. It keeps input tuples of which
---   counterparts are totally negated.
+-- | <ul>
+--   <li><i>maybe <i>R</i> -share <i>/P</i> ... -fill <i>E</i></i> Meet
+--   input and given relation <i>R</i>. It keeps input tuples of which
+--   counterparts are totally negated.</li>
+--   <li><i>maybe <i>R</i> -only <i>E</i> -order <i>/P</i> ... -top
+--   <i>N</i> -mid <i>N</i> -bot <i>N</i></i> Maybe with restriction by
+--   <i>E</i> and limit to <i>N</i> tuples.</li>
+--   <li><i>maybe <i>R</i> -only <i>E</i> -order <i>/P</i> ... -part
+--   <i>N</i> -of <i>N</i></i> Maybe with restriction by <i>E</i> and take
+--   <i>N</i>'th part.</li>
+--   </ul>
 consMaybe :: (CContent c) => RopCons c
 
 -- | Create <tt>maybe</tt> relmap.
@@ -394,6 +401,12 @@ relmapMaybe :: (Ord c, CRel c) => Intmed c -> SharedTerms -> c -> Map (Relmap c)
 
 -- | Create <tt>maybe</tt> relkit.
 relkitMaybe :: (Ord c, CRel c) => SharedTerms -> c -> RelkitBinary c
+
+-- | Parameter for <tt>meet -only</tt>.
+type MeetOnly c = (SharedTerms, CopSet c, Cox c, RelPortion)
+
+-- | Create <tt>maybe</tt>-with-restriction relmap.
+relmapMaybeOnly :: (CContent c) => Intmed c -> (MeetOnly c, c) -> Map (Relmap c)
 
 -- | <b>compose-maybe R -share /P ... -fill E</b>
 --   

@@ -8,7 +8,7 @@
 --   alternative, and repetitive expressions. It collects submatches and
 --   switch matching expression among multiple expressions.
 @package koshucode-baala-subtext
-@version 0.196.0.0
+@version 0.199.0.0
 
 
 -- | Lower and upper bound.

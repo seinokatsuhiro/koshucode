@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.196.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.199.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -187,8 +187,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >SplitList3e</a
 	    > a</li
 	  ><li class="src short"
-	  ><a href="#v:chunks"
-	    >chunks</a
+	  ><a href="#v:dividePer"
+	    >dividePer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [[a]]</li
+	  ><li class="src short"
+	  ><a href="#v:divideInto"
+	    >divideInto</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
 	    > -&gt; [a] -&gt; [[a]]</li
@@ -504,11 +510,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	>Divide</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:chunks" class="def"
-	    >chunks</a
+	  ><a name="v:dividePer" class="def"
+	    >dividePer</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; [a] -&gt; [[a]] <a onclick="showSource('src/Koshucode-Baala-Base-List-Split.html#chunks');" href="javascript:void(0);" class="link"
+	    > -&gt; [a] -&gt; [[a]] <a onclick="showSource('src/Koshucode-Baala-Base-List-Split.html#dividePer');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -519,10 +525,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>chunks 2 &quot;abcdefg&quot;
+		>dividePer 7 ['a' .. 'z']
 </code
 		></strong
-	      >[&quot;ab&quot;,&quot;cd&quot;,&quot;ef&quot;,&quot;g&quot;]
+	      >[&quot;abcdefg&quot;, &quot;hijklmn&quot;, &quot;opqrstu&quot;, &quot;vwxyz&quot;]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:divideInto" class="def"
+	    >divideInto</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [[a]] <a onclick="showSource('src/Koshucode-Baala-Base-List-Split.html#divideInto');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Divide list into <em
+	      >N</em
+	      > portions.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>divideInto 4 ['a' .. 'z']
+</code
+		></strong
+	      >[&quot;abcdefg&quot;, &quot;hijklmn&quot;, &quot;opqrstu&quot;, &quot;vwxyz&quot;]
 </pre
 	    ></div
 	  ></div
