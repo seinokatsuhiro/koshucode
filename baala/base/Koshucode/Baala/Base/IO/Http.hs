@@ -3,7 +3,7 @@
 -- | Retrieve via HTTP.
 module Koshucode.Baala.Base.IO.Http
   ( HttpProxy,
-    uriContent,
+    httpGet,
     httpExceptionSummary,
   ) where
 
@@ -11,7 +11,7 @@ import qualified Data.ByteString.Char8              as Bc
 import qualified Control.Exception                  as Ex
 import qualified Network.HTTP.Conduit               as H
 import qualified Network.HTTP.Types.Status          as H
-import qualified Network.URI                        as URI
+import qualified Network.URI                        as U
 import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
 
@@ -19,8 +19,8 @@ import qualified Koshucode.Baala.Base.Prelude       as B
 type HttpProxy = (String, Maybe O.IOPath)
 
 -- | Get HTTP content as lazy bytestring.
-uriContent :: [HttpProxy] -> O.IOPath -> IO (Either (Int, String) B.Bz)
-uriContent proxies uriText =
+httpGet :: [HttpProxy] -> O.IOPath -> IO (Either (Int, String) B.Bz)
+httpGet proxies uriText =
     do req <- requestFromURI proxies uriText
        catchHttpException $ do
          man <- H.newManager H.tlsManagerSettings
@@ -30,7 +30,7 @@ uriContent proxies uriText =
 requestFromURI :: [HttpProxy] -> O.IOPath -> IO H.Request
 requestFromURI proxies uriText =
     do req <- H.parseRequest uriText
-       case URI.parseURI uriText of
+       case U.parseURI uriText of
          Nothing  -> return req
          Just uri -> do let proxy = selectProxy proxies uri
                         return $ add proxy req
@@ -38,10 +38,10 @@ requestFromURI proxies uriText =
       add :: Maybe O.IOPath -> O.Map H.Request
       add proxy req = B.fromMaybe req $ do
           proxy'    <- proxy
-          uri       <- URI.parseURI proxy'
-          auth      <- URI.uriAuthority uri
-          let host'  = Bc.pack $ URI.uriRegName auth
-              port   = uriPortNumber $ URI.uriPort auth
+          uri       <- U.parseURI proxy'
+          auth      <- U.uriAuthority uri
+          let host'  = Bc.pack $ U.uriRegName auth
+              port   = uriPortNumber $ U.uriPort auth
           Just $ H.addProxy host' port req
 
 uriPortNumber :: String -> Int
@@ -51,9 +51,9 @@ uriPortNumber _         = defaultPortNumber
 defaultPortNumber :: Int
 defaultPortNumber = 80
 
-selectProxy :: [HttpProxy] -> URI.URI -> Maybe O.IOPath
+selectProxy :: [HttpProxy] -> U.URI -> Maybe O.IOPath
 selectProxy proxies uri =
-    do let scheme = URI.uriScheme uri
+    do let scheme = U.uriScheme uri
        proxy <- lookup scheme proxies
        proxy
 

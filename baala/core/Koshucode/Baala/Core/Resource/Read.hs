@@ -118,7 +118,7 @@ readCode res src add = dispatch $ B.nioPoint src where
     dispatch (B.IOPointUri url) =
         do g <- M.get
            let proxy = C.globalProxy g
-           abcode <- M.liftIO $ B.uriContent proxy url
+           abcode <- M.liftIO $ B.httpGet proxy url
            M.liftIO $ case abcode of
              Right code       -> include code
              Left (code, msg) -> return $ Msg.httpError url code msg
