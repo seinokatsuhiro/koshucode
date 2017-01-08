@@ -16,7 +16,8 @@ module Koshucode.Baala.Rop.Base.Get.Cox
     getLet,
 
     -- * Portion
-    getPotionCount, getPotionRatio,
+    getPotionCount, getPotionCountR,
+    getPotionRatio, getPotionRatioR,
   ) where
 
 import Prelude hiding (getContents)
@@ -176,24 +177,32 @@ treeRawText t          = Msg.abPara t Msg.reqRawText
 
 -- --------------------------------------------  Portion
 
+-- | 'getPotionCount' with regular parameter names:
+--   @-order@, @-top@, @-mid@, and @-bot@.
+getPotionCountR :: (K.CContent c) => Rop.RopGet0 ([K.TermName], K.Portion) c
+getPotionCountR med = getPotionCount med "-order" "-top" "-mid" "-bot"
+
 -- | Get count-type portion parameter.
---   Parameter names are fixed to @-order@, @-top@, @-mid@, and @-bot@.
-getPotionCount :: (K.CContent c) => Rop.RopGet0 ([K.TermName], K.Portion) c
-getPotionCount med =
-    do order <- Rop.getTerms med "-order"
-       top   <- Rop.getMaybe getInt med "-top"
-       mid   <- Rop.getMaybe getInt med "-mid"
-       bot   <- Rop.getMaybe getInt med "-bot"
-       Right (order, K.def { K.portionTop     = top
-                           , K.portionMiddle  = mid
-                           , K.portionBottom  = bot })
+getPotionCount :: (K.CContent c) => Rop.RopGet4 ([K.TermName], K.Portion) c
+getPotionCount med nOrder nTop nMid nBot =
+    do order <- Rop.getTerms med nOrder
+       top   <- Rop.getMaybe getInt med nTop
+       mid   <- Rop.getMaybe getInt med nMid
+       bot   <- Rop.getMaybe getInt med nBot
+       Right (order, K.def { K.portionTop    = top
+                           , K.portionMiddle = mid
+                           , K.portionBottom = bot })
+
+-- | 'getPotionRatio' with regular parameter names:
+--   @-order@, @-part@, and @-of@.
+getPotionRatioR :: (K.CContent c) => Rop.RopGet0 ([K.TermName], K.Portion) c
+getPotionRatioR med = getPotionRatio med "-order" "-part" "-of"
 
 -- | Get ratio-type portion parameter.
---   Parameter names are fixed to @-order@, @-part@, and  @-of@.
-getPotionRatio :: (K.CContent c) => Rop.RopGet0 ([K.TermName], K.Portion) c
-getPotionRatio med =
-    do order <- Rop.getTerms med "-order"
-       part  <- getInt med "-part"
-       per   <- getInt med "-of"
-       Right (order, K.def { K.portionParts   = [part - 1]
-                           , K.portionPer     = Just per })
+getPotionRatio :: (K.CContent c) => Rop.RopGet3 ([K.TermName], K.Portion) c
+getPotionRatio med nOrderer nPart nOf =
+    do order <- Rop.getTerms med nOrderer
+       part  <- getInt med nPart
+       per   <- getInt med nOf
+       Right (order, K.def { K.portionParts = [part - 1]
+                           , K.portionPer   = Just per })

@@ -81,8 +81,8 @@ consMaybe med =
        case Rop.getTag med of
          t | t "plain" -> Right $ relmapMaybe med sh fill rmap
            | t "only"  -> maybeOnly sh fill rmap $ Right K.def
-           | t "count" -> maybeOnly sh fill rmap $ Rop.getPotionCount med
-           | t "ratio" -> maybeOnly sh fill rmap $ Rop.getPotionRatio med
+           | t "count" -> maybeOnly sh fill rmap $ Rop.getPotionCountR med
+           | t "ratio" -> maybeOnly sh fill rmap $ Rop.getPotionRatioR med
            | otherwise -> Msg.unkTag
     where
       maybeOnly sh fill rmap createPortion =
