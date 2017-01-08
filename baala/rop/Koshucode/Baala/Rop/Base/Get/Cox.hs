@@ -14,6 +14,9 @@ module Koshucode.Baala.Rop.Base.Get.Cox
 
     -- * Derived expression
     getLet,
+
+    -- * Portion
+    getPotionCount, getPotionRatio,
   ) where
 
 import Prelude hiding (getContents)
@@ -170,3 +173,27 @@ treeRawText :: K.Tree -> K.Ab String
 treeRawText (P.LRaw n) = Right n
 treeRawText t          = Msg.abPara t Msg.reqRawText
 
+
+-- --------------------------------------------  Portion
+
+-- | Get count-type portion parameter.
+--   Parameter names are fixed to @-order@, @-top@, @-mid@, and @-bot@.
+getPotionCount :: (K.CContent c) => C.Intmed c -> K.Ab ([K.TermName], K.Portion)
+getPotionCount med =
+    do order <- Rop.getTerms med "-order"
+       top   <- Rop.getMaybe getInt med "-top"
+       mid   <- Rop.getMaybe getInt med "-mid"
+       bot   <- Rop.getMaybe getInt med "-bot"
+       Right (order, K.def { K.portionTop     = top
+                           , K.portionMiddle  = mid
+                           , K.portionBottom  = bot })
+
+-- | Get ratio-type portion parameter.
+--   Parameter names are fixed to @-order@, @-part@, and  @-of@.
+getPotionRatio :: (K.CContent c) => C.Intmed c -> K.Ab ([K.TermName], K.Portion)
+getPotionRatio med =
+    do order <- Rop.getTerms med "-order"
+       part  <- getInt med "-part"
+       per   <- getInt med "-of"
+       Right (order, K.def { K.portionParts   = [part - 1]
+                           , K.portionPer     = Just per })

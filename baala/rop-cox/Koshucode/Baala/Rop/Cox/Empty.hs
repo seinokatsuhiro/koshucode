@@ -38,9 +38,9 @@ ropsCoxEmpty = Rop.rops "cox-empty"
           , "maybe R -only E [-fill E] [-share /P ...]"
             K.& "only : -relmap/ . -only -fill? -share?"
           , "maybe R -only E -order /P ... [-top N] [-mid N] [-bot N] [-fill E] [-share /P ...]"
-            K.& "order : -relmap/ . -only -order -top? -mid? -bot? -fill? -share?"
+            K.& "count : -relmap/ . -only -order -top? -mid? -bot? -fill? -share?"
           , "maybe R -only E -order /P ... -part N -of N [-fill E] [-share /P ...]"
-            K.& "part : -relmap/ . -only -order -part -of -fill? -share?" ]
+            K.& "ratio : -relmap/ . -only -order -part -of -fill? -share?" ]
     ]
 
 
@@ -79,26 +79,10 @@ consMaybe med =
        fill <- Rop.getFiller med "-fill"
        sh   <- Rop.getMaybe Rop.getTerms med "-share"
        case Rop.getTag med of
-         t | t "plain"
-             -> Right $ relmapMaybe med sh fill rmap
-           | t "only"
-             -> maybeOnly sh fill rmap $ Right K.def
-           | t "order"
-             -> maybeOnly sh fill rmap $ do
-                  order <- Rop.getTerms med "-order"
-                  top   <- Rop.getMaybe Rop.getInt med "-top"
-                  mid   <- Rop.getMaybe Rop.getInt med "-mid"
-                  bot   <- Rop.getMaybe Rop.getInt med "-bot"
-                  Right (order, K.def { K.portionTop     = top
-                                      , K.portionMiddle  = mid
-                                      , K.portionBottom  = bot })
-           | t "part"
-             -> maybeOnly sh fill rmap $ do
-                  order <- Rop.getTerms med "-order"
-                  part  <- Rop.getInt med "-part"
-                  per   <- Rop.getInt med "-of"
-                  Right (order, K.def { K.portionParts   = [part - 1]
-                                      , K.portionPer     = Just per })
+         t | t "plain" -> Right $ relmapMaybe med sh fill rmap
+           | t "only"  -> maybeOnly sh fill rmap $ Right K.def
+           | t "count" -> maybeOnly sh fill rmap $ Rop.getPotionCount med
+           | t "ratio" -> maybeOnly sh fill rmap $ Rop.getPotionRatio med
            | otherwise -> Msg.unkTag
     where
       maybeOnly sh fill rmap createPortion =
