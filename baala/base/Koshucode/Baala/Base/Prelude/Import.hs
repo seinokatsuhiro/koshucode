@@ -21,6 +21,8 @@ module Koshucode.Baala.Base.Prelude.Import
     Bs,
     -- * Data.ByteString.Lazy
     Bz,
+    -- * Data.ByteString.UTF8
+    stringBs, bsString,
     -- * Data.ByteString.Lazy.UTF8
     stringBz, bzString,
 
@@ -45,6 +47,11 @@ module Koshucode.Baala.Base.Prelude.Import
     Data.Maybe.mapMaybe,
     Data.Maybe.fromJust,
     Data.Maybe.fromMaybe,
+
+    -- * Data.Text
+    Tx, stringTx, txString,
+    -- * Data.Text.Lazy
+    Tz, stringTz, tzString,
   
     -- * Data.Tuple
     Data.Tuple.swap,
@@ -71,10 +78,13 @@ import qualified Control.Monad
 import qualified Data.ByteString
 import qualified Data.ByteString.Lazy
 import qualified Data.ByteString.Lazy.UTF8
+import qualified Data.ByteString.UTF8
 import qualified Data.Default
 import qualified Data.List
 import qualified Data.Map
 import qualified Data.Maybe
+import qualified Data.Text
+import qualified Data.Text.Lazy
 import qualified Data.Tuple
 import qualified System.IO
 import qualified System.Exit
@@ -98,6 +108,16 @@ infixr 1 <.>
 -- | Strict bytestring.
 type Bs = Data.ByteString.ByteString
 
+-- | Convert strict bytestring to string.
+--   This is same as 'Data.ByteString.UTF8.toString'.
+bsString :: Bs -> String
+bsString = Data.ByteString.UTF8.toString
+
+-- | Convert string to strict bytestring.
+--   This is same as 'Data.ByteString.UTF8.fromString'.
+stringBs :: String -> Bs
+stringBs = Data.ByteString.UTF8.fromString
+
 -- | Lazy bytestring.
 type Bz = Data.ByteString.Lazy.ByteString
 
@@ -110,6 +130,32 @@ stringBz = Data.ByteString.Lazy.UTF8.fromString
 --   This is same as 'Data.ByteString.Lazy.UTF8.toString'.
 bzString :: Bz -> String
 bzString = Data.ByteString.Lazy.UTF8.toString
+
+-- | Strict text.
+type Tx = Data.Text.Text
+
+-- | Convert strict text to string.
+--   This is same as 'Data.Text.unpack'.
+txString :: Tx -> String
+txString = Data.Text.unpack
+
+-- | Convert string to strict text.
+--   This is same as 'Data.Text.pack'.
+stringTx :: String -> Tx
+stringTx = Data.Text.pack
+
+-- | Lazy text.
+type Tz = Data.Text.Lazy.Text
+
+-- | Convert lazy text to string.
+--   This is same as 'Data.Text.Lazy.unpack'.
+tzString :: Tz -> String
+tzString = Data.Text.Lazy.unpack
+
+-- | Convert string to lazy text.
+--   This is same as 'Data.Text.Lazy.pack'.
+stringTz :: String -> Tz
+stringTz = Data.Text.Lazy.pack
 
 -- | Same as 'Map.lookup' in @Data.Map@ module.
 lookupMap :: (Ord k) => k -> Data.Map.Map k a -> Maybe a
