@@ -40,7 +40,7 @@ dirTrees exclude path ps =
 
 dirTreesOne :: [FilePath] -> [S.SubtreePattern] -> IO [S.Subtree String]
 dirTreesOne exclude ps =
-    do fs <- Dir.listDirectory "."
+    do fs <- listDirectory "."
        zs <- tree O.<#> filter (`notElem` exclude) fs
        return $ S.subtreeOne ps zs
     where
@@ -66,3 +66,9 @@ withCurrentDirectory dir action =
   B.bracket Dir.getCurrentDirectory Dir.setCurrentDirectory $ \ _ -> do
     Dir.setCurrentDirectory dir
     action
+
+-- since directory-1.2.5.0
+listDirectory :: FilePath -> IO [FilePath]
+listDirectory path = filter f <$> Dir.getDirectoryContents path where
+    f filename = filename /= "." && filename /= ".."
+
