@@ -32,8 +32,8 @@ module Koshucode.Baala.Type.Decimal.Fraction
 
 import qualified Data.Ratio                                as R
 import qualified Koshucode.Baala.Overture                  as O
-import qualified Koshucode.Baala.Type.Decimal.Decimal      as D
-import qualified Koshucode.Baala.Type.Decimal.Rational     as D
+import qualified Koshucode.Baala.Type.Decimal.Decimal      as T
+import qualified Koshucode.Baala.Type.Decimal.Rational     as T
 
 
 -- --------------------------------------------  Part
@@ -41,164 +41,164 @@ import qualified Koshucode.Baala.Type.Decimal.Rational     as D
 -- ----------------------  Integer and fraction
 
 -- | Integer part of decimal.
-decimalIntPart :: O.Map D.Decimal
+decimalIntPart :: O.Map T.Decimal
 decimalIntPart = fst . decimalIntFrac
 
 -- | Fractional part of decimal.
-decimalFracPart :: O.Map D.Decimal
+decimalFracPart :: O.Map T.Decimal
 decimalFracPart = snd . decimalIntFrac
 
 -- | Integer and fractional parts of decimal.
 --
---   >>> decimalIntFrac $ D.realDecimal 2 (4.5 :: Double)
+--   >>> decimalIntFrac $ T.realDecimal 2 (4.5 :: Double)
 --   (Decimal (2) 4, Decimal (2) 0 + 1 % 2)
 --
-decimalIntFrac :: D.Decimal -> (D.Decimal, D.Decimal)
-decimalIntFrac d = (dec $ i D.%% 1, dec f) where
-    (i, f) = properFraction $ D.decimalRatio d
-    dec r  = D.decimalRatioMap (const r) d
+decimalIntFrac :: T.Decimal -> (T.Decimal, T.Decimal)
+decimalIntFrac d = (dec $ i T.%% 1, dec f) where
+    (i, f) = properFraction $ T.decimalRatio d
+    dec r  = T.decimalRatioMap (const r) d
 
 -- ----------------------  Numerator and denominator
 
 -- | Numerator part of decimal number.
-decimalNum :: D.Decimal -> D.DecimalInteger
-decimalNum = R.numerator . D.decimalRatio
+decimalNum :: T.Decimal -> T.DecimalInteger
+decimalNum = R.numerator . T.decimalRatio
 
 -- | Denominator part of decimal number.
-decimalDenom :: D.Decimal -> D.DecimalInteger
-decimalDenom = R.denominator . D.decimalRatio
+decimalDenom :: T.Decimal -> T.DecimalInteger
+decimalDenom = R.denominator . T.decimalRatio
 
 
 -- --------------------------------------------  Round
 
-updateDecimal :: D.Decimal -> D.DecimalFracle -> D.DecimalRatio -> D.Decimal
-updateDecimal d l r = d { D.decimalFracle = l
-                        , D.decimalRatio  = r }
+updateDecimal :: T.Decimal -> T.DecimalFracle -> T.DecimalRatio -> T.Decimal
+updateDecimal d l r = d { T.decimalFracle = l
+                        , T.decimalRatio  = r }
 
 -- ----------------------  Round
 
 -- | Round decimal per self fractional length.
-decimalRound :: O.Map D.Decimal
-decimalRound d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioRoundAt l r
+decimalRound :: O.Map T.Decimal
+decimalRound d@T.Decimal { T.decimalFracle = l, T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioRoundAt l r
 
 -- | Round decimal per fractional length.
-decimalRoundAt :: O.Bin D.Decimal
-decimalRoundAt D.Decimal { D.decimalRatio = l }
-             d@D.Decimal { D.decimalRatio = r } =
+decimalRoundAt :: O.Bin T.Decimal
+decimalRoundAt T.Decimal { T.decimalRatio = l }
+             d@T.Decimal { T.decimalRatio = r } =
     let l' = fst $ properFraction l
-    in updateDecimal d l' $ D.ratioRoundAt l' r
+    in updateDecimal d l' $ T.ratioRoundAt l' r
 
 -- | Round decimal per unit decimal.
-decimalRoundPer :: O.Bin D.Decimal
-decimalRoundPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
-              d@D.Decimal { D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioRoundPer per r
+decimalRoundPer :: O.Bin T.Decimal
+decimalRoundPer T.Decimal { T.decimalFracle = l, T.decimalRatio = per }
+              d@T.Decimal { T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioRoundPer per r
 
 -- ----------------------  Round to even
 
 -- | Round decimal to even per self fractional length.
-decimalRoundEven :: O.Map D.Decimal
-decimalRoundEven d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioRoundEvenAt l r
+decimalRoundEven :: O.Map T.Decimal
+decimalRoundEven d@T.Decimal { T.decimalFracle = l, T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioRoundEvenAt l r
 
 -- | Round decimal to even per fractional length.
-decimalRoundEvenAt :: O.Bin D.Decimal
-decimalRoundEvenAt D.Decimal { D.decimalRatio = l }
-                 d@D.Decimal { D.decimalRatio = r } =
+decimalRoundEvenAt :: O.Bin T.Decimal
+decimalRoundEvenAt T.Decimal { T.decimalRatio = l }
+                 d@T.Decimal { T.decimalRatio = r } =
     let l' = fst $ properFraction l
-    in updateDecimal d l' $ D.ratioRoundEvenAt l' r
+    in updateDecimal d l' $ T.ratioRoundEvenAt l' r
 
 -- | Round decimal to even per unit decimal.
-decimalRoundEvenPer :: O.Bin D.Decimal
-decimalRoundEvenPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
-                  d@D.Decimal { D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioRoundEvenPer per r
+decimalRoundEvenPer :: O.Bin T.Decimal
+decimalRoundEvenPer T.Decimal { T.decimalFracle = l, T.decimalRatio = per }
+                  d@T.Decimal { T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioRoundEvenPer per r
 
 -- ----------------------  Truncate
 
 -- | Truncate decimal per self fractional length.
-decimalTrunc :: O.Map D.Decimal
-decimalTrunc d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioTruncAt l r
+decimalTrunc :: O.Map T.Decimal
+decimalTrunc d@T.Decimal { T.decimalFracle = l, T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioTruncAt l r
 
 -- | Truncate decimal per fractional length.
-decimalTruncAt :: O.Bin D.Decimal
-decimalTruncAt D.Decimal { D.decimalRatio = l }
-             d@D.Decimal { D.decimalRatio = r } =
+decimalTruncAt :: O.Bin T.Decimal
+decimalTruncAt T.Decimal { T.decimalRatio = l }
+             d@T.Decimal { T.decimalRatio = r } =
     let l' = fst $ properFraction l
-    in updateDecimal d l' $ D.ratioTruncAt l' r
+    in updateDecimal d l' $ T.ratioTruncAt l' r
 
 -- | Truncate decimal per unit decimal.
-decimalTruncPer :: O.Bin D.Decimal
-decimalTruncPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
-              d@D.Decimal { D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioTruncPer per r
+decimalTruncPer :: O.Bin T.Decimal
+decimalTruncPer T.Decimal { T.decimalFracle = l, T.decimalRatio = per }
+              d@T.Decimal { T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioTruncPer per r
 
 -- | Truncation error of decimal.
-decimalTruncError :: O.Map D.Decimal
-decimalTruncError d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
-    updateDecimal d (l + 1) (r `D.ratioRem` D.ratioFracle l)
+decimalTruncError :: O.Map T.Decimal
+decimalTruncError d@T.Decimal { T.decimalFracle = l, T.decimalRatio = r } =
+    updateDecimal d (l + 1) (r `T.ratioRem` T.ratioFracle l)
 
 -- ----------------------  Round out
 
 -- | Round out (toward infinity) decimal to even per self fractional length.
-decimalRoundOut :: O.Map D.Decimal
-decimalRoundOut d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioRoundOutAt l r
+decimalRoundOut :: O.Map T.Decimal
+decimalRoundOut d@T.Decimal { T.decimalFracle = l, T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioRoundOutAt l r
 
 -- | Round out (toward infinity) decimal to even per fractional length.
-decimalRoundOutAt :: O.Bin D.Decimal
-decimalRoundOutAt D.Decimal { D.decimalRatio = l }
-                 d@D.Decimal { D.decimalRatio = r } =
+decimalRoundOutAt :: O.Bin T.Decimal
+decimalRoundOutAt T.Decimal { T.decimalRatio = l }
+                 d@T.Decimal { T.decimalRatio = r } =
     let l' = fst $ properFraction l
-    in updateDecimal d l' $ D.ratioRoundOutAt l' r
+    in updateDecimal d l' $ T.ratioRoundOutAt l' r
 
 -- | Round out (toward infinity) decimal to even per unit decimal.
-decimalRoundOutPer :: O.Bin D.Decimal
-decimalRoundOutPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
-                  d@D.Decimal { D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioRoundOutPer per r
+decimalRoundOutPer :: O.Bin T.Decimal
+decimalRoundOutPer T.Decimal { T.decimalFracle = l, T.decimalRatio = per }
+                  d@T.Decimal { T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioRoundOutPer per r
 
 -- ----------------------  Floor
 
 -- | Floor decimal per self fractional length.
-decimalFloor :: O.Map D.Decimal
-decimalFloor d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioFloorAt l r
+decimalFloor :: O.Map T.Decimal
+decimalFloor d@T.Decimal { T.decimalFracle = l, T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioFloorAt l r
 
 -- | Floor decimal per fractional length.
-decimalFloorAt :: O.Bin D.Decimal
-decimalFloorAt D.Decimal { D.decimalRatio = l }
-             d@D.Decimal { D.decimalRatio = r } =
+decimalFloorAt :: O.Bin T.Decimal
+decimalFloorAt T.Decimal { T.decimalRatio = l }
+             d@T.Decimal { T.decimalRatio = r } =
     let l' = fst $ properFraction l
-    in updateDecimal d l' $ D.ratioFloorAt l' r
+    in updateDecimal d l' $ T.ratioFloorAt l' r
 
 -- | Floor decimal per unit decimal.
-decimalFloorPer :: O.Bin D.Decimal
-decimalFloorPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
-              d@D.Decimal { D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioFloorPer per r
+decimalFloorPer :: O.Bin T.Decimal
+decimalFloorPer T.Decimal { T.decimalFracle = l, T.decimalRatio = per }
+              d@T.Decimal { T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioFloorPer per r
 
 -- ----------------------  Ceil
 
 -- | Ceiling decimal per self fractional length.
-decimalCeil :: O.Map D.Decimal
-decimalCeil d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioCeilAt l r
+decimalCeil :: O.Map T.Decimal
+decimalCeil d@T.Decimal { T.decimalFracle = l, T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioCeilAt l r
 
 -- | Ceiling decimal per fractional length.
-decimalCeilAt :: O.Bin D.Decimal
-decimalCeilAt D.Decimal { D.decimalRatio = l }
-             d@D.Decimal { D.decimalRatio = r } =
+decimalCeilAt :: O.Bin T.Decimal
+decimalCeilAt T.Decimal { T.decimalRatio = l }
+             d@T.Decimal { T.decimalRatio = r } =
     let l' = fst $ properFraction l
-    in updateDecimal d l' $ D.ratioCeilAt l' r
+    in updateDecimal d l' $ T.ratioCeilAt l' r
 
 -- | Ceiling decimal per unit decimal.
-decimalCeilPer :: O.Bin D.Decimal
-decimalCeilPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
-              d@D.Decimal { D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioCeilPer per r
+decimalCeilPer :: O.Bin T.Decimal
+decimalCeilPer T.Decimal { T.decimalFracle = l, T.decimalRatio = per }
+              d@T.Decimal { T.decimalRatio = r } =
+    updateDecimal d l $ T.ratioCeilPer per r
 
 -- ----------------------  Other
 

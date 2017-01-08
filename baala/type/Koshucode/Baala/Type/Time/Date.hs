@@ -25,7 +25,7 @@ import qualified Data.Time.Calendar.WeekDate           as Tim
 import qualified Data.Time.Calendar.OrdinalDate        as Tim
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Type.Time.Parts       as D
+import qualified Koshucode.Baala.Type.Time.Parts       as T
 import qualified Koshucode.Baala.Type.Message          as Msg
 
 
@@ -33,31 +33,31 @@ import qualified Koshucode.Baala.Type.Message          as Msg
 
 -- | Date.
 data Date
-    = Monthly D.Mjd    -- ^ Date in /YYYY-MM-DD/
-    | Weekly  D.Mjd    -- ^ Date in /YYYY-#WW-D/
-    | Yearly  D.Mjd    -- ^ Date in /YYYY-##D/
+    = Monthly T.Mjd    -- ^ Date in /YYYY-MM-DD/
+    | Weekly  T.Mjd    -- ^ Date in /YYYY-#WW-D/
+    | Yearly  T.Mjd    -- ^ Date in /YYYY-##D/
 
 instance Eq Date where
     (==) = O.ordEq
 
 instance Ord Date where
-    a `compare` b = D.toMjd a `compare` D.toMjd b
+    a `compare` b = T.toMjd a `compare` T.toMjd b
 
 instance Show Date where
     show d@(Monthly _) = "Date " ++ B.encode d
     show d = "Date " ++ B.encode d ++ " (" ++ B.encode (monthly d) ++ ")"
 
-instance D.ToMjd Date where
+instance T.ToMjd Date where
     toMjd = dateMjd
     
 -- | Get the internal Modified Julian Day.
-dateMjd :: Date -> D.Mjd
+dateMjd :: Date -> T.Mjd
 dateMjd (Monthly day)  = day
 dateMjd (Weekly  day)  = day
 dateMjd (Yearly  day)  = day
 
 -- | Type for year, month, and day.
-type Ymd = (D.Year, D.Month, D.Day)
+type Ymd = (T.Year, T.Month, T.Day)
 
 
 -- ----------------------  Encode
@@ -97,8 +97,8 @@ mix02 = B.mixDecZero 2
 --   >>> dateFromMjd (55555 :: Int)
 --   Date 2010-12-25
 --
-dateFromMjd :: (D.ToMjd n) => n -> Date
-dateFromMjd = Monthly . D.toMjd
+dateFromMjd :: (T.ToMjd n) => n -> Date
+dateFromMjd = Monthly . T.toMjd
 
 -- | Create date from year, month, and day.
 --
@@ -108,7 +108,7 @@ dateFromMjd = Monthly . D.toMjd
 --   >>> dateFromYmd 2013 4 31
 --   Left ...
 --
-dateFromYmd :: D.Year -> D.Month -> D.Day -> B.Ab Date
+dateFromYmd :: T.Year -> T.Month -> T.Day -> B.Ab Date
 dateFromYmd y m d =
     case Tim.fromGregorianValid y m d of
       Just day -> Right $ Monthly day
@@ -120,7 +120,7 @@ dateFromYmd y m d =
 --   >>> dateFromYwd 2013 16 4
 --   Right Date 2013-#16-4 (2013-04-18)
 --
-dateFromYwd :: D.Year -> D.Week -> D.Day -> B.Ab Date
+dateFromYwd :: T.Year -> T.Week -> T.Day -> B.Ab Date
 dateFromYwd y w d =
     case Tim.fromWeekDateValid y w d of
       Just day -> Right $ Weekly day
@@ -131,7 +131,7 @@ dateFromYwd y w d =
 --   >>> dateFromYd 2013 108
 --   Right Date 2013-##108 (2013-04-18)
 --
-dateFromYd :: D.Year -> D.Day -> B.Ab Date
+dateFromYd :: T.Year -> T.Day -> B.Ab Date
 dateFromYd y d =
     case Tim.fromOrdinalDateValid y d of
       Just day -> Right $ Yearly day
@@ -145,30 +145,30 @@ dateFromYd y d =
 --   >>> monthly $ dateFromMjd 55555
 --   Date 2010-12-25
 --
-monthly :: (D.ToMjd day) => day -> Date
-monthly = Monthly . D.toMjd
+monthly :: (T.ToMjd day) => day -> Date
+monthly = Monthly . T.toMjd
 
 -- | Convert date into weekly date.
 --
 --   >>> weekly $ dateFromMjd 55555
 --   Date 2010-#51-6 (2010-12-25)
 --
-weekly :: (D.ToMjd day) => day -> Date
-weekly  = Weekly . D.toMjd
+weekly :: (T.ToMjd day) => day -> Date
+weekly  = Weekly . T.toMjd
 
 -- | Convert date into yearly date.
 --
 --   >>> yearly $ dateFromMjd 55555
 --   Date 2010-##359 (2010-12-25)
 --
-yearly :: (D.ToMjd day) => day -> Date
-yearly  = Yearly . D.toMjd
+yearly :: (T.ToMjd day) => day -> Date
+yearly  = Yearly . T.toMjd
 
 
 -- ----------------------  Utility
 
 -- | Alter the Modified Julian Day of date.
-dateAltMjd :: O.Map D.Mjd -> O.Map Date
+dateAltMjd :: O.Map T.Mjd -> O.Map Date
 dateAltMjd f (Monthly day)  = Monthly $ f day
 dateAltMjd f (Weekly  day)  = Weekly  $ f day
 dateAltMjd f (Yearly  day)  = Yearly  $ f day

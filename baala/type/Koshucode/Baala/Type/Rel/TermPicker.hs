@@ -28,7 +28,7 @@ module Koshucode.Baala.Type.Rel.TermPicker
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
-import qualified Koshucode.Baala.Type.Judge            as D
+import qualified Koshucode.Baala.Type.Judge            as T
 
 
 -- ============================================  Construct
@@ -43,11 +43,11 @@ type TermPick c = TermPicker c -> [c] -> [c]
 type TermPick2 a b = (TermPick a, TermPick b)
 
 -- | Create term picker from left and right term names
-termPicker :: (D.GetTermNames target, D.GetTermNames input)
+termPicker :: (T.GetTermNames target, T.GetTermNames input)
            => target -> input -> TermPicker c
 termPicker target input =
-    B.picker (D.getTermNames target)
-             (D.getTermNames input)
+    B.picker (T.getTermNames target)
+             (T.getTermNames input)
 
 
 -- ============================================  Present & new terms
@@ -110,7 +110,7 @@ termsIndex = B.pkRShareIndex
 --   >>> pickDirect "/b /d" "/a /b /c /d" "ABCD"
 --   "BD"
 --
-pickDirect :: (D.GetTermNames target, D.GetTermNames input)
+pickDirect :: (T.GetTermNames target, T.GetTermNames input)
            => target -> input -> O.Map [c]
 pickDirect target input = pickTerms $ termPicker target input
 

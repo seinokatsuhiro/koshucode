@@ -36,7 +36,7 @@ module Koshucode.Baala.Type.Type
 import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
-import qualified Koshucode.Baala.Type.Judge        as D
+import qualified Koshucode.Baala.Type.Judge        as T
 
 -- | Type for types.
 data Type
@@ -109,7 +109,7 @@ typeToMix = wf where
     termTypes = B.mixJoin1 . map termType
 
     termType :: S.Term Type -> B.MixText
-    termType (n, t) = D.termNameToMix n `B.mixSep` wt t
+    termType (n, t) = T.termNameToMix n `B.mixSep` wt t
 
 -- | Print type as tree.
 typeExplain :: Type -> B.Doc

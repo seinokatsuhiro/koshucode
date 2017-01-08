@@ -39,9 +39,9 @@ import qualified Data.Char                                  as Ch
 import qualified Data.Ratio                                 as R
 import qualified Koshucode.Baala.Overture                   as O
 import qualified Koshucode.Baala.Base                       as B
-import qualified Koshucode.Baala.Type.Decimal.Decimal       as D
-import qualified Koshucode.Baala.Type.Decimal.Fraction      as D
-import qualified Koshucode.Baala.Type.Decimal.Rational      as D
+import qualified Koshucode.Baala.Type.Decimal.Decimal       as T
+import qualified Koshucode.Baala.Type.Decimal.Fraction      as T
+import qualified Koshucode.Baala.Type.Decimal.Rational      as T
 import qualified Koshucode.Baala.Type.Message               as Msg
 
 
@@ -50,14 +50,14 @@ import qualified Koshucode.Baala.Type.Message               as Msg
 -- | Decode to @a@.
 type DecodeAb a = String -> B.Ab a
 
-type Sign = O.Map D.DecimalInteger
+type Sign = O.Map T.DecimalInteger
 
 -- | Decode base-2 digits to decimal.
-decodeBinary :: DecodeAb D.Decimal
+decodeBinary :: DecodeAb T.Decimal
 decodeBinary = decodeBase 2
 
 -- | Decode base-8 digits to decimal.
-decodeOctal :: DecodeAb D.Decimal
+decodeOctal :: DecodeAb T.Decimal
 decodeOctal = decodeBase 8
 
 -- | Decode decimals.
@@ -71,15 +71,15 @@ decodeOctal = decodeBase 8
 -- >>> decodeDecimal "11.250 +"
 -- Right Decimal (3) 11 + 1 % 4
 
-decodeDecimal :: DecodeAb D.Decimal
+decodeDecimal :: DecodeAb T.Decimal
 decodeDecimal = decodeBase 10
 
 -- | Decode base-16 digits to decimal.
-decodeHex :: DecodeAb D.Decimal
+decodeHex :: DecodeAb T.Decimal
 decodeHex = decodeBase 16
 
 -- | Decode digits to number.
-decodeBase :: Integer -> DecodeAb D.Decimal
+decodeBase :: Integer -> DecodeAb T.Decimal
 decodeBase base ccs = headPart id ccs where
     minus x = - x
 
@@ -90,7 +90,7 @@ decodeBase base ccs = headPart id ccs where
         '+'  -> headPart sign  cs
         _    -> intPart  sign  0 (c:cs)
 
-    intPart :: Sign -> D.DecimalInteger -> DecodeAb D.Decimal
+    intPart :: Sign -> T.DecimalInteger -> DecodeAb T.Decimal
     intPart sign n [] = decimal 0 (sign n)
     intPart sign n (c:cs)
         = case digitToInteger c of
@@ -101,14 +101,14 @@ decodeBase base ccs = headPart id ccs where
                     | c == '.'  -> fracPart sign n 0 cs
                     | otherwise -> tailPart sign (n, 0) (c:cs)
 
-    ooPart :: Sign -> D.DecimalFracle -> D.DecimalInteger-> DecodeAb D.Decimal
+    ooPart :: Sign -> T.DecimalFracle -> T.DecimalInteger-> DecodeAb T.Decimal
     ooPart sign l n [] = decimal l (sign n)
     ooPart sign l n (c:cs)
         | c == ' '   = ooPart   sign l n cs
         | c == 'o'   = ooPart   sign (l - 1) n cs
         | otherwise  = tailPart sign (n, l) (c:cs)
 
-    fracPart :: Sign -> D.DecimalInteger -> D.DecimalFracle -> DecodeAb D.Decimal
+    fracPart :: Sign -> T.DecimalInteger -> T.DecimalFracle -> DecodeAb T.Decimal
     fracPart sign n f [] = decimal f (sign n)
     fracPart sign n f (c:cs)
         = case digitToInteger c of
@@ -117,7 +117,7 @@ decodeBase base ccs = headPart id ccs where
             Nothing | c == ' '  -> fracPart sign n f cs
                     | otherwise -> tailPart sign (n, f) (c:cs)
 
-    tailPart :: Sign -> (D.DecimalInteger, D.DecimalFracle) -> DecodeAb D.Decimal
+    tailPart :: Sign -> (T.DecimalInteger, T.DecimalFracle) -> DecodeAb T.Decimal
     tailPart sign (n, f) [] = decimal f (sign n)
     tailPart sign dec (c:cs) = case c of
         ' '  -> tailPart sign  dec cs
@@ -130,11 +130,11 @@ decodeBase base ccs = headPart id ccs where
     up c i n | i < base   = Right $ base * n + i
              | otherwise  = Msg.tooLargeDigit [c]
 
-    decimal l n = Right $ D.Decimal { D.decimalFracle = l
-                                    , D.decimalRatio  = r l }
-        where n'  = n D.%% 1
+    decimal l n = Right $ T.Decimal { T.decimalFracle = l
+                                    , T.decimalRatio  = r l }
+        where n'  = n T.%% 1
               r 0 = n'
-              r _ = n' * D.ratioFracle l
+              r _ = n' * T.ratioFracle l
 
 digitToInteger :: Char -> Maybe Integer
 digitToInteger c
@@ -151,7 +151,7 @@ ord = fromIntegral. Ch.ord
 
 -- ----------------------  Encode
 
-instance B.MixEncode D.Decimal where
+instance B.MixEncode T.Decimal where
     mixTransEncode _ dec = B.mixString $ encodeDecimal dec
 
 separator :: O.StringMap
@@ -162,40 +162,40 @@ separator cs            = ' ' : cs
 
 -- | Encode decimals.
 --
--- >>> encodeDecimal $ D.realDecimal 0 (12345 D.%% 10)
+-- >>> encodeDecimal $ T.realDecimal 0 (12345 T.%% 10)
 -- "1 234"
 --
--- >>> encodeDecimal $ D.realDecimal 2 (12345 D.%% 10)
+-- >>> encodeDecimal $ T.realDecimal 2 (12345 T.%% 10)
 -- "1 234.50"
 --
--- >>> encodeDecimal $ D.realDecimal (-2) (12345 D.%% 10)
+-- >>> encodeDecimal $ T.realDecimal (-2) (12345 T.%% 10)
 -- "1 2oo"
 
-encodeDecimal :: D.Decimal -> String
+encodeDecimal :: T.Decimal -> String
 encodeDecimal = encodeDecimalWith separator
 
 -- | Encode decimals without spaces.
-encodeDecimalCompact :: D.Decimal -> String
+encodeDecimalCompact :: T.Decimal -> String
 encodeDecimalCompact = encodeDecimalWith id
 
-encodeDecimalWith :: O.StringMap -> D.Decimal -> String
-encodeDecimalWith sep = encode . D.decimalRoundOut where
-    encode D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
+encodeDecimalWith :: O.StringMap -> T.Decimal -> String
+encodeDecimalWith sep = encode . T.decimalRoundOut where
+    encode T.Decimal { T.decimalFracle = l, T.decimalRatio = r } =
         decimalSign r $ case ratioDigits sep l $ abs r of
                           (int, frac) | l > 0      -> int ++ "." ++ frac
                                       | otherwise  -> int
 
-decimalSign :: D.DecimalRatio -> O.StringMap
+decimalSign :: T.DecimalRatio -> O.StringMap
 decimalSign r cs | r < 0      = '-' : cs
                  | otherwise  = cs
 
-ratioDigits :: (Integral n) => O.StringMap -> D.DecimalFracle -> R.Ratio n -> (String, String)
+ratioDigits :: (Integral n) => O.StringMap -> T.DecimalFracle -> R.Ratio n -> (String, String)
 ratioDigits sep l r = case properFraction r of
                         (i, r') -> (integerDigits sep l i, fracDigits sep l r')
 
-integerDigits :: O.StringMap -> D.DecimalFracle -> Integer -> String
+integerDigits :: O.StringMap -> T.DecimalFracle -> Integer -> String
 integerDigits sep = loop 0 "" where
-    loop :: Int -> String -> D.DecimalFracle -> Integer -> String
+    loop :: Int -> String -> T.DecimalFracle -> Integer -> String
     loop n cs l i
         | i == 0  = if null cs then "0" else cs
         | n == 3  = loop 0 (sep cs) l i
@@ -206,7 +206,7 @@ integerDigits sep = loop 0 "" where
     up l r | l < 0      = 'o'
            | otherwise  = Ch.intToDigit (fromInteger r)
 
-fracDigits :: (Integral n) => O.StringMap -> D.DecimalFracle -> R.Ratio n -> String
+fracDigits :: (Integral n) => O.StringMap -> T.DecimalFracle -> R.Ratio n -> String
 fracDigits sep = loop (0 :: Int) where
     loop n l 0 = fill n l
     loop _ 0 _ = ""

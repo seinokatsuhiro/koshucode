@@ -10,8 +10,8 @@ module Koshucode.Baala.Type.Judge.Interp
 
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Syntax                   as S
-import qualified Koshucode.Baala.Type.Judge.Judge         as D
-import qualified Koshucode.Baala.Type.Judge.JudgeClass    as D
+import qualified Koshucode.Baala.Type.Judge.Judge         as T
+import qualified Koshucode.Baala.Type.Judge.JudgeClass    as T
 
 -- | Data interpretation.
 data Interp = Interp
@@ -25,7 +25,7 @@ data InterpWord
     | InterpTerm S.TermName        -- ^ Variable part of interpretation.
     deriving (Show, Eq, Ord)
 
-instance D.GetTermNames Interp where
+instance T.GetTermNames Interp where
     getTermNames = interpTerms
 
 instance B.MixEncode Interp where
@@ -35,7 +35,7 @@ instance B.MixEncode Interp where
 
 instance B.MixEncode InterpWord where
     mixEncode (InterpText w) = B.mixString w
-    mixEncode (InterpTerm n) = D.termNameToMix n
+    mixEncode (InterpTerm n) = T.termNameToMix n
 
 -- | Create data interpretation.
 interp :: [InterpWord] -> Interp

@@ -31,7 +31,7 @@ module Koshucode.Baala.Type.Judge.Judge
 import qualified Koshucode.Baala.Overture                    as O
 import qualified Koshucode.Baala.Base                        as B
 import qualified Koshucode.Baala.Syntax                      as S
-import qualified Koshucode.Baala.Type.Judge.JudgeClass       as D
+import qualified Koshucode.Baala.Type.Judge.JudgeClass       as T
 
 
 -- ----------------------  Datatype
@@ -175,13 +175,13 @@ assertAs AssertViolate       = JudgeViolate
 
 -- ----------------------  Class
 
-instance D.GetClass (Judge c) where
+instance T.GetClass (Judge c) where
     getClass = judgeClass
 
-instance D.GetTermNames (Judge c) where
+instance T.GetTermNames (Judge c) where
     getTermNames = map fst . judgeTerms
 
-instance D.GetTerms Judge where
+instance T.GetTerms Judge where
     getTerms = judgeTerms
 
 -- | Return class of judgement.

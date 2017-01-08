@@ -38,8 +38,8 @@ import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Type.Type             as T
-import qualified Koshucode.Baala.Type.Judge            as D
-import qualified Koshucode.Baala.Type.Rel.TermPicker   as D
+import qualified Koshucode.Baala.Type.Judge            as T
+import qualified Koshucode.Baala.Type.Rel.TermPicker   as T
 
 
 -- ---------------------- Type
@@ -55,7 +55,7 @@ instance Monoid Head where
         where a (T.TypeRel ts1) (T.TypeRel ts2) = T.TypeRel $ B.unionUp ts1 ts2
               a _ _ = T.TypeAny
 
-instance D.GetTermNames Head where
+instance T.GetTermNames Head where
     getTermNames = T.typeRelTermNames . headType
 
 instance B.MixEncode Head where
@@ -115,7 +115,7 @@ headEquiv he1 he2 = ts he1 == ts he2 where
 --   False
 --
 isSubhead :: Head -> Head -> Bool
-isSubhead he1 he2 = D.getTermNames he1 `B.sublist` D.getTermNames he2
+isSubhead he1 he2 = T.getTermNames he1 `B.sublist` T.getTermNames he2
 
 -- | Test heading is superset of another heading.
 isSuperhead :: Head -> Head -> Bool
@@ -213,10 +213,10 @@ headUp = headOf . up . headType where
 --   >>> headForward (headFrom ["a", "b"]) (headFrom ["b", "a"]) ["x", "y"]
 --   ["y", "x"]
 --
-headForward :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> O.Map [c]
-headForward to from = B.pkRForward $ D.termPicker to from
+headForward :: (T.GetTermNames t1, T.GetTermNames t2) => t1 -> t2 -> O.Map [c]
+headForward to from = B.pkRForward $ T.termPicker to from
 
 -- | Move terms forward.
-bodyForward :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> O.Map [[c]]
+bodyForward :: (T.GetTermNames t1, T.GetTermNames t2) => t1 -> t2 -> O.Map [[c]]
 bodyForward to from = (headForward to from <$>)
 
