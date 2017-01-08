@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Syntax.Subtree.Decode
   ( readSubtreeClauses,
+    subtreeClause,
     decodeSubtreePattern,
   ) where
 
@@ -39,7 +40,7 @@ readSubtreeClauses path =
          Left a -> Left a
          Right ls -> subtreeClause O.<#> ls
 
--- | Insert open/sep/close to subtree clause.
+-- | Insert open\/sep\/close to subtree clause.
 subtreeClause :: S.TokenClause -> B.Ab S.TokenClause
 subtreeClause cl = cl' where
     cl' = case clauseFirstElem cl of
