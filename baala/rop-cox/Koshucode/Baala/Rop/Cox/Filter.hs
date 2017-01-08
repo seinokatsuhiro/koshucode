@@ -47,7 +47,7 @@ ropsCoxFilter = Rop.rops "cox-filter"
 --
 consFilter :: (K.CContent c) => Bool -> C.RopCons c
 consFilter which med =
-    do cops   <- Rop.getLet med "-let"
+    do cops   <- Rop.getLetR med
        cox    <- Rop.getCox med "-expr"
        Right $ relmapFilter med (which, cops, cox)
 

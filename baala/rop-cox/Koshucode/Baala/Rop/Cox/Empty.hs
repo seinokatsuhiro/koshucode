@@ -86,7 +86,7 @@ consMaybe med =
            | otherwise -> Msg.unkTag
     where
       maybeOnly sh fill rmap createPortion =
-          do cops  <- Rop.getLet med "-let"
+          do cops  <- Rop.getLetR med
              cox   <- Rop.getCox med "-only"
              portion <- createPortion
              Right $ relmapMaybeOnly med ((sh, cops, cox, portion), fill) rmap

@@ -53,7 +53,7 @@ ropsCoxCalc = Rop.ropAlias
 --
 consAdd :: (K.CContent c) => C.RopCons c
 consAdd med =
-    do cops <- Rop.getLet med "-let"
+    do cops <- Rop.getLetR med
        cox  <- Rop.getCoxTerms med "-cox"
        Right $ relmapAdd med (cops, cox)
 
@@ -81,7 +81,7 @@ relkitAdd (cops, cox) (Just he1) = Rop.newCheck pk kit where
 --
 consAlt :: (K.CContent c) => C.RopCons c
 consAlt med =
-    do cops <- Rop.getLet med "-let"
+    do cops <- Rop.getLetR med
        cox  <- Rop.getCoxTerms med "-cox"
        Right $ relmapAlt med (cops, cox)
 
@@ -192,7 +192,7 @@ relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
 --
 consSplit :: (K.CContent c) => C.RopCons c
 consSplit med =
-    do cops <- Rop.getLet med "-let"
+    do cops <- Rop.getLetR med
        cox  <- Rop.getCoxTerms med "-cox"
        Right $ relmapSplit med (cops, cox)
 

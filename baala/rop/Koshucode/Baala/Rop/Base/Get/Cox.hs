@@ -13,7 +13,7 @@ module Koshucode.Baala.Rop.Base.Get.Cox
     getCoxTerms, getNamedCoxTerms, getOptCoxTerms,
 
     -- * Derived expression
-    getLet,
+    getLet, getLetR,
 
     -- * Portion
     getPotionCount, getPotionCountR,
@@ -133,6 +133,10 @@ getLet med name =
     do fs <- Rop.getOpt [] getLetBody med name
        let cops = K.getCops med
        Right $ cops { K.copsetDerived = fs }
+
+-- | 'getLet' with regular parameter name: @-let@.
+getLetR :: (K.CContent c) => Rop.RopGet0 (K.CopSet c) c
+getLetR med = getLet med "-let"
 
 getLetBody :: (K.CContent c) => Rop.RopGet [K.NamedCox c] c
 getLetBody med name =

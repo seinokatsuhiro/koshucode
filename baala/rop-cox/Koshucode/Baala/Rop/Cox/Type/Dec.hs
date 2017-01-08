@@ -42,7 +42,7 @@ ropsTypeDec = Rop.rops "type"
 --
 consOfDec :: (K.CContent c) => C.RopCons c
 consOfDec med =
-  do cops     <- Rop.getLet       med "-let"
+  do cops     <- Rop.getLetR      med
      content  <- Rop.getCox       med "-content"
      sign     <- Rop.getMaybeTerm med "-sign"
      fracle   <- Rop.getMaybeTerm med "-fracle"
@@ -81,7 +81,7 @@ decContents dec = [sign, fracle, num, denom] where
 --
 consAltDec :: (K.CContent c) => C.RopCons c
 consAltDec med =
-    do cops    <- Rop.getLet      med "-let"
+    do cops    <- Rop.getLetR     med
        term    <- Rop.getTerm     med "-term"
        fracle  <- Rop.getMaybeCox med "-fracle"
        Right $ relmapAltDec med (cops, term, fracle)
