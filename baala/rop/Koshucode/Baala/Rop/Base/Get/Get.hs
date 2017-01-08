@@ -5,6 +5,10 @@
 module Koshucode.Baala.Rop.Base.Get.Get
   ( -- * Type
     RopGet,
+    RopGet0,
+    RopGet2,
+    RopGet3,
+    RopGet4,
 
     -- * Tree
     getTrees,
@@ -31,7 +35,19 @@ type RopGet a c
     -> String       -- ^ Parameter name, e.g., @\"-term\"@
     -> K.Ab a       -- ^ Parameter value
 
+-- | No-names version of 'RopGet'.
+type RopGet0 a c = C.Intmed c -> K.Ab a
 
+-- | 2-names version of 'RopGet'.
+type RopGet2 a c = C.Intmed c -> String -> String -> K.Ab a
+
+-- | 3-names version of 'RopGet'.
+type RopGet3 a c = C.Intmed c -> String -> String -> String -> K.Ab a
+
+-- | 4-names version of 'RopGet'.
+type RopGet4 a c = C.Intmed c -> String -> String -> String -> String -> K.Ab a
+
+    
 -- ----------------------  Tree
 
 -- | Lookup relmap parameter.

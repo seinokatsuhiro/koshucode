@@ -178,7 +178,7 @@ treeRawText t          = Msg.abPara t Msg.reqRawText
 
 -- | Get count-type portion parameter.
 --   Parameter names are fixed to @-order@, @-top@, @-mid@, and @-bot@.
-getPotionCount :: (K.CContent c) => C.Intmed c -> K.Ab ([K.TermName], K.Portion)
+getPotionCount :: (K.CContent c) => Rop.RopGet0 ([K.TermName], K.Portion) c
 getPotionCount med =
     do order <- Rop.getTerms med "-order"
        top   <- Rop.getMaybe getInt med "-top"
@@ -190,7 +190,7 @@ getPotionCount med =
 
 -- | Get ratio-type portion parameter.
 --   Parameter names are fixed to @-order@, @-part@, and  @-of@.
-getPotionRatio :: (K.CContent c) => C.Intmed c -> K.Ab ([K.TermName], K.Portion)
+getPotionRatio :: (K.CContent c) => Rop.RopGet0 ([K.TermName], K.Portion) c
 getPotionRatio med =
     do order <- Rop.getTerms med "-order"
        part  <- getInt med "-part"
