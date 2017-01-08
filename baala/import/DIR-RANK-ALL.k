@@ -98,9 +98,10 @@
 |-- DIR-RANK  /dir-rank 41  /dir "Koshucode.Baala.Type.Judge"  /base-rank {= /rank /base /import-dir [ 39 | "JudgeClass"
     | [ "Base" | "Syntax" ] ] [ 40 | "Judge" | [ "Base" | "Overture" | "Syntax" ] ] [ 41 | "Interp" | [ "Base" |
     "Syntax" ] ] =}
-|-- DIR-RANK  /dir-rank 46  /dir "Koshucode.Baala.Type.Rel"  /base-rank {= /rank /base /import-dir [ 43 | "TermPicker" |
-    [ "Base" | "Judge" | "Overture" | "Syntax" ] ] [ 44 | "Head" | [ "Base" | "Judge" | "Overture" | "Syntax" | "Type" ]
-    ] [ 45 | "Rel" | [ "Base" | "Judge" | "Overture" | "Syntax" ] ] [ 46 | "Mono" | [ "Base" ] ] =}
+|-- DIR-RANK  /dir-rank 46  /dir "Koshucode.Baala.Type.Rel"  /base-rank {= /rank /base /import-dir [ 43 | "Order" | [
+    "Base" | "Judge" | "Overture" | "Syntax" ] ] [ 43 | "TermPicker" | [ "Base" | "Judge" | "Overture" | "Syntax" ] ] [
+    44 | "Head" | [ "Base" | "Judge" | "Overture" | "Syntax" | "Type" ] ] [ 45 | "Rel" | [ "Base" | "Judge" | "Overture"
+    | "Syntax" ] ] [ 46 | "Mono" | [ "Base" ] ] =}
 *** 25
 
 |-- DIR-RANK  /dir-rank 47  /dir "Koshucode.Baala.Type"  /base-rank {= /rank /base /import-dir [ 20 | "Message" | [
@@ -415,6 +416,7 @@ TABLE : DIR-RANK
                                                  
   46        "Koshucode.Baala.Type.Rel"           /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
+                                                 43    "Order"              [ "Base" | "Judge" | "Overture" | "Syntax" ]
                                                  43    "TermPicker"         [ "Base" | "Judge" | "Overture" | "Syntax" ]
                                                  44    "Head"               [ "Base" | "Judge" | "Overture" | "Syntax" | "Type" ]
                                                  45    "Rel"                [ "Base" | "Judge" | "Overture" | "Syntax" ]

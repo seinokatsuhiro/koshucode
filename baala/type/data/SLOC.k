@@ -3,14 +3,14 @@
 about /package 'type
 
 |-- DIR  /code 12   /comment 5    /dir "type/Koshucode/Baala"
-|-- DIR  /code 230  /comment 176  /dir "type/Koshucode/Baala/Type"
+|-- DIR  /code 232  /comment 176  /dir "type/Koshucode/Baala/Type"
 |-- DIR  /code 484  /comment 415  /dir "type/Koshucode/Baala/Type/Decimal"
 |-- DIR  /code 203  /comment 148  /dir "type/Koshucode/Baala/Type/Judge"
-|-- DIR  /code 251  /comment 345  /dir "type/Koshucode/Baala/Type/Rel"
+|-- DIR  /code 300  /comment 379  /dir "type/Koshucode/Baala/Type/Rel"
 |-- DIR  /code 713  /comment 610  /dir "type/Koshucode/Baala/Type/Time"
 |-- DIR  /code 102  /comment 156  /dir "type/Koshucode/Baala/Type/Type"
 
-|-- DIR-TOTAL  /code 1995  /comment 1855
+|-- DIR-TOTAL  /code 2046  /comment 1889
 
 |-- FILE  /code 12   /comment 5    /file "Type.hs"        /dir "type/Koshucode/Baala"
 |-- FILE  /code 12   /comment 6    /file "Decimal.hs"     /dir "type/Koshucode/Baala/Type"
@@ -24,10 +24,11 @@ about /package 'type
 |-- FILE  /code 149  /comment 116  /file "Judge.hs"       /dir "type/Koshucode/Baala/Type/Judge"
 |-- FILE  /code 20   /comment 16   /file "JudgeClass.hs"  /dir "type/Koshucode/Baala/Type/Judge"
 |-- FILE  /code 44   /comment 26   /file "Message.hs"     /dir "type/Koshucode/Baala/Type"
-|-- FILE  /code 10   /comment 6    /file "Rel.hs"         /dir "type/Koshucode/Baala/Type"
+|-- FILE  /code 12   /comment 6    /file "Rel.hs"         /dir "type/Koshucode/Baala/Type"
 |-- FILE  /code 90   /comment 132  /file "Head.hs"        /dir "type/Koshucode/Baala/Type/Rel"
 |-- FILE  /code 30   /comment 24   /file "Mono.hs"        /dir "type/Koshucode/Baala/Type/Rel"
-|-- FILE  /code 72   /comment 76   /file "Rel.hs"         /dir "type/Koshucode/Baala/Type/Rel"
+|-- FILE  /code 53   /comment 36   /file "Order.hs"       /dir "type/Koshucode/Baala/Type/Rel"
+|-- FILE  /code 68   /comment 74   /file "Rel.hs"         /dir "type/Koshucode/Baala/Type/Rel"
 |-- FILE  /code 59   /comment 113  /file "TermPicker.hs"  /dir "type/Koshucode/Baala/Type/Rel"
 |-- FILE  /code 14   /comment 5    /file "Time.hs"        /dir "type/Koshucode/Baala/Type"
 |-- FILE  /code 169  /comment 133  /file "Clock.hs"       /dir "type/Koshucode/Baala/Type/Time"
@@ -40,4 +41,4 @@ about /package 'type
 |-- FILE  /code 69   /comment 135  /file "Genus.hs"       /dir "type/Koshucode/Baala/Type/Type"
 |-- FILE  /code 33   /comment 21   /file "Predefined.hs"  /dir "type/Koshucode/Baala/Type/Type"
 
-|-- FILE-TOTAL  /code 1995  /comment 1855
+|-- FILE-TOTAL  /code 2046  /comment 1889

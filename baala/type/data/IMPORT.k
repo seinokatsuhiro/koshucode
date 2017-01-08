@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    125 judges
+**    130 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Type.Decimal.BinaryAb"     /import "Koshucode.Baala.Base"
@@ -73,6 +73,11 @@
 |-- IMPORT  /module "Koshucode.Baala.Type.Rel.Mono"             /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Type.Rel.Mono"             /import "Koshucode.Baala.Type.Rel.Rel"
 
+|-- IMPORT  /module "Koshucode.Baala.Type.Rel.Order"            /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Type.Rel.Order"            /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Type.Rel.Order"            /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Type.Rel.Order"            /import "Koshucode.Baala.Type.Judge"
+
 |-- IMPORT  /module "Koshucode.Baala.Type.Rel.Rel"              /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Type.Rel.Rel"              /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Type.Rel.Rel"              /import "Koshucode.Baala.Syntax"
@@ -86,6 +91,7 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Type.Rel"                  /import "Koshucode.Baala.Type.Rel.Head"
 |-- IMPORT  /module "Koshucode.Baala.Type.Rel"                  /import "Koshucode.Baala.Type.Rel.Mono"
+|-- IMPORT  /module "Koshucode.Baala.Type.Rel"                  /import "Koshucode.Baala.Type.Rel.Order"
 |-- IMPORT  /module "Koshucode.Baala.Type.Rel"                  /import "Koshucode.Baala.Type.Rel.Rel"
 |-- IMPORT  /module "Koshucode.Baala.Type.Rel"                  /import "Koshucode.Baala.Type.Rel.TermPicker"
 
