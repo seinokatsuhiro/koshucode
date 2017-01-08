@@ -6,6 +6,7 @@ module Koshucode.Baala.Data.Class.Content
   ( -- * Generic content
     CContent (..),
     toDec,
+    valueContent,
   ) where
 
 import qualified Koshucode.Baala.Overture                 as O
@@ -62,4 +63,15 @@ toDec c
                       True   -> D.pInt 1
                       False  -> D.pInt 0
     | otherwise   = c
+
+-- | Convert 'O.Value' to content.
+valueContent :: (CContent c) => O.Value -> c
+valueContent (O.VEmpty)      = D.empty
+valueContent (O.VBool b)     = D.pBool b
+valueContent (O.VInt i)      = D.pInt i
+valueContent (O.VInteger i)  = D.pInteger i
+valueContent (O.VStr s)      = D.pText s
+valueContent (O.VTx s)       = D.pTx s
+valueContent (O.VTz s)       = D.pTz s
+valueContent (O.VList cs)    = D.pList (valueContent <$> cs)
 
