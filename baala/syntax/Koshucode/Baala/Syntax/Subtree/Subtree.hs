@@ -127,14 +127,14 @@ subtreeOne ps0 ts = p1 O.<++> ts where
     p2 _ _ = Nothing
 
 nullY :: (a -> String) -> S.SubtreeFilter -> Subtree a -> Bool
-nullY get f t = null $ S.subtreeFilterOn (get <.> getTreeY) f [t]
+nullY get f t = null $ S.subtreeFilterOn (get <#.> getTreeY) f [t]
 
 nullZ :: (a -> String) -> S.SubtreeFilter -> Subtree a -> Bool
-nullZ get f t = null $ S.subtreeFilterOn (get <.> getTreeZ) f [t]
+nullZ get f t = null $ S.subtreeFilterOn (get <#.> getTreeZ) f [t]
 
 -- | 'fmap' composition.
-(<.>) :: (Functor f) => (b -> c) -> (a -> f b) -> a -> f c
-(<.>) g f x = g <$> f x
+(<#.>) :: (Functor f) => (b -> c) -> (a -> f b) -> a -> f c
+(<#.>) g f x = g <$> f x
 
 -- | Branch element of tree.
 getTreeY :: B.RawTree b y z -> Maybe y

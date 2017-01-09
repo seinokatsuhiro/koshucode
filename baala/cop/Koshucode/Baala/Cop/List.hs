@@ -244,10 +244,10 @@ dropTakeDispatch (f, g) arg d t xs'
 -- ----------------------  push
 
 copPush :: (D.CContent c) => D.CopCalc c
-copPush = push (:) B.<.> D.getRightArg2
+copPush = push (:) B.<#.> D.getRightArg2
 
 copPushTail :: (D.CContent c) => D.CopCalc c
-copPushTail = push f B.<.> D.getRightArg2 where
+copPushTail = push f B.<#.> D.getRightArg2 where
     f c = ((c :) O./$/)
 
 push :: (D.CContent c) => (c -> [c] -> [c]) -> (c, c) -> B.Ab c
@@ -267,7 +267,7 @@ copCoxIn _       = Msg.adlib "require operand"
 
 -- function
 copFunIn :: (D.CContent c) => D.CopCalc c
-copFunIn = f B.<.> D.getRightArg2 where
+copFunIn = f B.<#.> D.getRightArg2 where
     f (c, cs)
         | D.isSet  cs  = D.putBool $ c `elem` D.gSet  cs
         | D.isList cs  = D.putBool $ c `elem` D.gList cs

@@ -64,7 +64,7 @@ treeContent tree = Msg.abLiteral tree $ cons tree where
     group []                 = Right D.empty
     group _                  = Msg.unkContent
 
-    putDecimal = D.putDec B.<.> T.decodeDecimal
+    putDecimal = D.putDec B.<#.> T.decodeDecimal
 
 tokenContent :: (D.CContent c) => S.Token -> B.Ab c
 tokenContent (P.T f w)
@@ -119,7 +119,7 @@ treesTie _ _ = Msg.adlib "unknown tie"
 --   treesTerms
 --
 treesTerms :: (D.CContent c) => DecodeContent c -> [S.Tree] -> B.Ab [S.Term c]
-treesTerms cons = mapM p B.<.> D.treesTerms1 where
+treesTerms cons = mapM p B.<#.> D.treesTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 
 -- | Decode judge from token trees.

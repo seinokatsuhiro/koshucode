@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Prelude.Import
     Control.Exception.bracket,
 
     -- * Control.Monad
-    (<.>),
+    (<#.>),
     (Control.Monad.>=>),
     Control.Monad.filterM,
     Control.Monad.foldM,
@@ -93,11 +93,11 @@ import qualified Text.PrettyPrint
 
 -- ----------------------  Control
 
-infixr 1 <.>
+infixr 1 <#.>
 
 -- | Composition of monadic functions.
-(<.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
-(<.>) = (Control.Monad.<=<)
+(<#.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
+(<#.>) = (Control.Monad.<=<)
 
 --concatMapM :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
 --concatMapM f = return . concat Control.Monad.<=< mapM f

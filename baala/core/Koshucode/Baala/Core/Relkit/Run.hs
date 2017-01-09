@@ -135,5 +135,5 @@ keys = (map fst O.<$$>)
 
 -- | Double lookup.
 lookup2 :: (Eq a, Eq b) => a -> b -> [(a, [(b, c)])] -> Maybe c
-lookup2 a b = lookup b B.<.> lookup a
+lookup2 a b = lookup b B.<#.> lookup a
 
