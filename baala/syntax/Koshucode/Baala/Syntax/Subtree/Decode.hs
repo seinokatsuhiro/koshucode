@@ -97,7 +97,7 @@ decodeSubtreePattern = pats where
     pat (P.LRaw ">" : ts) = do (ts', term) <- splitClassTerm ts
                                S.SubtreeB term </> ts'
     pat (P.LRaw ">>" : ts) = S.SubtreeR </> ts
-    pat _ = Msg.adlib "Unknown subtree pattern"
+    pat ts = abSubtree ts $ Msg.adlib "Unknown subtree pattern"
 
     filt []                          = Right (S.subtreeId, [])
     filt (P.LQq s : ts)              = S.subtreeEq s <+> ts
@@ -105,7 +105,7 @@ decodeSubtreePattern = pats where
     filt (P.LRaw "!" : P.LQq s : ts) = S.subtreeOmit s <+> ts
     filt [P.BGroup ts]               = do ps <- pats ts
                                           Right (S.subtreeId, ps)
-    filt _ = Msg.adlib "Unknown subtree filter"
+    filt ts = abSubtree ts $ Msg.adlib "Unknown subtree filter"
 
     k </> ts = do (f, ps) <- filt ts
                   Right $ k f ps
@@ -113,7 +113,7 @@ decodeSubtreePattern = pats where
                   Right (f O.++ g, ps)
 
 splitClassTerm :: [S.Tree] -> B.Ab ([S.Tree], S.SubtreeTerm)
-splitClassTerm ts0 = loop [] ts0 where
+splitClassTerm ts0 = abSubtree ts0 $ loop [] ts0 where
     loop cs (P.LRaw c : ts)  = loop (c : cs) ts
     loop cs (P.LTerm n : P.LRaw "seq" : ts)
         = right cs (ts, S.SubtreeSeq (reverse cs) (S.toTermName n))
@@ -124,3 +124,8 @@ splitClassTerm ts0 = loop [] ts0 where
     right cs result
         | null cs    = Msg.adlib "Expect one or more judgement classes"
         | otherwise  = Right result
+
+-- | Abortable scope for subtree.
+abSubtree :: (B.GetCodePos cp) => B.Abortable cp b
+abSubtree = B.abortable "subtree"
+
