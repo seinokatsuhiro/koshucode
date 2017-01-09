@@ -7,7 +7,6 @@ module Koshucode.Baala.Base.IO.Http
     httpExceptionSummary,
   ) where
 
-import qualified Data.ByteString.Char8              as Bc
 import qualified Control.Exception                  as Ex
 import qualified Network.HTTP.Conduit               as H
 import qualified Network.HTTP.Types.Status          as H
@@ -19,13 +18,30 @@ import qualified Koshucode.Baala.Base.Prelude       as B
 type HttpProxy = (String, Maybe O.IOPath)
 
 -- | Get HTTP content as lazy bytestring.
+--   If request succeeded as 200 OK,
+--   returns lazy-bytestring content in 'Right' part,
+--   otherwise, returns status code and message in 'Left' part.
+--
+--   >>> httpGet [] "https://httpbin.org/robots.txt"
+--   Right "User-agent: *\nDisallow: /deny\n"
+--
+--   >>> (print B.<#.> httpGet []) O.<#!> ((\c -> "http://httpbin.org/status/" ++ show c) <$> [400 .. 404 :: Int])
+--   Left (400, "BAD REQUEST")
+--   Left (401, "UNAUTHORIZED")
+--   Left (402, "PAYMENT REQUIRED")
+--   Left (403, "FORBIDDEN")
+--   Left (404, "NOT FOUND")
+--
 httpGet :: [HttpProxy] -> O.IOPath -> IO (Either (Int, String) B.Bz)
 httpGet proxies uriText =
     do req <- requestFromURI proxies uriText
        catchHttpException $ do
          man <- H.newManager H.tlsManagerSettings
          res <- H.httpLbs req man
-         return $ Right $ H.responseBody res
+         return $ case H.responseStatus res of
+           H.Status code msg
+               | code == 200 -> Right $ H.responseBody res
+               | otherwise   -> Left (code, B.bsString msg)
 
 requestFromURI :: [HttpProxy] -> O.IOPath -> IO H.Request
 requestFromURI proxies uriText =
@@ -40,7 +56,7 @@ requestFromURI proxies uriText =
           proxy'    <- proxy
           uri       <- U.parseURI proxy'
           auth      <- U.uriAuthority uri
-          let host'  = Bc.pack $ U.uriRegName auth
+          let host'  = B.stringBs $ U.uriRegName auth
               port   = uriPortNumber $ U.uriPort auth
           Just $ H.addProxy host' port req
 
@@ -66,7 +82,7 @@ catchHttpException = ( `Ex.catch` handler ) where
 -- | Status code and message.
 httpStatus :: H.Response body -> (Int, String)
 httpStatus res = case H.responseStatus res of
-                   H.Status code msg -> (code, Bc.unpack msg)
+                   H.Status code msg -> (code, B.bsString msg)
 
 -- | Text message of HTTP exception.
 httpExceptionSummary :: H.HttpException -> String
