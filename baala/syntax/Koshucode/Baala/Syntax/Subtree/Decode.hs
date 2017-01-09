@@ -76,17 +76,18 @@ clauseFirstElem cl =
 -- | Decode token trees to subtree patterns.
 --
 --   >>> S.withTrees decodeSubtreePattern "- \"Z1\""
---   Right [SubtreeL (SubtreeEq "Z1")]
+--   Right [SubtreeL SubtreeNone (SubtreeEq "Z1")]
 --
 --   >>> S.withTrees decodeSubtreePattern "> \"Y1\" ( - \"Z1\" )"
---   Right [SubtreeB (SubtreeEq "Y1") [SubtreeL (SubtreeEq "Z1")]]
+--   Right [SubtreeB SubtreeNone (SubtreeEq "Y1") [SubtreeL SubtreeNone (SubtreeEq "Z1")]]
 --
 --   >>> S.withTrees decodeSubtreePattern "> \"Y1\" ( - \"Z1\" | - \"Z2\" )"
---   Right [ SubtreeB (SubtreeEq "Y1") [ SubtreeL (SubtreeEq "Z1")
---                                     , SubtreeL (SubtreeEq "Z2") ]]
+--   Right [SubtreeB SubtreeNone (SubtreeEq "Y1")
+--                   [SubtreeL SubtreeNone (SubtreeEq "Z1"),
+--                    SubtreeL SubtreeNone (SubtreeEq "Z2")]]
 --
 --   >>> S.withTrees decodeSubtreePattern ">> \"Y1\" ( - \"Z1\" )"
---   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL (SubtreeEq "Z1")]]
+--   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL SubtreeNone (SubtreeEq "Z1")]]
 --
 --   >>> S.withTrees decodeSubtreePattern ">> \"Y1\" ( - A B /z \"Z1\" )"
 --   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL (SubtreeText ["A", "B"] (TermName EQ "z")) (SubtreeEq "Z1")]]
@@ -96,25 +97,39 @@ decodeSubtreePattern = pats where
     pats ts = pat O.<#> S.divideTreesByBar ts
 
     pat (P.LRaw "-" : ts) = do (ts', term) <- splitClassTerm ts
-                               (f, _) <- filt ts'
+                               (f, _) <- filtPat ts'
                                Right $ S.SubtreeL term f
     pat (P.LRaw ">" : ts) = do (ts', term) <- splitClassTerm ts
                                S.SubtreeB term </> ts'
     pat (P.LRaw ">>" : ts) = S.SubtreeR </> ts
     pat ts = abSubtree ts $ Msg.adlib "Unknown subtree pattern"
 
-    filt []                          = Right (S.subtreeId, [])
-    filt (P.LQq s : ts)              = S.subtreeEq s <+> ts
-    filt (P.LRaw "?" : P.LQq s : ts) = S.subtreeKeep s <+> ts
-    filt (P.LRaw "!" : P.LQq s : ts) = S.subtreeOmit s <+> ts
-    filt [P.BGroup ts]               = do ps <- pats ts
-                                          Right (S.subtreeId, ps)
+    k </> ts = do (f, ps) <- filtPat ts
+                  Right $ k f ps
+
+    filtPat ts = abSubtree ts $ case splitFilter ts of
+        (fs, [P.BGroup ts2])
+                 -> do fs' <- filt O.<#> fs
+                       ps <- pats ts2
+                       Right (mconcat fs', ps)
+        (fs, []) -> do fs' <- filt O.<#> fs
+                       Right (mconcat fs', [])
+        (_, ts2) -> abSubtree ts2 $ Msg.adlib "Malformed subtree pattern"
+
+    filt :: [S.Tree] -> B.Ab S.SubtreeFilter
+    filt []                      = Right $ S.subtreeId
+    filt [P.LQq s]               = Right $ S.subtreeEq s
+    filt [P.LRaw "?", P.LQq s]   = Right $ S.subtreeKeep s
+    filt [P.LRaw "!", P.LQq s]   = Right $ S.subtreeOmit s
     filt ts = abSubtree ts $ Msg.adlib "Unknown subtree filter"
 
-    k </> ts = do (f, ps) <- filt ts
-                  Right $ k f ps
-    f <+> ts = do (g, ps) <- filt ts
-                  Right (f O.++ g, ps)
+splitFilter :: [S.Tree] -> ([[S.Tree]], [S.Tree])
+splitFilter ts = (filt', pat) where
+    (filt, pat) = break isGroup ts
+    filt' = S.divideTreesByBar filt
+
+    isGroup (P.BGroup _) = True
+    isGroup _            = False
 
 splitClassTerm :: [S.Tree] -> B.Ab ([S.Tree], S.SubtreeTerm)
 splitClassTerm ts0 = abSubtree ts0 $ loop [] ts0 where
