@@ -13,7 +13,8 @@ module Koshucode.Baala.Syntax.Subtree.Subtree
     -- * Conversion
     Subtree,
     SubtreeOutput,
-    subtree, subtreeWith,
+    subtree,
+    subtreeBy,
     subtreeOne,
     subtreeData,
   ) where
@@ -89,25 +90,32 @@ type SubtreeOutput a = B.RawTree [SubtreePattern] (SubtreeTerm, a) (SubtreeTerm,
 --     - (SubtreeText ["A"] (TermName EQ "z"),"Z1")
 --
 subtree :: [SubtreePattern] -> [Subtree String] -> [SubtreeOutput String]
-subtree = subtreeWith id
+subtree = subtreeBy stringTest
 
--- | Select subtree with string getter.
-subtreeWith :: (a -> String) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
-subtreeWith get = loop where
+stringTest :: String -> S.SubtreeFilter -> Bool
+stringTest _ (S.SubtreeId)         = True
+stringTest t (S.SubtreeEq s)       = s == t
+stringTest t (S.SubtreeKeep s _)   = s == t
+stringTest t (S.SubtreeOmit s _)   = s /= t
+stringTest t (S.SubtreeChain f g)  = stringTest t f && stringTest t g
+
+-- | Select subtree by element tester.
+subtreeBy :: (a -> S.SubtreeFilter -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
+subtreeBy test = loop where
     loop ps0 ts = p1 O.<++> ts where
         p1 t = p2 t O.<?> ps0
 
-        p2 t@(B.TreeL z) (SubtreeL term f)
-            | nullZ get f t  = Nothing
-            | otherwise      = Just $ B.TreeL (term, z)
-        p2 t@(B.TreeB _ y xs) (SubtreeB term f ps)
-            | nullY get f t  = Nothing
-            | otherwise      = Just $ B.TreeB [] (term, y) (loop ps xs)
-        p2 t@(B.TreeB _ y xs) (SubtreeR f ps)
-            | nullY get f t  = Nothing
-            | otherwise      = case loop (SubtreeR f ps : ps) xs of
-                                 []  -> Nothing
-                                 xs' -> Just $ B.TreeB [] (SubtreeNone, y) xs'
+        p2 (B.TreeL z) (SubtreeL term f)
+            | test z f     = Just $ B.TreeL (term, z)
+            | otherwise    = Nothing
+        p2 (B.TreeB _ y xs) (SubtreeB term f ps)
+            | test y f     = Just $ B.TreeB [] (term, y) (loop ps xs)
+            | otherwise    = Nothing
+        p2 (B.TreeB _ y xs) (SubtreeR f ps)
+            | test y f     = case loop (SubtreeR f ps : ps) xs of
+                               []  -> Nothing
+                               xs' -> Just $ B.TreeB [] (SubtreeNone, y) xs'
+            | otherwise    = Nothing
         p2 _ _ = Nothing
 
 -- | Select subtree.

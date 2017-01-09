@@ -27,6 +27,7 @@ import qualified Text.StringLike                         as X
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Symbol           as S
+import qualified Koshucode.Baala.Syntax.Subtree.Filter   as S
 import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 
 
@@ -132,13 +133,20 @@ type RawJudge c = (S.JudgeClass, [S.Term c])
 
 -- | Calculate subtree of XML tree.
 xmlSubtree :: [S.SubtreePattern] -> [XmlTree String] -> [XmlTreeOutput String]
-xmlSubtree = S.subtreeWith xmlKeyString
+xmlSubtree = S.subtreeBy xmlTermTest
 
 xmlKeyString :: XmlTerm String -> String
 xmlKeyString (XmlElem s _ , _) = s
 xmlKeyString (XmlAttr s   , _) = s
 xmlKeyString (XmlText     , _) = "@text"
 xmlKeyString (XmlComment  , _) = "@comment"
+
+xmlTermTest :: XmlTerm String -> S.SubtreeFilter -> Bool
+xmlTermTest _ (S.SubtreeId)         = True
+xmlTermTest t (S.SubtreeEq s)       = s == xmlKeyString t
+xmlTermTest t (S.SubtreeKeep s _)   = s == xmlKeyString t
+xmlTermTest t (S.SubtreeOmit s _)   = s /= xmlKeyString t
+xmlTermTest t (S.SubtreeChain f g)  = xmlTermTest t f && xmlTermTest t g
 
 -- | Extract data from XML output tree.
 xmlData :: XmlTreeOutput String -> [RawJudge O.Value]
