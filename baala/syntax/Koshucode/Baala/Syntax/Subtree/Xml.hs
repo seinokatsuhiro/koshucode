@@ -34,7 +34,7 @@ import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 
 -- | XML token.
 data XmlToken s
-    = XmlOpen  s            -- ^ Open tag
+    = XmlOpen  s [(s, s)]   -- ^ Open tag and attributes
     | XmlClose s            -- ^ Close tag
     | XmlTerm (XmlTerm s)   -- ^ Terminal token
       deriving (Show, Eq, Ord)
@@ -48,10 +48,10 @@ type XmlTerm s = (XmlKey s, s)
 
 -- | Key data of XML tree.
 data XmlKey s
-    = XmlElem s       -- ^ Element node
-    | XmlAttr s       -- ^ Attribute of element
-    | XmlText         -- ^ Text node
-    | XmlComment      -- ^ Comment node
+    = XmlElem s [(s, s)]   -- ^ Element node
+    | XmlAttr s            -- ^ Attribute of element
+    | XmlText              -- ^ Text node
+    | XmlComment           -- ^ Comment node
       deriving (Show, Eq, Ord)
 
 -- | Tokenize XML document.
@@ -67,8 +67,8 @@ xmlTokens = convertTags . X.parseTags
 
 convertTags :: (X.StringLike s) => [X.Tag s] -> [XmlToken s]
 convertTags = loop [] where
-    loop up (X.TagOpen n xs : tags) = XmlOpen n : ((attr <$> xs)
-                                                   ++ loop (n : up) tags)
+    loop up (X.TagOpen n xs : tags) = XmlOpen n xs : ((attr <$> xs)
+                                                      ++ loop (n : up) tags)
     loop (u : up) tags'@(X.TagClose n : tags)
                        | u == n     = XmlClose n   : loop up tags
                        | otherwise  = XmlClose u   : loop up tags'
@@ -93,9 +93,9 @@ xmlTrees toks =
     do trees <- B.codeTrees bracket B.BracketNone toks
        Right (modifyTree <$> trees)
     where
-      bracket (XmlOpen n)   = B.BracketOpen  (XmlElem n, n)
-      bracket (XmlClose n)  = B.BracketClose (XmlElem n, n)
-      bracket _             = B.BracketNone
+      bracket (XmlOpen n xs) = B.BracketOpen  (XmlElem n xs, n)
+      bracket (XmlClose n)   = B.BracketClose (XmlElem n [], n)
+      bracket _              = B.BracketNone
 
 modifyTree :: (X.StringLike s) => XmlTree' s -> XmlTree s
 modifyTree = B.treeMap (const []) y xmlUntoken where
@@ -103,9 +103,9 @@ modifyTree = B.treeMap (const []) y xmlUntoken where
     y _              = (XmlComment, X.empty)
 
 xmlUntoken :: XmlToken s -> XmlTerm s
-xmlUntoken (XmlOpen  n) = (XmlElem n, n)
-xmlUntoken (XmlClose n) = (XmlElem n, n)
-xmlUntoken (XmlTerm  z) = z
+xmlUntoken (XmlOpen  n xs) = (XmlElem n xs, n)
+xmlUntoken (XmlClose n)    = (XmlElem n [], n)
+xmlUntoken (XmlTerm  z)    = z
 
 -- | Decode XML trees.
 --
@@ -135,10 +135,10 @@ xmlSubtree :: [S.SubtreePattern] -> [XmlTree String] -> [XmlTreeOutput String]
 xmlSubtree = S.subtreeWith xmlKeyString
 
 xmlKeyString :: XmlTerm String -> String
-xmlKeyString (XmlElem s  , _) = s
-xmlKeyString (XmlAttr s  , _) = s
-xmlKeyString (XmlText    , _) = "@text"
-xmlKeyString (XmlComment , _) = "@comment"
+xmlKeyString (XmlElem s _ , _) = s
+xmlKeyString (XmlAttr s   , _) = s
+xmlKeyString (XmlText     , _) = "@text"
+xmlKeyString (XmlComment  , _) = "@comment"
 
 -- | Extract data from XML output tree.
 xmlData :: XmlTreeOutput String -> [RawJudge O.Value]
