@@ -3,9 +3,13 @@
 -- | Decode subtree.
 
 module Koshucode.Baala.Syntax.Subtree.Decode
-  ( readSubtreeClauses,
+  ( -- * Decode
+    readSubtreeClauses,
     subtreeClause,
     decodeSubtreePattern,
+
+    -- * Syntax of subtree
+    -- $Syntax
   ) where
 
 import qualified Koshucode.Baala.Overture                as O
@@ -129,3 +133,42 @@ splitClassTerm ts0 = abSubtree ts0 $ loop [] ts0 where
 abSubtree :: (B.GetCodePos cp) => B.Abortable cp b
 abSubtree = B.abortable "subtree"
 
+-- $Syntax
+--
+-- == Pattern
+--
+--  [@-@ /Filter/]
+--    Leaf which satisfies /Filter/.
+--  [@>@ /Filter/ @{@ /Pattern/ @|@ ... @}@]
+--    Branch which satisfies /Filter/,
+--    and inner trees match /Pattern/.
+--  [@>>@ /Filter/ @{@ /Pattern/ @|@ ... @}@]
+--    Recursive branch pattern include current branch,
+--    and inner trees match /Pattern/.
+--  [@>>>@ /Filter/ @{@ /Pattern/ @|@ ... @}@]
+--    Recursive branch pattern only inner branches,
+--    and inner trees match /Pattern/.
+--
+-- == Filter
+--
+--  [/Element/ @|@ ...]
+--    Chain of filter /Element/s.
+--
+-- == Element
+--
+--  [@"@/Text/@"@]
+--    Node name is equal to /Text/.
+--  [@?@ @"@/Like/@"@]
+--    Node name satisfies /Like/ pattern.
+--  [@!@ @"@/Like/@"@]
+--    Node name does not satisfies /Like/ pattern.
+--  [@id@ @"@/Text/@"@]
+--    __Used for XML tree:__
+--    Value of id attribute is equal to /Text/.
+--  [@class@ @"@/Text/@"@]
+--    __Used for XML tree:__
+--    Space-delimited values of class attribute contains /Text/.
+--  [@"@/Text/@"@ @=@ @"@/Text/@"@]
+--    __Used for XML tree:__
+--    Attribute value is equal to /Text/.
+--
