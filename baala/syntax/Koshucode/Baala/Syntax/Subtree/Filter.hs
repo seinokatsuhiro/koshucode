@@ -7,6 +7,7 @@ module Koshucode.Baala.Syntax.Subtree.Filter
     subtreeId, subtreeEq,
     subtreeKeep, subtreeOmit,
     subtreeChain,
+    subtreeAttr,
     subtreeFilter,
     subtreeFilterOn,
   ) where
@@ -20,6 +21,7 @@ data SubtreeFilter
     | SubtreeEq    String                       -- ^ Equality
     | SubtreeKeep  String Glob.Pattern          -- ^ Glob
     | SubtreeOmit  String Glob.Pattern          -- ^ Anti-glob
+    | SubtreeAttr  String String                -- ^ Attribute
     | SubtreeChain SubtreeFilter SubtreeFilter  -- ^ Filter chain
       deriving (Show, Eq)
 
@@ -48,6 +50,10 @@ subtreeChain :: O.Bin SubtreeFilter
 subtreeChain SubtreeId f = f
 subtreeChain f SubtreeId = f
 subtreeChain f g = SubtreeChain f g
+
+-- | Attribute filter.
+subtreeAttr :: String -> String -> SubtreeFilter
+subtreeAttr = SubtreeAttr
 
 -- | Filter strings by subtree filter.
 --
@@ -82,5 +88,6 @@ subtreeFilterOn get f xs0 = a xs0 [f] where
     a xs (SubtreeEq x : fs)        = a xs' fs where xs' = O.keepOn get (== x) xs
     a xs (SubtreeKeep _ p : fs)    = a xs' fs where xs' = O.keepOn get (Glob.match p) xs
     a xs (SubtreeOmit _ p : fs)    = a xs' fs where xs' = O.omitOn get (Glob.match p) xs
+    a xs (SubtreeAttr _ _ : fs)    = a xs fs
     a xs (SubtreeChain f1 f2 : fs) = a xs fs' where fs' = f1 : f2 : fs
 

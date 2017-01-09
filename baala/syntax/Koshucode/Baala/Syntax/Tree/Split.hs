@@ -8,7 +8,8 @@ module Koshucode.Baala.Syntax.Tree.Split
     splitTokensBy, splitTreesBy,
     -- * Divide
     divideTreesBy,
-    divideTreesByBar, divideTreesByColon, divideTreesByEqual,
+    divideTreesByBar, divideTreesByBar2,
+    divideTreesByColon, divideTreesByEqual,
   ) where
 
 import qualified Koshucode.Baala.Overture                as O
@@ -74,6 +75,10 @@ divideTreesBy = B.divideBy . raw
 --
 divideTreesByBar :: [S.Tree] -> [[S.Tree]]
 divideTreesByBar = divideTreesBy (== "|")
+
+-- | Divide token trees by double vertical bar @\"||\"@.
+divideTreesByBar2 :: [S.Tree] -> [[S.Tree]]
+divideTreesByBar2 = divideTreesBy (== "||")
 
 -- | Divide token trees by colon @\":\"@.
 divideTreesByColon :: [S.Tree] -> [[S.Tree]]

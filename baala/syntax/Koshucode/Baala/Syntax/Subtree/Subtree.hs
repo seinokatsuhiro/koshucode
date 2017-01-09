@@ -98,6 +98,7 @@ stringTest t (S.SubtreeEq s)       = s == t
 stringTest t (S.SubtreeKeep s _)   = s == t
 stringTest t (S.SubtreeOmit s _)   = s /= t
 stringTest t (S.SubtreeChain f g)  = stringTest t f && stringTest t g
+stringTest _ (S.SubtreeAttr _ _)   = False
 
 -- | Select subtree by element tester.
 subtreeBy :: (a -> S.SubtreeFilter -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]

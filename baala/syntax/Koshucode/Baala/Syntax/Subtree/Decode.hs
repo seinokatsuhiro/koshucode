@@ -62,7 +62,7 @@ subtreeClause cl = cl' where
     test _          = False
 
     open   = S.TOpen  B.def "("
-    sep    = S.TText  B.def S.TextRaw "|"
+    sep    = S.TText  B.def S.TextRaw "||"
     close  = S.TClose B.def ")"
 
 clauseFirstElem :: B.CodeClause a -> Maybe a
@@ -94,7 +94,7 @@ clauseFirstElem cl =
 --
 decodeSubtreePattern :: [S.Tree] -> B.Ab [S.SubtreePattern]
 decodeSubtreePattern = pats where
-    pats ts = pat O.<#> S.divideTreesByBar ts
+    pats ts = pat O.<#> S.divideTreesByBar2 ts
 
     pat (P.LRaw "-" : ts) = do (ts', term) <- splitClassTerm ts
                                (f, _) <- filtPat ts'
@@ -121,6 +121,7 @@ decodeSubtreePattern = pats where
     filt [P.LQq s]               = Right $ S.subtreeEq s
     filt [P.LRaw "?", P.LQq s]   = Right $ S.subtreeKeep s
     filt [P.LRaw "!", P.LQq s]   = Right $ S.subtreeOmit s
+    filt [P.LQq n, P.LRaw "=", P.LQq v]  = Right $ S.subtreeAttr n v
     filt ts = abSubtree ts $ Msg.adlib "Unknown subtree filter"
 
 splitFilter :: [S.Tree] -> ([[S.Tree]], [S.Tree])

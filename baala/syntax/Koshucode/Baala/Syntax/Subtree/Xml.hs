@@ -147,6 +147,11 @@ xmlTermTest t (S.SubtreeEq s)       = s == xmlKeyString t
 xmlTermTest t (S.SubtreeKeep s _)   = s == xmlKeyString t
 xmlTermTest t (S.SubtreeOmit s _)   = s /= xmlKeyString t
 xmlTermTest t (S.SubtreeChain f g)  = xmlTermTest t f && xmlTermTest t g
+xmlTermTest (XmlElem _ xs, _) (S.SubtreeAttr n v) =
+    case lookup n xs of
+      Nothing -> True
+      Just v' -> v == v'
+xmlTermTest _ (S.SubtreeAttr _ _) = False
 
 -- | Extract data from XML output tree.
 xmlData :: XmlTreeOutput String -> [RawJudge O.Value]
