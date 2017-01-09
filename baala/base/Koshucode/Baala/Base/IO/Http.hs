@@ -1,13 +1,15 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Retrieve via HTTP.
 module Koshucode.Baala.Base.IO.Http
   ( HttpProxy,
-    httpGet,
+    httpGet, httpGetDoc,
     httpExceptionSummary,
   ) where
 
 import qualified Control.Exception                  as Ex
+import qualified Data.ByteString.Lazy               as Bz
 import qualified Network.HTTP.Conduit               as H
 import qualified Network.HTTP.Types.Status          as H
 import qualified Network.URI                        as U
@@ -33,8 +35,8 @@ type HttpProxy = (String, Maybe O.IOPath)
 --   Left (404, "NOT FOUND")
 --
 httpGet :: [HttpProxy] -> O.IOPath -> IO (Either (Int, String) B.Bz)
-httpGet proxies uriText =
-    do req <- requestFromURI proxies uriText
+httpGet proxies uri =
+    do req <- requestFromURI proxies uri
        catchHttpException $ do
          man <- H.newManager H.tlsManagerSettings
          res <- H.httpLbs req man
@@ -42,6 +44,24 @@ httpGet proxies uriText =
            H.Status code msg
                | code == 200 -> Right $ H.responseBody res
                | otherwise   -> Left (code, B.bsString msg)
+
+-- | Get HTTP content wrapped in @\<document\>@ tag.
+--
+--   >>> httpGetDoc [] "https://httpbin.org/robots.txt"
+--   Right "<document id=\"https://httpbin.org/robots.txt\"\r\n>User-agent: *\nDisallow: /deny\n</document>\r\n"
+--
+httpGetDoc :: [HttpProxy] -> O.IOPath -> IO (Either (Int, String) B.Bz)
+httpGetDoc proxies uri =
+    do result <- httpGet proxies uri
+       return (doc <$> result)
+    where
+      doc bz = Bz.concat [ "<document id=\""
+                         , B.stringBz $ escapeUri uri, "\"\r\n>"
+                         , bz, "</document>\r\n"]
+
+-- | Escape URI.
+escapeUri :: O.Map String
+escapeUri = U.escapeURIString U.isAllowedInURI
 
 requestFromURI :: [HttpProxy] -> O.IOPath -> IO H.Request
 requestFromURI proxies uriText =
