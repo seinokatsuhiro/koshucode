@@ -28,19 +28,19 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 
 -- ----------------------  Utility
 
-uncons3 :: a -> (Int -> a -> a -> a -> [a] -> [a] -> [a] -> b) -> [a] -> b
-uncons3 z f = first where
-    first (O.uncons -> Just (a, bs))
+tCut3 :: (O.Textual t) => Char -> (Int -> Char -> Char -> Char -> t -> t -> t -> a) -> t -> a
+tCut3 z f = first where
+    first (O.tCut -> Just (a, bs))
                      = second a bs
-    first _          = f 0 z z z [] [] []
+    first _          = f 0 z z z O.tEmpty O.tEmpty O.tEmpty
 
-    second a bs@(O.uncons -> Just (b, cs))
+    second a bs@(O.tCut -> Just (b, cs))
                      = third a b bs cs
-    second a _       = f 1 a z z [] [] []
+    second a _       = f 1 a z z O.tEmpty O.tEmpty O.tEmpty
 
-    third a b bs cs@(O.uncons -> Just (c, ds))
+    third a b bs cs@(O.tCut -> Just (c, ds))
                      = f 3 a b c bs cs ds
-    third a b bs _   = f 2 a b z bs [] []
+    third a b bs _   = f 2 a b z bs O.tEmpty O.tEmpty
 
 -- | Convert decimal string to integer.
 --
@@ -96,7 +96,7 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
 
     -- ----------------------  dispatch
 
-    sc' = S.section change (uncons3 '\0' dispatch) sc
+    sc' = S.section change (tCut3 '\0' dispatch) sc
 
     dispatch n a b c bs cs ds
         | S.isSpace a            = clip    $ S.clipSpace    cp bs
@@ -130,7 +130,7 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
                                            $ Msg.forbiddenInput $ S.angleQuote [a]
 
     aster :: String -> String -> S.TokenScan
-    aster (O.uncons -> Just (c, cs)) w
+    aster (O.tCut -> Just (c, cs)) w
         | w == "****"            = upd (c:cs) $ raw w
         | c == '*'               = aster cs (c:w)
     aster cs w
@@ -159,20 +159,20 @@ clipAngle cp cs0 = angle (0 :: Int) cs0 where
 
     -- <...
     angle :: Int -> String -> S.ClipResult
-    angle n (O.uncons -> Just (c, cs))
+    angle n (O.tCut -> Just (c, cs))
         | S.isSymbol c  = sym n (c:cs)
     angle n cs          = (cs, raw $ '<' : text n)
 
     -- <symbol ...
     sym :: Int -> String -> S.ClipResult
-    sym n (O.uncons -> Just (c, cs))
+    sym n (O.tCut -> Just (c, cs))
         | c == '>'      = close n cs
         | S.isSymbol c  = sym (n + 1) cs
     sym n cs            = (cs, raw $ '<' : text n) -- '<<'
 
     -- <symbol> ...
     close :: Int -> String -> S.ClipResult
-    close n (O.uncons -> Just (c, cs))
+    close n (O.tCut -> Just (c, cs))
         | c == '>'    = close (n + 1) cs
     close n cs        = (cs, key $ text n)
 
@@ -193,7 +193,7 @@ clipAngle cp cs0 = angle (0 :: Int) cs0 where
 -- | Clip token beginning with "@".
 clipAt :: B.CodePos -> String -> Int -> S.ClipResult
 clipAt cp = at where
-    at (O.uncons -> Just (c, cs))
+    at (O.tCut -> Just (c, cs))
        n | c == '@'    = at cs $ n + 1
          | c == '\''   = S.clipSlot 0 cp cs  -- positional
     at cs n            = S.clipSlot n cp cs
@@ -201,8 +201,8 @@ clipAt cp = at where
 -- | Clip local reference token, like @^/g@.
 clipHat :: B.CodePos -> String -> S.ClipResult
 clipHat cp = hat where
-    hat (O.uncons -> Just ('/', cs)) = localToken cs (S.LocalNest . S.toTermName)
-    hat cs@(O.uncons -> Just (c, _))
+    hat (O.tCut -> Just ('/', cs)) = localToken cs (S.LocalNest . S.toTermName)
+    hat cs@(O.tCut -> Just (c, _))
         | S.isSymbol c               = localToken cs S.LocalSymbol
     hat cs                           = ([], S.unknownToken cp cs $ Msg.adlib "local")
 
@@ -222,7 +222,7 @@ scanInterp change sc@B.CodeScan { B.codeInputPt = cp
     upd cs tok  = B.codeUpdate cs tok sc
     gen cs tok  = B.codeScanRestore $ upd cs tok
 
-    int (O.uncons -> Just (c, cs))
+    int (O.tCut -> Just (c, cs))
         | S.isSpace c   = clip   $ S.clipSpace    cp cs
         | S.isTerm c    = clipcl $ S.clipTermName cp wtab cs
         | otherwise     = word (c:cs)
@@ -231,7 +231,7 @@ scanInterp change sc@B.CodeScan { B.codeInputPt = cp
     word cs0 = loop O.zero cs0 where
         raw n = S.TText cp S.TextRaw $ take n cs0
         loop n cs@('|':'}':_) = gen  cs      $ raw n
-        loop n (O.uncons -> Just (c, cs))
+        loop n (O.tCut -> Just (c, cs))
             | S.isSpace c     = upd  (c:cs)  $ raw n
             | S.isTerm c      = upd  (c:cs)  $ raw n
             | otherwise       = loop (n + 1) cs

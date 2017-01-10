@@ -40,7 +40,7 @@ isQQ = (== '"')
 --
 nextSpace :: Next Int
 nextSpace = loop 0 where
-    loop n (O.uncons -> Just (c, cs))
+    loop n (O.tCut -> Just (c, cs))
         | Ch.isSpace c   = loop (n + 1) cs
     loop n cs            = (cs, n)
 
@@ -57,12 +57,12 @@ nextSpace = loop 0 where
 --
 nextQQ :: AbNext String
 nextQQ cs0 = loop O.zero cs0 where
-    loop n (O.uncons -> Just (c, cs))
+    loop n (O.tCut -> Just (c, cs))
         | isQQ c      = qq n cs
         | otherwise   = loop (n + 1) cs
     loop _ _          = Msg.quotNotEnd
 
-    qq n (O.uncons -> Just (c, cs))
+    qq n (O.tCut -> Just (c, cs))
         | isQQ c      = do (cs', s') <- nextQQ cs
                            Right (cs', take (n + 1) cs0 ++ s')
     qq n cs           = Right (cs, take n cs0)
