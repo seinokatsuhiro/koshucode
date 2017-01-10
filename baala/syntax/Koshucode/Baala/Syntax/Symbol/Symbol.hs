@@ -255,13 +255,11 @@ shortBody pre cs0 = short O.zero cs0 where
 --   Left (AbortReason "Expect ordinary symbol" ...)
 --
 nextSymbolPlain :: S.AbNext String
-nextSymbolPlain cs =
-    case nextSymbol cs of
-      (cs', sym) -> do w <- getSymbolPlain sym
-                       Right (cs', w)
+nextSymbolPlain cs = getSymbolPlain O.<#> nextSymbol cs
 
+-- | Extract plain symbol text.
 getSymbolPlain :: Symbol -> B.Ab String
 getSymbolPlain (SymbolCommon w)  = Right w
 getSymbolPlain (SymbolPlain  w)  = Right w
-getSymbolPlain _                 = Msg.expOrdSym
+getSymbolPlain _                 = Msg.expPlainSym
 

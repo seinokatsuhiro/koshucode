@@ -215,7 +215,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
         | c == '='    = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
         | isSymbol c  = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
         | isQQ c      = call (S.nextQQ cs)           (\w -> term (w : ns))
-    word _ _          = (wtab, [], [S.unknownToken cp cs0 Msg.expOrdSym])
+    word _ _          = (wtab, [], [S.unknownToken cp cs0 Msg.expPlainSym])
     call e f          = case e of
                           Right (cs', w) -> f w cs'
                           Left a         -> (wtab, [], [S.TUnknown cp cs0 a])
@@ -231,7 +231,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
     term ns cs
         | q           = case ns of
                           [n] -> (wtab, cs, [S.TText cp S.TextTerm n])
-                          _   -> (wtab, cs, [S.unknownToken cp cs0 Msg.expOrdSym])
+                          _   -> (wtab, cs, [S.unknownToken cp cs0 Msg.expPlainSym])
         | otherwise   = (wtab, cs, termPath (S.TTerm cp <$> ns))
 
     termPath [t]      = [t]
