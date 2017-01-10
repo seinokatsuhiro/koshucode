@@ -38,7 +38,7 @@ import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 -- >   letter       ( G )   P           SymbolPlain
 -- >   mark         ( G )   P           SymbolPlain
 -- >   number'      ( G )   P           SymbolPlain
--- >   "_?"         ( G )   P           SymbolPlain
+-- >   "_!?"        ( G )   P           SymbolPlain
 -- >   "+"          ( G )         N     SymbolNumeric
 -- >   "*=<>~"        G                 SymbolGeneral
 -- >   ".#"                       N     SymbolNumeric
@@ -144,12 +144,11 @@ isCharDigit  c  = c >= '0' && c <= '9'
 isCharHyphen c  = c == '-'
 
 isCharGp :: O.Test Char
-isCharGp c =
-    case O.majorGeneralCategory c of
-      O.UnicodeLetter    -> True
-      O.UnicodeMark      -> True
-      O.UnicodeNumber    -> True      -- include isCharDigit
-      _                  -> c == '_' || c == '?'
+isCharGp c = case O.majorGeneralCategory c of
+               O.UnicodeLetter  -> True
+               O.UnicodeMark    -> True
+               O.UnicodeNumber  -> True  -- include isCharDigit
+               _                -> c == '_' || c == '!' || c == '?'
 
 isCharGn, isCharG, isCharN :: O.Test Char
 isCharGn c   = c == '+'
