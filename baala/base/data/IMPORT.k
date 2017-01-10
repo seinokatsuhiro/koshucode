@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    179 judges
+**    182 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.CodePos"        /import "Data.List"
@@ -84,8 +84,8 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Encoding"          /import "Koshucode.Baala.System"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Encoding"          /import "Koshucode.Baala.Base.Prelude"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Data.ByteString.Char8"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Control.Exception"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Network.HTTP.Conduit"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Network.HTTP.Types.Status"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Network.URI"
@@ -184,10 +184,13 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.ByteString"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.ByteString.Lazy.UTF8"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.ByteString.UTF8"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Default"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Maybe"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Text.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Tuple"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "System.Exit"

@@ -57,7 +57,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    179 judges
+**    182 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.CodePos"        /import "Data.List"
@@ -134,8 +134,8 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Encoding"          /import "Koshucode.Baala.System"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Encoding"          /import "Koshucode.Baala.Base.Prelude"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Data.ByteString.Char8"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Control.Exception"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Network.HTTP.Conduit"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Network.HTTP.Types.Status"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Http"              /import "Network.URI"
@@ -234,10 +234,13 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.ByteString"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.ByteString.Lazy.UTF8"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.ByteString.UTF8"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Default"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Maybe"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Text.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Tuple"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "System.Exit"
@@ -1429,7 +1432,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    178 judges
+**    179 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Data.List"
@@ -1527,6 +1530,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Xml"        /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Xml"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Xml"        /import "Koshucode.Baala.Syntax.Symbol"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Xml"        /import "Koshucode.Baala.Syntax.Subtree.Filter"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Xml"        /import "Koshucode.Baala.Syntax.Subtree.Subtree"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree"            /import "Koshucode.Baala.Syntax.Subtree.Decode"
@@ -1879,8 +1883,8 @@
 |-- IMPORT  /module "Koshucode.Baala.Type.Type.Genus"           /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Type.Type.Genus"           /import "Koshucode.Baala.Data.Class"
 
-|-- IMPORT  /module "Koshucode.Baala.Type.Type.Predefined where"  /import "Koshucode.Baala.Data.Class"
 |-- IMPORT  /module "Koshucode.Baala.Type.Type.Predefined where"  /import "Koshucode.Baala.Type.Type.Genus"
+|-- IMPORT  /module "Koshucode.Baala.Type.Type.Predefined where"  /import "Koshucode.Baala.Data.Class"
 |-- IMPORT  /module "Koshucode.Baala.Type.Type.Predefined where"  /import "Koshucode.Baala.Data"
 
 |-- IMPORT  /module "Koshucode.Baala.Type.Type"                 /import "Koshucode.Baala.Overture"

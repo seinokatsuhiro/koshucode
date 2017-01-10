@@ -153,8 +153,8 @@
 |-- IMPORT  /module "Koshucode.Baala.Type.Type.Genus"           /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Type.Type.Genus"           /import "Koshucode.Baala.Data.Class"
 
-|-- IMPORT  /module "Koshucode.Baala.Type.Type.Predefined where"  /import "Koshucode.Baala.Data.Class"
 |-- IMPORT  /module "Koshucode.Baala.Type.Type.Predefined where"  /import "Koshucode.Baala.Type.Type.Genus"
+|-- IMPORT  /module "Koshucode.Baala.Type.Type.Predefined where"  /import "Koshucode.Baala.Data.Class"
 |-- IMPORT  /module "Koshucode.Baala.Type.Type.Predefined where"  /import "Koshucode.Baala.Data"
 
 |-- IMPORT  /module "Koshucode.Baala.Type.Type"                 /import "Koshucode.Baala.Overture"
