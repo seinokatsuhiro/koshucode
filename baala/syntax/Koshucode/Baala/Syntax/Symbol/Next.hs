@@ -9,6 +9,7 @@ module Koshucode.Baala.Syntax.Symbol.Next
     Next, AbNext,
     nextSpace,
     nextQQ,
+    nextBefore,
   ) where
 
 import qualified Data.Char                              as Ch
@@ -66,4 +67,19 @@ nextQQ cs0 = loop O.zero cs0 where
         | isQQ c      = do (cs', s') <- nextQQ cs
                            Right (cs', O.tTake (n + 1) cs0 O.++ s')
     qq n cs           = Right (cs, O.tTake n cs0)
+
+-- | Get next text before given delimiter.
+--
+--   >>> nextBefore "''" "abc'' def"
+--   Right (" def","abc")
+--
+nextBefore :: String -> AbNext String
+nextBefore "" _ = B.bug "nextBefore"
+nextBefore (t0 : to) cs0 = loop O.zero cs0 where
+    loop n (O.tCut -> Just (c, cs))
+        | c == t0     = case O.tDropPrefix to cs of
+                          Just cs' -> Right (cs', O.tTake n cs0)
+                          Nothing  -> loop (n + 1) cs
+        | otherwise   = loop (n + 1) cs
+    loop _ _          = Msg.quotNotEnd
 

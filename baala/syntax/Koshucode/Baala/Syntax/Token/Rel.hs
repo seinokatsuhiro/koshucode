@@ -102,8 +102,9 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | S.isSpace a            = clip    $ S.clipSpace    cp bs
         | S.isTerm a             = clipcl  $ S.clipTermName cp wtab bs
         | isPM a && S.isTerm b   = clipcl  $ S.clipTermSign (O.char2T a b) cp wtab cs
-        | S.isQQ a               = clipw   $ S.clipQQ       cp wtab bs
+        | S.isQQ a               = clipw   $ S.clipQq       cp wtab bs
         | isQ a && S.isTerm b    = clipcl  $ S.clipTermQ    cp wtab cs
+        | isQ a && isQ b         = clipw   $ S.clipQn       cp wtab cs
         | isQ a                  = clipw   $ S.clipQ        cp wtab bs
 
         | a == '(' && c == ')' && b `elem` "+-/=#"

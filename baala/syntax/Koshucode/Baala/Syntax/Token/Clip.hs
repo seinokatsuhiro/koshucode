@@ -22,7 +22,7 @@ module Koshucode.Baala.Syntax.Token.Clip
     clipUpdate, clipUpdateC, clipUpdateCL,
     -- ** Textual
     clipSpace,
-    clipQ, clipQQ,
+    clipQ, clipQq, clipQn,
     -- ** Identifier
     clipSymbol,
     --symbolToken,
@@ -137,15 +137,33 @@ clipQ cp wtab cs =
 
 -- | Clip double-quoted text.
 --
---   >>> clipQQ B.def O.emptyWordCache "foo\" bar baz"
+--   >>> clipQq B.def O.emptyWordCache "foo\" bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --
-clipQQ :: ClipTokenC
-clipQQ cp wtab cs =
+clipQq :: ClipTokenC
+clipQq cp wtab cs =
     case S.nextQQ cs of
       Left a         -> (wtab, [], S.TUnknown cp cs a)
       Right (cs', w) -> case O.cacheGet wtab w of
                           (wtab', w') -> (wtab', cs', S.TText cp S.TextQQ w')
+
+-- | Clip quoted text before delimiter.
+--   This function must be called after two single quotations.
+--
+--   >>> clipQn B.def B.emptyWordCache "'foo''' bar baz"
+--   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
+--
+clipQn :: ClipTokenC
+clipQn cp wtab (countQuote -> (n, cs)) =
+    case S.nextBefore (replicate (n + 2) '\'') cs of
+      Left a         -> (wtab, [], S.TUnknown cp cs a)
+      Right (cs', w) -> case O.cacheGet wtab w of
+                          (wtab', w') -> (wtab', cs', S.TText cp S.TextQQ w')
+
+countQuote :: (O.Textual t) => t -> (Int, t)
+countQuote = loop 0 where
+    loop n (O.tCut -> Just ('\'', t)) = loop (n + 1) t
+    loop n t = (n, t)
 
 -- ---------------------------------  Identifier
 
