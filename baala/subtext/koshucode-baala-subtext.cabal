@@ -59,6 +59,7 @@ library
         Koshucode.Baala.Subtext.Operator.Repeat
 
         Koshucode.Baala.Subtext.Para
+        Koshucode.Baala.Subtext.Sieve.Token
 
   -- Modules included in this library but not exported.
   --other-modules:       
