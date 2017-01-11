@@ -84,6 +84,32 @@ class (Eq a, Monoid a) => Textual a where
     --
     tDrop :: Int -> a -> a
 
+    -- ----------------------  Creation
+
+    -- | Create text from single character.
+    --
+    --   >>> charT 'b' :: String
+    --   "b"
+    --
+    charT :: Char -> a
+    charT c = tAdd c tEmpty
+
+    -- | Create text from two characters.
+    --
+    --   >>> char2T 'b' 'a' :: String
+    --   "ba"
+    --
+    char2T :: Char -> Char -> a
+    char2T c d = tAdd c $ charT d
+
+    -- | Create text from three characters.
+    --
+    --   >>> char3T 'b' 'a' 'r' :: String
+    --   "bar"
+    --
+    char3T :: Char -> Char -> Char -> a
+    char3T c d e = tAdd c $ char2T d e
+
     -- ----------------------  Conversion
 
     -- | Convert textual value to string.

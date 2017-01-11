@@ -101,20 +101,20 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
     dispatch n a b c bs cs ds
         | S.isSpace a            = clip    $ S.clipSpace    cp bs
         | S.isTerm a             = clipcl  $ S.clipTermName cp wtab bs
-        | isPM a && S.isTerm b   = clipcl  $ S.clipTermSign [a,b] cp wtab cs
+        | isPM a && S.isTerm b   = clipcl  $ S.clipTermSign (O.char2T a b) cp wtab cs
         | S.isQQ a               = clipw   $ S.clipQQ       cp wtab bs
         | isQ a && S.isTerm b    = clipcl  $ S.clipTermQ    cp wtab cs
         | isQ a                  = clipw   $ S.clipQ        cp wtab bs
 
         | a == '(' && c == ')' && b `elem` "+-/=#"
-                                 = upd ds  $ raw             [a,b,c]
-        | a == '{' && b == '|'   = int cs  $ S.TOpen      cp [a,b]
-        | isOpen a && isGrip b   = upd cs  $ S.TOpen      cp [a,b]
-        | isGrip a && isClose b  = upd cs  $ S.TClose     cp [a,b]
-        | isOpen a               = upd bs  $ S.TOpen      cp [a]
-        | isClose a              = upd bs  $ S.TClose     cp [a]
+                                 = upd ds  $ raw             (O.char3T a b c)
+        | a == '{' && b == '|'   = int cs  $ S.TOpen      cp (O.char2T a b)
+        | isOpen a && isGrip b   = upd cs  $ S.TOpen      cp (O.char2T a b)
+        | isGrip a && isClose b  = upd cs  $ S.TClose     cp (O.char2T a b)
+        | isOpen a               = upd bs  $ S.TOpen      cp (O.charT a)
+        | isClose a              = upd bs  $ S.TClose     cp (O.charT a)
 
-        | a == '*'               = aster bs [a]
+        | a == '*'               = aster bs (O.charT a)
         | a == '<'               = clip    $ clipAngle cp bs
         | a == '@'               = clip    $ clipAt    cp bs 1
         | a == '|'               = clip    $ S.clipBar cp bs
@@ -123,11 +123,11 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | a == '-' && b == '*' && c == '-'
                                  = updEnd  $ S.TComment   cp bs
 
-        | isSingle a             = upd bs  $ raw [a]
+        | isSingle a             = upd bs  $ raw (O.charT a)
         | S.isSymbol a           = clipw   $ S.clipSymbol cp wtab $ O.tAdd a bs
         | n == 0                 = sc
         | otherwise              = upd []  $ S.unknownToken cp cs
-                                           $ Msg.forbiddenInput $ S.angleQuote [a]
+                                           $ Msg.forbiddenInput $ S.angleQuote (O.charT a)
 
     aster :: String -> String -> S.TokenScan
     aster (O.tCut -> Just (c, cs)) w
