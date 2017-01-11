@@ -6,7 +6,7 @@
 --   
 --   Facility for implementing relation-mapping operators
 @package koshucode-baala-rop
-@version 0.199.0.0
+@version 0.200.0.0
 
 
 -- | Message list.
@@ -274,6 +274,9 @@ getOptCoxTerms :: (CContent c) => (TermName -> c) -> RopGet [TermCox c] c
 
 -- | Get <tt>-let</tt> style parameter as set of derived functions.
 getLet :: (CContent c) => RopGet (CopSet c) c
+
+-- | <a>getLet</a> with regular parameter name: <tt>-let</tt>.
+getLetR :: (CContent c) => RopGet0 (CopSet c) c
 
 -- | Get count-type portion parameter.
 getPotionCount :: (CContent c) => RopGet4 ([TermName], Portion) c

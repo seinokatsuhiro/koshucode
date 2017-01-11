@@ -6,7 +6,7 @@
 --   
 --   Additional data types for Koshucode
 @package koshucode-baala-type
-@version 0.199.0.0
+@version 0.200.0.0
 
 
 -- | Common properties of judgements and relations.
@@ -682,7 +682,7 @@ clockNeg :: Map Clock
 -- | Set MJD to zero.
 clockCutDay :: Map Clock
 
--- | Add MJD.
+-- | Add MJT.
 clockAddDay :: Days -> Map Clock
 
 -- | Add second.
@@ -747,17 +747,17 @@ timePrecision :: Time -> String
 -- | Create monthly time.
 --   
 --   <pre>
---   &gt;&gt;&gt; monthlyTime (D.DateYmd 2013 4 18) (Just $ D.ClockPartsMin 0 12 05)
+--   &gt;&gt;&gt; monthlyTime (T.DateYmd 2013 4 18) (Just $ T.ClockPartsMin 0 12 05)
 --   Right 2013-04-18 12:05
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; monthlyTime (D.DateYmd 2013 4 18) (Nothing :: Maybe D.ClockParts)
+--   &gt;&gt;&gt; monthlyTime (T.DateYmd 2013 4 18) (Nothing :: Maybe T.ClockParts)
 --   Right 2013-04-18
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; monthlyTime (D.DateYmd 2013 4 31) (Nothing :: Maybe D.ClockParts)
+--   &gt;&gt;&gt; monthlyTime (T.DateYmd 2013 4 31) (Nothing :: Maybe T.ClockParts)
 --   Left AbortReason "Not monthly date" ...
 --   </pre>
 monthlyTime :: (ToMjdClip day, ToClock clock) => day -> Maybe clock -> Ab Time
@@ -944,7 +944,7 @@ timeCeilYaer :: Map Time
 -- | Create range of time.
 --   
 --   <pre>
---   &gt;&gt;&gt; timeRangeDay (D.timeFromYmd 2014 11 3) (D.timeFromYmd 2014 11 5)
+--   &gt;&gt;&gt; timeRangeDay (T.timeFromYmd 2014 11 3) (T.timeFromYmd 2014 11 5)
 --   [2014-11-03, 2014-11-04, 2014-11-05]
 --   </pre>
 timeRangeDay :: RangeBy Time
@@ -1140,7 +1140,7 @@ decimalFracPart :: Map Decimal
 -- | Integer and fractional parts of decimal.
 --   
 --   <pre>
---   &gt;&gt;&gt; decimalIntFrac $ D.realDecimal 2 (4.5 :: Double)
+--   &gt;&gt;&gt; decimalIntFrac $ T.realDecimal 2 (4.5 :: Double)
 --   (Decimal (2) 4, Decimal (2) 0 + 1 % 2)
 --   </pre>
 decimalIntFrac :: Decimal -> (Decimal, Decimal)
@@ -1275,17 +1275,17 @@ decodeBase :: Integer -> DecodeAb Decimal
 -- | Encode decimals.
 --   
 --   <pre>
---   &gt;&gt;&gt; encodeDecimal $ D.realDecimal 0 (12345 D.%% 10)
+--   &gt;&gt;&gt; encodeDecimal $ T.realDecimal 0 (12345 T.%% 10)
 --   "1 234"
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; encodeDecimal $ D.realDecimal 2 (12345 D.%% 10)
+--   &gt;&gt;&gt; encodeDecimal $ T.realDecimal 2 (12345 T.%% 10)
 --   "1 234.50"
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; encodeDecimal $ D.realDecimal (-2) (12345 D.%% 10)
+--   &gt;&gt;&gt; encodeDecimal $ T.realDecimal (-2) (12345 T.%% 10)
 --   "1 2oo"
 --   </pre>
 encodeDecimal :: Decimal -> String

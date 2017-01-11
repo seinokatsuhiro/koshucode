@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.199.0.0
+@version 0.200.0.0
 
 
 -- | Suffix and prefix.
@@ -239,7 +239,7 @@ module Koshucode.Baala.Base.Prelude.Import
 bracket :: IO a -> (a -> IO b) -> (a -> IO c) -> IO c
 
 -- | Composition of monadic functions.
-(<.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
+(<#.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
 
 -- | Left-to-right Kleisli composition of monads.
 (>=>) :: Monad m => (a -> m b) -> (b -> m c) -> a -> m c
@@ -300,6 +300,13 @@ type Bs = ByteString
 
 -- | Lazy bytestring.
 type Bz = ByteString
+
+-- | Convert string to strict bytestring. This is same as
+--   <a>fromString</a>.
+stringBs :: String -> Bs
+
+-- | Convert strict bytestring to string. This is same as <a>toString</a>.
+bsString :: Bs -> String
 
 -- | Convert string into lazy bytestring. This is same as
 --   <a>fromString</a>.
@@ -506,6 +513,24 @@ fromJust :: Maybe a -> a
 --   0
 --   </pre>
 fromMaybe :: a -> Maybe a -> a
+
+-- | Strict text.
+type Tx = Text
+
+-- | Convert string to strict text. This is same as <a>pack</a>.
+stringTx :: String -> Tx
+
+-- | Convert strict text to string. This is same as <a>unpack</a>.
+txString :: Tx -> String
+
+-- | Lazy text.
+type Tz = Text
+
+-- | Convert string to lazy text. This is same as <a>pack</a>.
+stringTz :: String -> Tz
+
+-- | Convert lazy text to string. This is same as <a>unpack</a>.
+tzString :: Tz -> String
 
 -- | Swap the components of a pair.
 swap :: (a, b) -> (b, a)
@@ -2152,8 +2177,32 @@ module Koshucode.Baala.Base.IO.Http
 -- | Pair of protocol name and proxy URI.
 type HttpProxy = (String, Maybe IOPath)
 
--- | Get HTTP content as lazy bytestring.
-uriContent :: [HttpProxy] -> IOPath -> IO (Either (Int, String) Bz)
+-- | Get HTTP content as lazy bytestring. If request succeeded as 200 OK,
+--   returns lazy-bytestring content in <a>Right</a> part, otherwise,
+--   returns status code and message in <a>Left</a> part.
+--   
+--   <pre>
+--   &gt;&gt;&gt; httpGet [] "https://httpbin.org/robots.txt"
+--   Right "User-agent: *\nDisallow: /deny\n"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; (print B.&lt;#.&gt; httpGet []) O.&lt;#!&gt; ((\c -&gt; "http://httpbin.org/status/" ++ show c) &lt;$&gt; [400 .. 404 :: Int])
+--   Left (400, "BAD REQUEST")
+--   Left (401, "UNAUTHORIZED")
+--   Left (402, "PAYMENT REQUIRED")
+--   Left (403, "FORBIDDEN")
+--   Left (404, "NOT FOUND")
+--   </pre>
+httpGet :: [HttpProxy] -> IOPath -> IO (Either (Int, String) Bz)
+
+-- | Get HTTP content wrapped in <tt>&lt;document&gt;</tt> tag.
+--   
+--   <pre>
+--   &gt;&gt;&gt; httpGetDoc [] "https://httpbin.org/robots.txt"
+--   Right "&lt;document id=\"https://httpbin.org/robots.txt\"\r\n&gt;User-agent: *\nDisallow: /deny\n&lt;/document&gt;\r\n"
+--   </pre>
+httpGetDoc :: [HttpProxy] -> IOPath -> IO (Either (Int, String) Bz)
 
 -- | Text message of HTTP exception.
 httpExceptionSummary :: HttpException -> String

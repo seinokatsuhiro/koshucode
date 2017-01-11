@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.199.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.200.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -74,38 +74,50 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >Data.ByteString.Lazy.UTF8</a
+	    >Data.ByteString.UTF8</a
 	    ></li
 	  ><li
 	  ><a href="#g:6"
-	    >Data.Default</a
+	    >Data.ByteString.Lazy.UTF8</a
 	    ></li
 	  ><li
 	  ><a href="#g:7"
-	    >Data.List</a
+	    >Data.Default</a
 	    ></li
 	  ><li
 	  ><a href="#g:8"
-	    >Data.Map</a
+	    >Data.List</a
 	    ></li
 	  ><li
 	  ><a href="#g:9"
-	    >Data.Maybe</a
+	    >Data.Map</a
 	    ></li
 	  ><li
 	  ><a href="#g:10"
-	    >Data.Tuple</a
+	    >Data.Maybe</a
 	    ></li
 	  ><li
 	  ><a href="#g:11"
-	    >System.Exit</a
+	    >Data.Text</a
 	    ></li
 	  ><li
 	  ><a href="#g:12"
-	    >System.IO</a
+	    >Data.Text.Lazy</a
 	    ></li
 	  ><li
 	  ><a href="#g:13"
+	    >Data.Tuple</a
+	    ></li
+	  ><li
+	  ><a href="#g:14"
+	    >System.Exit</a
+	    ></li
+	  ><li
+	  ><a href="#g:15"
+	    >System.IO</a
+	    ></li
+	  ><li
+	  ><a href="#g:16"
 	    >Text.PrettyPrint</a
 	    ></li
 	  ></ul
@@ -135,8 +147,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >IO</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:-60-.-62-"
-	    >(&lt;.&gt;)</a
+	  ><a href="#v:-60--35-.-62-"
+	    >(&lt;#.&gt;)</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
 	    >Monad</a
 	    > m =&gt; (b -&gt; m c) -&gt; (a -&gt; m b) -&gt; a -&gt; m c</li
@@ -211,6 +223,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Bz</a
 	    > = <a href="http://hackage.haskell.org/package/bytestring/docs/Data-ByteString-Lazy.html#t:ByteString"
 	    >ByteString</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:stringBs"
+	    >stringBs</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bs"
+	    >Bs</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:bsString"
+	    >bsString</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bs"
+	    >Bs</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:stringBz"
@@ -326,6 +354,50 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a -&gt; a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Tx"
+	    >Tx</a
+	    > = Text</li
+	  ><li class="src short"
+	  ><a href="#v:stringTx"
+	    >stringTx</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Tx"
+	    >Tx</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:txString"
+	    >txString</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Tx"
+	    >Tx</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Tz"
+	    >Tz</a
+	    > = Text</li
+	  ><li class="src short"
+	  ><a href="#v:stringTz"
+	    >stringTz</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Tz"
+	    >Tz</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:tzString"
+	    >tzString</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Tz"
+	    >Tz</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
 	  ><li class="src short"
 	  ><a href="#v:swap"
 	    >swap</a
@@ -520,15 +592,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	>Control.Monad</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:-60-.-62-" class="def"
-	    >(&lt;.&gt;)</a
+	  ><a name="v:-60--35-.-62-" class="def"
+	    >(&lt;#.&gt;)</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
 	    >Monad</a
 	    > m =&gt; (b -&gt; m c) -&gt; (a -&gt; m b) -&gt; a -&gt; m c <span class="fixity"
 	    >infixr 1</span
 	    ><span class="rightedge"
 	    ></span
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#%3C.%3E');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#%3C%23.%3E');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -774,6 +846,46 @@ function' are not commutative.</p
 	    ></div
 	  ></div
 	><h1 id="g:5"
+	>Data.ByteString.UTF8</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringBs" class="def"
+	    >stringBs</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bs"
+	    >Bs</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#stringBs');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert string to strict bytestring.
+   This is same as <code
+	      >fromString</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:bsString" class="def"
+	    >bsString</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bs"
+	    >Bs</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#bsString');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert strict bytestring to string.
+   This is same as <code
+	      >toString</code
+	      >.</p
+	    ></div
+	  ></div
+	><h1 id="g:6"
 	>Data.ByteString.Lazy.UTF8</h1
 	><div class="top"
 	><p class="src"
@@ -813,7 +925,7 @@ function' are not commutative.</p
 	      >.</p
 	    ></div
 	  ></div
-	><h1 id="g:6"
+	><h1 id="g:7"
 	>Data.Default</h1
 	><div class="top"
 	><p class="src"
@@ -929,7 +1041,7 @@ function' are not commutative.</p
 	      ></div
 	    ></div
 	  ></div
-	><h1 id="g:7"
+	><h1 id="g:8"
 	>Data.List</h1
 	><div class="top"
 	><p class="src"
@@ -1156,7 +1268,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
  to supply their own equality test.</p
 	    ></div
 	  ></div
-	><h1 id="g:8"
+	><h1 id="g:9"
 	>Data.Map</h1
 	><div class="top"
 	><p class="src"
@@ -1182,7 +1294,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	      > module.</p
 	    ></div
 	  ></div
-	><h1 id="g:9"
+	><h1 id="g:10"
 	>Data.Maybe</h1
 	><div class="top"
 	><p class="src"
@@ -1536,7 +1648,115 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	      ></div
 	    ></div
 	  ></div
-	><h1 id="g:10"
+	><h1 id="g:11"
+	>Data.Text</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Tx" class="def"
+	    >Tx</a
+	    > = Text <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#Tx');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Strict text.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringTx" class="def"
+	    >stringTx</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Tx"
+	    >Tx</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#stringTx');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert string to strict text.
+   This is same as <code
+	      >pack</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:txString" class="def"
+	    >txString</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Tx"
+	    >Tx</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#txString');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert strict text to string.
+   This is same as <code
+	      >unpack</code
+	      >.</p
+	    ></div
+	  ></div
+	><h1 id="g:12"
+	>Data.Text.Lazy</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Tz" class="def"
+	    >Tz</a
+	    > = Text <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#Tz');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Lazy text.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringTz" class="def"
+	    >stringTz</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Tz"
+	    >Tz</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#stringTz');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert string to lazy text.
+   This is same as <code
+	      >pack</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tzString" class="def"
+	    >tzString</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Tz"
+	    >Tz</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#tzString');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert lazy text to string.
+   This is same as <code
+	      >unpack</code
+	      >.</p
+	    ></div
+	  ></div
+	><h1 id="g:13"
 	>Data.Tuple</h1
 	><div class="top"
 	><p class="src"
@@ -1548,7 +1768,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    >Swap the components of a pair.</p
 	    ></div
 	  ></div
-	><h1 id="g:11"
+	><h1 id="g:14"
 	>System.Exit</h1
 	><div class="top"
 	><p class="src"
@@ -1789,7 +2009,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
  exception will not cause the process itself to exit.</p
 	    ></div
 	  ></div
-	><h1 id="g:12"
+	><h1 id="g:15"
 	>System.IO</h1
 	><div class="top"
 	><p class="src"
@@ -1803,7 +2023,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    >A handle managing output to the Haskell program's standard output channel.</p
 	    ></div
 	  ></div
-	><h1 id="g:13"
+	><h1 id="g:16"
 	>Text.PrettyPrint</h1
 	><div class="top"
 	><p class="src"

@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.199.0.0
+@version 0.200.0.0
 
 
 -- | Message list.
@@ -510,6 +510,9 @@ typeOrder :: CContent c => c -> Int
 
 -- | Convert some content to decimal number.
 toDec :: (CContent c) => Map c
+
+-- | Convert <a>Value</a> to content.
+valueContent :: (CContent c) => Value -> c
 
 
 -- | Content encoder.

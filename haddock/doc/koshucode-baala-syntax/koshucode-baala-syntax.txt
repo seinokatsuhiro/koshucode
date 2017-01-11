@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.199.0.0
+@version 0.200.0.0
 
 
 -- | Term types and related functions.
@@ -224,6 +224,9 @@ SubtreeKeep :: String -> Pattern -> SubtreeFilter
 -- | Anti-glob
 SubtreeOmit :: String -> Pattern -> SubtreeFilter
 
+-- | Attribute
+SubtreeAttr :: String -> String -> SubtreeFilter
+
 -- | Filter chain
 SubtreeChain :: SubtreeFilter -> SubtreeFilter -> SubtreeFilter
 
@@ -241,6 +244,9 @@ subtreeOmit :: String -> SubtreeFilter
 
 -- | Filter chain.
 subtreeChain :: Bin SubtreeFilter
+
+-- | Attribute filter.
+subtreeAttr :: String -> String -> SubtreeFilter
 
 -- | Filter strings by subtree filter.
 --   
@@ -770,10 +776,14 @@ unkAngleText :: String -> Ab a
 -- | Message list.
 module Koshucode.Baala.Syntax.Symbol.Message
 
--- | Expect ordinary symbol
-expOrdSym :: Ab a
+-- | <ul>
+--   <li><i>Expect plain symbol</i></li>
+--   </ul>
+expPlainSym :: Ab a
 
--- | Quotation not end in line
+-- | <ul>
+--   <li><i>Quotation not end in line</i></li>
+--   </ul>
 quotNotEnd :: Ab a
 
 
@@ -816,6 +826,14 @@ nextSpace :: Next Int
 --   </pre>
 nextQQ :: AbNext String
 
+-- | Get next text before given delimiter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextBefore "''" "abc'' def"
+--   Right (" def","abc")
+--   </pre>
+nextBefore :: String -> AbNext String
+
 
 -- | Symbol type.
 module Koshucode.Baala.Syntax.Symbol.Symbol
@@ -835,7 +853,7 @@ module Koshucode.Baala.Syntax.Symbol.Symbol
 --   letter       ( G )   P           SymbolPlain
 --   mark         ( G )   P           SymbolPlain
 --   number'      ( G )   P           SymbolPlain
---   "_?"         ( G )   P           SymbolPlain
+--   "_!?"        ( G )   P           SymbolPlain
 --   "+"          ( G )         N     SymbolNumeric
 --   "*=&lt;&gt;~"        G                 SymbolGeneral
 --   ".#"                       N     SymbolNumeric
@@ -1083,8 +1101,8 @@ type SubtreeOutput a = RawTree [SubtreePattern] (SubtreeTerm, a) (SubtreeTerm, a
 --   </pre>
 subtree :: [SubtreePattern] -> [Subtree String] -> [SubtreeOutput String]
 
--- | Select subtree with string getter.
-subtreeWith :: (a -> String) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
+-- | Select subtree by element tester.
+subtreeBy :: (a -> SubtreeFilter -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
 
 -- | Select subtree.
 subtreeOne :: [SubtreePattern] -> Map [Subtree String]
@@ -1131,8 +1149,8 @@ module Koshucode.Baala.Syntax.Subtree.Xml
 -- | XML token.
 data XmlToken s
 
--- | Open tag
-XmlOpen :: s -> XmlToken s
+-- | Open tag and attributes
+XmlOpen :: s -> [(s, s)] -> XmlToken s
 
 -- | Close tag
 XmlClose :: s -> XmlToken s
@@ -1147,7 +1165,7 @@ type XmlTerm s = (XmlKey s, s)
 data XmlKey s
 
 -- | Element node
-XmlElem :: s -> XmlKey s
+XmlElem :: s -> [(s, s)] -> XmlKey s
 
 -- | Attribute of element
 XmlAttr :: s -> XmlKey s
@@ -1488,10 +1506,19 @@ clipQ :: ClipTokenC
 -- | Clip double-quoted text.
 --   
 --   <pre>
---   &gt;&gt;&gt; clipQQ B.def O.emptyWordCache "foo\" bar baz"
+--   &gt;&gt;&gt; clipQq B.def O.emptyWordCache "foo\" bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --   </pre>
-clipQQ :: ClipTokenC
+clipQq :: ClipTokenC
+
+-- | Clip quoted text before delimiter. This function must be called after
+--   two single quotations.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clipQn B.def B.emptyWordCache "'foo''' bar baz"
+--   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
+--   </pre>
+clipQn :: ClipTokenC
 
 -- | Clip symbolic token.
 --   
@@ -1940,6 +1967,10 @@ treesDoc :: [Tree] -> Doc
 --   </pre>
 ppTrees :: (ToTrees a) => a -> IO ()
 instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees GHC.Base.String
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Base.Prelude.Import.Tx
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Base.Prelude.Import.Tz
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Base.Prelude.Import.Bz
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Base.Prelude.Import.Bs
 instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees [Koshucode.Baala.Syntax.Token.Token.Token]
 instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees [Koshucode.Baala.Syntax.Tree.Parse.Tree]
 instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Syntax.Token.Clause.TokenClause
@@ -1994,6 +2025,9 @@ divideTreesBy :: Test String -> [Tree] -> [[Tree]]
 --   </pre>
 divideTreesByBar :: [Tree] -> [[Tree]]
 
+-- | Divide token trees by double vertical bar <tt>"||"</tt>.
+divideTreesByBar2 :: [Tree] -> [[Tree]]
+
 -- | Divide token trees by colon <tt>":"</tt>.
 divideTreesByColon :: [Tree] -> [[Tree]]
 
@@ -2025,27 +2059,31 @@ module Koshucode.Baala.Syntax.Subtree.Decode
 --   </pre>
 readSubtreeClauses :: FilePath -> IOAb [TokenClause]
 
+-- | Insert open/sep/close to subtree clause.
+subtreeClause :: TokenClause -> Ab TokenClause
+
 -- | Decode token trees to subtree patterns.
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "- \"Z1\""
---   Right [SubtreeL (SubtreeEq "Z1")]
+--   Right [SubtreeL SubtreeNone (SubtreeEq "Z1")]
 --   </pre>
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt; \"Y1\" ( - \"Z1\" )"
---   Right [SubtreeB (SubtreeEq "Y1") [SubtreeL (SubtreeEq "Z1")]]
+--   Right [SubtreeB SubtreeNone (SubtreeEq "Y1") [SubtreeL SubtreeNone (SubtreeEq "Z1")]]
 --   </pre>
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt; \"Y1\" ( - \"Z1\" | - \"Z2\" )"
---   Right [ SubtreeB (SubtreeEq "Y1") [ SubtreeL (SubtreeEq "Z1")
---                                     , SubtreeL (SubtreeEq "Z2") ]]
+--   Right [SubtreeB SubtreeNone (SubtreeEq "Y1")
+--                   [SubtreeL SubtreeNone (SubtreeEq "Z1"),
+--                    SubtreeL SubtreeNone (SubtreeEq "Z2")]]
 --   </pre>
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt;&gt; \"Y1\" ( - \"Z1\" )"
---   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL (SubtreeEq "Z1")]]
+--   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL SubtreeNone (SubtreeEq "Z1")]]
 --   </pre>
 --   
 --   <pre>

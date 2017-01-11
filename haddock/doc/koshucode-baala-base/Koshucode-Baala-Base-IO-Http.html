@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.199.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.200.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -77,8 +77,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	    >IOPath</a
 	    >)</li
 	  ><li class="src short"
-	  ><a href="#v:uriContent"
-	    >uriContent</a
+	  ><a href="#v:httpGet"
+	    >httpGet</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-Http.html#t:HttpProxy"
+	    >HttpProxy</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Misc.html#t:IOPath"
+	    >IOPath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >) <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:httpGetDoc"
+	    >httpGetDoc</a
 	    > :: [<a href="Koshucode-Baala-Base-IO-Http.html#t:HttpProxy"
 	    >HttpProxy</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Misc.html#t:IOPath"
@@ -127,8 +145,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:uriContent" class="def"
-	    >uriContent</a
+	  ><a name="v:httpGet" class="def"
+	    >httpGet</a
 	    > :: [<a href="Koshucode-Baala-Base-IO-Http.html#t:HttpProxy"
 	    >HttpProxy</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Misc.html#t:IOPath"
@@ -143,12 +161,85 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	    >String</a
 	    >) <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
 	    >Bz</a
-	    >) <a onclick="showSource('src/Koshucode-Baala-Base-IO-Http.html#uriContent');" href="javascript:void(0);" class="link"
+	    >) <a onclick="showSource('src/Koshucode-Baala-Base-IO-Http.html#httpGet');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get HTTP content as lazy bytestring.</p
+	    >Get HTTP content as lazy bytestring.
+   If request succeeded as 200 OK,
+   returns lazy-bytestring content in <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#v:Right"
+		>Right</a
+		></code
+	      > part,
+   otherwise, returns status code and message in <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#v:Left"
+		>Left</a
+		></code
+	      > part.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>httpGet [] &quot;https://httpbin.org/robots.txt&quot;
+</code
+		></strong
+	      >Right &quot;User-agent: *\nDisallow: /deny\n&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>(print B.&lt;#.&gt; httpGet []) O.&lt;#!&gt; ((\c -&gt; &quot;http://httpbin.org/status/&quot; ++ show c) &lt;$&gt; [400 .. 404 :: Int])
+</code
+		></strong
+	      >Left (400, &quot;BAD REQUEST&quot;)
+Left (401, &quot;UNAUTHORIZED&quot;)
+Left (402, &quot;PAYMENT REQUIRED&quot;)
+Left (403, &quot;FORBIDDEN&quot;)
+Left (404, &quot;NOT FOUND&quot;)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:httpGetDoc" class="def"
+	    >httpGetDoc</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-Http.html#t:HttpProxy"
+	    >HttpProxy</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Misc.html#t:IOPath"
+	    >IOPath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >) <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Base-IO-Http.html#httpGetDoc');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get HTTP content wrapped in <code
+	      >&lt;document&gt;</code
+	      > tag.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>httpGetDoc [] &quot;https://httpbin.org/robots.txt&quot;
+</code
+		></strong
+	      >Right &quot;&lt;document id=\&quot;https://httpbin.org/robots.txt\&quot;\r\n&gt;User-agent: *\nDisallow: /deny\n&lt;/document&gt;\r\n&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"

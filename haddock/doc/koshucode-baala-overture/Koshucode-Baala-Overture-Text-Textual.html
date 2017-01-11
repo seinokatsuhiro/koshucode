@@ -1,0 +1,788 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Overture.Text.Textual</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('overture', 'koshucode-baala-overture', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overture-Text-Textual.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-overture-0.200.0.0: Preliminary library for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Overture.Text.Textual</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Textual class.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a, <a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#t:Monoid"
+	    >Monoid</a
+	    > a) =&gt; <a href="#t:Textual"
+	    >Textual</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:tEmpty"
+		>tEmpty</a
+		> :: a</li
+	      ><li
+	      ><a href="#v:tIsEmpty"
+		>tIsEmpty</a
+		> :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:tJoin"
+		>tJoin</a
+		> :: a -&gt; a -&gt; a</li
+	      ><li
+	      ><a href="#v:tJoinAll"
+		>tJoinAll</a
+		> :: [a] -&gt; a</li
+	      ><li
+	      ><a href="#v:tAdd"
+		>tAdd</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; a -&gt; a</li
+	      ><li
+	      ><a href="#v:tAdd2"
+		>tAdd2</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; a -&gt; a</li
+	      ><li
+	      ><a href="#v:tAdd3"
+		>tAdd3</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; a -&gt; a</li
+	      ><li
+	      ><a href="#v:tCut"
+		>tCut</a
+		> :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		>, a)</li
+	      ><li
+	      ><a href="#v:tCut2"
+		>tCut2</a
+		> :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		>, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		>, a))</li
+	      ><li
+	      ><a href="#v:tCut3"
+		>tCut3</a
+		> :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		>, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		>, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		>, a)))</li
+	      ><li
+	      ><a href="#v:tTake"
+		>tTake</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		> -&gt; a -&gt; a</li
+	      ><li
+	      ><a href="#v:tDrop"
+		>tDrop</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		> -&gt; a -&gt; a</li
+	      ><li
+	      ><a href="#v:tDropPrefix"
+		>tDropPrefix</a
+		> :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		>Textual</a
+		> b =&gt; b -&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> a</li
+	      ><li
+	      ><a href="#v:charT"
+		>charT</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; a</li
+	      ><li
+	      ><a href="#v:char2T"
+		>char2T</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; a</li
+	      ><li
+	      ><a href="#v:char3T"
+		>char3T</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; a</li
+	      ><li
+	      ><a href="#v:tString"
+		>tString</a
+		> :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      ><a href="#v:stringT"
+		>stringT</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
+		> -&gt; a</li
+	      ></ul
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a, <a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#t:Monoid"
+	    >Monoid</a
+	    > a) =&gt; <a name="t:Textual" class="def"
+	    >Textual</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#Textual');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Text-like value.</p
+	    ></div
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    ><a href="Koshucode-Baala-Overture-Text-Textual.html#v:tAdd"
+	      >tAdd</a
+	      >, <a href="Koshucode-Baala-Overture-Text-Textual.html#v:tCut"
+	      >tCut</a
+	      >, <a href="Koshucode-Baala-Overture-Text-Textual.html#v:tTake"
+	      >tTake</a
+	      >, <a href="Koshucode-Baala-Overture-Text-Textual.html#v:tDrop"
+	      >tDrop</a
+	      >, <a href="Koshucode-Baala-Overture-Text-Textual.html#v:tString"
+	      >tString</a
+	      >, <a href="Koshucode-Baala-Overture-Text-Textual.html#v:stringT"
+	      >stringT</a
+	      ></p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:tEmpty" class="def"
+	      >tEmpty</a
+	      > :: a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tEmpty');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Empty text.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tEmpty :: String
+</code
+		  ></strong
+		>&quot;&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tIsEmpty" class="def"
+	      >tIsEmpty</a
+	      > :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tIsEmpty');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Test text is empty.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tIsEmpty &quot;&quot;
+</code
+		  ></strong
+		>True
+</pre
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tIsEmpty &quot;foo&quot;
+</code
+		  ></strong
+		>False
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tJoin" class="def"
+	      >tJoin</a
+	      > :: a -&gt; a -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tJoin');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Append two texts.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tJoin &quot;foo&quot; &quot;bar&quot;
+</code
+		  ></strong
+		>&quot;foobar&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tJoinAll" class="def"
+	      >tJoinAll</a
+	      > :: [a] -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tJoinAll');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Append multiple texts.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tJoinAll [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]
+</code
+		  ></strong
+		>&quot;foobarbaz&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tAdd" class="def"
+	      >tAdd</a
+	      > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; a -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tAdd');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Preppend character to text.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tAdd 'g' &quot;foo&quot;
+</code
+		  ></strong
+		>&quot;gfoo&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tAdd2" class="def"
+	      >tAdd2</a
+	      > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; a -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tAdd2');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Preppend two characters to text.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tAdd2 'b' 'a' &quot;foo&quot;
+</code
+		  ></strong
+		>&quot;bafoo&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tAdd3" class="def"
+	      >tAdd3</a
+	      > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; a -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tAdd3');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Preppend two characters to text.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tAdd3 'b' 'a' 'r' &quot;foo&quot;
+</code
+		  ></strong
+		>&quot;barfoo&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tCut" class="def"
+	      >tCut</a
+	      > :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	      >Maybe</a
+	      > (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      >, a) <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tCut');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Split text into first character and rest of text.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tCut &quot;foo&quot;
+</code
+		  ></strong
+		>Just ('f',&quot;oo&quot;)
+</pre
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tCut &quot;&quot;
+</code
+		  ></strong
+		>Nothing
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tCut2" class="def"
+	      >tCut2</a
+	      > :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	      >Maybe</a
+	      > (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      >, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	      >Maybe</a
+	      > (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      >, a)) <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tCut2');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Split one or two characters.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tCut2 &quot;bar&quot;
+</code
+		  ></strong
+		>Just ('b', Just ('a', &quot;r&quot;))
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tCut3" class="def"
+	      >tCut3</a
+	      > :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	      >Maybe</a
+	      > (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      >, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	      >Maybe</a
+	      > (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      >, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	      >Maybe</a
+	      > (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      >, a))) <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tCut3');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Split one, two, or three characters.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tCut3 &quot;bar&quot;
+</code
+		  ></strong
+		>Just ('b', Just ('a', Just ('r', &quot;&quot;)))
+</pre
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tCut3 &quot;b&quot;
+</code
+		  ></strong
+		>Just ('b', Nothing)
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tTake" class="def"
+	      >tTake</a
+	      > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	      >Int</a
+	      > -&gt; a -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tTake');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Take <em
+		>N</em
+		> characters.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tTake 3 &quot;foobar&quot;
+</code
+		  ></strong
+		>&quot;foo&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tDrop" class="def"
+	      >tDrop</a
+	      > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	      >Int</a
+	      > -&gt; a -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tDrop');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Drop <em
+		>N</em
+		> characters.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tDrop 3 &quot;foobar&quot;
+</code
+		  ></strong
+		>&quot;bar&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tDropPrefix" class="def"
+	      >tDropPrefix</a
+	      > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	      >Textual</a
+	      > b =&gt; b -&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	      >Maybe</a
+	      > a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tDropPrefix');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Drop prefix from text.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tDropPrefix &quot;foo&quot; &quot;foobar&quot;
+</code
+		  ></strong
+		>Just &quot;bar&quot;
+</pre
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tDropPrefix &quot;bar&quot; &quot;foobar&quot;
+</code
+		  ></strong
+		>Nothing
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:charT" class="def"
+	      >charT</a
+	      > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#charT');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Create text from single character.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >charT 'b' :: String
+</code
+		  ></strong
+		>&quot;b&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:char2T" class="def"
+	      >char2T</a
+	      > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#char2T');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Create text from two characters.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >char2T 'b' 'a' :: String
+</code
+		  ></strong
+		>&quot;ba&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:char3T" class="def"
+	      >char3T</a
+	      > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#char3T');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Create text from three characters.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >char3T 'b' 'a' 'r' :: String
+</code
+		  ></strong
+		>&quot;bar&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tString" class="def"
+	      >tString</a
+	      > :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	      >String</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tString');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Convert textual value to string.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tString &quot;foo&quot;
+</code
+		  ></strong
+		>&quot;foo&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:stringT" class="def"
+	      >stringT</a
+	      > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	      >String</a
+	      > -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#stringT');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Convert string to textual value.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >stringT &quot;foo&quot; :: String
+</code
+		  ></strong
+		>&quot;foo&quot;
+</pre
+	      ></div
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Textual" class="caption collapser" onclick="toggleSection('i:Textual')"
+	    >Instances</p
+	    ><div id="section.i:Textual" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#line-182');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > Text</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#line-195');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Strict text.</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > Text</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#line-209');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Lazy text.</p
+		    ></td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

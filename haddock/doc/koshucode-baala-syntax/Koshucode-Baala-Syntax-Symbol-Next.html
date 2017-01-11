@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.199.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.200.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -116,6 +116,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><a href="#v:nextQQ"
 	    >nextQQ</a
 	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:AbNext"
+	    >AbNext</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:nextBefore"
+	    >nextBefore</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:AbNext"
 	    >AbNext</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
@@ -256,6 +266,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 </code
 		></strong
 	      >Right (&quot; ghi&quot;,&quot;abc\&quot;def&quot;)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nextBefore" class="def"
+	    >nextBefore</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:AbNext"
+	    >AbNext</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Next.html#nextBefore');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get next text before given delimiter.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nextBefore &quot;''&quot; &quot;abc'' def&quot;
+</code
+		></strong
+	      >Right (&quot; def&quot;,&quot;abc&quot;)
 </pre
 	    ></div
 	  ></div

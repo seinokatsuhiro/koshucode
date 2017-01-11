@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-type-0.199.0.0: Additional data types for Koshucode</p
+      >koshucode-baala-type-0.200.0.0: Additional data types for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -558,7 +558,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		    ></td
 		  ><td class="doc"
 		  ><p
-		    >Extract date part and convert to MJD.</p
+		    >Extract date part and convert to MJT.</p
 		    ></td
 		  ></tr
 		></table
@@ -650,7 +650,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>monthlyTime (D.DateYmd 2013 4 18) (Just $ D.ClockPartsMin 0 12 05)
+		>monthlyTime (T.DateYmd 2013 4 18) (Just $ T.ClockPartsMin 0 12 05)
 </code
 		></strong
 	      >Right 2013-04-18 12:05
@@ -660,7 +660,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>monthlyTime (D.DateYmd 2013 4 18) (Nothing :: Maybe D.ClockParts)
+		>monthlyTime (T.DateYmd 2013 4 18) (Nothing :: Maybe T.ClockParts)
 </code
 		></strong
 	      >Right 2013-04-18
@@ -670,7 +670,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>monthlyTime (D.DateYmd 2013 4 31) (Nothing :: Maybe D.ClockParts)
+		>monthlyTime (T.DateYmd 2013 4 31) (Nothing :: Maybe T.ClockParts)
 </code
 		></strong
 	      >Left AbortReason &quot;Not monthly date&quot; ...

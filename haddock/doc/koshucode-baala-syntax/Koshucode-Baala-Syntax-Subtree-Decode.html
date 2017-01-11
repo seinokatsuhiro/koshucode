@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.199.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.200.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,6 +51,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Syntax.Subtree.Decode</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Decode</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Syntax of subtree</a
+	    ></li
+	  ></ul
 	></div
       ><div id="description"
       ><p class="caption"
@@ -75,6 +89,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >TokenClause</a
 	    >]</li
 	  ><li class="src short"
+	  ><a href="#v:subtreeClause"
+	    >subtreeClause</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
+	    >TokenClause</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
+	    >TokenClause</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:decodeSubtreePattern"
 	    >decodeSubtreePattern</a
 	    > :: [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
@@ -87,8 +111,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Decode</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:readSubtreeClauses" class="def"
@@ -128,6 +152,24 @@ TClose /0.0.0/ &quot;)&quot;
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:subtreeClause" class="def"
+	    >subtreeClause</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
+	    >TokenClause</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
+	    >TokenClause</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Decode.html#subtreeClause');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Insert open/sep/close to subtree clause.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:decodeSubtreePattern" class="def"
 	    >decodeSubtreePattern</a
 	    > :: [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
@@ -150,7 +192,7 @@ TClose /0.0.0/ &quot;)&quot;
 		>S.withTrees decodeSubtreePattern &quot;- \&quot;Z1\&quot;&quot;
 </code
 		></strong
-	      >Right [SubtreeL (SubtreeEq &quot;Z1&quot;)]
+	      >Right [SubtreeL SubtreeNone (SubtreeEq &quot;Z1&quot;)]
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -160,7 +202,7 @@ TClose /0.0.0/ &quot;)&quot;
 		>S.withTrees decodeSubtreePattern &quot;&gt; \&quot;Y1\&quot; ( - \&quot;Z1\&quot; )&quot;
 </code
 		></strong
-	      >Right [SubtreeB (SubtreeEq &quot;Y1&quot;) [SubtreeL (SubtreeEq &quot;Z1&quot;)]]
+	      >Right [SubtreeB SubtreeNone (SubtreeEq &quot;Y1&quot;) [SubtreeL SubtreeNone (SubtreeEq &quot;Z1&quot;)]]
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -170,8 +212,9 @@ TClose /0.0.0/ &quot;)&quot;
 		>S.withTrees decodeSubtreePattern &quot;&gt; \&quot;Y1\&quot; ( - \&quot;Z1\&quot; | - \&quot;Z2\&quot; )&quot;
 </code
 		></strong
-	      >Right [ SubtreeB (SubtreeEq &quot;Y1&quot;) [ SubtreeL (SubtreeEq &quot;Z1&quot;)
-                                  , SubtreeL (SubtreeEq &quot;Z2&quot;) ]]
+	      >Right [SubtreeB SubtreeNone (SubtreeEq &quot;Y1&quot;)
+                [SubtreeL SubtreeNone (SubtreeEq &quot;Z1&quot;),
+                 SubtreeL SubtreeNone (SubtreeEq &quot;Z2&quot;)]]
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -181,7 +224,7 @@ TClose /0.0.0/ &quot;)&quot;
 		>S.withTrees decodeSubtreePattern &quot;&gt;&gt; \&quot;Y1\&quot; ( - \&quot;Z1\&quot; )&quot;
 </code
 		></strong
-	      >Right [SubtreeR (SubtreeEq &quot;Y1&quot;) [SubtreeL (SubtreeEq &quot;Z1&quot;)]]
+	      >Right [SubtreeR (SubtreeEq &quot;Y1&quot;) [SubtreeL SubtreeNone (SubtreeEq &quot;Z1&quot;)]]
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -194,6 +237,198 @@ TClose /0.0.0/ &quot;)&quot;
 	      >Right [SubtreeR (SubtreeEq &quot;Y1&quot;) [SubtreeL (SubtreeText [&quot;A&quot;, &quot;B&quot;] (TermName EQ &quot;z&quot;)) (SubtreeEq &quot;Z1&quot;)]]
 </pre
 	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Syntax of subtree</h1
+	><div class="doc"
+	><h2
+	  >Pattern</h2
+	  ><dl
+	  ><dt
+	    ><code
+	      >-</code
+	      > <em
+	      >Filter</em
+	      ></dt
+	    ><dd
+	    >Leaf which satisfies <em
+	      >Filter</em
+	      >.</dd
+	    ><dt
+	    ><code
+	      >&gt;</code
+	      > <em
+	      >Filter</em
+	      > <code
+	      >{</code
+	      > <em
+	      >Pattern</em
+	      > <code
+	      >|</code
+	      > ... <code
+	      >}</code
+	      ></dt
+	    ><dd
+	    >Branch which satisfies <em
+	      >Filter</em
+	      >,
+    and inner trees match <em
+	      >Pattern</em
+	      >.</dd
+	    ><dt
+	    ><code
+	      >&gt;&gt;</code
+	      > <em
+	      >Filter</em
+	      > <code
+	      >{</code
+	      > <em
+	      >Pattern</em
+	      > <code
+	      >|</code
+	      > ... <code
+	      >}</code
+	      ></dt
+	    ><dd
+	    >Recursive branch pattern include current branch,
+    and inner trees match <em
+	      >Pattern</em
+	      >.</dd
+	    ><dt
+	    ><code
+	      >&gt;&gt;&gt;</code
+	      > <em
+	      >Filter</em
+	      > <code
+	      >{</code
+	      > <em
+	      >Pattern</em
+	      > <code
+	      >|</code
+	      > ... <code
+	      >}</code
+	      ></dt
+	    ><dd
+	    >Recursive branch pattern only inner branches,
+    and inner trees match <em
+	      >Pattern</em
+	      >.</dd
+	    ></dl
+	  ><h2
+	  >Filter</h2
+	  ><dl
+	  ><dt
+	    ><em
+	      >Element</em
+	      > <code
+	      >|</code
+	      > ...</dt
+	    ><dd
+	    >Chain of filter <em
+	      >Element</em
+	      >s.</dd
+	    ></dl
+	  ><h2
+	  >Element</h2
+	  ><dl
+	  ><dt
+	    ><code
+	      >&quot;</code
+	      ><em
+	      >Text</em
+	      ><code
+	      >&quot;</code
+	      ></dt
+	    ><dd
+	    >Node name is equal to <em
+	      >Text</em
+	      >.</dd
+	    ><dt
+	    ><code
+	      >?</code
+	      > <code
+	      >&quot;</code
+	      ><em
+	      >Like</em
+	      ><code
+	      >&quot;</code
+	      ></dt
+	    ><dd
+	    >Node name satisfies <em
+	      >Like</em
+	      > pattern.</dd
+	    ><dt
+	    ><code
+	      >!</code
+	      > <code
+	      >&quot;</code
+	      ><em
+	      >Like</em
+	      ><code
+	      >&quot;</code
+	      ></dt
+	    ><dd
+	    >Node name does not satisfies <em
+	      >Like</em
+	      > pattern.</dd
+	    ><dt
+	    ><code
+	      >id</code
+	      > <code
+	      >&quot;</code
+	      ><em
+	      >Text</em
+	      ><code
+	      >&quot;</code
+	      ></dt
+	    ><dd
+	    ><strong
+	      >Used for XML tree:</strong
+	      >
+    Value of id attribute is equal to <em
+	      >Text</em
+	      >.</dd
+	    ><dt
+	    ><code
+	      >class</code
+	      > <code
+	      >&quot;</code
+	      ><em
+	      >Text</em
+	      ><code
+	      >&quot;</code
+	      ></dt
+	    ><dd
+	    ><strong
+	      >Used for XML tree:</strong
+	      >
+    Space-delimited values of class attribute contains <em
+	      >Text</em
+	      >.</dd
+	    ><dt
+	    ><code
+	      >&quot;</code
+	      ><em
+	      >Text</em
+	      ><code
+	      >&quot;</code
+	      > <code
+	      >=</code
+	      > <code
+	      >&quot;</code
+	      ><em
+	      >Text</em
+	      ><code
+	      >&quot;</code
+	      ></dt
+	    ><dd
+	    ><strong
+	      >Used for XML tree:</strong
+	      >
+    Attribute value is equal to <em
+	      >Text</em
+	      >.</dd
+	    ></dl
 	  ></div
 	></div
       ></div

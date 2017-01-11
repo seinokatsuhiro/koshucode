@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.199.0.0
+@version 0.200.0.0
 
 
 -- | Exit process.
@@ -647,10 +647,6 @@ hPutLines :: Handle -> [String] -> IO ()
 prompt :: IO String
 
 
--- | Bundle of text modules.
-module Koshucode.Baala.Overture.Text
-
-
 -- | Shorthand types and functions.
 module Koshucode.Baala.Overture.Shorthand
 
@@ -851,6 +847,184 @@ module Koshucode.Baala.Overture.Infix
 
 -- | Monadic concat mappping.
 (<#++>) :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
+
+
+-- | Textual class.
+module Koshucode.Baala.Overture.Text.Textual
+
+-- | Text-like value.
+class (Eq a, Monoid a) => Textual a where tEmpty = mempty tIsEmpty = (== tEmpty) tJoin = mappend tJoinAll = mconcat tAdd2 c d = tAdd c . tAdd d tAdd3 c d e = tAdd c . tAdd2 d e tCut2 a = tCut <$$> tCut a tCut3 a = tCut2 <$$> tCut a tDropPrefix (tCut -> Just (c, cs)) (tCut -> Just (a, as)) | c == a = tDropPrefix cs as | otherwise = Nothing tDropPrefix cs as | tIsEmpty cs = Just as | otherwise = Nothing charT c = tAdd c tEmpty char2T c d = tAdd2 c d tEmpty char3T c d e = tAdd3 c d e tEmpty
+
+-- | Empty text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tEmpty :: String
+--   ""
+--   </pre>
+tEmpty :: Textual a => a
+
+-- | Test text is empty.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tIsEmpty ""
+--   True
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; tIsEmpty "foo"
+--   False
+--   </pre>
+tIsEmpty :: Textual a => a -> Bool
+
+-- | Append two texts.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tJoin "foo" "bar"
+--   "foobar"
+--   </pre>
+tJoin :: Textual a => a -> a -> a
+
+-- | Append multiple texts.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tJoinAll ["foo", "bar", "baz"]
+--   "foobarbaz"
+--   </pre>
+tJoinAll :: Textual a => [a] -> a
+
+-- | Preppend character to text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tAdd 'g' "foo"
+--   "gfoo"
+--   </pre>
+tAdd :: Textual a => Char -> a -> a
+
+-- | Preppend two characters to text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tAdd2 'b' 'a' "foo"
+--   "bafoo"
+--   </pre>
+tAdd2 :: Textual a => Char -> Char -> a -> a
+
+-- | Preppend two characters to text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tAdd3 'b' 'a' 'r' "foo"
+--   "barfoo"
+--   </pre>
+tAdd3 :: Textual a => Char -> Char -> Char -> a -> a
+
+-- | Split text into first character and rest of text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tCut "foo"
+--   Just ('f',"oo")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; tCut ""
+--   Nothing
+--   </pre>
+tCut :: Textual a => a -> Maybe (Char, a)
+
+-- | Split one or two characters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tCut2 "bar"
+--   Just ('b', Just ('a', "r"))
+--   </pre>
+tCut2 :: Textual a => a -> Maybe (Char, Maybe (Char, a))
+
+-- | Split one, two, or three characters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tCut3 "bar"
+--   Just ('b', Just ('a', Just ('r', "")))
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; tCut3 "b"
+--   Just ('b', Nothing)
+--   </pre>
+tCut3 :: Textual a => a -> Maybe (Char, Maybe (Char, Maybe (Char, a)))
+
+-- | Take <i>N</i> characters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tTake 3 "foobar"
+--   "foo"
+--   </pre>
+tTake :: Textual a => Int -> a -> a
+
+-- | Drop <i>N</i> characters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tDrop 3 "foobar"
+--   "bar"
+--   </pre>
+tDrop :: Textual a => Int -> a -> a
+
+-- | Drop prefix from text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tDropPrefix "foo" "foobar"
+--   Just "bar"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; tDropPrefix "bar" "foobar"
+--   Nothing
+--   </pre>
+tDropPrefix :: (Textual a, Textual b) => b -> a -> Maybe a
+
+-- | Create text from single character.
+--   
+--   <pre>
+--   &gt;&gt;&gt; charT 'b' :: String
+--   "b"
+--   </pre>
+charT :: Textual a => Char -> a
+
+-- | Create text from two characters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; char2T 'b' 'a' :: String
+--   "ba"
+--   </pre>
+char2T :: Textual a => Char -> Char -> a
+
+-- | Create text from three characters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; char3T 'b' 'a' 'r' :: String
+--   "bar"
+--   </pre>
+char3T :: Textual a => Char -> Char -> Char -> a
+
+-- | Convert textual value to string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tString "foo"
+--   "foo"
+--   </pre>
+tString :: Textual a => a -> String
+
+-- | Convert string to textual value.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringT "foo" :: String
+--   "foo"
+--   </pre>
+stringT :: Textual a => String -> a
+instance Koshucode.Baala.Overture.Text.Textual.Textual GHC.Base.String
+instance Koshucode.Baala.Overture.Text.Textual.Textual Data.Text.Internal.Text
+instance Koshucode.Baala.Overture.Text.Textual.Textual Data.Text.Internal.Lazy.Text
+
+
+-- | Bundle of text modules.
+module Koshucode.Baala.Overture.Text
 
 
 -- | Indexed value.

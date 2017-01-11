@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.199.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.200.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -291,8 +291,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >ClipTokenC</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:clipQQ"
-	    >clipQQ</a
+	  ><a href="#v:clipQq"
+	    >clipQq</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenC"
+	    >ClipTokenC</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipQn"
+	    >clipQn</a
 	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenC"
 	    >ClipTokenC</a
 	    ></li
@@ -717,11 +723,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:clipQQ" class="def"
-	    >clipQQ</a
+	  ><a name="v:clipQq" class="def"
+	    >clipQq</a
 	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenC"
 	    >ClipTokenC</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipQQ');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipQq');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -732,7 +738,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>clipQQ B.def O.emptyWordCache &quot;foo\&quot; bar baz&quot;
+		>clipQq B.def O.emptyWordCache &quot;foo\&quot; bar baz&quot;
+</code
+		></strong
+	      >(Cache 8 [&quot;foo&quot;] [], &quot; bar baz&quot;, TText /0.0.0/ TextQQ &quot;foo&quot;)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipQn" class="def"
+	    >clipQn</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenC"
+	    >ClipTokenC</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipQn');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip quoted text before delimiter.
+   This function must be called after two single quotations.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipQn B.def B.emptyWordCache &quot;'foo''' bar baz&quot;
 </code
 		></strong
 	      >(Cache 8 [&quot;foo&quot;] [], &quot; bar baz&quot;, TText /0.0.0/ TextQQ &quot;foo&quot;)
