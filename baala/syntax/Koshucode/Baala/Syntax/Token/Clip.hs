@@ -220,7 +220,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
                           Right (cs', w) -> f w cs'
                           Left a         -> (wtab, [], [S.TUnknown cp cs0 a])
 
-    nterm ns w cs'    = let w' = show (O.getIx cp) ++ ('=' : w)
+    nterm ns w cs'    = let w' = show (O.getIx cp) ++ (O.tAdd '=' w)
                         in term (w' : ns) cs'
 
     term ns (O.tCut -> Just (c, cs))
@@ -252,7 +252,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
 --
 clipBar :: B.CodePos -> String -> ClipResult
 clipBar cp cs0 = bar (0 :: Int) cs0 where
-    text n = '|' : take n cs0
+    text n = O.tAdd '|' $ O.tTake n cs0
     barToken n = S.TText cp S.TextBar $ text n
     rawToken n = S.TText cp S.TextRaw $ text n
 

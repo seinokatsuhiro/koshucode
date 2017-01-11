@@ -21,9 +21,9 @@ import qualified Koshucode.Baala.Syntax.Symbol.Next     as S
 import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 
 
--- --------------------------------------------  Symbol
+-- ============================================  Symbol
 
--- ----------------------  Data type
+-- ---------------------------------  Data type
 
 -- | Symbol class.
 --
@@ -90,7 +90,7 @@ data Symbol
       deriving (Show, Eq, Ord)
 
 
--- ----------------------  Symbol test
+-- ---------------------------------  Symbol test
 
 -- | Test symbol is general, in other words,
 --   'SymbolCommon', 'SymbolPlain' or 'SymbolGeneral'.
@@ -120,7 +120,7 @@ isShortSymbol (SymbolShort _ _)    = True
 isShortSymbol _                    = False
 
 
--- ----------------------  Char test
+-- ---------------------------------  Char test
 
 -- | Test character is a symbol component.
 isSymbolChar :: O.Test Char
@@ -163,7 +163,7 @@ isCharG'  c  = isCharGp' c || isCharGn c || isCharG c
 isCharN'  c  = isCharGn' c || isCharN  c
 
 
--- ---------------------- Next symbol
+-- ---------------------------------  Next symbol
 
 -- | Get next symbol.
 --
@@ -178,7 +178,7 @@ isCharN'  c  = isCharGn' c || isCharN  c
 --
 nextSymbol :: S.Next Symbol
 nextSymbol cs0 = symbolGpn O.zero cs0 where
-    done n cs k           = (cs, k $ take n cs0)
+    done n cs k           = (cs, k $ O.tTake n cs0)
 
     -- General and Plain and Numeric
     symbolGpn n (O.tCut -> Just (c, cs))
@@ -193,7 +193,7 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
 
     -- General and Plain
     symbolGp n (O.tCut -> Just (c, cs))
-        | c == '.'        = shortBody (take n cs0) cs
+        | c == '.'        = shortBody (O.tTake n cs0) cs
         | isCharGp' c     = symbolGp  n' cs
         | isCharG   c     = symbolG   n' cs
         | isSymbolChar c  = symbolUnk n' cs
@@ -230,7 +230,7 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
 
 shortBody :: String -> S.Next Symbol
 shortBody pre cs0 = short O.zero cs0 where
-    done n cs k           = (cs, k $ take n cs0)
+    done n cs k           = (cs, k $ O.tTake n cs0)
 
     -- Plain "." Plain
     short n (O.tCut -> Just (c, cs))

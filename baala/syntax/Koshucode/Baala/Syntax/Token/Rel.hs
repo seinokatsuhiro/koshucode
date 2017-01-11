@@ -90,7 +90,7 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
     clipw        = S.clipUpdateC  sc
     clipcl       = S.clipUpdateCL sc
     upd cs tok   = B.codeUpdate cs tok sc
-    updEnd       = upd ""
+    updEnd       = upd O.tEmpty
     int cs tok   = B.codeChange (scanInterp change) $ B.codeScanSave $ upd cs tok
     raw          = S.TText cp S.TextRaw
 
@@ -124,15 +124,15 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
                                  = updEnd  $ S.TComment   cp bs
 
         | isSingle a             = upd bs  $ raw [a]
-        | S.isSymbol a           = clipw   $ S.clipSymbol cp wtab $ a : bs
+        | S.isSymbol a           = clipw   $ S.clipSymbol cp wtab $ O.tAdd a bs
         | n == 0                 = sc
         | otherwise              = upd []  $ S.unknownToken cp cs
                                            $ Msg.forbiddenInput $ S.angleQuote [a]
 
     aster :: String -> String -> S.TokenScan
     aster (O.tCut -> Just (c, cs)) w
-        | w == "****"            = upd (c:cs) $ raw w
-        | c == '*'               = aster cs (c:w)
+        | w == "****"            = upd (O.tAdd c cs) $ raw w
+        | c == '*'               = aster cs (O.tAdd c w)
     aster cs w
         | w == "**"              = updEnd  $ S.TComment cp cs
         | w == "***"             = updEnd  $ S.TComment cp cs
@@ -155,20 +155,20 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
 clipAngle :: B.CodePos -> String -> S.ClipResult
 clipAngle cp cs0 = angle (0 :: Int) cs0 where
     raw = S.TText cp S.TextRaw
-    text n = take n cs0
+    text n = O.tTake n cs0
 
     -- <...
     angle :: Int -> String -> S.ClipResult
     angle n (O.tCut -> Just (c, cs))
         | S.isSymbol c  = sym n (c:cs)
-    angle n cs          = (cs, raw $ '<' : text n)
+    angle n cs          = (cs, raw $ O.tAdd '<' $ text n)
 
     -- <symbol ...
     sym :: Int -> String -> S.ClipResult
     sym n (O.tCut -> Just (c, cs))
         | c == '>'      = close n cs
         | S.isSymbol c  = sym (n + 1) cs
-    sym n cs            = (cs, raw $ '<' : text n) -- '<<'
+    sym n cs            = (cs, raw $ O.tAdd '<' $ text n) -- '<<'
 
     -- <symbol> ...
     close :: Int -> String -> S.ClipResult
@@ -229,7 +229,7 @@ scanInterp change sc@B.CodeScan { B.codeInputPt = cp
     int _               = sc
 
     word cs0 = loop O.zero cs0 where
-        raw n = S.TText cp S.TextRaw $ take n cs0
+        raw n = S.TText cp S.TextRaw $ O.tTake n cs0
         loop n cs@('|':'}':_) = gen  cs      $ raw n
         loop n (O.tCut -> Just (c, cs))
             | S.isSpace c     = upd  (c:cs)  $ raw n

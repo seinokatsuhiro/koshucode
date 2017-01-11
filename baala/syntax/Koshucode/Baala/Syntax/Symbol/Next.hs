@@ -64,6 +64,6 @@ nextQQ cs0 = loop O.zero cs0 where
 
     qq n (O.tCut -> Just (c, cs))
         | isQQ c      = do (cs', s') <- nextQQ cs
-                           Right (cs', take (n + 1) cs0 ++ s')
-    qq n cs           = Right (cs, take n cs0)
+                           Right (cs', O.tTake (n + 1) cs0 O.++ s')
+    qq n cs           = Right (cs, O.tTake n cs0)
 
