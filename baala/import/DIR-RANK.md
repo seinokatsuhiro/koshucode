@@ -453,7 +453,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    179 judges
+**    180 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Data.List"
@@ -624,6 +624,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Rel"          /import "Koshucode.Baala.Base.Message"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Rel"          /import "Koshucode.Baala.Syntax.Token.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Section"      /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Section"      /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Section"      /import "Koshucode.Baala.Syntax.Symbol"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Section"      /import "Koshucode.Baala.Syntax.Token.Clip"
@@ -818,7 +819,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    142 judges
+**    143 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Overture"
@@ -947,6 +948,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Message"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Message"       /import "Koshucode.Baala.Syntax"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Type"

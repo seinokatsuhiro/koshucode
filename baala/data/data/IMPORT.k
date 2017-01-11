@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    142 judges
+**    143 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Overture"
@@ -136,6 +136,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Message"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Message"       /import "Koshucode.Baala.Syntax"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Type"
