@@ -9,6 +9,7 @@ module Koshucode.Baala.Data.Decode.Numeric
     treesTime, stringTime,
   ) where
 
+import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Type                  as T
@@ -25,7 +26,7 @@ import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 --   Right "-123450.00"
 --
 treesDigits :: [S.Tree] -> B.Ab String
-treesDigits = concatDigits B.<#.> D.treesTexts False
+treesDigits = concatDigits O.<#.> D.treesTexts False
 
 concatDigits :: [String] -> B.Ab String
 concatDigits = first where
@@ -116,7 +117,7 @@ fromDigit _    =  Nothing
 --   Right 2013-#16
 --
 treesTime :: [S.Tree] -> B.Ab T.Time
-treesTime = stringsTime B.<#.> D.treesTexts False
+treesTime = stringsTime O.<#.> D.treesTexts False
 
 -- | Get time from string.
 --

@@ -4,16 +4,19 @@
 
 module Koshucode.Baala.Overture.Infix
  ( -- * Infix operators
-   (&),
-   (/$/),
-   (++), (<++>),
-   (<?>),
-   (<$$>),
+   (&), (++),
+
+   -- ** Map
+   (/$/), (<++>),
+   (<?>), (<$$>),
+
+   -- ** Monad
    (<#>), (<#!>),
-   (<#++>),
+   (<#.>), (<#++>),
  ) where
 
 import Prelude hiding ((++))
+import qualified Control.Monad
 import qualified Data.Maybe                    as May
 import qualified Koshucode.Baala.Overture.Type as O
 
@@ -33,6 +36,19 @@ a & b = (a, b)
 
 infixr 6 ++
 
+-- | Associative operator of monoid,
+--   same as 'mappend' or infix '<>'.
+--
+--   >>> Just "abc" ++ Nothing ++ Just "def"
+--   Just "abcdef"
+--
+{-# INLINE (++) #-}
+(++) :: (Monoid a) => a -> a -> a
+(++) = mappend
+
+
+-- ----------------------  Map
+
 -- | Apply function to reversed list, and reverse back.
 --
 --   >>> take 3 $ "abcdefg"
@@ -43,16 +59,6 @@ infixr 6 ++
 --
 (/$/) :: O.Map [a] -> O.Map [a]
 (/$/) f = reverse . f . reverse
-
--- | Associative operator of monoid,
---   same as 'mappend' or infix '<>'.
---
---   >>> Just "abc" ++ Nothing ++ Just "def"
---   Just "abcdef"
---
-{-# INLINE (++) #-}
-(++) :: (Monoid a) => a -> a -> a
-(++) = mappend
 
 -- | Same as 'concatMap'.
 --
@@ -77,6 +83,9 @@ infixl 4 <$$>
 (<$$>) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
 f <$$> x = fmap f <$> x
 
+
+-- ----------------------  Monad
+
 -- | Monadic mapping, same as 'mapM'.
 {-# INLINE (<#>) #-}
 (<#>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m (t b)
@@ -86,6 +95,12 @@ f <$$> x = fmap f <$> x
 {-# INLINE (<#!>) #-}
 (<#!>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m ()
 (<#!>) = mapM_
+
+infixr 1 <#.>
+
+-- | Composition of monadic functions.
+(<#.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
+(<#.>) = (Control.Monad.<=<)
 
 -- | Monadic concat mappping.
 (<#++>) :: (Monad m) => (a -> m [b]) -> [a] -> m [b]

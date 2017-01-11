@@ -7,7 +7,6 @@ module Koshucode.Baala.Base.Prelude.Import
     Control.Exception.bracket,
 
     -- * Control.Monad
-    (<#.>),
     (Control.Monad.>=>),
     Control.Monad.filterM,
     Control.Monad.foldM,
@@ -15,7 +14,6 @@ module Koshucode.Baala.Base.Prelude.Import
     Control.Monad.sequence,
     Control.Monad.unless,
     Control.Monad.when,
-    --concatMapM,
   
     -- * Data.ByteString
     Bs,
@@ -89,18 +87,6 @@ import qualified Data.Tuple
 import qualified System.IO
 import qualified System.Exit
 import qualified Text.PrettyPrint
-
-
--- ----------------------  Control
-
-infixr 1 <#.>
-
--- | Composition of monadic functions.
-(<#.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
-(<#.>) = (Control.Monad.<=<)
-
---concatMapM :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
---concatMapM f = return . concat Control.Monad.<=< mapM f
 
 
 -- ----------------------  Data

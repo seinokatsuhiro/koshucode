@@ -189,7 +189,7 @@ codeTreeFmap f = loop where
 -- | Convert code elements to a single code tree.
 codeTree :: (Ord b, B.GetCodePos a) => B.GetBracket b a -> B.Bracket b -> b -> [a] -> B.Ab (CodeTree b a)
 codeTree bracketType zero one =
-    Right . codeTreeWrap one B.<#.> codeTrees bracketType zero
+    Right . codeTreeWrap one O.<#.> codeTrees bracketType zero
 
 -- | Convert code elements to code trees.
 codeTrees :: forall a. forall b. (Ord b, B.GetCodePos a)
