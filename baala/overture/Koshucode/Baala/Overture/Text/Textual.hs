@@ -7,8 +7,9 @@ module Koshucode.Baala.Overture.Text.Textual
   ( Textual (..),
   ) where
 
-import qualified Data.Text        as Tx
-import qualified Data.Text.Lazy   as Tz
+import qualified Data.Text                       as Tx
+import qualified Data.Text.Lazy                  as Tz
+import qualified Koshucode.Baala.Overture.Misc   as O
 
 -- | Text-like value.
 class (Eq a) => Textual a where
@@ -48,7 +49,7 @@ class (Eq a) => Textual a where
     tJoinAll :: [a] -> a
     tJoinAll = foldr tJoin tEmpty
 
-    -- ----------------------  First character
+    -- ----------------------  Subtext
 
     -- | Preppend character to text.
     --
@@ -66,6 +67,20 @@ class (Eq a) => Textual a where
     --   Nothing
     --
     tCut :: a -> Maybe (Char, a)
+
+    -- | Take /N/ characters.
+    --
+    --   >>> tTake 3 "foobar"
+    --   "foo"
+    --
+    tTake :: Int -> a -> a
+
+    -- | Drop /N/ characters.
+    --
+    --   >>> tDrop 3 "foobar"
+    --   "bar"
+    --
+    tDrop :: Int -> a -> a
 
     -- ----------------------  Conversion
 
@@ -88,9 +103,9 @@ instance Textual String where
     tIsEmpty     = null
     tJoin        = (++)
     tAdd         = (:)
-
-    tCut (c:cs)  = Just (c, cs)
-    tCut ""      = Nothing
+    tCut         = O.uncons
+    tTake        = take
+    tDrop        = drop
 
     tString      = id
     stringT      = id
@@ -103,6 +118,8 @@ instance Textual Tx.Text where
 
     tAdd         = Tx.cons
     tCut         = Tx.uncons
+    tTake        = Tx.take
+    tDrop        = Tx.drop
 
     tString      = Tx.unpack
     stringT      = Tx.pack
@@ -115,6 +132,8 @@ instance Textual Tz.Text where
 
     tAdd         = Tz.cons
     tCut         = Tz.uncons
+    tTake        = Tz.take . fromIntegral
+    tDrop        = Tz.drop . fromIntegral
 
     tString      = Tz.unpack
     stringT      = Tz.pack
