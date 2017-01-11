@@ -12,7 +12,7 @@ import qualified Data.Text.Lazy                  as Tz
 import qualified Koshucode.Baala.Overture.Misc   as O
 
 -- | Text-like value.
-class (Eq a) => Textual a where
+class (Eq a, Monoid a) => Textual a where
 
     -- ----------------------  Monoid
 
@@ -22,6 +22,7 @@ class (Eq a) => Textual a where
     --   ""
     --
     tEmpty :: a
+    tEmpty = mempty
 
     -- | Test text is empty.
     --
@@ -40,6 +41,7 @@ class (Eq a) => Textual a where
     --   "foobar"
     --
     tJoin :: a -> a -> a
+    tJoin = mappend
 
     -- | Append multiple texts.
     --
@@ -47,7 +49,7 @@ class (Eq a) => Textual a where
     --   "foobarbaz"
     --
     tJoinAll :: [a] -> a
-    tJoinAll = foldr tJoin tEmpty
+    tJoinAll = mconcat
 
     -- ----------------------  Subtext
 
