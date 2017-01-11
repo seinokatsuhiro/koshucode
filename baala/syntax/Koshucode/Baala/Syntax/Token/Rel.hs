@@ -178,13 +178,13 @@ clipAngle cp cs0 = angle (0 :: Int) cs0 where
 
     -- symbol in '<symbol>'
     key :: String -> S.Token
-    key ('U' : '+' : s)      = fromCodePoint stringHexIntList s
-    key ('c' : s) | isCodePoint s
-                             = fromCodePoint stringIntList s -- obsolete
-    key ""                   = raw "<>"
-    key s                    = case lookup s S.angleTexts of
-                                 Just w   -> S.TText cp S.TextKey w
-                                 Nothing  -> S.TText cp S.TextUnk s
+    key (O.tCut2 -> Just ('U', Just ('+', s))) = fromCodePoint stringHexIntList s
+    key (O.tCut  -> Just ('c', s))
+          | isCodePoint s  = fromCodePoint stringIntList s -- obsolete
+    key s | O.tIsEmpty s   = raw "<>"
+          | otherwise      = case lookup s S.angleTexts of
+                               Just w  -> S.TText cp S.TextKey w
+                               Nothing -> S.TText cp S.TextUnk s
 
     fromCodePoint f s = case f s of
                           Just ns  -> S.TText cp S.TextKey (toEnum <$> ns)
@@ -203,12 +203,12 @@ clipHat :: B.CodePos -> String -> S.ClipResult
 clipHat cp = hat where
     hat (O.tCut -> Just ('/', cs)) = localToken cs (S.LocalNest . S.toTermName)
     hat cs@(O.tCut -> Just (c, _))
-        | S.isSymbol c               = localToken cs S.LocalSymbol
-    hat cs                           = ([], S.unknownToken cp cs $ Msg.adlib "local")
+        | S.isSymbol c             = localToken cs S.LocalSymbol
+    hat cs                         = ([], S.unknownToken cp cs $ Msg.adlib "local")
 
-    localToken cs k                  = case S.nextSymbolPlain cs of
-                                         Right (cs', w) -> (cs', S.TLocal cp (k w) (-1) [])
-                                         Left a         -> ([],  S.TUnknown cp cs a)
+    localToken cs k                = case S.nextSymbolPlain cs of
+                                       Right (cs', w) -> (cs', S.TLocal cp (k w) (-1) [])
+                                       Left a         -> ([],  S.TUnknown cp cs a)
 
 
 -- ----------------------  Interpretation
@@ -230,12 +230,13 @@ scanInterp change sc@B.CodeScan { B.codeInputPt = cp
 
     word cs0 = loop O.zero cs0 where
         raw n = S.TText cp S.TextRaw $ O.tTake n cs0
-        loop n cs@('|':'}':_) = gen  cs      $ raw n
+        loop n cs@(O.tCut2 -> Just ('|', Just ('}', _)))
+                            = gen  cs            $ raw n
         loop n (O.tCut -> Just (c, cs))
-            | S.isSpace c     = upd  (c:cs)  $ raw n
-            | S.isTerm c      = upd  (c:cs)  $ raw n
-            | otherwise       = loop (n + 1) cs
-        loop n cs             = upd  cs      $ raw n
+            | S.isSpace c   = upd  (O.tAdd c cs) $ raw n
+            | S.isTerm c    = upd  (O.tAdd c cs) $ raw n
+            | otherwise     = loop (n + 1) cs
+        loop n cs           = upd  cs            $ raw n
 
 
 -- ------------------------------------------------------------------
