@@ -60,6 +60,7 @@ library
 
         Koshucode.Baala.Subtext.Para
         Koshucode.Baala.Subtext.Sieve.Token
+        Koshucode.Baala.Subtext.Sieve.Tree
 
   -- Modules included in this library but not exported.
   --other-modules:       
@@ -70,6 +71,7 @@ library
        , containers                == 0.*
        , text                      == 1.*
        , koshucode-baala-overture  == 0.201.0.0
+       , koshucode-baala-base      == 0.201.0.0
 
   ghc-options:         -Wall
 

@@ -12,6 +12,7 @@ module Koshucode.Baala.Subtext.Sieve.Token
 
 import qualified Data.Char                    as Ch
 import qualified Koshucode.Baala.Overture     as O
+import qualified Koshucode.Baala.Base         as B
 
 -- | Sieve token.
 data SivToken t
@@ -20,6 +21,10 @@ data SivToken t
     | SivOpen  SivBracket
     | SivClose SivBracket
       deriving (Show, Eq, Ord)
+
+instance B.GetCodePos (SivToken t) where
+    getCP  _ = B.def
+    getCPs _ = []
 
 -- | Sieve bracket.
 data SivBracket
