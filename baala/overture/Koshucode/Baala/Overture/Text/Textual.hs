@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -119,6 +120,22 @@ class (Eq a, Monoid a) => Textual a where
     --   "bar"
     --
     tDrop :: Int -> a -> a
+
+    -- | Drop prefix from text.
+    --
+    --   >>> tDropPrefix "foo" "foobar"
+    --   Just "bar"
+    --
+    --   >>> tDropPrefix "bar" "foobar"
+    --   Nothing
+    --
+    tDropPrefix :: (Textual b) => b -> a -> Maybe a
+    tDropPrefix (tCut -> Just (c, cs)) (tCut -> Just (a, as))
+        | c == a       = tDropPrefix cs as
+        | otherwise    = Nothing
+    tDropPrefix cs as
+        | tIsEmpty cs  = Just as
+        | otherwise    = Nothing
 
     -- ----------------------  Creation
 
