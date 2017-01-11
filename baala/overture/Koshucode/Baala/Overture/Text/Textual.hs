@@ -9,6 +9,7 @@ module Koshucode.Baala.Overture.Text.Textual
 
 import qualified Data.Text                       as Tx
 import qualified Data.Text.Lazy                  as Tz
+import qualified Koshucode.Baala.Overture.Infix  as O
 import qualified Koshucode.Baala.Overture.Misc   as O
 
 -- | Text-like value.
@@ -69,6 +70,25 @@ class (Eq a, Monoid a) => Textual a where
     --   Nothing
     --
     tCut :: a -> Maybe (Char, a)
+
+    -- | Split one or two characters.
+    --
+    --   >>> tCut2 "bar"
+    --   Just ('b', Just ('a', "r"))
+    --
+    tCut2 :: a -> Maybe (Char, Maybe (Char, a))
+    tCut2 a = tCut O.<$$> tCut a
+
+    -- | Split one, two, or three characters.
+    --
+    --   >>> tCut3 "bar"
+    --   Just ('b', Just ('a', Just ('r', "")))
+    --
+    --   >>> tCut3 "b"
+    --   Just ('b', Nothing)
+    --
+    tCut3 :: a -> Maybe (Char, Maybe (Char, Maybe (Char, a)))
+    tCut3 a = tCut2 O.<$$> tCut a
 
     -- | Take /N/ characters.
     --
