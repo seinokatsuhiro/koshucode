@@ -59,6 +59,8 @@ library
         Koshucode.Baala.Subtext.Operator.Repeat
 
         Koshucode.Baala.Subtext.Para
+
+        Koshucode.Baala.Subtext.Sieve
         Koshucode.Baala.Subtext.Sieve.Token
         Koshucode.Baala.Subtext.Sieve.Tree
 
