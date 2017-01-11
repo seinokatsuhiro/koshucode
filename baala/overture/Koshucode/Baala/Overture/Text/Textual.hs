@@ -61,6 +61,22 @@ class (Eq a, Monoid a) => Textual a where
     --
     tAdd :: Char -> a -> a
 
+    -- | Preppend two characters to text.
+    --
+    --   >>> tAdd2 'b' 'a' "foo"
+    --   "bafoo"
+    --
+    tAdd2 :: Char -> Char -> a -> a
+    tAdd2 c d = tAdd c . tAdd d
+
+    -- | Preppend two characters to text.
+    --
+    --   >>> tAdd3 'b' 'a' 'r' "foo"
+    --   "barfoo"
+    --
+    tAdd3 :: Char -> Char ->  Char -> a -> a
+    tAdd3 c d e = tAdd c . tAdd2 d e
+
     -- | Split text into first character and rest of text.
     --
     --   >>> tCut "foo"
@@ -120,7 +136,7 @@ class (Eq a, Monoid a) => Textual a where
     --   "ba"
     --
     char2T :: Char -> Char -> a
-    char2T c d = tAdd c $ charT d
+    char2T c d = tAdd2 c d tEmpty
 
     -- | Create text from three characters.
     --
@@ -128,7 +144,7 @@ class (Eq a, Monoid a) => Textual a where
     --   "bar"
     --
     char3T :: Char -> Char -> Char -> a
-    char3T c d e = tAdd c $ char2T d e
+    char3T c d e = tAdd3 c d e tEmpty
 
     -- ----------------------  Conversion
 
