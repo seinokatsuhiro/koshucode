@@ -67,6 +67,7 @@ library
          base                      == 4.*
        , koshucode-baala-overture  == 0.201.0.0
        , koshucode-baala-base      == 0.201.0.0
+       , koshucode-baala-subtext   == 0.201.0.0
        , koshucode-baala-syntax    == 0.201.0.0
        , koshucode-baala-type      == 0.201.0.0
        , koshucode-baala-data      == 0.201.0.0

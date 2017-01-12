@@ -1,10 +1,12 @@
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Content operators on texts.
 
 module Koshucode.Baala.Cop.Text
   ( copsText,
+    copSiv,
     copSuffix, copUnsuffix,
   ) where
 
@@ -14,6 +16,7 @@ import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
 import qualified Koshucode.Baala.Type             as T
 import qualified Koshucode.Baala.Data             as D
+import qualified Koshucode.Baala.Subtext          as P
 import qualified Koshucode.Baala.Rop.Base.Message as Msg
 
 -- | Content operators on texts.
@@ -22,6 +25,9 @@ copsText =
     [ D.CopCalc  (D.copInfix "*=")                copEndWithInfix
     , D.CopCalc  (D.copInfix "*=*")               copContainInfix
     , D.CopCalc  (D.copInfix "=*")                copBeginWithInfix
+
+    , D.CopCalc  (D.copInfix "=?")                $ copSiv True
+    , D.CopCalc  (D.copInfix "=!")                $ copSiv False
 
     , D.CopCalc  (D.copNormal "base-part")        copBasePart
     , D.CopCalc  (D.copNormal "char")             copChar
@@ -98,6 +104,17 @@ isList2 x y = D.isList x && D.isList y
 
 isText2 :: (D.CText c) => c -> c -> Bool
 isText2 x y = D.isText x && D.isText y
+
+
+-- ---------------------- Siv pattern
+
+-- | [__/TEXT/ =? /PATTERN/__] Test /TEXT/ matches /PATTERN/.
+--   [__/TEXT/ =! /PATTERN/__] Test /TEXT/ does not matches /PATTERN/.
+copSiv :: (D.CContent c) => Bool -> D.CopCalc c
+copSiv b [D.getText -> Right t, D.getText -> Right p] =
+    do res <- P.sivMatch p t
+       D.putBool $ res == b
+copSiv _ cs = Msg.unexpArg cs ["text", "pattern text"]
 
 
 -- ----------------------  text
@@ -393,7 +410,7 @@ extractText c
 
 -- ----------------------  suffix & unsuffix
 
--- | __suffix LIST__ adds unique suffixes to text elements of /LIST/.
+-- | [suffix /LIST/] Add unique suffixes to text elements of /LIST/.
 copSuffix :: (D.CContent c) => D.CopCalc c
 copSuffix = op where
     op [Right ls] | D.isList ls && (all D.isText $ D.gList ls)
@@ -401,7 +418,7 @@ copSuffix = op where
     op [c] = c
     op xs  = Msg.badArg xs
 
--- | __unsuffix C__ remove integer suffixes from /C/.
+-- | [unsuffix /C/] Remove integer suffixes from /C/.
 copUnsuffix :: forall c. (D.CContent c) => D.CopCalc c
 copUnsuffix = op where
     op [Right c] = Right $ unsuf c
@@ -412,4 +429,3 @@ copUnsuffix = op where
             | D.isList c  = D.pList (unsuf <$> D.gList c)
             | D.isSet  c  = D.pSet  (unsuf <$> D.gSet c)
             | otherwise   = c
-

@@ -57,6 +57,8 @@ baalaInfix = htab where
         , 6 ! "=*"    -- begin with
         , 6 ! "*="    -- end with
         , 6 ! "*=*"   -- contain
+        , 6 ! "=?"    -- siv match
+        , 6 ! "=!"    -- negative siv match
 
         , 2 ! "+"     -- add
         , 2 ! ".+"    -- left add
