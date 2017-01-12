@@ -27,7 +27,7 @@ type HttpProxy = (String, Maybe O.IOPath)
 --   >>> httpGet [] "https://httpbin.org/robots.txt"
 --   Right "User-agent: *\nDisallow: /deny\n"
 --
---   >>> (print O.<#.> httpGet []) O.<#!> ((\c -> "http://httpbin.org/status/" ++ show c) <$> [400 .. 404 :: Int])
+--   >>> (print O.#. httpGet []) O.<#!> ((\c -> "http://httpbin.org/status/" ++ show c) <$> [400 .. 404 :: Int])
 --   Left (400, "BAD REQUEST")
 --   Left (401, "UNAUTHORIZED")
 --   Left (402, "PAYMENT REQUIRED")

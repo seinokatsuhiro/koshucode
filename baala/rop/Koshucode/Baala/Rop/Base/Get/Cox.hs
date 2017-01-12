@@ -68,7 +68,7 @@ getNamedContentTerms = getOptContentTerms K.pTerm
 
 -- | Get list of content terms.
 getOptContentTerms :: (K.CContent c) => (K.TermName -> c) -> Rop.RopGet [K.Term c] c
-getOptContentTerms f med = optContentTerms f med K.<#.> Rop.getTreesTerms med
+getOptContentTerms f med = optContentTerms f med K.#. Rop.getTreesTerms med
 
 -- | Build terms of content.
 optContentTerms :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> [K.Term [K.Tree]] -> K.Ab [K.Term c]
@@ -84,7 +84,7 @@ optContent _ med (n, ts) = do c <- K.calcTree med $ K.ttreeGroup ts
 
 -- | Get required single content expression.
 getCox :: (K.CContent c) => Rop.RopGet (K.Cox c) c
-getCox med = buildCox med K.<#.> Rop.getTrees med
+getCox med = buildCox med K.#. Rop.getTrees med
 
 -- | Get optional single content expression.
 getMaybeCox :: (K.CContent c) => Rop.RopGet (K.MaybeCox c) c
@@ -109,7 +109,7 @@ getNamedCoxTerms = getOptCoxTerms K.pTerm
 -- | Get list of content expression terms.
 --   Contents of empty terms can be generated using its term name.
 getOptCoxTerms :: (K.CContent c) => (K.TermName -> c) -> Rop.RopGet [K.TermCox c] c
-getOptCoxTerms f med = optCoxTerms f med K.<#.> Rop.getTreesTerms med
+getOptCoxTerms f med = optCoxTerms f med K.#. Rop.getTreesTerms med
 
 -- | Build content expression.
 buildCox :: (K.CContent c) => C.Intmed c -> [K.Tree] -> K.AbCox c

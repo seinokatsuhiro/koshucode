@@ -11,8 +11,9 @@ module Koshucode.Baala.Overture.Infix
    (<?>), (<$$>),
 
    -- ** Monad
-   (#$), (<#>), (<#!>),
-   (<#.>), (<#++>),
+   (#$), (#.),
+   (<#>), (<#!>),
+   (<#++>),
  ) where
 
 import Prelude hiding ((++))
@@ -92,6 +93,12 @@ infixr 1 #$
 (#$) :: (Monad m) => (a -> m b) -> m a -> m b
 (#$) = (=<<)
 
+infixr 1 #.
+
+-- | Composition of monadic functions, same as 'Control.Monad.<=<'.
+(#.) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
+(#.) = (Control.Monad.<=<)
+
 -- | Monadic mapping, same as 'mapM'.
 {-# INLINE (<#>) #-}
 (<#>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m (t b)
@@ -102,12 +109,6 @@ infixr 1 #$
 (<#!>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m ()
 (<#!>) = mapM_
 
-infixr 1 <#.>
-
--- | Composition of monadic functions.
-(<#.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
-(<#.>) = (Control.Monad.<=<)
-
 -- | Monadic concat mappping.
 (<#++>) :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
-(<#++>) f a = return . concat =<< (f <#> a)
+(<#++>) f a = (return . concat) #$ (f <#> a)

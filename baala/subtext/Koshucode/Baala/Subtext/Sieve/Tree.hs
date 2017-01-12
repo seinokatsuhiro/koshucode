@@ -62,7 +62,7 @@ instance ToSivExpr SivExpr where
     toSivExpr = Right
 
 instance ToSivExpr [S.SivToken String] where
-    toSivExpr = sivExpr O.<#.> sivTrees
+    toSivExpr = sivExpr O.#. sivTrees
 
 instance ToSivExpr String where
     toSivExpr = toSivExpr . S.sivTokens
