@@ -56,20 +56,20 @@ tBracket t = bracket2 t O.<||> bracket1 t where
 
 -- | Sieve keyword.
 data SivKey
-    = SivAnyChar   -- ^ __[ ? ]__ Any single character.
+    = SivAnyChar   -- ^ __[ _ ]__ Any single character.
     | SivAnyText   -- ^ __[ * ]__ Arbitrary-length any text.
     | SivRange     -- ^ __[ - ]__ Character between two characters.
       deriving (Show, Eq, Ord)
 
 sivKey :: Char -> Maybe SivKey
-sivKey '?'  = Just SivAnyChar
+sivKey '_'  = Just SivAnyChar
 sivKey '*'  = Just SivAnyText
 sivKey '-'  = Just SivRange
 sivKey _    = Nothing
 
 -- | Convert textual value to sieve token list.
 --
---  >>> print O.<#!> sivTokens "foo{ba?}[0-9]baz?"
+--  >>> print O.<#!> sivTokens "foo{ba_}[0-9]baz_"
 --  SivText "foo"
 --  SivOpen (SivRepeat 0)
 --  SivText "ba"
@@ -80,7 +80,7 @@ sivKey _    = Nothing
 --  SivKey SivRange
 --  SivText "9"
 --  SivClose SivOption
---  SivText "baz?"
+--  SivText "baz_"
 --
 sivTokens :: (O.Textual t) => t -> [SivToken t]
 sivTokens = toks 0

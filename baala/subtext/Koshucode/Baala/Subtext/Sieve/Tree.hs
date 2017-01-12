@@ -28,7 +28,7 @@ type SivTree t = B.CodeTree S.SivBracket (S.SivToken t)
 
 -- | Parse sieve token list.
 --
---   >>> mapM_ B.printTree =<< B.abortLeft (sivTrees $ S.sivTokens "foo{ba?}[0-9]baz?")
+--   >>> mapM_ B.printTree =<< B.abortLeft (sivTrees $ S.sivTokens "foo{ba_}[0-9]baz_")
 --   - SivText "foo"
 --   > SivRepeat 0 Just (SivOpen (SivRepeat 0), SivClose (SivRepeat 0))
 --     - SivText "ba"
@@ -37,7 +37,7 @@ type SivTree t = B.CodeTree S.SivBracket (S.SivToken t)
 --     - SivText "0"
 --     - SivKey SivRange
 --     - SivText "9"
---   - SivText "baz?"
+--   - SivText "baz_"
 --
 sivTrees :: [S.SivToken t] -> B.Ab [SivTree t]
 sivTrees = B.codeTrees bracket B.BracketNone where
