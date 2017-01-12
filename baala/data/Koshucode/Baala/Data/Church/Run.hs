@@ -63,7 +63,7 @@ reduce = red [] where
     red args cox = Msg.abCoxReduce cox $ case cox of
         D.CoxLit    cp c      -> Right $ BetaLit  cp c
         D.CoxTerm   cp n i    -> Right $ BetaTerm cp n i
-        D.CoxLocal  _ v k     -> red args =<< kth v k args
+        D.CoxLocal  _ v k     -> red args O.# kth v k args
         D.CoxFill   _ fn xs   -> fill args fn $ substL args xs
         D.CoxCalc   _ _ _     -> fill args cox []
         D.CoxWith   _ arg2 e  -> red (arg2 ++ args) e
@@ -152,7 +152,7 @@ type CalcTuple c = [c] -> B.Ab c
 -- | [Cox-to-Tuple-to-Content]
 --     Create tuple calculator from content expression.
 calcTuple :: (D.GetCops cops, D.CContent c) => cops c -> T.Head -> D.Cox c -> CalcTuple c
-calcTuple cops he cox cs = coxRun cs =<< beta (D.getCops cops) he cox
+calcTuple cops he cox cs = coxRun cs O.# beta (D.getCops cops) he cox
 
 -- | [Tuple-to-Cox-to-Content]
 --     Calculate content expression with specific tuple.
@@ -182,7 +182,7 @@ coxRun args = run 0 where
              BetaLit  _ c       -> Right c
              BetaTerm _ _ [p]   -> Right $ args !!! p
              BetaTerm _ _ ps    -> term ps args
-             BetaCall _ _ f xs  -> f . map run' =<< sequence xs
+             BetaCall _ _ f xs  -> f . map run' O.# sequence xs
 
     term :: [S.TermIndex] -> [c] -> B.Ab c
     term []       _ = Msg.adlib "empty term"
@@ -195,7 +195,7 @@ coxRun args = run 0 where
 
     rel :: [S.TermIndex] -> T.Rel c -> B.Ab c
     rel ps (T.Rel _ args2) =
-        D.putList =<< mapM (term ps) args2
+        D.putList O.# mapM (term ps) args2
 
 (!!!) :: (B.MixEncode c) => [c] -> S.TermIndex -> c
 list !!! index = loop index list where

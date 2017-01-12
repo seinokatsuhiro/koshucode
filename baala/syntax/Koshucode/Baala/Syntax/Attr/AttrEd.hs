@@ -7,6 +7,7 @@ module Koshucode.Baala.Syntax.Attr.AttrEd
     consAttrEd, runAttrEd,
   ) where
 
+import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol          as S
 import qualified Koshucode.Baala.Syntax.Token           as S
@@ -102,9 +103,9 @@ runAttrEd (B.Codic cp edit) attr = run where
           Nothing  -> Msg.reqAttr $ S.attrNameText k
 
     fill :: [S.Tree] -> [Maybe S.Tree] -> B.Ab [S.Tree]
-    fill (p : ps) (Nothing : xs)   = Right . (p:) =<< fill ps xs
-    fill (p : ps) (_       : xs)   = Right . (p:) =<< fill ps xs
-    fill []       (Just x  : xs)   = Right . (x:) =<< fill [] xs
+    fill (p : ps) (Nothing : xs)   = Right . (p:) O.# fill ps xs
+    fill (p : ps) (_       : xs)   = Right . (p:) O.# fill ps xs
+    fill []       (Just x  : xs)   = Right . (x:) O.# fill [] xs
     fill []       (Nothing : _ )   = Msg.reqAttr "*"
     fill ps       []               = Right $ ps
 

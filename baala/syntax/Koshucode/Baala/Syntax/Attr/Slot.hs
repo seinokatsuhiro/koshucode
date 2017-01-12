@@ -45,7 +45,7 @@ substTree gslot attr tree = Msg.abSlot [tree] $ loop tree where
     pos :: [S.Tree] -> String -> B.Ab [S.Tree]
     pos od "all" = Right od
     pos od n     = case O.stringInt n of
-                     Just i  -> Right . B.list1 =<< od `at` i
+                     Just i  -> Right . B.list1 O.# od `at` i
                      Nothing -> Msg.noSlotName 0 n
 
     at = substIndex $ unwords . map S.tokenContent . B.untree

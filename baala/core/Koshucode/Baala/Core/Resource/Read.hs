@@ -112,7 +112,7 @@ readCode res src add = dispatch $ B.nioPoint src where
              cd'   = putDir cd $ Path.dropFileName path
          exist <- Dir.doesFileExist path'
          case exist of
-           True   -> includeUnder cd' =<< Bz.readFile path'
+           True   -> includeUnder cd' O.# Bz.readFile path'
            False  -> return $ Msg.noFile cd path
 
     dispatch (B.IOPointUri url) =
@@ -125,7 +125,7 @@ readCode res src add = dispatch $ B.nioPoint src where
 
     dispatch (B.IOPointText   _ code) = M.liftIO $ include code
     dispatch (B.IOPointCustom _ code) = M.liftIO $ include code
-    dispatch (B.IOPointStdin _)       = lift $ include =<< Bz.getContents
+    dispatch (B.IOPointStdin _)       = lift $ include O.# Bz.getContents
     dispatch _                        = B.bug "read resource"
 
     putDir dir path  = cutDot dir ++ cutDot path

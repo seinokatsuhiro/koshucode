@@ -43,24 +43,24 @@ treeContent :: forall c. (D.CContent c) => DecodeContent c
 treeContent tree = Msg.abLiteral tree $ cons tree where
     cons :: DecodeContent c
     cons x@(P.L tok)
-        = (putDecimal =<< D.treesDigits [x]) O.<||>
-          (D.putTime  =<< D.treesTime [x])   O.<||>
-          (D.putClock =<< D.tokenClock tok)  O.<||>
+        = (putDecimal O.# D.treesDigits [x]) O.<||>
+          (D.putTime  O.# D.treesTime [x])   O.<||>
+          (D.putClock O.# D.tokenClock tok)  O.<||>
           (tokenContent tok)
     cons (P.B b xs) = case b of
         S.BracketGroup   -> group xs
-        S.BracketList    -> D.putList   =<< treesContents cons xs
-        S.BracketSet     -> D.putSet    =<< treesContents cons xs
+        S.BracketList    -> D.putList   O.# treesContents cons xs
+        S.BracketSet     -> D.putSet    O.# treesContents cons xs
         S.BracketTie     ->                 treesTie      cons xs
-        S.BracketRel     -> D.putRel    =<< treesRel      cons xs
-        S.BracketType    -> D.putType   =<< D.treesType        xs
-        S.BracketInterp  -> D.putInterp =<< D.treesInterp      xs
+        S.BracketRel     -> D.putRel    O.# treesRel      cons xs
+        S.BracketType    -> D.putType   O.# D.treesType        xs
+        S.BracketInterp  -> D.putInterp O.# D.treesInterp      xs
         _                -> Msg.unkBracket
     cons _ = B.bug "treeContent"
 
     group :: [S.Tree] -> B.Ab c
-    group xs@(P.LRaw _ : _)  = (putDecimal =<< D.treesDigits xs) O.<||>
-                               (D.putTime  =<< D.treesTime xs)
+    group xs@(P.LRaw _ : _)  = (putDecimal O.# D.treesDigits xs) O.<||>
+                               (D.putTime  O.# D.treesTime xs)
     group []                 = Right D.empty
     group _                  = Msg.unkContent
 
@@ -106,7 +106,7 @@ treesContents cons cs = lt `mapM` S.divideTreesByBar cs where
 --      treesTie                 treesTie
 --
 treesTie :: (D.CContent c) => DecodeContent c -> [S.Tree] -> B.Ab c
-treesTie cons xs@(P.LTerm _ : _) = D.putTie =<< treesTerms cons xs
+treesTie cons xs@(P.LTerm _ : _) = D.putTie O.# treesTerms cons xs
 treesTie _ [] = D.putTie []
 treesTie _ [P.LRaw "words", P.LQq ws] = D.putList $ map D.pText $ words ws
 treesTie _ _ = Msg.adlib "unknown tie"
@@ -120,7 +120,7 @@ treesTie _ _ = Msg.adlib "unknown tie"
 --
 treesTerms :: (D.CContent c) => DecodeContent c -> [S.Tree] -> B.Ab [S.Term c]
 treesTerms cons = mapM p O.#. D.treesTerms1 where
-    p (name, tree) = Right . (name,) =<< cons tree
+    p (name, tree) = Right . (name,) O.# cons tree
 
 -- | Decode judge from token trees.
 --   Judges itself are not content type.

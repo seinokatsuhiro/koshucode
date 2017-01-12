@@ -34,7 +34,7 @@ runAssertJudges hook opt a =
 runAssertDataset :: forall h. forall c. (Ord c, D.CContent c, T.SelectRel h, C.GetGlobal' h)
   => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab [C.ResultChunk c]
 runAssertDataset hook option (S.Short _ sh ass) =
-    Right . concat =<< mapM each ass
+    Right . concat O.# mapM each ass
     where
       each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
       each a@(C.Assert _ typ pat _ opt (Just relmap) libs) =

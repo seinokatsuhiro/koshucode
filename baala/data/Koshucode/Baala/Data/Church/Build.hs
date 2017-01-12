@@ -61,11 +61,11 @@ coxUnfold = unfold . D.coxMap coxUnfold where
 convCox :: forall c. D.CopFind (D.CopCox c) -> B.AbMap (D.Cox c)
 convCox find = expand where
     expand :: B.AbMap (D.Cox c)
-    expand (D.CoxForm1 cp tag n  x) = Right . D.CoxForm1 cp tag n  =<< expand x
-    expand (D.CoxForm  cp tag ns x) = Right . D.CoxForm  cp tag ns =<< expand x
+    expand (D.CoxForm1 cp tag n  x) = Right . D.CoxForm1 cp tag n  O.# expand x
+    expand (D.CoxForm  cp tag ns x) = Right . D.CoxForm  cp tag ns O.# expand x
     expand (D.CoxFill  cp f@(D.CoxBlank _ n) xs)
                                     = case find n of
-                                        Just g -> expand =<< g xs
+                                        Just g -> expand O.# g xs
                                         _      -> fill cp f xs
     expand (D.CoxFill  cp f xs)     = fill cp f xs
     expand cox                      =  Right cox
@@ -189,7 +189,7 @@ convTree find = expand where
           op@(P.LRaw name) : args
               -> Msg.abCoxSyntax tree $
                  case find $ S.BlankNormal name of
-                   Just f -> expand =<< f args
+                   Just f -> expand O.# f args
                    _      -> do args2 <- mapM expand args
                                 Right $ B.TreeB S.BracketGroup p (op : args2)
           _ -> do sub2 <- mapM expand subtrees

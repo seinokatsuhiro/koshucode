@@ -77,7 +77,7 @@ bracketTable xs = bracketType where
 --   >>> let test s = s `elem` [">", "-"]
 --   >>> let toks s = takeWhile (== '/') s : words (dropWhile (== '/') s)
 --   >>> let text = Right . unwords . concat
---   >>> let conv ls = text =<< indentBranch size test "(" "|" ")" (toks <$> ls)
+--   >>> let conv ls = text O.# indentBranch size test "(" "|" ")" (toks <$> ls)
 --
 --   >>> toks "/> bb"
 --   ["/",">","bb"]

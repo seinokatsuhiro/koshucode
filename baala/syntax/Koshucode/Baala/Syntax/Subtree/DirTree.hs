@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 
 -- | Create selective directory trees.
 --
---   >>> O.putLines . B.ppRawTrees =<< dirTrees [] "." [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit "dist") [S.subtreeL $ S.subtreeKeep "S*"]]
+--   >>> O.putLines . B.ppRawTrees O.# dirTrees [] "." [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit "dist") [S.subtreeL $ S.subtreeKeep "S*"]]
 --   > [] "data"
 --     - "SLOC.k"
 --   > [] "Koshucode"

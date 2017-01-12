@@ -7,6 +7,7 @@ module Koshucode.Baala.Core.Resource.Include
   ( resInclude,
   ) where
 
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Type                    as T
@@ -98,7 +99,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
              Right $ res { C.resAssert = C.resAssert << ass' }
 
       relmap n toks =
-          do lt <- C.consLexmapTrees =<< C.ttreePara2 toks
+          do lt <- C.consLexmapTrees O.# C.ttreePara2 toks
              Right $ res { C.resLexmap = C.resLexmap  << ((sec, n), lt) }
 
       slot n toks =

@@ -134,7 +134,7 @@ tokenIndent             _  = 0
 --
 -- Read this file and parse to token clauses.
 --
---   >>> O.printList =<< B.abortLeft =<< readClauses "clause.txt"
+--   >>> O.printList O.# B.abortLeft O.# readClauses "clause.txt"
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.1.0/ TextRaw "aa"]}
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.2.0/ TextRaw "bb",
 --                                                  TText /0.3.1/ TextRaw "cc"]}

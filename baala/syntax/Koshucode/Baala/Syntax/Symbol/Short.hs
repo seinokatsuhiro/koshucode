@@ -44,7 +44,7 @@ shortTrim = B.omit $ null . shortBody
 
 -- | Evaluate body of short structure.
 shortM :: (Monad m) => Short (m a) -> m (Short a)
-shortM (Short pt he bo) = return . Short pt he =<< bo
+shortM (Short pt he bo) = return . Short pt he O.# bo
 
 -- | Evaluate body of short structures.
 shortListM :: (Monad m) => [Short (m a)] -> m [Short a]

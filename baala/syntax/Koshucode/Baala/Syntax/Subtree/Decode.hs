@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Base.Message            as Msg
 
 -- | Read subtree clauses from file.
 --
---   >>> mapM_ (S.printToks . B.clauseTokens) =<< B.abortLeft =<< readSubtreeClauses "subtree.txt"
+--   >>> mapM_ (S.printToks . B.clauseTokens) O.# B.abortLeft O.# readSubtreeClauses "subtree.txt"
 --   ********** > "a1"
 --   TText /0.10.0/ TextRaw ">"
 --   TText /0.10.2/ TextQQ "a1"

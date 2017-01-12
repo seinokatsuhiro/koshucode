@@ -60,7 +60,7 @@ relkitRun hook rs (B.Codic cp core) bo1 =
 
        C.RelkitAbWhole   u f bs  -> monad u $            f (mrun bs)        bo1
        C.RelkitAbLine    u f bs  -> monad u $            f (mrun bs) `mapM` bo1
-       C.RelkitAbMany    u f bs  -> right u . concat =<< f (mrun bs) `mapM` bo1
+       C.RelkitAbMany    u f bs  -> right u . concat O.# f (mrun bs) `mapM` bo1
        C.RelkitAbSemi      f b   -> B.filterM (semi f b) bo1
        C.RelkitAbTest      f     -> B.filterM f bo1
 
@@ -89,13 +89,13 @@ relkitRun hook rs (B.Codic cp core) bo1 =
       mrun   = map run
 
       semi :: ([[c]] -> B.Ab Bool) -> C.RelkitBody c -> [c] -> B.Ab Bool
-      semi f b cs = f =<< run b [cs]
+      semi f b cs = f O.# run b [cs]
 
       right :: (Ord b) => Bool -> [b] -> B.Ab [b]
       right u = Right . uif u
 
       monad :: (Ord b) => Bool -> B.Ab [b] -> B.Ab [b]
-      monad u = (Right . uif u =<<)
+      monad u = (Right . uif u O.#)
 
       uif :: (Ord b) => Bool -> [b] -> [b]
       uif True   = B.unique

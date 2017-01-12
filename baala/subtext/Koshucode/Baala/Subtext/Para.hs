@@ -12,6 +12,7 @@ module Koshucode.Baala.Subtext.Para
 import Prelude hiding (seq, and)
 
 import qualified Data.Map.Strict                   as Ms
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Overture.Fn       as O
 import qualified Koshucode.Baala.Subtext.Bundle    as T
 import qualified Koshucode.Baala.Subtext.Expr      as T
@@ -120,6 +121,6 @@ replaceWhat rep = berryM loop where
 -- | Map to berry expression.
 berryM :: (Monad m) => (T.Expr a -> m (T.Expr a)) -> T.Expr a -> m (T.Expr a)
 berryM f = loop where
-    loop (T.ERec (T.ESub n e))  = return . T.ERec . T.ESub  n =<< loop e
-    loop (T.ERec (T.EGath b e)) = return . T.ERec . T.EGath b =<< loop e
+    loop (T.ERec (T.ESub n e))  = return . T.ERec . T.ESub  n O.# loop e
+    loop (T.ERec (T.EGath b e)) = return . T.ERec . T.EGath b O.# loop e
     loop e = f e

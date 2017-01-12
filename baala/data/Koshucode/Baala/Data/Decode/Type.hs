@@ -73,7 +73,7 @@ treesType :: [S.Tree] -> B.Ab T.Type
 treesType = gen where
     gen xs = case S.divideTreesByBar xs of
                [x] ->  single x
-               xs2 ->  Right . T.TypeSum =<< mapM gen xs2
+               xs2 ->  Right . T.TypeSum O.# mapM gen xs2
 
     single [P.B _ xs]        = gen xs
     single (P.LText f n : xs)
@@ -95,8 +95,8 @@ treesType = gen where
     dispatch "text"    _    = Right T.TypeText
     dispatch "code"    _    = Right T.TypeCode
     dispatch "decimal" _    = Right T.TypeDec
-    dispatch "clock"   xs   = Right . T.TypeClock  =<< precision clock xs
-    dispatch "time"    xs   = Right . T.TypeTime   =<< precision time  xs
+    dispatch "clock"   xs   = Right . T.TypeClock  O.# precision clock xs
+    dispatch "time"    xs   = Right . T.TypeTime   O.# precision time  xs
     dispatch "binary"  _    = Right T.TypeBin
     dispatch "term"    _    = Right T.TypeTerm
     dispatch "type"    _    = Right T.TypeType
@@ -109,8 +109,8 @@ treesType = gen where
                                             typ' <- gen [typ]
                                             Right $ T.TypeTag tag' typ'
                                 _   -> Msg.unkType "tag"
-    dispatch "list"  xs     = Right . T.TypeList =<< gen xs
-    dispatch "set"   xs     = Right . T.TypeSet  =<< gen xs
+    dispatch "list"  xs     = Right . T.TypeList O.# gen xs
+    dispatch "set"   xs     = Right . T.TypeSet  O.# gen xs
     dispatch "tuple" xs     = do ts <- mapM (gen. B.list1) xs
                                  Right $ T.TypeTuple ts
     dispatch "tie"   xs     = do ts1 <- D.treesTerms xs

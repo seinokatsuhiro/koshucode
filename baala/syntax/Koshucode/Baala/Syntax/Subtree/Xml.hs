@@ -110,11 +110,11 @@ xmlUntoken (XmlTerm  z)    = z
 
 -- | Decode XML trees.
 --
---   >>> B.printTrees =<< B.abortLeft (xmlDecode "<hello>wonderful</world>")
+--   >>> B.printTrees O.# B.abortLeft (xmlDecode "<hello>wonderful</world>")
 --   > () (XmlElem "hello","hello")
 --     - (XmlText,"wonderful")
 --
---   >>> B.printTrees =<< B.abortLeft (xmlDecode "<a x='xx' y='yy'>")
+--   >>> B.printTrees O.# B.abortLeft (xmlDecode "<a x='xx' y='yy'>")
 --   > () (XmlElem "a","a")
 --     - (XmlAttr "x","xx")
 --     - (XmlAttr "y","yy")
