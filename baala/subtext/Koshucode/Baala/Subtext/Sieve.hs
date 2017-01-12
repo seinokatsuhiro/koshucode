@@ -31,7 +31,7 @@ import Koshucode.Baala.Subtext.Sieve.Tree
 --  Outside of parens include brackets or braces
 --  are treated as literal text.
 --
---  >>> sivMatch "ba( ? )" `mapM` [ "foo", "bar", "baz" ]
+--  >>> sivMatch "ba( _ )" `mapM` [ "foo", "bar", "baz" ]
 --  Right [False,True,True]
 --
 -- === T3. " /Text/ &#x5B; /Expr/ &#x5D; /Text/ "
@@ -67,42 +67,50 @@ import Koshucode.Baala.Subtext.Sieve.Tree
 --
 -- == Expr
 --
--- === E1. *
---
---  Asterisk indicates arbitrary-length any text.
---
---  >>> sivMatch "( * )-( * ).k" `mapM` [ "foo.k", "foo-bar.k", "foo-baz.hs" ]
---  Right [False,True,False]
---
--- === E2. _
+-- === E1. _
 --
 --  Underscore indicates single any character.
 --
 --  >>> sivMatch "foo.( _ )" `mapM` [ "foo.k", "foo.hs", "foo.zip" ]
 --  Right [True,False,False]
 --
--- === E3. /Char-1/ - /Char-2/
+-- === E2. *
+--
+--  Asterisk indicates arbitrary-length any text.
+--
+--  >>> sivMatch "( * )-( * ).k" `mapM` [ "foo.k", "foo-bar.k", "foo-baz.hs" ]
+--  Right [False,True,False]
+--
+-- === E3. ...
+--
+--  Three dots ellipsis indicates arbitrary-length any text.
+--  It is equivalent to asterisk.
+--
+--  >>> sivMatch "( ... )-( ... ).k" `mapM` [ "foo.k", "foo-bar.k", "foo-baz.hs" ]
+--  Right [False,True,False]
+--
+-- === E4. /Char-1/ - /Char-2/
 --
 --  Character range from /Char-1/ to /Char-2/.
 --
 --  >>> sivMatch "{- a-z -}{- 0-9 -}" `mapM` [ "foo1", "bar20", "baz" ]
 --  Right [True,True,False]
 --
--- === E4. /Expr-1/ | /Expr-2/ | ... | /Expr-N/
+-- === E5. /Expr-1/ | /Expr-2/ | ... | /Expr-N/
 --
 --  One of /Expr-1/, /Expr-2/, ..., and /Expr-N/.
 --
--- === E5. /Expr-1/ ? /Expr-2/
+-- === E6. /Expr-1/ ? /Expr-2/
 --
 --  /Expr-1/ and /Expr-2/.
 --  __/Expr-1/ ? /Expr-2/ ? /Expr-3/__ equals to
 --  __( /Expr-1/ ? /Expr-2/ ) ? /Expr-3/__.
 --
--- === E6. /Expr-1/ ! /Expr-2/
+-- === E7. /Expr-1/ ! /Expr-2/
 --
 --  /Expr-1/ not /Expr-2/.
 --
--- === E7. (= /Top/ =)
+-- === E8. (= /Top/ =)
 --
 --  /Top/ is treated as top-level pattern.
 --

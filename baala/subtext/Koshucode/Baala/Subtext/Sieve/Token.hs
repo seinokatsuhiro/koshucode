@@ -61,11 +61,12 @@ data SivKey
     | SivRange     -- ^ __[ - ]__ Character between two characters.
       deriving (Show, Eq, Ord)
 
-sivKey :: Char -> Maybe SivKey
-sivKey '_'  = Just SivAnyChar
-sivKey '*'  = Just SivAnyText
-sivKey '-'  = Just SivRange
-sivKey _    = Nothing
+sivKey :: (O.Textual t) => Char -> t -> Maybe (SivKey, t)
+sivKey '*' t = Just (SivAnyText, t)
+sivKey '_' t = Just (SivAnyChar, t)
+sivKey '-' t = Just (SivRange, t)
+sivKey '.' (O.tCut2 -> Just ('.', Just ('.', t))) = Just (SivAnyText, t)
+sivKey _ _ = Nothing
 
 -- | Convert textual value to sieve token list.
 --
@@ -92,13 +93,13 @@ toks lv t | O.tIsEmpty t           = []
 
 text :: (O.Textual t) => Int -> t -> Int -> t -> [SivToken t]
 text lv t0 = loop where
-    loop n (tBracket -> Just (b, t')) = push n $ b : toks (lv + level b) t'
-    loop n (O.tCut -> Just (c, t'))
-      | lv == 0       = loop (n + 1) t'
-      | Ch.isSpace c  = push n $ toks lv t'
-      | otherwise     = case sivKey c of
-                          Nothing -> loop (n + 1) t'
-                          Just k  -> push n $ (SivKey k) : toks lv t'
+    loop n (tBracket -> Just (b, t)) = push n $ b : toks (lv + level b) t
+    loop n (O.tCut -> Just (c, t))
+      | lv == 0       = loop (n + 1) t
+      | Ch.isSpace c  = push n $ toks lv t
+      | otherwise     = case sivKey c t of
+                          Nothing -> loop (n + 1) t
+                          Just (k, t') -> push n $ (SivKey k) : toks lv t'
     loop n _ = push n []
 
     push n = case O.tTake n t0 of
