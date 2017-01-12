@@ -12,15 +12,15 @@ module Koshucode.Baala.Syntax.Subtree.Filter
     subtreeFilterOn,
   ) where
 
-import qualified System.FilePath.Glob                    as Glob
 import qualified Koshucode.Baala.Overture                as O
+import qualified Koshucode.Baala.Subtext                 as S
 
 -- | Subtree filter.
 data SubtreeFilter
     = SubtreeId                                 -- ^ Identity
     | SubtreeEq    String                       -- ^ Equality
-    | SubtreeKeep  String Glob.Pattern          -- ^ Glob
-    | SubtreeOmit  String Glob.Pattern          -- ^ Anti-glob
+    | SubtreeKeep  String S.SivExpr             -- ^ Keep by sieve pattern
+    | SubtreeOmit  String S.SivExpr             -- ^ Omit by sieve pattern
     | SubtreeAttr  String String                -- ^ Attribute
     | SubtreeChain SubtreeFilter SubtreeFilter  -- ^ Filter chain
       deriving (Show, Eq)
@@ -37,13 +37,13 @@ subtreeId = SubtreeId
 subtreeEq :: String -> SubtreeFilter
 subtreeEq = SubtreeEq
 
--- | Glob filter.
+-- | Filter by sieve pattern.
 subtreeKeep :: String -> SubtreeFilter
-subtreeKeep s = SubtreeKeep s $ Glob.compile s
+subtreeKeep s = SubtreeKeep s (S.toSivExprOr S.fail s)
 
--- | Anti-glob filter.
+-- | Anti-filter by sieve pattern.
 subtreeOmit :: String -> SubtreeFilter
-subtreeOmit s = SubtreeOmit s $ Glob.compile s
+subtreeOmit s = SubtreeOmit s (S.toSivExprOr S.fail s)
 
 -- | Filter chain.
 subtreeChain :: O.Bin SubtreeFilter
@@ -86,8 +86,8 @@ subtreeFilterOn get f xs0 = a xs0 [f] where
     a xs []                        = xs
     a xs (SubtreeId : fs)          = a xs fs
     a xs (SubtreeEq x : fs)        = a xs' fs where xs' = O.keepOn get (== x) xs
-    a xs (SubtreeKeep _ p : fs)    = a xs' fs where xs' = O.keepOn get (Glob.match p) xs
-    a xs (SubtreeOmit _ p : fs)    = a xs' fs where xs' = O.omitOn get (Glob.match p) xs
+    a xs (SubtreeKeep _ e : fs)    = a xs' fs where xs' = O.keepOn get (S.sivMatchExpr e) xs
+    a xs (SubtreeOmit _ e : fs)    = a xs' fs where xs' = O.omitOn get (S.sivMatchExpr e) xs
     a xs (SubtreeAttr _ _ : fs)    = a xs fs
     a xs (SubtreeChain f1 f2 : fs) = a xs fs' where fs' = f1 : f2 : fs
 

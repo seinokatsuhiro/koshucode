@@ -12,6 +12,7 @@ module Koshucode.Baala.Subtext.Sieve.Tree
     ToSivExpr (..),
     toSivExprOr,
     sivMatch,
+    sivMatchExpr,
   ) where
 
 import Prelude hiding (seq, min, max)
