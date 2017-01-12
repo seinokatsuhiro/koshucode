@@ -11,7 +11,7 @@ module Koshucode.Baala.Overture.Infix
    (<?>), (<$$>),
 
    -- ** Monad
-   (<#>), (<#!>),
+   (#$), (<#>), (<#!>),
    (<#.>), (<#++>),
  ) where
 
@@ -85,6 +85,12 @@ f <$$> x = fmap f <$> x
 
 
 -- ----------------------  Monad
+
+infixr 1 #$
+
+-- | Monadic application, same as '=<<'.
+(#$) :: (Monad m) => (a -> m b) -> m a -> m b
+(#$) = (=<<)
 
 -- | Monadic mapping, same as 'mapM'.
 {-# INLINE (<#>) #-}
