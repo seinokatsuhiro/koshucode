@@ -4,6 +4,8 @@
 
 module Koshucode.Baala.Syntax.Subtree.DirTree
   ( dirTrees,
+    withCurrentDirectory,
+    listDirectory,
   ) where
 
 import qualified System.Directory                        as Dir
