@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
@@ -7,7 +8,8 @@
 module Koshucode.Baala.Subtext.Sieve.Tree
   ( SivTree,
     sivTrees,
-    sivExpr,
+    SivExpr,
+    ToSivExpr (..),
     sivMatch,
   ) where
 
@@ -41,8 +43,24 @@ sivTrees = B.codeTrees bracket B.BracketNone where
     bracket (S.SivClose b) = B.BracketClose b
     bracket _              = B.BracketNone
 
--- | Convet sieve tree to subtext expression.
-sivExpr :: [SivTree String] -> B.Ab S.CharExpr
+-- | Sieve expression.
+type SivExpr = S.CharExpr
+
+-- | Convert to sieve expression.
+class ToSivExpr a where
+    toSivExpr :: a -> B.Ab SivExpr
+
+instance ToSivExpr SivExpr where
+    toSivExpr = Right
+
+instance ToSivExpr [S.SivToken String] where
+    toSivExpr = sivExpr O.<#.> sivTrees
+
+instance ToSivExpr String where
+    toSivExpr = toSivExpr . S.sivTokens
+
+-- | Convet sieve tree to sieve expression.
+sivExpr :: [SivTree String] -> B.Ab SivExpr
 sivExpr = top where
     top ts = do e <- seq ts
                 Right $ S.seq [e, S.end]
@@ -100,11 +118,13 @@ pattern Bo   xs   <- B S.SivOption xs
 --   >>> sivMatch "foo(*).k" O.<#> ["foo.k", "foo.hs", "foobar.k", "bar.k"]
 --   Right [True, True, False]
 --
-sivMatch :: String -> String -> B.Ab Bool
-sivMatch siv text =
-    do ts <- sivTrees $ S.sivTokens siv
-       e  <- sivExpr ts
-       case S.matchExpr e text of
-         Just _  -> Right True
-         Nothing -> Right False
+sivMatch :: (ToSivExpr siv) => siv -> String -> B.Ab Bool
+sivMatch siv t = do e <- toSivExpr siv
+                    Right $ sivMatchExpr e t
+
+-- | Test sieve pattern matches text.
+sivMatchExpr :: SivExpr -> String -> Bool
+sivMatchExpr e t = case S.matchExpr e t of
+                     Just _  -> True
+                     Nothing -> False
 
