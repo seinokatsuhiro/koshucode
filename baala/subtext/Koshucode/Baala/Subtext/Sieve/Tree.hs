@@ -10,6 +10,7 @@ module Koshucode.Baala.Subtext.Sieve.Tree
     sivTrees,
     SivExpr,
     ToSivExpr (..),
+    toSivExprOr,
     sivMatch,
   ) where
 
@@ -49,6 +50,12 @@ type SivExpr = S.CharExpr
 -- | Convert to sieve expression.
 class ToSivExpr a where
     toSivExpr :: a -> B.Ab SivExpr
+
+-- | Convert to sieve expression with replacement.
+toSivExprOr :: (ToSivExpr a) => SivExpr -> a -> SivExpr
+toSivExprOr e0 a = case toSivExpr a of
+                     Right e -> e
+                     Left _  -> e0
 
 instance ToSivExpr SivExpr where
     toSivExpr = Right
