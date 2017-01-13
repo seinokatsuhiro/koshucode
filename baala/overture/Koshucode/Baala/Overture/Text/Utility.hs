@@ -15,7 +15,11 @@ module Koshucode.Baala.Overture.Text.Utility
     -- * Code point
     isAsciiCode,
     isNewlineCode,
-    integralLF, integralCR,
+    integralHT,
+    integralLF,
+    integralVT,
+    integralFF,
+    integralCR,
     integralSpace,
 
     -- * Put
@@ -134,15 +138,27 @@ isAsciiCode = (<= 127)
 isNewlineCode :: (Integral n) => n -> Bool
 isNewlineCode n = (n == integralLF) || (n == integralCR)
 
--- | Generic code point of line feed character (@'\n'@).
+-- | Generic code point (9) of horizontal tab character (@'\t'@).
+integralHT :: (Integral n) => n
+integralHT = 9
+
+-- | Generic code point (10) of line feed character (@'\n'@).
 integralLF :: (Integral n) => n
 integralLF = 10
 
--- | Generic code point of carriage return character (@'\r'@).
+-- | Generic code point (11) of vertical tab character (@'\v'@).
+integralVT :: (Integral n) => n
+integralVT = 11
+
+-- | Generic code point (12) of form feed character (@'\f'@).
+integralFF :: (Integral n) => n
+integralFF = 12
+
+-- | Generic code point (13) of carriage return character (@'\r'@).
 integralCR :: (Integral n) => n
 integralCR = 13
 
--- | Generic code point of space character (@' '@).
+-- | Generic code point (32) of space character (@' '@).
 integralSpace :: (Integral n) => n
 integralSpace = 32
 
