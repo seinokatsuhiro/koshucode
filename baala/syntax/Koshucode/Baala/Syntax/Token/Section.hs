@@ -39,7 +39,7 @@ section change f
         sc@B.CodeScan { B.codeMap    = prev
                       , B.codeInput  = cs0
                       , B.codeOutput = out } = body out cs0 where
-    body [] (O.tCut -> Just ('=', _)) = B.codeChange (selectSection change prev) sc
+    body [] (O.tCut -> O.Jp '=' _) = B.codeChange (selectSection change prev) sc
     body _ cs = f cs
 
 selectSection :: ChangeSection -> S.TokenScanMap -> S.TokenScanMap
@@ -53,9 +53,9 @@ selectSection change prev
     out    = reverse $ S.sweepToken $ B.codeOutput sc
     --toPrev = B.codeChange prev
 
-    sec (O.tCut2 -> Just ('*', Just( '*', _)))
+    sec (O.tCut2 -> O.Jp2 '*' '*' _)
                          = dispatch out  -- end of effective text
-    sec ccs@(O.tCut -> Just (c, cs))
+    sec ccs@(O.tCut -> O.Jp c cs)
         | S.isSpace c    = clip  $ S.clipSpace  cp cs
         | S.isSymbol c   = clipw $ S.clipSymbol cp ws ccs
         | otherwise      = sectionUnexp [] sc
@@ -112,7 +112,7 @@ scanLine form change sc = section change text sc where
 
 scanLineInClause :: S.TextForm -> Scanner
 scanLineInClause form change sc = section change text sc where
-    text cs@(O.tCut -> Just (c, _))
+    text cs@(O.tCut -> O.Jp c _)
         | S.isSpace c = S.clipUpdate sc $ S.clipSpace (B.getCP sc) cs
         | B.isBol sc  = B.codeScanRestore sc
         | otherwise   = let tok = S.TText (B.getCP sc) form cs
@@ -125,7 +125,7 @@ scanTextAssert change sc = section change text sc where
     cp = B.getCP sc
     raw = S.TText cp S.TextRaw
 
-    text ccs@(O.tCut -> Just (c, cs))
+    text ccs@(O.tCut -> O.Jp c cs)
         | S.isSpace c  = S.clipUpdate  sc $ S.clipSpace cp ccs
         | c == '|'     = S.clipUpdate  sc $ S.clipBar cp cs
         | c == ':'     = B.codeChange (scanLineInClause S.TextRaw change)

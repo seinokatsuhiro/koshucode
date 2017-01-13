@@ -46,10 +46,10 @@ sivBracket _     = Nothing
 
 tBracket :: (O.Textual t) => t -> Maybe (SivToken t, t)
 tBracket t = bracket2 t O.<||> bracket1 t where
-    bracket2 (O.tCut2 -> Just (a, Just (b, t'))) = pair t' <$> sivBracket [a,b]
+    bracket2 (O.tCut2 -> O.Jp2 a b t') = pair t' <$> sivBracket [a,b]
     bracket2 _ = Nothing
 
-    bracket1 (O.tCut -> Just (a, t')) = pair t' <$> sivBracket [a]
+    bracket1 (O.tCut -> O.Jp a t') = pair t' <$> sivBracket [a]
     bracket1 _ = Nothing
 
     pair t' b = (b, t')
@@ -65,7 +65,7 @@ sivKey :: (O.Textual t) => Char -> t -> Maybe (SivKey, t)
 sivKey '*' t = Just (SivAnyText, t)
 sivKey '_' t = Just (SivAnyChar, t)
 sivKey '-' t = Just (SivRange, t)
-sivKey '.' (O.tCut2 -> Just ('.', Just ('.', t))) = Just (SivAnyText, t)
+sivKey '.' (O.tCut2 -> O.Jp2 '.' '.' t) = Just (SivAnyText, t)
 sivKey _ _ = Nothing
 
 -- | Convert textual value to sieve token list.
@@ -94,7 +94,7 @@ toks lv t | O.tIsEmpty t           = []
 text :: (O.Textual t) => Int -> t -> Int -> t -> [SivToken t]
 text lv t0 = loop where
     loop n (tBracket -> Just (b, t)) = push n $ b : toks (lv + level b) t
-    loop n (O.tCut -> Just (c, t))
+    loop n (O.tCut -> O.Jp c t)
       | lv == 0       = loop (n + 1) t
       | Ch.isSpace c  = push n $ toks lv t
       | otherwise     = case sivKey c t of

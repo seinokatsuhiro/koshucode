@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Shorthand types and functions.
@@ -5,6 +6,9 @@
 module Koshucode.Baala.Overture.Shorthand
  ( -- * Derived types
    Pair, Twin,
+   pattern Jp,
+   pattern Jp2,
+   pattern Jp3,
 
    -- * Functions
    ordEq, compareOn,
@@ -17,11 +21,20 @@ import qualified Koshucode.Baala.Overture.Type as O
 
 -- ============================================  Types
 
--- | Pair of /a/ and /b/.
+-- | Nominal pair type.
 type Pair a b = (a, b)
 
--- | Pair of /a/ and /a/.
+-- | Twin pair.
 type Twin a = (a, a)
+
+-- | Just pair: __Jp /a b/__ is equal to __Just (/a/, /b/)__.
+pattern Jp a b = Just (a, b)
+
+-- | Double just pairs: __Jp2 /a b c/__ is equal to __Just (/a/, Just (/b/, /c/))__.
+pattern Jp2 a b c = Just (a, Just (b, c))
+
+-- | Triple just pairs: __Jp3 /a b c d/__ is equal to __Just (/a/, Just (/b/, Just (/c/, /d/)))__.
+pattern Jp3 a b c d = Just (a, Just (b, Just (c, d)))
 
 
 -- ============================================  Function
