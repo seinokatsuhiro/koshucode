@@ -3,7 +3,10 @@
 -- | Text utility.
 
 module Koshucode.Baala.Overture.Text.Utility
-  ( -- * Trim
+  ( -- * Reexport from Data.Char
+    Ch.isSpace,
+
+    -- * Trim
     trimBegin, trimEnd, trimBoth,
 
     -- * Padding
@@ -36,16 +39,13 @@ import qualified Koshucode.Baala.Overture.Type  as O
 
 -- ============================================  Trim
 
-isSpace :: Char -> Bool
-isSpace c = Ch.isSpace c    -- UnicodeSeprator | UnicodeOther
-
 -- | Remove space and space-like characters from the beginning of string.
 --
 --   >>> trimBegin "  abc  "
 --   "abc  "
 --
 trimBegin :: O.StringMap
-trimBegin = dropWhile isSpace
+trimBegin = dropWhile Ch.isSpace
 
 -- | Remove space and space-like characters from the end of string.
 --
@@ -56,7 +56,7 @@ trimEnd :: O.StringMap
 trimEnd [] = []
 trimEnd (x : xs) =
     case x : trimEnd xs of
-      [y] | isSpace y -> []
+      [y] | Ch.isSpace y -> []
       ys -> ys
 
 -- | Remove space and space-like characters
