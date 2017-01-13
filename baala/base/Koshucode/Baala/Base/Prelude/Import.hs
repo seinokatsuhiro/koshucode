@@ -7,7 +7,6 @@ module Koshucode.Baala.Base.Prelude.Import
     Control.Exception.bracket,
 
     -- * Control.Monad
-    (Control.Monad.>=>),
     Control.Monad.filterM,
     Control.Monad.foldM,
     Control.Monad.guard,

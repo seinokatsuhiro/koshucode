@@ -36,7 +36,7 @@ type CalcContent c = S.Tree -> B.Ab c
 
 -- | Decode content from string.
 stringContent :: (D.CContent c) => String -> B.Ab c
-stringContent = S.toTree B.>=> treeContent
+stringContent = treeContent O.#. S.toTree
 
 -- | Decode content from token tree.
 treeContent :: forall c. (D.CContent c) => DecodeContent c

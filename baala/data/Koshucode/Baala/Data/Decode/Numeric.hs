@@ -128,7 +128,7 @@ treesTime = stringsTime O.#. D.treesTexts False
 --   Right 2013-04-18 03:00
 --
 stringTime :: String -> B.Ab T.Time
-stringTime = S.toTrees B.>=> treesTime
+stringTime = treesTime O.#. S.toTrees
 
 stringsTime :: [String] -> B.Ab T.Time
 stringsTime = year where

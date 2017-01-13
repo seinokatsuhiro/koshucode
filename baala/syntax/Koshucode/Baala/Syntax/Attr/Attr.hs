@@ -80,7 +80,7 @@ attrPara trees =
 
 -- | Parameterize attributes by its layout.
 attrParaBy :: AttrLayout -> AttrParaze
-attrParaBy lay = attrPara B.>=> attrMatch lay
+attrParaBy lay = attrMatch lay O.#. attrPara
 
 -- | Match parameter with its layout.
 --   See 'paraChoose' in ParaSpec module.

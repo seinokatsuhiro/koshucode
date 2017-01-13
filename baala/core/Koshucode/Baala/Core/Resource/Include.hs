@@ -119,7 +119,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
              checkIOPoint $ res { C.resOutput = C.inputPoint io }
 
       ioPoint :: [S.Token] -> B.Ab C.InputPoint
-      ioPoint = C.ttreePara2 B.>=> paraToIOPoint cd
+      ioPoint = paraToIOPoint cd O.#. C.ttreePara2
 
       checkIOPoint :: B.AbMap (C.Resource c)
       checkIOPoint res' = let ins = C.resInput  res'
