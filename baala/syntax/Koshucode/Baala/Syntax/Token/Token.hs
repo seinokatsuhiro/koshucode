@@ -101,23 +101,6 @@ instance B.GetCodePos Token where
     getCPs (TName    cp _)      = [cp]
     getCPs (TUnknown cp _ _)    = [cp]
 
-instance B.PPrint Token where
-    pprint = d where
-        d (TText     cp q w)    = pp2 "TText"    cp q w
-        d (TShort    cp a b)    = pp2 "TShort"   cp a b
-        d (TTerm     cp n)      = pp1 "TTerm"    cp n
-        d (TLocal    cp n _ _)  = pp1 "TLocal"   cp n
-        d (TSlot     cp n w)    = pp2 "TSlot"    cp n w
-        d (TOpen     cp p)      = pp1 "TOpen"    cp p
-        d (TClose    cp p)      = pp1 "TClose"   cp p
-        d (TSpace    cp c)      = pp1 "TSpace"   cp c
-        d (TComment  cp s)      = pp1 "TComment" cp s
-        d (TName     cp w)      = pp1 "TName"    cp w
-        d (TUnknown  cp w _)    = pp1 "TUnknown" cp w
-
-        pp1 k cp x   = B.pprintH [B.pprint k, B.pprint cp, B.pprint $ show x]
-        pp2 k cp x y = pp1 k cp x B.<+> B.pprint (show y)
-
 -- | Create raw text token.
 rawTextToken :: String -> Token
 rawTextToken = TText B.def TextRaw

@@ -20,7 +20,6 @@ module Koshucode.Baala.Base.Abort.CodePos
 import qualified Data.List                          as Li
 import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
-import qualified Koshucode.Baala.Base.Text          as B
 
 
 -- ----------------------  CodePos
@@ -37,11 +36,7 @@ data CodePos = CodePos
 -- | Number of input point, line number, and column number,
 --   e.g., @\/1.6.14\/@.
 instance Show CodePos where
-    show = longSlash
-
--- | Line number and column number, e.g., @\/6.14\/@.
-instance B.PPrint CodePos where
-    pprint = B.pprint . shortSlash
+    show = showCp posText
 
 instance O.GetIx CodePos where
     getIx = cpIndex
@@ -49,11 +44,8 @@ instance O.GetIx CodePos where
 instance O.GetIOPath CodePos where
     getIOPath = cpPath
 
-longSlash :: CodePos -> String
-longSlash = showCp (\s l c -> "/" ++ s ++ "." ++ l ++ "." ++ c ++ "/")
-
-shortSlash :: CodePos -> String
-shortSlash = showCp (\_ l c -> "/" ++ l ++ "." ++ c ++ "/")
+posText :: String -> String -> String -> String
+posText s l c = "/" ++ s ++ "." ++ l ++ "." ++ c ++ "/"
 
 showCp :: (String -> String -> String -> String) -> CodePos -> String
 showCp f cp = f s l c where
