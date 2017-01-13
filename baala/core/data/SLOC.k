@@ -8,9 +8,9 @@ about /package 'core
 |-- DIR  /code 215  /comment 158  /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- DIR  /code 270  /comment 204  /dir "core/Koshucode/Baala/Core/Relkit"
 |-- DIR  /code 628  /comment 353  /dir "core/Koshucode/Baala/Core/Relmap"
-|-- DIR  /code 685  /comment 330  /dir "core/Koshucode/Baala/Core/Resource"
+|-- DIR  /code 686  /comment 330  /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- DIR-TOTAL  /code 2121  /comment 1337
+|-- DIR-TOTAL  /code 2122  /comment 1337
 
 |-- FILE  /code 13   /comment 74   /file "Core.hs"        /dir "core/Koshucode/Baala"
 |-- FILE  /code 8    /comment 6    /file "Assert.hs"      /dir "core/Koshucode/Baala/Core"
@@ -41,10 +41,10 @@ about /package 'core
 |-- FILE  /code 15   /comment 29   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core"
 |-- FILE  /code 189  /comment 82   /file "Clause.hs"      /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 23   /comment 31   /file "Concrete.hs"    /dir "core/Koshucode/Baala/Core/Resource"
-|-- FILE  /code 125  /comment 37   /file "Include.hs"     /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /code 126  /comment 37   /file "Include.hs"     /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 35   /comment 24   /file "Message.hs"     /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 102  /comment 44   /file "Read.hs"        /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 105  /comment 89   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 106  /comment 23   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- FILE-TOTAL  /code 2121  /comment 1337
+|-- FILE-TOTAL  /code 2122  /comment 1337

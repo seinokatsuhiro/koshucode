@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    52 judges
+**    66 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Bundle"            /import "Data.Map.Strict"
@@ -63,13 +63,30 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Para"              /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Para"              /import "Data.Map.Strict"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Para"              /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Para"              /import "Koshucode.Baala.Overture.Fn"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Para"              /import "Koshucode.Baala.Subtext.Bundle"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Para"              /import "Koshucode.Baala.Subtext.Expr"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Para"              /import "Koshucode.Baala.Subtext.MinMax"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Para"              /import "Koshucode.Baala.Subtext.Operator"
 
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Token"       /import "Data.Char"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Token"       /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Token"       /import "Koshucode.Baala.Base"
+
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Tree"        /import "Prelude"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Tree"        /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Tree"        /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Tree"        /import "Koshucode.Baala.Subtext.Match"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Tree"        /import "Koshucode.Baala.Subtext.Operator"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Tree"        /import "Koshucode.Baala.Subtext.Sieve.Token"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Tree"        /import "Koshucode.Baala.Base.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve"             /import "Koshucode.Baala.Subtext.Sieve.Token"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve"             /import "Koshucode.Baala.Subtext.Sieve.Tree"
+
 |-- IMPORT  /module "Koshucode.Baala.Subtext"                   /import "Koshucode.Baala.Subtext.Bundle"
 |-- IMPORT  /module "Koshucode.Baala.Subtext"                   /import "Koshucode.Baala.Subtext.Match"
 |-- IMPORT  /module "Koshucode.Baala.Subtext"                   /import "Koshucode.Baala.Subtext.Operator"
+|-- IMPORT  /module "Koshucode.Baala.Subtext"                   /import "Koshucode.Baala.Subtext.Sieve"
 

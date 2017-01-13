@@ -46,13 +46,10 @@
 |-- DIR-RANK  /dir-rank 9  /dir "Koshucode.Baala.Base.Text"  /base-rank {= /rank /base /import-dir [ 5 | "Comment" | [
     "Overture" ] ] [ 5 | "Suffix" | [ "Overture" ] ] [ 5 | "TextTable" | [ "Overture" ] ] [ 7 | "PPrint" | [ "Overture"
     | "Prelude" ] ] [ 9 | "Dots" | [ "List" | "Overture" ] ] =}
-|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Subtext"  /base-rank {= /rank /base /import-dir [ 0 | "MinMax" | [ ] ]
-    [ 2 | "Expr" | [ ] ] [ 7 | "Operator" | [ ] ] [ 8 | "Bundle" | [ "Operator" ] ] [ 9 | "Para" | [ "Operator" ] ] [ 10
-    | "Match" | [ "Operator" ] ] =}
-
 |-- DIR-RANK  /dir-rank 15  /dir "Koshucode.Baala.Base.Abort"  /base-rank {= /rank /base /import-dir [ 11 | "CodePos" |
     [ "Overture" | "Prelude" | "Text" ] ] [ 12 | "Reason" | [ "List" | "Overture" ] ] [ 13 | "Report" | [ "List" |
     "Overture" | "Text" ] ] [ 15 | "Message" | [ "Abort" ] ] =}
+
 |-- DIR-RANK  /dir-rank 15  /dir "Koshucode.Baala.Base.IO"  /base-rank {= /rank /base /import-dir [ 7 | "Encoding" | [
     "Prelude" ] ] [ 7 | "Http" | [ "Overture" | "Prelude" ] ] [ 9 | "IOPoint" | [ "List" | "Overture" | "Prelude" ] ] [
     15 | "BzFile" | [ "Abort" | "Prelude" ] ] =}
@@ -63,10 +60,15 @@
 |-- DIR-RANK  /dir-rank 19  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 6 | "Prelude" | [ ] ] [
     8 | "List" | [ ] ] [ 8 | "MixText" | [ ] ] [ 10 | "Text" | [ ] ] [ 14 | "Abort" | [ ] ] [ 16 | "IO" | [ ] ] [ 16 |
     "Message" | [ ] ] [ 19 | "Code" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 22  /dir "Koshucode.Baala.Subtext.Sieve"  /base-rank {= /rank /base /import-dir [ 21 | "Token" |
+    [ "Base" | "Overture" ] ] [ 22 | "Tree" | [ "Base" | "Operator" | "Overture" ] ] =}
+|-- DIR-RANK  /dir-rank 23  /dir "Koshucode.Baala.Subtext"  /base-rank {= /rank /base /import-dir [ 0 | "MinMax" | [ ] ]
+    [ 2 | "Expr" | [ ] ] [ 7 | "Operator" | [ ] ] [ 8 | "Bundle" | [ "Operator" ] ] [ 9 | "Para" | [ "Operator" |
+    "Overture" ] ] [ 10 | "Match" | [ "Operator" ] ] [ 23 | "Sieve" | [ ] ] =}
+
 |-- DIR-RANK  /dir-rank 23  /dir "Koshucode.Baala.Syntax.Para"  /base-rank {= /rank /base /import-dir [ 21 | "Para" | [
     "Base" | "Overture" ] ] [ 22 | "Get" | [ "Base" ] ] [ 22 | "ParaSpec" | [ "Base" | "Overture" ] ] [ 23 | "Parse" | [
     "Base" | "Overture" ] ] =}
-
 |-- DIR-RANK  /dir-rank 24  /dir "Koshucode.Baala.Syntax.Symbol"  /base-rank {= /rank /base /import-dir [ 5 |
     "AngleText" | [ "Overture" ] ] [ 5 | "Term" | [ "Overture" ] ] [ 21 | "Message" | [ "Base" ] ] [ 22 | "Next" | [
     "Base" | "Overture" ] ] [ 23 | "Symbol" | [ "Base" | "Overture" ] ] [ 24 | "Short" | [ "Base" | "Overture" ] ] =}
@@ -81,30 +83,30 @@
     "Pattern" | [ ] ] [ 27 | "Utility" | [ "Base" | "Overture" | "Symbol" ] ] [ 28 | "Section" | [ "Base" | "Overture" |
     "Symbol" ] ] [ 29 | "Rel" | [ "Base" | "Overture" | "Symbol" ] ] [ 30 | "Clause" | [ "Base" | "Overture" | "Symbol"
     ] ] =}
+
 |-- DIR-RANK  /dir-rank 34  /dir "Koshucode.Baala.Syntax.Tree"  /base-rank {= /rank /base /import-dir [ 32 | "Bracket" |
     [ "Base" | "Token" ] ] [ 33 | "Parse" | [ "Base" | "Overture" | "Token" ] ] [ 33 | "Pattern" | [ "Base" | "Token" ]
     ] [ 34 | "Split" | [ "Base" | "Overture" | "Token" ] ] =}
-
-|-- DIR-RANK  /dir-rank 36  /dir "Koshucode.Baala.Syntax.Subtree"  /base-rank {= /rank /base /import-dir [ 5 | "Filter"
-    | [ "Overture" ] ] [ 26 | "Subtree" | [ "Base" | "Overture" | "Symbol" ] ] [ 27 | "DirTree" | [ "Base" | "Overture"
-    ] ] [ 27 | "Xml" | [ "Base" | "Overture" | "Symbol" ] ] [ 36 | "Decode" | [ "Base" | "Overture" | "Symbol" | "Token"
-    | "Tree" ] ] =}
+|-- DIR-RANK  /dir-rank 36  /dir "Koshucode.Baala.Syntax.Subtree"  /base-rank {= /rank /base /import-dir [ 25 | "Filter"
+    | [ "Overture" | "Subtext" ] ] [ 26 | "Subtree" | [ "Base" | "Overture" | "Symbol" ] ] [ 27 | "DirTree" | [ "Base" |
+    "Overture" ] ] [ 27 | "Xml" | [ "Base" | "Overture" | "Symbol" ] ] [ 36 | "Decode" | [ "Base" | "Overture" |
+    "Symbol" | "Token" | "Tree" ] ] =}
 |-- DIR-RANK  /dir-rank 37  /dir "Koshucode.Baala.Syntax.Attr"  /base-rank {= /rank /base /import-dir [ 0 | "AttrName" |
     [ ] ] [ 26 | "Message" | [ "Base" | "Para" | "Symbol" ] ] [ 36 | "Attr" | [ "Base" | "Overture" | "Para" | "Tree" ]
-    ] [ 36 | "Slot" | [ "Base" | "Overture" | "Token" | "Tree" ] ] [ 37 | "AttrEd" | [ "Base" | "Symbol" | "Token" |
-    "Tree" ] ] =}
+    ] [ 36 | "Slot" | [ "Base" | "Overture" | "Token" | "Tree" ] ] [ 37 | "AttrEd" | [ "Base" | "Overture" | "Symbol" |
+    "Token" | "Tree" ] ] =}
 |-- DIR-RANK  /dir-rank 38  /dir "Koshucode.Baala.Syntax"  /base-rank {= /rank /base /import-dir [ 24 | "Para" | [ ] ] [
     25 | "Symbol" | [ ] ] [ 27 | "Message" | [ ] ] [ 31 | "Token" | [ ] ] [ 34 | "Pattern" | [ ] ] [ 35 | "Tree" | [ ] ]
     [ 37 | "Subtree" | [ ] ] [ 38 | "Attr" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 42  /dir "Koshucode.Baala.Type.Judge"  /base-rank {= /rank /base /import-dir [ 40 | "JudgeClass"
     | [ "Base" | "Syntax" ] ] [ 41 | "Judge" | [ "Base" | "Overture" | "Syntax" ] ] [ 42 | "Interp" | [ "Base" |
     "Syntax" ] ] =}
+*** 25
+
 |-- DIR-RANK  /dir-rank 47  /dir "Koshucode.Baala.Type.Rel"  /base-rank {= /rank /base /import-dir [ 44 | "Order" | [
     "Base" | "Judge" | "Overture" | "Syntax" ] ] [ 44 | "TermPicker" | [ "Base" | "Judge" | "Overture" | "Syntax" ] ] [
     45 | "Head" | [ "Base" | "Judge" | "Overture" | "Syntax" | "Type" ] ] [ 46 | "Rel" | [ "Base" | "Judge" | "Overture"
     | "Syntax" ] ] [ 47 | "Mono" | [ "Base" ] ] =}
-*** 25
-
 |-- DIR-RANK  /dir-rank 48  /dir "Koshucode.Baala.Type"  /base-rank {= /rank /base /import-dir [ 21 | "Message" | [
     "Base" | "Overture" ] ] [ 25 | "Decimal" | [ ] ] [ 28 | "Time" | [ ] ] [ 43 | "Judge" | [ ] ] [ 44 | "Type" | [
     "Base" | "Judge" | "Overture" | "Syntax" ] ] [ 48 | "Rel" | [ ] ] =}
@@ -120,11 +122,11 @@
     "Syntax" | "Type" ] ] [ 51 | "Numeric" | [ "Base" | "Overture" | "Syntax" | "Type" ] ] [ 56 | "Content" | [ "Base" |
     "Class" | "Overture" | "Syntax" | "Type" ] ] [ 57 | "Dataset" | [ "Base" | "Class" | "Overture" | "Syntax" | "Type"
     ] ] =}
+
 |-- DIR-RANK  /dir-rank 60  /dir "Koshucode.Baala.Data.Church"  /base-rank {= /rank /base /import-dir [ 50 | "Message" |
     [ "Base" | "Syntax" | "Type" ] ] [ 51 | "Cox" | [ "Base" | "Overture" | "Syntax" ] ] [ 52 | "Cop" | [ "Base" |
     "Overture" | "Syntax" ] ] [ 59 | "Build" | [ "Base" | "Class" | "Decode" | "Overture" | "Syntax" ] ] [ 60 | "Run" |
     [ "Base" | "Class" | "Decode" | "Overture" | "Syntax" | "Type" ] ] =}
-
 |-- DIR-RANK  /dir-rank 61  /dir "Koshucode.Baala.Data"  /base-rank {= /rank /base /import-dir [ 51 | "Message" | [ ] ]
     [ 55 | "Class" | [ ] ] [ 58 | "Decode" | [ ] ] [ 59 | "Content" | [ "Base" | "Class" | "Decode" | "Overture" |
     "Syntax" | "Type" ] ] [ 61 | "Church" | [ ] ] =}
@@ -140,17 +142,17 @@
     | "Type" ] ] [ 66 | "Rop" | [ "Base" | "Data" | "Lexmap" | "Syntax" ] ] [ 66 | "Specialize" | [ "Base" | "Lexmap" |
     "Overture" | "Relkit" | "Syntax" | "Type" ] ] [ 67 | "Construct" | [ "Base" | "Lexmap" | "Overture" | "Relkit" |
     "Syntax" | "Type" ] ] [ 67 | "Global" | [ "Base" | "Data" | "Overture" | "Type" ] ] =}
+
 |-- DIR-RANK  /dir-rank 70  /dir "Koshucode.Baala.Core.Assert"  /base-rank {= /rank /base /import-dir [ 40 | "Message" |
     [ "Base" | "Syntax" ] ] [ 63 | "RelTable" | [ "Base" | "Data" | "Overture" | "Syntax" | "Type" ] ] [ 69 | "Assert" |
     [ "Base" | "Lexmap" | "Overture" | "Relmap" | "Syntax" | "Type" ] ] [ 70 | "Run" | [ "Base" | "Data" | "Lexmap" |
     "Overture" | "Relkit" | "Relmap" | "Syntax" | "Type" ] ] =}
-
 |-- DIR-RANK  /dir-rank 74  /dir "Koshucode.Baala.Core.Resource"  /base-rank {= /rank /base /import-dir [ 21 | "Message"
     | [ "Base" ] ] [ 55 | "Clause" | [ "Base" | "Lexmap" | "Overture" | "Syntax" | "Type" ] ] [ 72 | "Resource" | [
     "Assert" | "Base" | "Data" | "Lexmap" | "Overture" | "Relkit" | "Relmap" | "Syntax" | "Type" ] ] [ 73 | "Concrete" |
     [ "Base" | "Data" | "Relmap" | "Syntax" | "Type" ] ] [ 73 | "Include" | [ "Assert" | "Base" | "Data" | "Lexmap" |
-    "Relmap" | "Syntax" | "Type" ] ] [ 73 | "Run" | [ "Assert" | "Base" | "Data" | "Lexmap" | "Overture" | "Relmap" |
-    "Syntax" | "Type" ] ] [ 74 | "Read" | [ "Base" | "Data" | "Overture" | "Relmap" | "Syntax" ] ] =}
+    "Overture" | "Relmap" | "Syntax" | "Type" ] ] [ 73 | "Run" | [ "Assert" | "Base" | "Data" | "Lexmap" | "Overture" |
+    "Relmap" | "Syntax" | "Type" ] ] [ 74 | "Read" | [ "Base" | "Data" | "Overture" | "Relmap" | "Syntax" ] ] =}
 |-- DIR-RANK  /dir-rank 75  /dir "Koshucode.Baala.Core"  /base-rank {= /rank /base /import-dir [ 52 | "Message" | [ ] ]
     [ 54 | "Lexmap" | [ ] ] [ 64 | "Relkit" | [ ] ] [ 68 | "Relmap" | [ ] ] [ 71 | "Assert" | [ ] ] [ 75 | "Resource" |
     [ ] ] =}
@@ -162,17 +164,17 @@
     63 | "Coxhand" | [ "Base" | "Data" | "Overture" | "Syntax" ] ] [ 64 | "Logic" | [ "Data" | "Overture" ] ] [ 78 |
     "Arith" | [ "Base" | "Data" | "Overture" | "Type" ] ] [ 78 | "List" | [ "Base" | "Data" | "Overture" | "Type" ] ] [
     78 | "Misc" | [ "Base" | "Data" | "Syntax" ] ] [ 78 | "Order" | [ "Data" | "Overture" ] ] [ 78 | "Text" | [ "Base" |
-    "Data" | "Overture" | "Syntax" | "Type" ] ] [ 78 | "Time" | [ "Data" | "Overture" | "Type" ] ] [ 78 | "Type" | [
-    "Data" | "Overture" ] ] [ 79 | "Bundle" | [ "Base" | "Data" ] ] =}
+    "Data" | "Overture" | "Subtext" | "Syntax" | "Type" ] ] [ 78 | "Time" | [ "Data" | "Overture" | "Type" ] ] [ 78 |
+    "Type" | [ "Data" | "Overture" ] ] [ 79 | "Bundle" | [ "Base" | "Data" ] ] =}
+
 |-- DIR-RANK  /dir-rank 79  /dir "Koshucode.Baala.Rop.Base"  /base-rank {= /rank /base /import-dir [ 77 | "Message" | [
     "Core" ] ] [ 78 | "Define" | [ "Core" ] ] [ 79 | "Rops" | [ "Core" ] ] =}
-
 |-- DIR-RANK  /dir-rank 80  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 1 | "System" | [ ] ] [ 4 |
-    "Overture" | [ "Text" ] ] [ 11 | "Subtext" | [ "Operator" ] ] [ 20 | "Base" | [ "Abort" | "Code" | "IO" | "List" |
-    "MixText" | "Prelude" | "Text" ] ] [ 39 | "Syntax" | [ "Attr" | "Para" | "Subtree" | "Symbol" | "Token" | "Tree" ] ]
-    [ 49 | "Type" | [ "Decimal" | "Judge" | "Rel" | "Time" | "Type" ] ] [ 62 | "Data" | [ "Church" | "Class" | "Decode"
-    | "Type" ] ] [ 63 | "DataPlus" | [ "Base" | "Data" | "Overture" | "Syntax" | "Type" ] ] [ 76 | "Core" | [ "Assert" |
-    "Lexmap" | "Relkit" | "Relmap" | "Resource" ] ] [ 79 | "Writer" | [ ] ] [ 80 | "Cop" | [ ] ] =}
+    "Overture" | [ "Text" ] ] [ 20 | "Base" | [ "Abort" | "Code" | "IO" | "List" | "MixText" | "Prelude" | "Text" ] ] [
+    24 | "Subtext" | [ "Operator" | "Sieve" ] ] [ 39 | "Syntax" | [ "Attr" | "Para" | "Subtree" | "Symbol" | "Token" |
+    "Tree" ] ] [ 49 | "Type" | [ "Decimal" | "Judge" | "Rel" | "Time" | "Type" ] ] [ 62 | "Data" | [ "Church" | "Class"
+    | "Decode" | "Type" ] ] [ 63 | "DataPlus" | [ "Base" | "Data" | "Overture" | "Syntax" | "Type" ] ] [ 76 | "Core" | [
+    "Assert" | "Lexmap" | "Relkit" | "Relmap" | "Resource" ] ] [ 79 | "Writer" | [ ] ] [ 80 | "Cop" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 80  /dir "Koshucode.Baala.Rop.Base.Get"  /base-rank {= /rank /base /import-dir [ 78 | "Get" | [
     "Core" ] ] [ 79 | "Rel" | [ "Core" ] ] [ 80 | "Cox" | [ "Core" ] ] =}
 |-- DIR-RANK  /dir-rank 81  /dir "Koshucode.Baala.Toolkit.Main"  /base-rank {= /rank /base /import-dir [ 64 | "KoshuRdf"
@@ -181,10 +183,10 @@
     ] ] [ 81 | "KoshuMain" | [ "Base" | "Core" | "Data" | "Overture" | "Type" | "Writer" ] ] =}
 |-- DIR-RANK  /dir-rank 82  /dir "Koshucode.Baala.Rop.Cox.Type"  /base-rank {= /rank /base /import-dir [ 82 | "Clock" |
     [ "Base" | "Core" ] ] [ 82 | "Dec" | [ "Base" | "Core" ] ] =}
+
 |-- DIR-RANK  /dir-rank 84  /dir "Koshucode.Baala.Rop.Flat.Applied"  /base-rank {= /rank /base /import-dir [ 64 |
     "PoScale" | [ ] ] [ 82 | "Gadget" | [ "Base" | "Core" ] ] [ 82 | "Subtext" | [ "Base" | "Core" | "Subtext" ] ] [ 83
     | "Peripheral" | [ "Base" | "Core" ] ] [ 84 | "Rops" | [ "Core" ] ] =}
-
 |-- DIR-RANK  /dir-rank 84  /dir "Koshucode.Baala.Rop.Flat.Lattice"  /base-rank {= /rank /base /import-dir [ 82 |
     "Tropashko" | [ "Base" | "Core" ] ] [ 83 | "Restrict" | [ "Base" | "Core" ] ] [ 84 | "Rop" | [ "Base" | "Core" ] ]
     =}
@@ -201,17 +203,17 @@
 |-- DIR-RANK  /dir-rank 91  /dir "Koshucode.Baala.Rop.Nest"  /base-rank {= /rank /base /import-dir [ 82 | "Flow" | [
     "Base" | "Core" ] ] [ 89 | "Confl" | [ "Base" | "Core" | "Flat" ] ] [ 90 | "Deriv" | [ "Base" | "Core" | "Flat" ] ]
     [ 91 | "Rops" | [ "Base" | "Core" ] ] =}
-|-- DIR-RANK  /dir-rank 92  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 81 | "Base" | [ ] ] [ 88
-    | "Flat" | [ "Applied" | "Lattice" ] ] [ 91 | "Cox" | [ ] ] [ 92 | "Nest" | [ ] ] =}
 *** 50
 
+|-- DIR-RANK  /dir-rank 92  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 81 | "Base" | [ ] ] [ 88
+    | "Flat" | [ "Applied" | "Lattice" ] ] [ 91 | "Cox" | [ ] ] [ 92 | "Nest" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 93  /dir "Koshucode.Baala.Toolkit.Library"  /base-rank {= /rank /base /import-dir [ 0 |
     "Version" | [ ] ] [ 63 | "RDF" | [ "Data" | "Type" ] ] [ 77 | "Element" | [ "Base" | "Core" | "Data" | "Overture" |
     "Syntax" | "Type" ] ] [ 77 | "Input" | [ "Base" | "Core" | "Data" ] ] [ 80 | "Change" | [ "Base" | "Data" | "Type" |
     "Writer" ] ] [ 80 | "Run" | [ "Base" | "Core" | "Data" | "Writer" ] ] [ 93 | "Global" | [ "Base" | "Cop" | "Core" |
     "Cox" | "Data" | "Flat" | "Nest" ] ] =}
 
-*** 51 judges
+*** 52 judges
 
 === note
 
@@ -289,15 +291,6 @@ TABLE : DIR-RANK
                                                  7     "PPrint"             [ "Overture" | "Prelude" ]
                                                  9     "Dots"               [ "List" | "Overture" ]
                                                  
-  10        "Koshucode.Baala.Subtext"            /rank /base                /import-dir
-                                                 ----- -------------------- --------------------------------------------------------------------------------------------------
-                                                 0     "MinMax"             [ ]
-                                                 2     "Expr"               [ ]
-                                                 7     "Operator"           [ ]
-                                                 8     "Bundle"             [ "Operator" ]
-                                                 9     "Para"               [ "Operator" ]
-                                                 10    "Match"              [ "Operator" ]
-                                                 
   15        "Koshucode.Baala.Base.Abort"         /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
                                                  11    "CodePos"            [ "Overture" | "Prelude" | "Text" ]
@@ -332,6 +325,21 @@ TABLE : DIR-RANK
                                                  16    "IO"                 [ ]
                                                  16    "Message"            [ ]
                                                  19    "Code"               [ ]
+                                                 
+  22        "Koshucode.Baala.Subtext.Sieve"      /rank /base                /import-dir
+                                                 ----- -------------------- --------------------------------------------------------------------------------------------------
+                                                 21    "Token"              [ "Base" | "Overture" ]
+                                                 22    "Tree"               [ "Base" | "Operator" | "Overture" ]
+                                                 
+  23        "Koshucode.Baala.Subtext"            /rank /base                /import-dir
+                                                 ----- -------------------- --------------------------------------------------------------------------------------------------
+                                                 0     "MinMax"             [ ]
+                                                 2     "Expr"               [ ]
+                                                 7     "Operator"           [ ]
+                                                 8     "Bundle"             [ "Operator" ]
+                                                 9     "Para"               [ "Operator" | "Overture" ]
+                                                 10    "Match"              [ "Operator" ]
+                                                 23    "Sieve"              [ ]
                                                  
   23        "Koshucode.Baala.Syntax.Para"        /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
@@ -386,7 +394,7 @@ TABLE : DIR-RANK
                                                  
   36        "Koshucode.Baala.Syntax.Subtree"     /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
-                                                 5     "Filter"             [ "Overture" ]
+                                                 25    "Filter"             [ "Overture" | "Subtext" ]
                                                  26    "Subtree"            [ "Base" | "Overture" | "Symbol" ]
                                                  27    "DirTree"            [ "Base" | "Overture" ]
                                                  27    "Xml"                [ "Base" | "Overture" | "Symbol" ]
@@ -398,7 +406,7 @@ TABLE : DIR-RANK
                                                  26    "Message"            [ "Base" | "Para" | "Symbol" ]
                                                  36    "Attr"               [ "Base" | "Overture" | "Para" | "Tree" ]
                                                  36    "Slot"               [ "Base" | "Overture" | "Token" | "Tree" ]
-                                                 37    "AttrEd"             [ "Base" | "Symbol" | "Token" | "Tree" ]
+                                                 37    "AttrEd"             [ "Base" | "Overture" | "Symbol" | "Token" | "Tree" ]
                                                  
   38        "Koshucode.Baala.Syntax"             /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
@@ -512,7 +520,7 @@ TABLE : DIR-RANK
                                                  55    "Clause"             [ "Base" | "Lexmap" | "Overture" | "Syntax" | "Type" ]
                                                  72    "Resource"           [ "Assert" | "Base" | "Data" | "Lexmap" | "Overture" | "Relkit" | "Relmap" | "Syntax" | "Type" ]
                                                  73    "Concrete"           [ "Base" | "Data" | "Relmap" | "Syntax" | "Type" ]
-                                                 73    "Include"            [ "Assert" | "Base" | "Data" | "Lexmap" | "Relmap" | "Syntax" | "Type" ]
+                                                 73    "Include"            [ "Assert" | "Base" | "Data" | "Lexmap" | "Overture" | "Relmap" | "Syntax" | "Type" ]
                                                  73    "Run"                [ "Assert" | "Base" | "Data" | "Lexmap" | "Overture" | "Relmap" | "Syntax" | "Type" ]
                                                  74    "Read"               [ "Base" | "Data" | "Overture" | "Relmap" | "Syntax" ]
                                                  
@@ -542,7 +550,7 @@ TABLE : DIR-RANK
                                                  78    "List"               [ "Base" | "Data" | "Overture" | "Type" ]
                                                  78    "Misc"               [ "Base" | "Data" | "Syntax" ]
                                                  78    "Order"              [ "Data" | "Overture" ]
-                                                 78    "Text"               [ "Base" | "Data" | "Overture" | "Syntax" | "Type" ]
+                                                 78    "Text"               [ "Base" | "Data" | "Overture" | "Subtext" | "Syntax" | "Type" ]
                                                  78    "Time"               [ "Data" | "Overture" | "Type" ]
                                                  78    "Type"               [ "Data" | "Overture" ]
                                                  79    "Bundle"             [ "Base" | "Data" ]
@@ -557,8 +565,8 @@ TABLE : DIR-RANK
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
                                                  1     "System"             [ ]
                                                  4     "Overture"           [ "Text" ]
-                                                 11    "Subtext"            [ "Operator" ]
                                                  20    "Base"               [ "Abort" | "Code" | "IO" | "List" | "MixText" | "Prelude" | "Text" ]
+                                                 24    "Subtext"            [ "Operator" | "Sieve" ]
                                                  39    "Syntax"             [ "Attr" | "Para" | "Subtree" | "Symbol" | "Token" | "Tree" ]
                                                  49    "Type"               [ "Decimal" | "Judge" | "Rel" | "Time" | "Type" ]
                                                  62    "Data"               [ "Church" | "Class" | "Decode" | "Type" ]
@@ -654,6 +662,6 @@ TABLE : DIR-RANK
 
 **
 **  SUMMARY
-**      51 judges on DIR-RANK
-**      51 judges in total
+**      52 judges on DIR-RANK
+**      52 judges in total
 **
