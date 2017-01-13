@@ -12,12 +12,8 @@ module Koshucode.Baala.Syntax.Tree.Parse
     ttreeGroup,
     withTrees,
     readClauseTrees,
-
-    -- * Pretty print
-    treesDoc, ppTrees,
   ) where
 
-import qualified Text.PrettyPrint                        as P
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
@@ -94,9 +90,7 @@ tokenTrees = B.codeTrees S.getBracketType B.BracketNone . S.prepareTokens
 --   Right [TreeL (TText /0.1.0/ TextRaw "a")]
 --
 withTrees :: (ToTrees a) => ([Tree] -> B.Ab b) -> a -> B.Ab b
-withTrees f a =
-    do ts <- toTrees a
-       f ts
+withTrees f a = f O.# toTrees a
 
 -- | Read clauses and convert to token trees.
 readClauseTrees :: FilePath -> B.IOAb [[Tree]]
@@ -106,31 +100,3 @@ readClauseTrees path =
          Right ls   -> toTrees O.<#> ls
          Left a     -> Left a
 
--- --------------------------------------------  Pretty print
-
--- | Convert token trees to 'B.Doc' value for pretty printing.
-treesDoc :: [Tree] -> B.Doc
-treesDoc = dv where
-    dv = B.pprintV . map d
-    d (B.TreeL x) = B.pprint "|" B.<+> B.pprint x
-    d (B.TreeB br oc xs) =
-        let tag   = "<" ++ B.name br ++ ">"
-            treeB = B.pprint tag B.<+> brackets oc
-        in P.hang treeB 2 $ dv xs
-
-    brackets Nothing = B.pprint ""
-    brackets (Just (open, close)) =
-        B.pprintH [B.pprint open, B.pprint "--", B.pprint close]
-
--- | Pretty print token trees.
---
---   >>> ppTrees "a ( b c )"
---   | TText /1.0/ TextRaw "a"
---   <group> TOpen /1.2/ "(" -- TClose /1.8/ ")"
---     | TText /1.4/ TextRaw "b"
---     | TText /1.6/ TextRaw "c"
---
-ppTrees :: (ToTrees a) => a -> IO ()
-ppTrees a = case toTrees a of
-              Left ab   -> putStrLn `mapM_` B.abortMessage [] ab
-              Right ts  -> print $ treesDoc ts

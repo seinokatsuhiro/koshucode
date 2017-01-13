@@ -135,8 +135,7 @@ dumpRel r = K.leftPage "Dump relation" $ C.relTableLines [] r
 
 -- | [Dump token trees]
 dumpTrees :: [K.Tree] -> K.Ab a
-dumpTrees trees = K.leftLines "Dump token trees"
-                   $ lines $ show $ K.treesDoc trees
+dumpTrees = K.leftLines "Dump token trees" . K.ppRawTrees
 
 -- ---------------------------------  Others
 
