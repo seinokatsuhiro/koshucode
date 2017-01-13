@@ -15,7 +15,7 @@ module Koshucode.Baala.Base.Code.Tree
     partitionLB,
 
     -- * Print tree
-    ppRawTree, ppRawTrees,
+    ppRawTreeWith, ppRawTree, ppRawTrees,
     printTree, printTrees,
 
     -- * Code tree
@@ -29,7 +29,6 @@ module Koshucode.Baala.Base.Code.Tree
 import qualified Data.List                             as Ls
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base.Abort            as B
-import qualified Koshucode.Baala.Base.Prelude          as B
 import qualified Koshucode.Baala.Base.Code.Bracket     as B
 import qualified Koshucode.Baala.Base.Code.Message     as Msg
 
@@ -127,16 +126,19 @@ isTreeL (TreeB _ _ _)  = False
 -- ============================================  Print tree
 
 -- | Convert single raw tree to printable lines.
---   Branches are marked usign right arrow (@>@),
---   and leaves are marked using hyphen (@-@).
---
-ppRawTree :: (Show b, Show y, Show z) => RawTree b y z -> [String]
-ppRawTree = pp 0 where
-    pp dp (TreeL z)      = [indent dp ++ "- " ++ show z]
-    pp dp (TreeB b y xs) = (indent dp ++ "> " ++ show b ++ " " ++ show y)
+ppRawTreeWith :: (b -> String) -> (y -> String) -> (z -> String) -> RawTree b y z -> [String]
+ppRawTreeWith showB showY showZ = pp 0 where
+    pp dp (TreeL z)      = [indent dp ++ "- " ++ showZ z]
+    pp dp (TreeB b y xs) = (indent dp ++ "> " ++ showB b ++ " " ++ showY y)
                            : (pp (dp + 1) O.<++> xs)
     indent 0  = ""
     indent dp = replicate (2 * dp) ' '
+
+-- | Convert single raw tree to printable lines.
+--   Branches are marked usign right arrow (@>@),
+--   and leaves are marked using hyphen (@-@).
+ppRawTree :: (Show b, Show y, Show z) => RawTree b y z -> [String]
+ppRawTree = ppRawTreeWith show show show
 
 -- | Convert multiple raw trees to printable lines.
 ppRawTrees :: (Show b, Show y, Show z) => [RawTree b y z] -> [String]
