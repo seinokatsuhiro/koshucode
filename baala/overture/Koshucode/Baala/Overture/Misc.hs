@@ -6,7 +6,6 @@
 
 module Koshucode.Baala.Overture.Misc
  ( IOPath, GetIOPath (..),
-   Some (..), orElse, (<||>),
    uncons,
    keepOn, omitOn,
    zero,
@@ -29,43 +28,6 @@ class GetIOPath a where
 
 instance GetIOPath String where
     getIOPath = id
-
--- ---------------------------------  Some
-
--- | Something exists.
-class Some a where
-    -- | Test something exists.
-    some :: a -> Bool
-    some = not . none
-
-    -- | Test something does not exists.
-    none :: a -> Bool
-    none = not . some
-
-instance Some Bool where
-    some = id
-
-instance Some (Maybe a) where
-    some (Just _)   = True
-    some (Nothing)  = False
-
-instance Some (Either a b) where
-    some (Right _)  = True
-    some (Left  _)  = False
-
-instance Some [a] where
-    none = null
-
--- Same as ||
-infixr 2 <||>
-infixr 2 `orElse`
-
-orElse :: (Some a) => a -> a -> a
-orElse a b | some a     = a
-           | otherwise  = b
-
-(<||>) :: (Some a) => a -> a -> a
-(<||>) = orElse
 
 
 -- ---------------------------------
