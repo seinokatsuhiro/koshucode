@@ -129,9 +129,9 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
              Left tok@(S.TShort _ pre _) -> unkClause [tok] $ Msg.unresPrefix pre
              Left tok                    -> unkClause [tok] $ Msg.bug "clause"
 
-    tokens | B.some unks    = Left $ head unks     -- include unknown tokens
-           | B.some sh      = mapM unshorten orig  -- unshorten short tokens
-           | B.some shorts  = Left $ head shorts   -- include short tokens
+    tokens | O.some unks    = Left $ head unks     -- include unknown tokens
+           | O.some sh      = mapM unshorten orig  -- unshorten short tokens
+           | O.some shorts  = Left $ head shorts   -- include short tokens
            | otherwise      = Right orig
 
     unshorten :: S.Token -> Either S.Token S.Token
@@ -237,9 +237,9 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     shortCheck :: [S.ShortDef] -> ClauseBody
     shortCheck sh'
-        | B.some prefix    = abort $ Msg.dupPrefix prefix
-        | B.some replace   = abort $ Msg.dupReplacement replace
-        | B.some invalid   = abort $ Msg.invalidPrefix invalid
+        | O.some prefix    = abort $ Msg.dupPrefix prefix
+        | O.some replace   = abort $ Msg.dupReplacement replace
+        | O.some invalid   = abort $ Msg.invalidPrefix invalid
         | otherwise        = empty
         where (pre, rep)   = unzip sh'
               prefix       = B.duplicates pre

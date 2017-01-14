@@ -81,7 +81,7 @@ newTerms = B.pkLProperNames
 --   True
 --
 preTermsExist :: O.Test (TermPicker c)
-preTermsExist = B.some . preTerms
+preTermsExist = O.some . preTerms
 
 -- | Test new terms exist.
 --
@@ -92,7 +92,7 @@ preTermsExist = B.some . preTerms
 --   False
 --
 newTermsExist :: O.Test (TermPicker c)
-newTermsExist = B.some . newTerms
+newTermsExist = O.some . newTerms
 
 
 --  ============================================  Mapping

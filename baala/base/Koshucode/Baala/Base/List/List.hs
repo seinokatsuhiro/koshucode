@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Base.List.List
   ( -- * Test
-    some, isSingleton,
+    isSingleton,
     sameLength, notSameLength,
 
     -- * Take
@@ -31,10 +31,6 @@ import qualified Koshucode.Baala.Base.List.Split  as B
 
 
 -- ----------------------  List
-
--- | Test list is not empty.
-some :: O.Test [a]
-some = not . null
 
 -- | Test list has single element.
 isSingleton :: O.Test [a]

@@ -6,7 +6,7 @@
 
 module Koshucode.Baala.Overture.Misc
  ( IOPath, GetIOPath (..),
-   OrElse (..),
+   Some (..), orElse, (<||>),
    uncons,
    keepOn, omitOn,
    zero,
@@ -30,55 +30,43 @@ class GetIOPath a where
 instance GetIOPath String where
     getIOPath = id
 
--- ---------------------------------  Or else
+-- ---------------------------------  Some
+
+-- | Something exists.
+class Some a where
+    -- | Test something exists.
+    some :: a -> Bool
+    some = not . none
+
+    -- | Test something does not exists.
+    none :: a -> Bool
+    none = not . some
+
+instance Some Bool where
+    some = id
+
+instance Some (Maybe a) where
+    some (Just _)   = True
+    some (Nothing)  = False
+
+instance Some (Either a b) where
+    some (Right _)  = True
+    some (Left  _)  = False
+
+instance Some [a] where
+    none = null
 
 -- Same as ||
 infixr 2 <||>
 infixr 2 `orElse`
 
--- | Or-else pattern.
---   This is similar to 'Control.Applicative.Alternative'.
-class OrElse a where
-    orElse :: a -> a -> a
+orElse :: (Some a) => a -> a -> a
+orElse a b | some a     = a
+           | otherwise  = b
 
-    (<||>) :: (OrElse a) => a -> a -> a
-    (<||>) = orElse
+(<||>) :: (Some a) => a -> a -> a
+(<||>) = orElse
 
--- | False or something else.
---
---   >>> False <||> True <||> True
---   True
---
-instance OrElse Bool where
-    orElse False a  = a
-    orElse a _      = a
-
--- | Empty list or something else.
---
---   >>> "" <||> "foo" <||> "bar"
---   "foo"
---
-instance OrElse [a] where
-    orElse [] a  = a
-    orElse a _   = a
-
--- | Nothing or something else.
---
---   >>> Nothing <||> Just "foo" <||> Just "bar"
---   Just "foo"
---
-instance OrElse (Maybe a) where
-    orElse Nothing a  = a
-    orElse a _        = a
-
--- | Left or something else.
---
---   >>> Left "foo" <||> Right "bar" <||> Right "baz"
---   Right "bar"
---
-instance OrElse (Either a b) where
-    orElse (Left _) a  = a
-    orElse a _         = a
 
 -- ---------------------------------
 
