@@ -17,6 +17,8 @@ module Koshucode.Baala.Overture.Text.Utility
 
     -- * Code point
     isAsciiCode,
+    isControlCode,
+    isFormatCode,
     isNewlineCode,
     integralHT,
     integralLF,
@@ -130,11 +132,19 @@ addSpace ""                         = ""
 
 -- ============================================  Code point
 
--- | Test ASCII code point.
+-- | Test ASCII code point (0 .. 127).
 isAsciiCode :: (Integral n) => n -> Bool
 isAsciiCode = (<= 127)
 
--- | Test newline code point.
+-- | Test ASCII control code point (0 .. 31, 127).
+isControlCode :: (Integral n) => n -> Bool
+isControlCode n = n <= 31 || n == 127
+
+-- | Test format code point (9 .. 13).
+isFormatCode :: (Integral n) => n -> Bool
+isFormatCode n = n >= integralHT && n <= integralCR
+
+-- | Test newline code point (10, 13).
 isNewlineCode :: (Integral n) => n -> Bool
 isNewlineCode n = (n == integralLF) || (n == integralCR)
 
