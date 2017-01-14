@@ -15,7 +15,8 @@ import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 
 -- | Create selective directory trees.
 --
---   >>> O.putLines . B.ppRawTrees O.# dirTrees [] "." [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit "dist") [S.subtreeL $ S.subtreeKeep "S*"]]
+--   >>> import Koshucode.Baala.Syntax.Subtree.Filter as S
+--   >>> B.printTrees O.# dirTrees [] "." [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit "dist") [S.subtreeL $ S.subtreeKeep "S(*)"]]
 --   > [] "data"
 --     - "SLOC.k"
 --   > [] "Koshucode"
@@ -23,6 +24,9 @@ import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 --       > [] "Syntax"
 --         > [] "Attr"
 --           - "Slot.hs"
+--         > [] "Subtree"
+--           - "Subtree.hs"
+--         - "Subtree.hs"
 --         > [] "Symbol"
 --           - "Short.hs"
 --           - "Symbol.hs"
@@ -31,10 +35,13 @@ import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 --           - "Section.hs"
 --         > [] "Tree"
 --           - "Split.hs"
---           - "Subtree.hs"
 --       - "Syntax.hs"
 --
-dirTrees :: [FilePath] -> FilePath -> [S.SubtreePattern] -> IO [S.Subtree String]
+dirTrees ::
+    [FilePath]                  -- ^ Exclude directory names
+    -> FilePath                 -- ^ Beginning directory
+    -> [S.SubtreePattern]       -- ^ Directory tree patterns
+    -> IO [S.Subtree FilePath]  -- ^ Result directory trees
 dirTrees exclude path ps =
     withCurrentDirectory path $ do
       ts <- dirTreesOne exclude ps
@@ -62,14 +69,14 @@ dirTreesRec exclude ts = p O.<#++> ts where
              _  -> do zs' <- dirTreesRec exclude zs
                       return [B.TreeB [] y zs']
 
--- since directory-1.2.3.0
+-- | Same as 'Dir.withCurrentDirectory'.
 withCurrentDirectory :: FilePath -> IO a -> IO a
 withCurrentDirectory dir action =
   B.bracket Dir.getCurrentDirectory Dir.setCurrentDirectory $ \ _ -> do
     Dir.setCurrentDirectory dir
     action
 
--- since directory-1.2.5.0
+-- | Same as 'Dir.listDirectory'.
 listDirectory :: FilePath -> IO [FilePath]
 listDirectory path = filter f <$> Dir.getDirectoryContents path where
     f filename = filename /= "." && filename /= ".."
