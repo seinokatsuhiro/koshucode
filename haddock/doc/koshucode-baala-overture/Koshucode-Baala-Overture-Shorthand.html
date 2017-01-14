@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-overture-0.200.0.0: Preliminary library for Koshucode</p
+      >koshucode-baala-overture-0.203.0.0: Preliminary library for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -91,6 +91,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >Twin</a
 	    > a = (a, a)</li
 	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:Jp"
+	    >Jp</a
+	    > ::   t -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, t)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:Jp2"
+	    >Jp2</a
+	    > ::   t -&gt; t -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, t))</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:Jp3"
+	    >Jp3</a
+	    > ::   t -&gt; t -&gt; t -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, t)))</li
+	  ><li class="src short"
 	  ><a href="#v:ordEq"
 	    >ordEq</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
@@ -144,11 +174,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Pair of <em
-	      >a</em
-	      > and <em
-	      >b</em
-	      >.</p
+	    >Nominal pair type.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -162,10 +188,96 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Pair of <em
-	      >a</em
-	      > and <em
-	      >a</em
+	    >Twin pair.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:Jp" class="def"
+	    >Jp</a
+	    > ::   t -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, t) <a onclick="showSource('src/Koshucode-Baala-Overture-Shorthand.html#Jp');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Just pair: <strong
+	      >Jp <em
+		>a b</em
+		></strong
+	      > is equal to <strong
+	      >Just (<em
+		>a</em
+		>, <em
+		>b</em
+		>)</strong
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:Jp2" class="def"
+	    >Jp2</a
+	    > ::   t -&gt; t -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, t)) <a onclick="showSource('src/Koshucode-Baala-Overture-Shorthand.html#Jp2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Double just pairs: <strong
+	      >Jp2 <em
+		>a b c</em
+		></strong
+	      > is equal to <strong
+	      >Just (<em
+		>a</em
+		>, Just (<em
+		>b</em
+		>, <em
+		>c</em
+		>))</strong
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:Jp3" class="def"
+	    >Jp3</a
+	    > ::   t -&gt; t -&gt; t -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t, t))) <a onclick="showSource('src/Koshucode-Baala-Overture-Shorthand.html#Jp3');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Triple just pairs: <strong
+	      >Jp3 <em
+		>a b c d</em
+		></strong
+	      > is equal to <strong
+	      >Just (<em
+		>a</em
+		>, Just (<em
+		>b</em
+		>, Just (<em
+		>c</em
+		>, <em
+		>d</em
+		>)))</strong
 	      >.</p
 	    ></div
 	  ></div

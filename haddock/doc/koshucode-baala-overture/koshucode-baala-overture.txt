@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.200.0.0
+@version 0.203.0.0
 
 
 -- | Exit process.
@@ -537,6 +537,11 @@ type Bin a = a -> a -> a
 -- | Text utility.
 module Koshucode.Baala.Overture.Text.Utility
 
+-- | Returns <a>True</a> for any Unicode space character, and the control
+--   characters <tt>\t</tt>, <tt>\n</tt>, <tt>\r</tt>, <tt>\f</tt>,
+--   <tt>\v</tt>.
+isSpace :: Char -> Bool
+
 -- | Remove space and space-like characters from the beginning of string.
 --   
 --   <pre>
@@ -610,19 +615,34 @@ stringWidth :: String -> Int
 --   </pre>
 addSpace :: StringMap
 
--- | Test ASCII code point.
+-- | Test ASCII code point (0 .. 127).
 isAsciiCode :: (Integral n) => n -> Bool
 
--- | Test newline code point.
+-- | Test ASCII control code point (0 .. 31, 127).
+isControlCode :: (Integral n) => n -> Bool
+
+-- | Test format code point (9 .. 13).
+isFormatCode :: (Integral n) => n -> Bool
+
+-- | Test newline code point (10, 13).
 isNewlineCode :: (Integral n) => n -> Bool
 
--- | Generic code point of line feed character (<tt>'\n'</tt>).
+-- | Generic code point (9) of horizontal tab character (<tt>'\t'</tt>).
+integralHT :: (Integral n) => n
+
+-- | Generic code point (10) of line feed character (<tt>'\n'</tt>).
 integralLF :: (Integral n) => n
 
--- | Generic code point of carriage return character (<tt>'\r'</tt>).
+-- | Generic code point (11) of vertical tab character (<tt>'\v'</tt>).
+integralVT :: (Integral n) => n
+
+-- | Generic code point (12) of form feed character (<tt>'\f'</tt>).
+integralFF :: (Integral n) => n
+
+-- | Generic code point (13) of carriage return character (<tt>'\r'</tt>).
 integralCR :: (Integral n) => n
 
--- | Generic code point of space character (<tt>' '</tt>).
+-- | Generic code point (32) of space character (<tt>' '</tt>).
 integralSpace :: (Integral n) => n
 
 -- | Print newline.
@@ -643,18 +663,84 @@ putLines :: [String] -> IO ()
 -- | Print multiple lines.
 hPutLines :: Handle -> [String] -> IO ()
 
--- | Print prompt (<tt>&gt;&gt;</tt>) and read user input.
+-- | Print prompt (<tt>&gt;&gt;</tt>) and read user input. It returns
+--   trimmed input string. Reread when input is empty.
 prompt :: IO String
+
+-- | Print prompt with give string and read user input.
+promptWith :: String -> IO String
+
+
+-- | Something exists somewhere.
+module Koshucode.Baala.Overture.Some
+
+-- | Something exists.
+class Some s where some = not . none none = not . some
+
+-- | Test something exists.
+--   
+--   <pre>
+--   &gt;&gt;&gt; some $ Just "foo"
+--   True
+--   </pre>
+some :: Some s => s a -> Bool
+
+-- | Test something does not exists.
+--   
+--   <pre>
+--   &gt;&gt;&gt; none ["foo"]
+--   False
+--   </pre>
+none :: Some s => s a -> Bool
+
+-- | Extract something.
+thing :: Some s => s a -> Maybe a
+
+-- | Extract thing or return default thing.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ["foo", "bar"] |?| "baz"
+--   "foo"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; [] |?| "baz"
+--   "baz"
+--   </pre>
+(|?|) :: (Some s) => s a -> a -> a
+
+-- | Calculate alternatives if prior expression failed.
+orElse :: (Some s) => s a -> s a -> s a
+
+-- | Infix operator for <a>orElse</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; Nothing &lt;||&gt; Just "foo" &lt;||&gt; Just "bar"
+--     Just "foo"
+--   </pre>
+(<||>) :: (Some s) => s a -> s a -> s a
+instance Koshucode.Baala.Overture.Some.Some GHC.Base.Maybe
+instance Koshucode.Baala.Overture.Some.Some (Data.Either.Either a)
+instance Koshucode.Baala.Overture.Some.Some []
 
 
 -- | Shorthand types and functions.
 module Koshucode.Baala.Overture.Shorthand
 
--- | Pair of <i>a</i> and <i>b</i>.
+-- | Nominal pair type.
 type Pair a b = (a, b)
 
--- | Pair of <i>a</i> and <i>a</i>.
+-- | Twin pair.
 type Twin a = (a, a)
+
+-- | Just pair: <b>Jp <i>a b</i></b> is equal to <b>Just (<i>a</i>,
+--   <i>b</i>)</b>.
+
+-- | Double just pairs: <b>Jp2 <i>a b c</i></b> is equal to <b>Just
+--   (<i>a</i>, Just (<i>b</i>, <i>c</i>))</b>.
+
+-- | Triple just pairs: <b>Jp3 <i>a b c d</i></b> is equal to <b>Just
+--   (<i>a</i>, Just (<i>b</i>, Just (<i>c</i>, <i>d</i>)))</b>.
 
 -- | Test equality using <a>Ord</a> method. This function can be used for
 --   implementing <a>Eq</a> instance.
@@ -723,11 +809,6 @@ type IOPath = String
 class GetIOPath a
 getIOPath :: GetIOPath a => a -> IOPath
 
--- | Or-else pattern. This is similar to <a>Alternative</a>.
-class OrElse a where (<||>) = orElse
-orElse :: OrElse a => a -> a -> a
-(<||>) :: (OrElse a, OrElse a) => a -> a -> a
-
 -- | Head and tail of list. This is a list version of text <a>uncons</a>.
 --   
 --   <pre>
@@ -776,10 +857,6 @@ printList :: (Show a) => [a] -> IO ()
 --   </pre>
 truncateString :: Int -> StringMap
 instance Koshucode.Baala.Overture.Misc.GetIOPath GHC.Base.String
-instance Koshucode.Baala.Overture.Misc.OrElse GHC.Types.Bool
-instance Koshucode.Baala.Overture.Misc.OrElse [a]
-instance Koshucode.Baala.Overture.Misc.OrElse (GHC.Base.Maybe a)
-instance Koshucode.Baala.Overture.Misc.OrElse (Data.Either.Either a b)
 
 
 -- | Infix operators.
@@ -798,6 +875,15 @@ module Koshucode.Baala.Overture.Infix
 --   </pre>
 (&) :: a -> b -> (a, b)
 
+-- | Associative operator of monoid, same as <a>mappend</a> or infix
+--   <tt>&lt;&gt;</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; Just "abc" ++ Nothing ++ Just "def"
+--   Just "abcdef"
+--   </pre>
+(++) :: (Monoid a) => a -> a -> a
+
 -- | Apply function to reversed list, and reverse back.
 --   
 --   <pre>
@@ -810,15 +896,6 @@ module Koshucode.Baala.Overture.Infix
 --   "efg"
 --   </pre>
 (/$/) :: Map [a] -> Map [a]
-
--- | Associative operator of monoid, same as <a>mappend</a> or infix
---   <tt>&lt;&gt;</tt>.
---   
---   <pre>
---   &gt;&gt;&gt; Just "abc" ++ Nothing ++ Just "def"
---   Just "abcdef"
---   </pre>
-(++) :: (Monoid a) => a -> a -> a
 
 -- | Same as <a>concatMap</a>.
 --   
@@ -838,6 +915,12 @@ module Koshucode.Baala.Overture.Infix
 --   [("a",5), ("b",6), ("c",5)]
 --   </pre>
 (<$$>) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
+
+-- | Monadic application, same as <a>=&lt;&lt;</a>.
+(#) :: (Monad m) => (a -> m b) -> m a -> m b
+
+-- | Composition of monadic functions, same as <a>&lt;=&lt;</a>.
+(#.) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
 
 -- | Monadic mapping, same as <a>mapM</a>.
 (<#>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m (t b)

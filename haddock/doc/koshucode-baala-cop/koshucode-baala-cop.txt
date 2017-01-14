@@ -8,7 +8,7 @@
 --   in the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-cop
-@version 0.200.0.0
+@version 0.203.0.0
 
 
 -- | Replace sublists.
@@ -155,11 +155,24 @@ module Koshucode.Baala.Cop.Text
 -- | Content operators on texts.
 copsText :: (CContent c) => [Cop c]
 
--- | <b>suffix LIST</b> adds unique suffixes to text elements of
---   <i>LIST</i>.
+-- | <ul>
+--   <li><i><b><i>TEXT</i> =? <i>PATTERN</i></b></i> Test <i>TEXT</i>
+--   matches <i>PATTERN</i>.</li>
+--   <li><i><b><i>TEXT</i> =! <i>PATTERN</i></b></i> Test <i>TEXT</i> does
+--   not matches <i>PATTERN</i>.</li>
+--   </ul>
+copSiv :: (CContent c) => Bool -> CopCalc c
+
+-- | <ul>
+--   <li><i>suffix <i>LIST</i></i> Add unique suffixes to text elements of
+--   <i>LIST</i>.</li>
+--   </ul>
 copSuffix :: (CContent c) => CopCalc c
 
--- | <b>unsuffix C</b> remove integer suffixes from <i>C</i>.
+-- | <ul>
+--   <li><i>unsuffix <i>C</i></i> Remove integer suffixes from
+--   <i>C</i>.</li>
+--   </ul>
 copUnsuffix :: (CContent c) => CopCalc c
 
 

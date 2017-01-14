@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Subtext.Sieve</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('subtext', 'koshucode-baala-subtext', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtext-Sieve.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-subtext-0.203.0.0: A text matching library</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Subtext.Sieve</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Module</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Syntax</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Sieve pattern.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  >module <a href="Koshucode-Baala-Subtext-Sieve-Token.html"
+	    >Koshucode.Baala.Subtext.Sieve.Token</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Subtext-Sieve-Tree.html"
+	    >Koshucode.Baala.Subtext.Sieve.Tree</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Module</h1
+	><div class="top"
+	><p class="src"
+	  >module <a href="Koshucode-Baala-Subtext-Sieve-Token.html"
+	    >Koshucode.Baala.Subtext.Sieve.Token</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >module <a href="Koshucode-Baala-Subtext-Sieve-Tree.html"
+	    >Koshucode.Baala.Subtext.Sieve.Tree</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Syntax</h1
+	><div class="doc"
+	><h2
+	  >Top</h2
+	  ><h3
+	  >T1. &quot; <em
+	    >Text</em
+	    > &quot;</h3
+	  ><p
+	  >Literal <em
+	    >Text</em
+	    >.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >sivMatch &quot;foo&quot; `mapM` [ &quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot; ]
+</code
+	      ></strong
+	    >Right [True,False,False]
+</pre
+	  ><h3
+	  >T2. &quot; <em
+	    >Text</em
+	    > ( <em
+	    >Expr</em
+	    > ) <em
+	    >Text</em
+	    > &quot;</h3
+	  ><p
+	  >Literal <em
+	    >Text</em
+	    >, pattern <em
+	    >Expr</em
+	    >, and literal <em
+	    >Text</em
+	    >.
+  Outside of parens include brackets or braces
+  are treated as literal text.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >sivMatch &quot;ba( _ )&quot; `mapM` [ &quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot; ]
+</code
+	      ></strong
+	    >Right [False,True,True]
+</pre
+	  ><h3
+	  >T3. &quot; <em
+	    >Text</em
+	    > [ <em
+	    >Expr</em
+	    > ] <em
+	    >Text</em
+	    > &quot;</h3
+	  ><p
+	  >Optional <em
+	    >Expr</em
+	    >, i.e., single or no <em
+	    >Expr</em
+	    >.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >sivMatch &quot;foo[ bar ]&quot; `mapM` [ &quot;foo&quot;, &quot;foobar&quot;, &quot;foobaz&quot; ]
+</code
+	      ></strong
+	    >Right [True,True,False]
+</pre
+	  ><h3
+	  >T4. &quot; <em
+	    >Text</em
+	    > { <em
+	    >Expr</em
+	    > } <em
+	    >Text</em
+	    > &quot;</h3
+	  ><p
+	  >Repeat <em
+	    >Expr</em
+	    > zero-or-more times.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >sivMatch &quot;f{ o }bar&quot; `mapM` [ &quot;foo&quot;, &quot;fbar&quot;, &quot;fobar&quot;, &quot;foobar&quot; ]
+</code
+	      ></strong
+	    >Right [False,True,True,True]
+</pre
+	  ><h3
+	  >T5. &quot; <em
+	    >Text</em
+	    > {- <em
+	    >Expr</em
+	    > -} <em
+	    >Text</em
+	    > &quot;</h3
+	  ><p
+	  >Repeat <em
+	    >Expr</em
+	    > one-or-more times.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >sivMatch &quot;f{- o -}bar&quot; `mapM` [ &quot;foo&quot;, &quot;fbar&quot;, &quot;fobar&quot;, &quot;foobar&quot; ]
+</code
+	      ></strong
+	    >Right [False,False,True,True]
+</pre
+	  ><h3
+	  >T6. &quot; <em
+	    >Text</em
+	    > {= ( <em
+	    >Times</em
+	    > ) <em
+	    >Expr</em
+	    > =} <em
+	    >Text</em
+	    > &quot;</h3
+	  ><p
+	  >Repeat <em
+	    >Expr</em
+	    > in <em
+	    >Times</em
+	    >.</p
+	  ><ul
+	  ><li
+	    ><strong
+	      ><em
+		>Num-1</em
+		> - <em
+		>Num-2</em
+		></strong
+	      > indicates lower-and-upper bounded repetition.</li
+	    ><li
+	    ><strong
+	      ><em
+		>Num</em
+		> -</strong
+	      > indicates lower bounded repetition.</li
+	    ><li
+	    ><strong
+	      >- <em
+		>Num</em
+		></strong
+	      > indicates upper bounded repetition.</li
+	    ><li
+	    ><strong
+	      ><em
+		>Num</em
+		> ...</strong
+	      > indicates <em
+	      >Num</em
+	      >-times repetition.</li
+	    ></ul
+	  ><h2
+	  >Expr</h2
+	  ><h3
+	  >E1. _</h3
+	  ><p
+	  >Underscore indicates single any character.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >sivMatch &quot;foo.( _ )&quot; `mapM` [ &quot;foo.k&quot;, &quot;foo.hs&quot;, &quot;foo.zip&quot; ]
+</code
+	      ></strong
+	    >Right [True,False,False]
+</pre
+	  ><h3
+	  >E2. *</h3
+	  ><p
+	  >Asterisk indicates arbitrary-length any text.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >sivMatch &quot;( * )-( * ).k&quot; `mapM` [ &quot;foo.k&quot;, &quot;foo-bar.k&quot;, &quot;foo-baz.hs&quot; ]
+</code
+	      ></strong
+	    >Right [False,True,False]
+</pre
+	  ><h3
+	  >E3. ...</h3
+	  ><p
+	  >Three dots ellipsis indicates arbitrary-length any text.
+  It is equivalent to asterisk.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >sivMatch &quot;( ... )-( ... ).k&quot; `mapM` [ &quot;foo.k&quot;, &quot;foo-bar.k&quot;, &quot;foo-baz.hs&quot; ]
+</code
+	      ></strong
+	    >Right [False,True,False]
+</pre
+	  ><h3
+	  >E4. <em
+	    >Char-1</em
+	    > - <em
+	    >Char-2</em
+	    ></h3
+	  ><p
+	  >Character range from <em
+	    >Char-1</em
+	    > to <em
+	    >Char-2</em
+	    >.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >sivMatch &quot;{- a-z -}{- 0-9 -}&quot; `mapM` [ &quot;foo1&quot;, &quot;bar20&quot;, &quot;baz&quot; ]
+</code
+	      ></strong
+	    >Right [True,True,False]
+</pre
+	  ><h3
+	  >E5. <em
+	    >Expr-1</em
+	    > | <em
+	    >Expr-2</em
+	    > | ... | <em
+	    >Expr-N</em
+	    ></h3
+	  ><p
+	  >One of <em
+	    >Expr-1</em
+	    >, <em
+	    >Expr-2</em
+	    >, ..., and <em
+	    >Expr-N</em
+	    >.</p
+	  ><h3
+	  >E6. <em
+	    >Expr-1</em
+	    > ? <em
+	    >Expr-2</em
+	    ></h3
+	  ><p
+	  ><em
+	    >Expr-1</em
+	    > and <em
+	    >Expr-2</em
+	    >.
+  <strong
+	    ><em
+	      >Expr-1</em
+	      > ? <em
+	      >Expr-2</em
+	      > ? <em
+	      >Expr-3</em
+	      ></strong
+	    > equals to
+  <strong
+	    >( <em
+	      >Expr-1</em
+	      > ? <em
+	      >Expr-2</em
+	      > ) ? <em
+	      >Expr-3</em
+	      ></strong
+	    >.</p
+	  ><h3
+	  >E7. <em
+	    >Expr-1</em
+	    > ! <em
+	    >Expr-2</em
+	    ></h3
+	  ><p
+	  ><em
+	    >Expr-1</em
+	    > not <em
+	    >Expr-2</em
+	    >.</p
+	  ><h3
+	  >E8. (= <em
+	    >Top</em
+	    > =)</h3
+	  ><p
+	  ><em
+	    >Top</em
+	    > is treated as top-level pattern.</p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

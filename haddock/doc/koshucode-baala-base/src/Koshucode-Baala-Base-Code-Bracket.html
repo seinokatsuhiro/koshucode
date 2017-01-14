@@ -86,7 +86,7 @@
 <a class="number" name="line-77">77</a><span class='hs-comment'>--   &gt;&gt;&gt; let test s = s `elem` ["&gt;", "-"]</span>
 <a class="number" name="line-78">78</a><span class='hs-comment'>--   &gt;&gt;&gt; let toks s = takeWhile (== '/') s : words (dropWhile (== '/') s)</span>
 <a class="number" name="line-79">79</a><span class='hs-comment'>--   &gt;&gt;&gt; let text = Right . unwords . concat</span>
-<a class="number" name="line-80">80</a><span class='hs-comment'>--   &gt;&gt;&gt; let conv ls = text =&lt;&lt; indentBranch size test "(" "|" ")" (toks &lt;$&gt; ls)</span>
+<a class="number" name="line-80">80</a><span class='hs-comment'>--   &gt;&gt;&gt; let conv ls = text O.# indentBranch size test "(" "|" ")" (toks &lt;$&gt; ls)</span>
 <a class="number" name="line-81">81</a><span class='hs-comment'>--</span>
 <a class="number" name="line-82">82</a><span class='hs-comment'>--   &gt;&gt;&gt; toks "/&gt; bb"</span>
 <a class="number" name="line-83">83</a><span class='hs-comment'>--   ["/","&gt;","bb"]</span>

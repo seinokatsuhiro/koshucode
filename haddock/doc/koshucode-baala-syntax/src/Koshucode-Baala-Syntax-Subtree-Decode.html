@@ -34,7 +34,7 @@
 <a class="number" name="line-25">25</a>
 <a class="number" name="line-26">26</a><a name="readSubtreeClauses"></a><span class='hs-comment'>-- | Read subtree clauses from file.</span>
 <a class="number" name="line-27">27</a><span class='hs-comment'>--</span>
-<a class="number" name="line-28">28</a><span class='hs-comment'>--   &gt;&gt;&gt; mapM_ (S.printToks . B.clauseTokens) =&lt;&lt; B.abortLeft =&lt;&lt; readSubtreeClauses "subtree.txt"</span>
+<a class="number" name="line-28">28</a><span class='hs-comment'>--   &gt;&gt;&gt; mapM_ (S.printToks . B.clauseTokens) O.# B.abortLeft O.# readSubtreeClauses "subtree.txt"</span>
 <a class="number" name="line-29">29</a><span class='hs-comment'>--   ********** &gt; "a1"</span>
 <a class="number" name="line-30">30</a><span class='hs-comment'>--   TText /0.10.0/ TextRaw "&gt;"</span>
 <a class="number" name="line-31">31</a><span class='hs-comment'>--   TText /0.10.2/ TextQQ "a1"</span>

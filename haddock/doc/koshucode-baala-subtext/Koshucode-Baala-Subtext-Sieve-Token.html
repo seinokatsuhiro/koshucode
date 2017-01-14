@@ -1,0 +1,544 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Subtext.Sieve.Token</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('subtext', 'koshucode-baala-subtext', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtext-Sieve-Token.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-subtext-0.203.0.0: A text matching library</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Subtext.Sieve.Token</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Token for sieve pattern. </p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:SivToken"
+	    >SivToken</a
+	    > t<ul class="subs"
+	    ><li
+	      >= <a href="#v:SivText"
+		>SivText</a
+		> t</li
+	      ><li
+	      >| <a href="#v:SivKey"
+		>SivKey</a
+		> <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivKey"
+		>SivKey</a
+		></li
+	      ><li
+	      >| <a href="#v:SivOpen"
+		>SivOpen</a
+		> <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivBracket"
+		>SivBracket</a
+		></li
+	      ><li
+	      >| <a href="#v:SivClose"
+		>SivClose</a
+		> <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivBracket"
+		>SivBracket</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:SivBracket"
+	    >SivBracket</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:SivGroup"
+		>SivGroup</a
+		></li
+	      ><li
+	      >| <a href="#v:SivRepeat"
+		>SivRepeat</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		></li
+	      ><li
+	      >| <a href="#v:SivOption"
+		>SivOption</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:SivKey"
+	    >SivKey</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:SivAnyChar"
+		>SivAnyChar</a
+		></li
+	      ><li
+	      >| <a href="#v:SivAnyText"
+		>SivAnyText</a
+		></li
+	      ><li
+	      >| <a href="#v:SivRange"
+		>SivRange</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:sivTokens"
+	    >sivTokens</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; [<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+	    >SivToken</a
+	    > t]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:SivToken" class="def"
+	    >SivToken</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#SivToken');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sieve token.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:SivText" class="def"
+		  >SivText</a
+		  > t</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivKey" class="def"
+		  >SivKey</a
+		  > <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivKey"
+		  >SivKey</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivOpen" class="def"
+		  >SivOpen</a
+		  > <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivBracket"
+		  >SivBracket</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivClose" class="def"
+		  >SivClose</a
+		  > <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivBracket"
+		  >SivBracket</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:SivToken" class="caption collapser" onclick="toggleSection('i:SivToken')"
+	    >Instances</p
+	    ><div id="section.i:SivToken" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+		      >SivToken</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#line-23');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+		      >SivToken</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#line-23');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+		      >SivToken</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#line-23');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
+		      >GetCodePos</a
+		      > (<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+		      >SivToken</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#line-25');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+		      >ToSivExpr</a
+		      > [<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+		      >SivToken</a
+		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      >]</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#line-64');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:SivBracket" class="def"
+	    >SivBracket</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#SivBracket');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sieve bracket.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:SivGroup" class="def"
+		  >SivGroup</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivRepeat" class="def"
+		  >SivRepeat</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		  >Int</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivOption" class="def"
+		  >SivOption</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:SivBracket" class="caption collapser" onclick="toggleSection('i:SivBracket')"
+	    >Instances</p
+	    ><div id="section.i:SivBracket" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivBracket"
+		      >SivBracket</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#line-34');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivBracket"
+		      >SivBracket</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#line-34');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivBracket"
+		      >SivBracket</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#line-34');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:SivKey" class="def"
+	    >SivKey</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#SivKey');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sieve keyword.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:SivAnyChar" class="def"
+		  >SivAnyChar</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><strong
+		    >[ _ ]</strong
+		    > Any single character.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivAnyText" class="def"
+		  >SivAnyText</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><strong
+		    >[ * ]</strong
+		    > Arbitrary-length any text.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivRange" class="def"
+		  >SivRange</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><strong
+		    >[ - ]</strong
+		    > Character between two characters.</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:SivKey" class="caption collapser" onclick="toggleSection('i:SivKey')"
+	    >Instances</p
+	    ><div id="section.i:SivKey" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivKey"
+		      >SivKey</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#line-62');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivKey"
+		      >SivKey</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#line-62');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivKey"
+		      >SivKey</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#line-62');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sivTokens" class="def"
+	    >sivTokens</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; [<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+	    >SivToken</a
+	    > t] <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Token.html#sivTokens');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert textual value to sieve token list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>print O.&lt;#!&gt; sivTokens &quot;foo{ba_}[0-9]baz_&quot;
+</code
+		></strong
+	      >SivText &quot;foo&quot;
+SivOpen (SivRepeat 0)
+SivText &quot;ba&quot;
+SivKey SivAnyChar
+SivClose (SivRepeat 0)
+SivOpen SivOption
+SivText &quot;0&quot;
+SivKey SivRange
+SivText &quot;9&quot;
+SivClose SivOption
+SivText &quot;baz_&quot;
+</pre
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

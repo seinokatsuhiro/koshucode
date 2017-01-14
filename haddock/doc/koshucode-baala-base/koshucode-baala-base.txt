@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.200.0.0
+@version 0.203.0.0
 
 
 -- | Suffix and prefix.
@@ -237,12 +237,6 @@ module Koshucode.Baala.Base.Prelude.Import
 --   withFile name mode = bracket (openFile name mode) hClose
 --   </pre>
 bracket :: IO a -> (a -> IO b) -> (a -> IO c) -> IO c
-
--- | Composition of monadic functions.
-(<#.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
-
--- | Left-to-right Kleisli composition of monads.
-(>=>) :: Monad m => (a -> m b) -> (b -> m c) -> a -> m c
 
 -- | This generalizes the list-based <tt>filter</tt> function.
 filterM :: Monad m => (a -> m Bool) -> [a] -> m [a]
@@ -1761,9 +1755,6 @@ instance GHC.Show.Show n => GHC.Show.Show (Koshucode.Baala.Base.List.Picker.Pick
 -- | List utilities.
 module Koshucode.Baala.Base.List.List
 
--- | Test list is not empty.
-notNull :: Test [a]
-
 -- | Test list has single element.
 isSingleton :: Test [a]
 
@@ -2073,6 +2064,84 @@ gatherToAssocOrder :: (Ord k) => [(k, v)] -> [(k, [v])]
 module Koshucode.Baala.Base.Prelude
 
 
+-- | Position on code string.
+module Koshucode.Baala.Base.Abort.CodePos
+
+-- | Position on input code string.
+data CodePos
+CodePos :: Ix -> FilePath -> Int -> String -> String -> CodePos
+
+-- | Index of code source
+[cpIndex] :: CodePos -> Ix
+
+-- | Path of code source
+[cpPath] :: CodePos -> FilePath
+
+-- | Line number
+[cpLineNo] :: CodePos -> Int
+
+-- | Code string line
+[cpLineText] :: CodePos -> String
+
+-- | Current code string
+[cpText] :: CodePos -> String
+
+-- | Column number at which code starts.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let cp = CodePos 0 "&lt;stdin&gt;" 1 "abcdefg" "defg"
+--   
+--   &gt;&gt;&gt; cp
+--   /0.1.3/
+--   
+--   &gt;&gt;&gt; cpColumnNo cp
+--   3
+--   </pre>
+cpColumnNo :: CodePos -> Int
+
+-- | Before and after text of code position.
+--   
+--   <pre>
+--   &gt;&gt;&gt; cpSplit $ CodePos 0 "&lt;stdin&gt;" 1 "abcdefg" "defg"
+--   ("abc", "defg")
+--   </pre>
+cpSplit :: CodePos -> (String, String)
+
+-- | Type which has code positions.
+class GetCodePos a where getCP a = headNull def $ getCPs a
+getCPs :: GetCodePos a => a -> [CodePos]
+getCP :: GetCodePos a => a -> CodePos
+
+-- | Value with code string.
+data Codic a
+Codic :: [CodePos] -> a -> Codic a
+
+-- | Code positions.
+[codicCPs] :: Codic a -> [CodePos]
+
+-- | Value.
+[uncodic] :: Codic a -> a
+
+-- | Create value with code position.
+codic :: (GetCodePos cp) => cp -> a -> Codic a
+
+-- | Create codic value without code string.
+noCodic :: a -> Codic a
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Abort.CodePos.Codic a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Abort.CodePos.Codic a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Abort.CodePos.Codic a)
+instance GHC.Classes.Eq Koshucode.Baala.Base.Abort.CodePos.CodePos
+instance GHC.Show.Show Koshucode.Baala.Base.Abort.CodePos.CodePos
+instance Koshucode.Baala.Overture.Index.GetIx Koshucode.Baala.Base.Abort.CodePos.CodePos
+instance Koshucode.Baala.Overture.Misc.GetIOPath Koshucode.Baala.Base.Abort.CodePos.CodePos
+instance GHC.Classes.Ord Koshucode.Baala.Base.Abort.CodePos.CodePos
+instance Data.Default.Class.Default Koshucode.Baala.Base.Abort.CodePos.CodePos
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos Koshucode.Baala.Base.Abort.CodePos.CodePos
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos cp => Koshucode.Baala.Base.Abort.CodePos.GetCodePos [cp]
+instance GHC.Base.Functor Koshucode.Baala.Base.Abort.CodePos.Codic
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Abort.CodePos.Codic a)
+
+
 -- | Sort by ascending order or descending order.
 module Koshucode.Baala.Base.List.Order
 
@@ -2187,7 +2256,7 @@ type HttpProxy = (String, Maybe IOPath)
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; (print B.&lt;#.&gt; httpGet []) O.&lt;#!&gt; ((\c -&gt; "http://httpbin.org/status/" ++ show c) &lt;$&gt; [400 .. 404 :: Int])
+--   &gt;&gt;&gt; (print O.#. httpGet []) O.&lt;#!&gt; ((\c -&gt; "http://httpbin.org/status/" ++ show c) &lt;$&gt; [400 .. 404 :: Int])
 --   Left (400, "BAD REQUEST")
 --   Left (401, "UNAUTHORIZED")
 --   Left (402, "PAYMENT REQUIRED")
@@ -2251,6 +2320,92 @@ module Koshucode.Baala.Base.MixText
 
 -- | Bundle of list modules.
 module Koshucode.Baala.Base.List
+
+
+-- | Abort reasons.
+module Koshucode.Baala.Base.Abort.Reason
+
+-- | Abort reason.
+data AbortReason
+AbortReason :: String -> [String] -> [String] -> [CodePosInfo] -> AbortReason
+
+-- | Reason in one line
+[abortReason] :: AbortReason -> String
+
+-- | Detailed description
+[abortDetail] :: AbortReason -> [String]
+
+-- | Additional notes for long description
+[abortNote] :: AbortReason -> [String]
+
+-- | Tag and aborting points
+[abortPoint] :: AbortReason -> [CodePosInfo]
+
+-- | Tag on aborting point.
+type AbortTag = String
+
+-- | Source code position information.
+type CodePosInfo = (CodePos, AbortTag)
+
+-- | Upward aborting points, i.e., from callee to caller.
+abortPointUp :: AbortReason -> [CodePosInfo]
+
+-- | Abortable result, i.e., either of right result or abort reason.
+type Ab a = Either AbortReason a
+
+-- | Abortable mapping.
+type AbMap a = a -> Ab a
+
+-- | Abortable-to-abortable mapping.
+type MapAb a = Ab a -> Ab a
+
+-- | Abortable many map.
+type AbManyMap a = a -> Ab [a]
+
+-- | Abortable Boolean-valued function.
+type AbTest a = a -> Ab Bool
+
+-- | Abortable I/O.
+type IOAb a = IO (Ab a)
+
+-- | Type for abortable binary operators.
+type BinAb a = a -> a -> Ab a
+
+-- | Construct abort reason with reason text.
+abortBecause :: String -> AbortReason
+
+-- | Construct abort reason with reason and detailed text.
+abortLine :: String -> String -> AbortReason
+
+-- | Construct abort reason with reason and multilined detailed text.
+abortLines :: String -> [String] -> AbortReason
+
+-- | Construct abort reason with reason and note.
+abortPage :: String -> [String] -> AbortReason
+
+-- | <a>Left</a> plus <a>abortBecause</a>.
+leftBecause :: String -> Ab a
+
+-- | <a>Left</a> plus <a>abortLine</a>.
+leftLine :: String -> String -> Ab a
+
+-- | <a>Left</a> plus <a>abortLines</a>.
+leftLines :: String -> [String] -> Ab a
+
+-- | <a>Left</a> plus <a>abortPage</a>.
+leftPage :: String -> [String] -> Ab a
+
+-- | Abortable process.
+type Abortable cp b = cp -> MapAb b
+
+-- | Push source information when process is aborted.
+abortable :: (GetCodePos cp) => AbortTag -> Abortable cp b
+
+-- | Extract right value or print error message.
+unabort :: Ab a -> a
+instance GHC.Classes.Ord Koshucode.Baala.Base.Abort.Reason.AbortReason
+instance GHC.Classes.Eq Koshucode.Baala.Base.Abort.Reason.AbortReason
+instance GHC.Show.Show Koshucode.Baala.Base.Abort.Reason.AbortReason
 
 
 -- | I/O point: file, standard input, direct text, etc.
@@ -2396,171 +2551,6 @@ takeDots :: [String] -> String -> Maybe [String]
 
 -- | Bundle of text modules.
 module Koshucode.Baala.Base.Text
-
-
--- | Position on code string.
-module Koshucode.Baala.Base.Abort.CodePos
-
--- | Position on input code string.
-data CodePos
-CodePos :: Ix -> FilePath -> Int -> String -> String -> CodePos
-
--- | Index of code source
-[cpIndex] :: CodePos -> Ix
-
--- | Path of code source
-[cpPath] :: CodePos -> FilePath
-
--- | Line number
-[cpLineNo] :: CodePos -> Int
-
--- | Code string line
-[cpLineText] :: CodePos -> String
-
--- | Current code string
-[cpText] :: CodePos -> String
-
--- | Column number at which code starts.
---   
---   <pre>
---   &gt;&gt;&gt; let cp = CodePos 0 "&lt;stdin&gt;" 1 "abcdefg" "defg"
---   
---   &gt;&gt;&gt; cp
---   /0.1.3/
---   
---   &gt;&gt;&gt; cpColumnNo cp
---   3
---   </pre>
-cpColumnNo :: CodePos -> Int
-
--- | Before and after text of code position.
---   
---   <pre>
---   &gt;&gt;&gt; cpSplit $ CodePos 0 "&lt;stdin&gt;" 1 "abcdefg" "defg"
---   ("abc", "defg")
---   </pre>
-cpSplit :: CodePos -> (String, String)
-
--- | Type which has code positions.
-class GetCodePos a where getCP a = headNull def $ getCPs a
-getCPs :: GetCodePos a => a -> [CodePos]
-getCP :: GetCodePos a => a -> CodePos
-
--- | Value with code string.
-data Codic a
-Codic :: [CodePos] -> a -> Codic a
-
--- | Code positions.
-[codicCPs] :: Codic a -> [CodePos]
-
--- | Value.
-[uncodic] :: Codic a -> a
-
--- | Create value with code position.
-codic :: (GetCodePos cp) => cp -> a -> Codic a
-
--- | Create codic value without code string.
-noCodic :: a -> Codic a
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Abort.CodePos.Codic a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Abort.CodePos.Codic a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Abort.CodePos.Codic a)
-instance GHC.Classes.Eq Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance GHC.Show.Show Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance Koshucode.Baala.Base.Text.PPrint.PPrint Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance Koshucode.Baala.Overture.Index.GetIx Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance Koshucode.Baala.Overture.Misc.GetIOPath Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance GHC.Classes.Ord Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance Data.Default.Class.Default Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos cp => Koshucode.Baala.Base.Abort.CodePos.GetCodePos [cp]
-instance GHC.Base.Functor Koshucode.Baala.Base.Abort.CodePos.Codic
-instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Abort.CodePos.Codic a)
-
-
--- | Abort reasons.
-module Koshucode.Baala.Base.Abort.Reason
-
--- | Abort reason.
-data AbortReason
-AbortReason :: String -> [String] -> [String] -> [CodePosInfo] -> AbortReason
-
--- | Reason in one line
-[abortReason] :: AbortReason -> String
-
--- | Detailed description
-[abortDetail] :: AbortReason -> [String]
-
--- | Additional notes for long description
-[abortNote] :: AbortReason -> [String]
-
--- | Tag and aborting points
-[abortPoint] :: AbortReason -> [CodePosInfo]
-
--- | Tag on aborting point.
-type AbortTag = String
-
--- | Source code position information.
-type CodePosInfo = (CodePos, AbortTag)
-
--- | Upward aborting points, i.e., from callee to caller.
-abortPointUp :: AbortReason -> [CodePosInfo]
-
--- | Abortable result, i.e., either of right result or abort reason.
-type Ab a = Either AbortReason a
-
--- | Abortable mapping.
-type AbMap a = a -> Ab a
-
--- | Abortable-to-abortable mapping.
-type MapAb a = Ab a -> Ab a
-
--- | Abortable many map.
-type AbManyMap a = a -> Ab [a]
-
--- | Abortable Boolean-valued function.
-type AbTest a = a -> Ab Bool
-
--- | Abortable I/O.
-type IOAb a = IO (Ab a)
-
--- | Type for abortable binary operators.
-type BinAb a = a -> a -> Ab a
-
--- | Construct abort reason with reason text.
-abortBecause :: String -> AbortReason
-
--- | Construct abort reason with reason and detailed text.
-abortLine :: String -> String -> AbortReason
-
--- | Construct abort reason with reason and multilined detailed text.
-abortLines :: String -> [String] -> AbortReason
-
--- | Construct abort reason with reason and note.
-abortPage :: String -> [String] -> AbortReason
-
--- | <a>Left</a> plus <a>abortBecause</a>.
-leftBecause :: String -> Ab a
-
--- | <a>Left</a> plus <a>abortLine</a>.
-leftLine :: String -> String -> Ab a
-
--- | <a>Left</a> plus <a>abortLines</a>.
-leftLines :: String -> [String] -> Ab a
-
--- | <a>Left</a> plus <a>abortPage</a>.
-leftPage :: String -> [String] -> Ab a
-
--- | Abortable process.
-type Abortable cp b = cp -> MapAb b
-
--- | Push source information when process is aborted.
-abortable :: (GetCodePos cp) => AbortTag -> Abortable cp b
-
--- | Extract right value or print error message.
-unabort :: Ab a -> a
-instance GHC.Classes.Ord Koshucode.Baala.Base.Abort.Reason.AbortReason
-instance GHC.Classes.Eq Koshucode.Baala.Base.Abort.Reason.AbortReason
-instance GHC.Show.Show Koshucode.Baala.Base.Abort.Reason.AbortReason
 
 
 -- | Report abort reasons.
@@ -2760,7 +2750,7 @@ bracketTable :: (Eq a) => [(b, (Test a, Test a))] -> GetBracket b a
 --   
 --   &gt;&gt;&gt; let text = Right . unwords . concat
 --   
---   &gt;&gt;&gt; let conv ls = text =&lt;&lt; indentBranch size test "(" "|" ")" (toks &lt;$&gt; ls)
+--   &gt;&gt;&gt; let conv ls = text O.# indentBranch size test "(" "|" ")" (toks &lt;$&gt; ls)
 --   </pre>
 --   
 --   <pre>
@@ -2853,6 +2843,9 @@ undouble :: Test b -> Map (RawTree b y z)
 
 -- | Divide branch into leaves and branches.
 partitionLB :: [RawTree b y z] -> ([RawTree b y z], [RawTree b y z])
+
+-- | Convert single raw tree to printable lines.
+ppRawTreeWith :: (b -> String) -> (y -> String) -> (z -> String) -> RawTree b y z -> [String]
 
 -- | Convert single raw tree to printable lines. Branches are marked usign
 --   right arrow (<tt>&gt;</tt>), and leaves are marked using hyphen

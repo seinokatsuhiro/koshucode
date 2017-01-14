@@ -89,7 +89,7 @@
 <a class="number" name="line-80">80</a>
 <a class="number" name="line-81">81</a><a name="attrParaBy"></a><span class='hs-comment'>-- | Parameterize attributes by its layout.</span>
 <a class="number" name="line-82">82</a><span class='hs-definition'>attrParaBy</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AttrLayout</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>AttrParaze</span>
-<a class="number" name="line-83">83</a><span class='hs-definition'>attrParaBy</span> <span class='hs-varid'>lay</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>attrPara</span> <span class='hs-conid'>B</span><span class='hs-varop'>.&gt;=&gt;</span> <span class='hs-varid'>attrMatch</span> <span class='hs-varid'>lay</span>
+<a class="number" name="line-83">83</a><span class='hs-definition'>attrParaBy</span> <span class='hs-varid'>lay</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>attrMatch</span> <span class='hs-varid'>lay</span> <span class='hs-conid'>O</span><span class='hs-varop'>.#.</span> <span class='hs-varid'>attrPara</span>
 <a class="number" name="line-84">84</a>
 <a class="number" name="line-85">85</a><a name="attrMatch"></a><span class='hs-comment'>-- | Match parameter with its layout.</span>
 <a class="number" name="line-86">86</a><span class='hs-comment'>--   See 'paraChoose' in ParaSpec module.</span>

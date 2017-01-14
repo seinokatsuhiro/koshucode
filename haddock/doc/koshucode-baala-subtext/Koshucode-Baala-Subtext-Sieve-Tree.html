@@ -1,0 +1,382 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Subtext.Sieve.Tree</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('subtext', 'koshucode-baala-subtext', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtext-Sieve-Tree.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-subtext-0.203.0.0: A text matching library</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Subtext.Sieve.Tree</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Token tree for sieve pattern. </p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SivTree"
+	    >SivTree</a
+	    > t = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivBracket"
+	    >SivBracket</a
+	    > (<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+	    >SivToken</a
+	    > t)</li
+	  ><li class="src short"
+	  ><a href="#v:sivTrees"
+	    >sivTrees</a
+	    > :: [<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+	    >SivToken</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivTree"
+	    >SivTree</a
+	    > t]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SivExpr"
+	    >SivExpr</a
+	    > = <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:ToSivExpr"
+	    >ToSivExpr</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:toSivExpr"
+		>toSivExpr</a
+		> :: a -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+		>SivExpr</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:toSivExprOr"
+	    >toSivExprOr</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+	    >ToSivExpr</a
+	    > a =&gt; <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+	    >SivExpr</a
+	    > -&gt; a -&gt; <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+	    >SivExpr</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:sivMatch"
+	    >sivMatch</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+	    >ToSivExpr</a
+	    > siv =&gt; siv -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:sivMatchExpr"
+	    >sivMatchExpr</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+	    >SivExpr</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SivTree" class="def"
+	    >SivTree</a
+	    > t = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivBracket"
+	    >SivBracket</a
+	    > (<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+	    >SivToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#SivTree');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sieve tree.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sivTrees" class="def"
+	    >sivTrees</a
+	    > :: [<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+	    >SivToken</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivTree"
+	    >SivTree</a
+	    > t] <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#sivTrees');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse sieve token list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>mapM_ B.printTree O.# B.abortLeft (sivTrees $ S.sivTokens &quot;foo{ba_}[0-9]baz_&quot;)
+</code
+		></strong
+	      >- SivText &quot;foo&quot;
+&gt; SivRepeat 0 Just (SivOpen (SivRepeat 0), SivClose (SivRepeat 0))
+  - SivText &quot;ba&quot;
+  - SivKey SivAnyChar
+&gt; SivOption Just (SivOpen SivOption, SivClose SivOption)
+  - SivText &quot;0&quot;
+  - SivKey SivRange
+  - SivText &quot;9&quot;
+- SivText &quot;baz_&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SivExpr" class="def"
+	    >SivExpr</a
+	    > = <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#SivExpr');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sieve expression.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:ToSivExpr" class="def"
+	    >ToSivExpr</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#ToSivExpr');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert to sieve expression.</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:toSivExpr" class="def"
+	      >toSivExpr</a
+	      > :: a -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+	      >SivExpr</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#toSivExpr');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ToSivExpr" class="caption collapser" onclick="toggleSection('i:ToSivExpr')"
+	    >Instances</p
+	    ><div id="section.i:ToSivExpr" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+		      >ToSivExpr</a
+		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#line-67');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+		      >ToSivExpr</a
+		      > <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+		      >SivExpr</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#line-61');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+		      >ToSivExpr</a
+		      > [<a href="Koshucode-Baala-Subtext-Sieve-Token.html#t:SivToken"
+		      >SivToken</a
+		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      >]</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#line-64');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:toSivExprOr" class="def"
+	    >toSivExprOr</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+	    >ToSivExpr</a
+	    > a =&gt; <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+	    >SivExpr</a
+	    > -&gt; a -&gt; <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+	    >SivExpr</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#toSivExprOr');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert to sieve expression with replacement.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sivMatch" class="def"
+	    >sivMatch</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+	    >ToSivExpr</a
+	    > siv =&gt; siv -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#sivMatch');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test sieve pattern matches text.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>sivMatch &quot;foo(*).k&quot; O.&lt;#&gt; [&quot;foo.k&quot;, &quot;foo.hs&quot;, &quot;foobar.k&quot;, &quot;bar.k&quot;]
+</code
+		></strong
+	      >Right [True, True, False]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sivMatchExpr" class="def"
+	    >sivMatchExpr</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+	    >SivExpr</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Tree.html#sivMatchExpr');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test sieve pattern matches text.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

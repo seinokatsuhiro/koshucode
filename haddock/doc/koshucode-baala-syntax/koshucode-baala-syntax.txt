@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.200.0.0
+@version 0.203.0.0
 
 
 -- | Term types and related functions.
@@ -218,11 +218,11 @@ SubtreeId :: SubtreeFilter
 -- | Equality
 SubtreeEq :: String -> SubtreeFilter
 
--- | Glob
-SubtreeKeep :: String -> Pattern -> SubtreeFilter
+-- | Keep by sieve pattern
+SubtreeKeep :: String -> SivExpr -> SubtreeFilter
 
--- | Anti-glob
-SubtreeOmit :: String -> Pattern -> SubtreeFilter
+-- | Omit by sieve pattern
+SubtreeOmit :: String -> SivExpr -> SubtreeFilter
 
 -- | Attribute
 SubtreeAttr :: String -> String -> SubtreeFilter
@@ -236,10 +236,10 @@ subtreeId :: SubtreeFilter
 -- | Equal filter.
 subtreeEq :: String -> SubtreeFilter
 
--- | Glob filter.
+-- | Filter by sieve pattern.
 subtreeKeep :: String -> SubtreeFilter
 
--- | Anti-glob filter.
+-- | Anti-filter by sieve pattern.
 subtreeOmit :: String -> SubtreeFilter
 
 -- | Filter chain.
@@ -1121,7 +1121,7 @@ module Koshucode.Baala.Syntax.Subtree.DirTree
 -- | Create selective directory trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; O.putLines . B.ppRawTrees =&lt;&lt; dirTrees [] "." [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit "dist") [S.subtreeL $ S.subtreeKeep "S*"]]
+--   &gt;&gt;&gt; O.putLines . B.ppRawTrees O.# dirTrees [] "." [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit "dist") [S.subtreeL $ S.subtreeKeep "S*"]]
 --   &gt; [] "data"
 --     - "SLOC.k"
 --   &gt; [] "Koshucode"
@@ -1141,6 +1141,8 @@ module Koshucode.Baala.Syntax.Subtree.DirTree
 --       - "Syntax.hs"
 --   </pre>
 dirTrees :: [FilePath] -> FilePath -> [SubtreePattern] -> IO [Subtree String]
+withCurrentDirectory :: FilePath -> IO a -> IO a
+listDirectory :: FilePath -> IO [FilePath]
 
 
 -- | XML tree.
@@ -1198,13 +1200,13 @@ xmlTrees :: (Ord s, StringLike s) => [XmlToken s] -> Ab [XmlTree s]
 -- | Decode XML trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; B.printTrees =&lt;&lt; B.abortLeft (xmlDecode "&lt;hello&gt;wonderful&lt;/world&gt;")
+--   &gt;&gt;&gt; B.printTrees O.# B.abortLeft (xmlDecode "&lt;hello&gt;wonderful&lt;/world&gt;")
 --   &gt; () (XmlElem "hello","hello")
 --     - (XmlText,"wonderful")
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; B.printTrees =&lt;&lt; B.abortLeft (xmlDecode "&lt;a x='xx' y='yy'&gt;")
+--   &gt;&gt;&gt; B.printTrees O.# B.abortLeft (xmlDecode "&lt;a x='xx' y='yy'&gt;")
 --   &gt; () (XmlElem "a","a")
 --     - (XmlAttr "x","xx")
 --     - (XmlAttr "y","yy")
@@ -1346,7 +1348,6 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.TextForm
 instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos Koshucode.Baala.Syntax.Token.Token.Token
-instance Koshucode.Baala.Base.Text.PPrint.PPrint Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.TextForm
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.LocalRef
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.BlankName
@@ -1662,7 +1663,7 @@ tokenClauses :: [TokenLine] -> [TokenClause]
 --   Read this file and parse to token clauses.
 --   
 --   <pre>
---   &gt;&gt;&gt; O.printList =&lt;&lt; B.abortLeft =&lt;&lt; readClauses "clause.txt"
+--   &gt;&gt;&gt; O.printList O.# B.abortLeft O.# readClauses "clause.txt"
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.1.0/ TextRaw "aa"]}
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.2.0/ TextRaw "bb",
 --                                                  TText /0.3.1/ TextRaw "cc"]}
@@ -1952,20 +1953,6 @@ withTrees :: (ToTrees a) => ([Tree] -> Ab b) -> a -> Ab b
 
 -- | Read clauses and convert to token trees.
 readClauseTrees :: FilePath -> IOAb [[Tree]]
-
--- | Convert token trees to <a>Doc</a> value for pretty printing.
-treesDoc :: [Tree] -> Doc
-
--- | Pretty print token trees.
---   
---   <pre>
---   &gt;&gt;&gt; ppTrees "a ( b c )"
---   | TText /1.0/ TextRaw "a"
---   &lt;group&gt; TOpen /1.2/ "(" -- TClose /1.8/ ")"
---     | TText /1.4/ TextRaw "b"
---     | TText /1.6/ TextRaw "c"
---   </pre>
-ppTrees :: (ToTrees a) => a -> IO ()
 instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees GHC.Base.String
 instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Base.Prelude.Import.Tx
 instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Base.Prelude.Import.Tz
@@ -2045,7 +2032,7 @@ module Koshucode.Baala.Syntax.Subtree.Decode
 -- | Read subtree clauses from file.
 --   
 --   <pre>
---   &gt;&gt;&gt; mapM_ (S.printToks . B.clauseTokens) =&lt;&lt; B.abortLeft =&lt;&lt; readSubtreeClauses "subtree.txt"
+--   &gt;&gt;&gt; mapM_ (S.printToks . B.clauseTokens) O.# B.abortLeft O.# readSubtreeClauses "subtree.txt"
 --   ********** &gt; "a1"
 --   TText /0.10.0/ TextRaw "&gt;"
 --   TText /0.10.2/ TextQQ "a1"

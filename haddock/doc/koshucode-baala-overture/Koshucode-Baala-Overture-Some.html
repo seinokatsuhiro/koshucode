@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Overture.Some</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('overture', 'koshucode-baala-overture', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overture-Some.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Overture-Some.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-overture-0.203.0.0: Preliminary library for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Overture.Some</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Something exists somewhere.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:Some"
+	    >Some</a
+	    > s <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:some"
+		>some</a
+		> :: s a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:none"
+		>none</a
+		> :: s a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:thing"
+		>thing</a
+		> :: s a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> a</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:-124--63--124-"
+	    >(|?|)</a
+	    > :: <a href="Koshucode-Baala-Overture-Some.html#t:Some"
+	    >Some</a
+	    > s =&gt; s a -&gt; a -&gt; a</li
+	  ><li class="src short"
+	  ><a href="#v:orElse"
+	    >orElse</a
+	    > :: <a href="Koshucode-Baala-Overture-Some.html#t:Some"
+	    >Some</a
+	    > s =&gt; s a -&gt; s a -&gt; s a</li
+	  ><li class="src short"
+	  ><a href="#v:-60--124--124--62-"
+	    >(&lt;||&gt;)</a
+	    > :: <a href="Koshucode-Baala-Overture-Some.html#t:Some"
+	    >Some</a
+	    > s =&gt; s a -&gt; s a -&gt; s a</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:Some" class="def"
+	    >Some</a
+	    > s <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Some.html#Some');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Something exists.</p
+	    ></div
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    ><a href="Koshucode-Baala-Overture-Some.html#v:thing"
+	      >thing</a
+	      ></p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:some" class="def"
+	      >some</a
+	      > :: s a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Overture-Some.html#some');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Test something exists.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >some $ Just &quot;foo&quot;
+</code
+		  ></strong
+		>True
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:none" class="def"
+	      >none</a
+	      > :: s a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Overture-Some.html#none');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Test something does not exists.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >none [&quot;foo&quot;]
+</code
+		  ></strong
+		>False
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:thing" class="def"
+	      >thing</a
+	      > :: s a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	      >Maybe</a
+	      > a <a onclick="showSource('src/Koshucode-Baala-Overture-Some.html#thing');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Extract something.</p
+	      ></div
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Some" class="caption collapser" onclick="toggleSection('i:Some')"
+	    >Instances</p
+	    ><div id="section.i:Some" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Overture-Some.html#t:Some"
+		      >Some</a
+		      > []</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Some.html#line-49');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Non-empty list.</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Overture-Some.html#t:Some"
+		      >Some</a
+		      > <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		      >Maybe</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Some.html#line-34');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Just.</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Overture-Some.html#t:Some"
+		      >Some</a
+		      > (<a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+		      >Either</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Some.html#line-41');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Right.</p
+		    ></td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-124--63--124-" class="def"
+	    >(|?|)</a
+	    > :: <a href="Koshucode-Baala-Overture-Some.html#t:Some"
+	    >Some</a
+	    > s =&gt; s a -&gt; a -&gt; a <a onclick="showSource('src/Koshucode-Baala-Overture-Some.html#%7C%3F%7C');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract thing or return default thing.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>[&quot;foo&quot;, &quot;bar&quot;] |?| &quot;baz&quot;
+</code
+		></strong
+	      >&quot;foo&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>[] |?| &quot;baz&quot;
+</code
+		></strong
+	      >&quot;baz&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:orElse" class="def"
+	    >orElse</a
+	    > :: <a href="Koshucode-Baala-Overture-Some.html#t:Some"
+	    >Some</a
+	    > s =&gt; s a -&gt; s a -&gt; s a <span class="fixity"
+	    >infixr 2</span
+	    ><span class="rightedge"
+	    ></span
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Some.html#orElse');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate alternatives if prior expression failed.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-60--124--124--62-" class="def"
+	    >(&lt;||&gt;)</a
+	    > :: <a href="Koshucode-Baala-Overture-Some.html#t:Some"
+	    >Some</a
+	    > s =&gt; s a -&gt; s a -&gt; s a <span class="fixity"
+	    >infixr 2</span
+	    ><span class="rightedge"
+	    ></span
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Some.html#%3C%7C%7C%3E');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Infix operator for <code
+	      ><a href="Koshucode-Baala-Overture-Some.html#v:orElse"
+		>orElse</a
+		></code
+	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>Nothing &lt;||&gt; Just &quot;foo&quot; &lt;||&gt; Just &quot;bar&quot;
+</code
+		></strong
+	      >  Just &quot;foo&quot;
+</pre
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

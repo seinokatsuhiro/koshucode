@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-overture-0.200.0.0: Preliminary library for Koshucode</p
+      >koshucode-baala-overture-0.203.0.0: Preliminary library for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -59,6 +59,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	><li
 	  ><a href="#g:1"
 	    >Infix operators</a
+	    ><ul
+	    ><li
+	      ><a href="#g:2"
+		>Map</a
+		></li
+	      ><li
+	      ><a href="#g:3"
+		>Monad</a
+		></li
+	      ></ul
 	    ></li
 	  ></ul
 	></div
@@ -79,6 +89,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >(&amp;)</a
 	    > :: a -&gt; b -&gt; (a, b)</li
 	  ><li class="src short"
+	  ><a href="#v:-43--43-"
+	    >(++)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#t:Monoid"
+	    >Monoid</a
+	    > a =&gt; a -&gt; a -&gt; a</li
+	  ><li class="src short"
 	  ><a href="#v:-47--36--47-"
 	    >(/$/)</a
 	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:Map"
@@ -86,12 +102,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    > [a] -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > [a]</li
-	  ><li class="src short"
-	  ><a href="#v:-43--43-"
-	    >(++)</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#t:Monoid"
-	    >Monoid</a
-	    > a =&gt; a -&gt; a -&gt; a</li
 	  ><li class="src short"
 	  ><a href="#v:-60--43--43--62-"
 	    >(&lt;++&gt;)</a
@@ -110,6 +120,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    > f, <a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
 	    >Functor</a
 	    > g) =&gt; (a -&gt; b) -&gt; f (g a) -&gt; f (g b)</li
+	  ><li class="src short"
+	  ><a href="#v:-35-"
+	    >(#)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; (a -&gt; m b) -&gt; m a -&gt; m b</li
+	  ><li class="src short"
+	  ><a href="#v:-35-."
+	    >(#.)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; (b -&gt; m c) -&gt; (a -&gt; m b) -&gt; a -&gt; m c</li
 	  ><li class="src short"
 	  ><a href="#v:-60--35--62-"
 	    >(&lt;#&gt;)</a
@@ -175,6 +197,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:-43--43-" class="def"
+	    >(++)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#t:Monoid"
+	    >Monoid</a
+	    > a =&gt; a -&gt; a -&gt; a <span class="fixity"
+	    >infixr 6</span
+	    ><span class="rightedge"
+	    ></span
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Infix.html#%2B%2B');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Associative operator of monoid,
+   same as <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#v:mappend"
+		>mappend</a
+		></code
+	      > or infix <code
+	      >&lt;&gt;</code
+	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>Just &quot;abc&quot; ++ Nothing ++ Just &quot;def&quot;
+</code
+		></strong
+	      >Just &quot;abcdef&quot;
+</pre
+	    ></div
+	  ></div
+	><h2 id="g:2"
+	>Map</h2
+	><div class="top"
+	><p class="src"
 	  ><a name="v:-47--36--47-" class="def"
 	    >(/$/)</a
 	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:Map"
@@ -206,41 +265,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 </code
 		></strong
 	      >&quot;efg&quot;
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:-43--43-" class="def"
-	    >(++)</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#t:Monoid"
-	    >Monoid</a
-	    > a =&gt; a -&gt; a -&gt; a <span class="fixity"
-	    >infixr 6</span
-	    ><span class="rightedge"
-	    ></span
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Infix.html#%2B%2B');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Associative operator of monoid,
-   same as <code
-	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#v:mappend"
-		>mappend</a
-		></code
-	      > or infix <code
-	      >&lt;&gt;</code
-	      >.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>Just &quot;abc&quot; ++ Nothing ++ Just &quot;def&quot;
-</code
-		></strong
-	      >Just &quot;abcdef&quot;
 </pre
 	    ></div
 	  ></div
@@ -316,6 +340,52 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		></strong
 	      >[(&quot;a&quot;,5), (&quot;b&quot;,6), (&quot;c&quot;,5)]
 </pre
+	    ></div
+	  ></div
+	><h2 id="g:3"
+	>Monad</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-35-" class="def"
+	    >(#)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; (a -&gt; m b) -&gt; m a -&gt; m b <span class="fixity"
+	    >infixr 1</span
+	    ><span class="rightedge"
+	    ></span
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Infix.html#%23');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Monadic application, same as <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#v:-61--60--60-"
+		>=&lt;&lt;</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-35-." class="def"
+	    >(#.)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; (b -&gt; m c) -&gt; (a -&gt; m b) -&gt; a -&gt; m c <span class="fixity"
+	    >infixr 1</span
+	    ><span class="rightedge"
+	    ></span
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Infix.html#%23.');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Composition of monadic functions, same as <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#v:-60--61--60-"
+		>&lt;=&lt;</a
+		></code
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"

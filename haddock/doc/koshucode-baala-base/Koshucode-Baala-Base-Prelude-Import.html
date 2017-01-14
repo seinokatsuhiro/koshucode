@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.200.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.203.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -146,18 +146,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > c) -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
 	    >IO</a
 	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:-60--35-.-62-"
-	    >(&lt;#.&gt;)</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
-	    >Monad</a
-	    > m =&gt; (b -&gt; m c) -&gt; (a -&gt; m b) -&gt; a -&gt; m c</li
-	  ><li class="src short"
-	  ><a href="#v:-62--61--62-"
-	    >(&gt;=&gt;)</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
-	    >Monad</a
-	    > m =&gt; (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c</li
 	  ><li class="src short"
 	  ><a href="#v:filterM"
 	    >filterM</a
@@ -592,40 +580,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	>Control.Monad</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:-60--35-.-62-" class="def"
-	    >(&lt;#.&gt;)</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
-	    >Monad</a
-	    > m =&gt; (b -&gt; m c) -&gt; (a -&gt; m b) -&gt; a -&gt; m c <span class="fixity"
-	    >infixr 1</span
-	    ><span class="rightedge"
-	    ></span
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#%3C%23.%3E');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Composition of monadic functions.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:-62--61--62-" class="def"
-	    >(&gt;=&gt;)</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
-	    >Monad</a
-	    > m =&gt; (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c <span class="fixity"
-	    >infixr 1</span
-	    ><span class="rightedge"
-	    ></span
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Left-to-right Kleisli composition of monads.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
 	  ><a name="v:filterM" class="def"
 	    >filterM</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
@@ -986,20 +940,6 @@ function' are not commutative.</p
 		  ><span class="inst-left"
 		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
 		      >Default</a
-		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
-		      >IxIOPoint</a
-		      ></span
-		    ></td
-		  ><td class="doc"
-		  ><p
-		    >Zero-numbered empty input point.</p
-		    ></td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
-		      >Default</a
 		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
 		      >CodePos</a
 		      ></span
@@ -1007,6 +947,20 @@ function' are not commutative.</p
 		  ><td class="doc"
 		  ><p
 		    >Empty code position, i.e., empty content and zero line number.</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
+		      >IxIOPoint</a
+		      ></span
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Zero-numbered empty input point.</p
 		    ></td
 		  ></tr
 		><tr

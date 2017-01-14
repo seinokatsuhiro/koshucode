@@ -36,7 +36,7 @@
 <a class="number" name="line-27">27</a><span class='hs-comment'>--   &gt;&gt;&gt; httpGet [] "https://httpbin.org/robots.txt"</span>
 <a class="number" name="line-28">28</a><span class='hs-comment'>--   Right "User-agent: *\nDisallow: /deny\n"</span>
 <a class="number" name="line-29">29</a><span class='hs-comment'>--</span>
-<a class="number" name="line-30">30</a><span class='hs-comment'>--   &gt;&gt;&gt; (print B.&lt;#.&gt; httpGet []) O.&lt;#!&gt; ((\c -&gt; "<a href="http://httpbin.org/status/">http://httpbin.org/status/</a>" ++ show c) &lt;$&gt; [400 .. 404 :: Int])</span>
+<a class="number" name="line-30">30</a><span class='hs-comment'>--   &gt;&gt;&gt; (print O.#. httpGet []) O.&lt;#!&gt; ((\c -&gt; "<a href="http://httpbin.org/status/">http://httpbin.org/status/</a>" ++ show c) &lt;$&gt; [400 .. 404 :: Int])</span>
 <a class="number" name="line-31">31</a><span class='hs-comment'>--   Left (400, "BAD REQUEST")</span>
 <a class="number" name="line-32">32</a><span class='hs-comment'>--   Left (401, "UNAUTHORIZED")</span>
 <a class="number" name="line-33">33</a><span class='hs-comment'>--   Left (402, "PAYMENT REQUIRED")</span>

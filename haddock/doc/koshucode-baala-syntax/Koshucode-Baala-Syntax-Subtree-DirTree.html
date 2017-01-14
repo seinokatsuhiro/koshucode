@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.200.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.203.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -80,6 +80,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:withCurrentDirectory"
+	    >withCurrentDirectory</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > a -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:listDirectory"
+	    >listDirectory</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > [<a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    >]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -112,7 +132,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>O.putLines . B.ppRawTrees =&lt;&lt; dirTrees [] &quot;.&quot; [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit &quot;dist&quot;) [S.subtreeL $ S.subtreeKeep &quot;S*&quot;]]
+		>O.putLines . B.ppRawTrees O.# dirTrees [] &quot;.&quot; [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit &quot;dist&quot;) [S.subtreeL $ S.subtreeKeep &quot;S*&quot;]]
 </code
 		></strong
 	      >&gt; [] &quot;data&quot;
@@ -134,6 +154,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
     - &quot;Syntax.hs&quot;
 </pre
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:withCurrentDirectory" class="def"
+	    >withCurrentDirectory</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > a -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-DirTree.html#withCurrentDirectory');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:listDirectory" class="def"
+	    >listDirectory</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > [<a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-DirTree.html#listDirectory');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	></div
       ></div

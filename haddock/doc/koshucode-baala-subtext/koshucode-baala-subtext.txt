@@ -8,7 +8,64 @@
 --   alternative, and repetitive expressions. It collects submatches and
 --   switch matching expression among multiple expressions.
 @package koshucode-baala-subtext
-@version 0.200.0.0
+@version 0.203.0.0
+
+
+-- | Token for sieve pattern.
+module Koshucode.Baala.Subtext.Sieve.Token
+
+-- | Sieve token.
+data SivToken t
+SivText :: t -> SivToken t
+SivKey :: SivKey -> SivToken t
+SivOpen :: SivBracket -> SivToken t
+SivClose :: SivBracket -> SivToken t
+
+-- | Sieve bracket.
+data SivBracket
+SivGroup :: SivBracket
+SivRepeat :: Int -> SivBracket
+SivOption :: SivBracket
+
+-- | Sieve keyword.
+data SivKey
+
+-- | <b>[ _ ]</b> Any single character.
+SivAnyChar :: SivKey
+
+-- | <b>[ * ]</b> Arbitrary-length any text.
+SivAnyText :: SivKey
+
+-- | <b>[ - ]</b> Character between two characters.
+SivRange :: SivKey
+
+-- | Convert textual value to sieve token list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; print O.&lt;#!&gt; sivTokens "foo{ba_}[0-9]baz_"
+--   SivText "foo"
+--   SivOpen (SivRepeat 0)
+--   SivText "ba"
+--   SivKey SivAnyChar
+--   SivClose (SivRepeat 0)
+--   SivOpen SivOption
+--   SivText "0"
+--   SivKey SivRange
+--   SivText "9"
+--   SivClose SivOption
+--   SivText "baz_"
+--   </pre>
+sivTokens :: (Textual t) => t -> [SivToken t]
+instance GHC.Classes.Ord t => GHC.Classes.Ord (Koshucode.Baala.Subtext.Sieve.Token.SivToken t)
+instance GHC.Classes.Eq t => GHC.Classes.Eq (Koshucode.Baala.Subtext.Sieve.Token.SivToken t)
+instance GHC.Show.Show t => GHC.Show.Show (Koshucode.Baala.Subtext.Sieve.Token.SivToken t)
+instance GHC.Classes.Ord Koshucode.Baala.Subtext.Sieve.Token.SivKey
+instance GHC.Classes.Eq Koshucode.Baala.Subtext.Sieve.Token.SivKey
+instance GHC.Show.Show Koshucode.Baala.Subtext.Sieve.Token.SivKey
+instance GHC.Classes.Ord Koshucode.Baala.Subtext.Sieve.Token.SivBracket
+instance GHC.Classes.Eq Koshucode.Baala.Subtext.Sieve.Token.SivBracket
+instance GHC.Show.Show Koshucode.Baala.Subtext.Sieve.Token.SivBracket
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Subtext.Sieve.Token.SivToken t)
 
 
 -- | Lower and upper bound.
@@ -423,6 +480,57 @@ matchExpr :: (Show a) => Expr a -> GeneralMatch a
 
 -- | Apply expression bundle to input sequence.
 matchBundle :: (Show a) => Bundle a -> GeneralMatch a
+
+
+-- | Token tree for sieve pattern.
+module Koshucode.Baala.Subtext.Sieve.Tree
+
+-- | Sieve tree.
+type SivTree t = CodeTree SivBracket (SivToken t)
+
+-- | Parse sieve token list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mapM_ B.printTree O.# B.abortLeft (sivTrees $ S.sivTokens "foo{ba_}[0-9]baz_")
+--   - SivText "foo"
+--   &gt; SivRepeat 0 Just (SivOpen (SivRepeat 0), SivClose (SivRepeat 0))
+--     - SivText "ba"
+--     - SivKey SivAnyChar
+--   &gt; SivOption Just (SivOpen SivOption, SivClose SivOption)
+--     - SivText "0"
+--     - SivKey SivRange
+--     - SivText "9"
+--   - SivText "baz_"
+--   </pre>
+sivTrees :: [SivToken t] -> Ab [SivTree t]
+
+-- | Sieve expression.
+type SivExpr = CharExpr
+
+-- | Convert to sieve expression.
+class ToSivExpr a
+toSivExpr :: ToSivExpr a => a -> Ab SivExpr
+
+-- | Convert to sieve expression with replacement.
+toSivExprOr :: (ToSivExpr a) => SivExpr -> a -> SivExpr
+
+-- | Test sieve pattern matches text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; sivMatch "foo(*).k" O.&lt;#&gt; ["foo.k", "foo.hs", "foobar.k", "bar.k"]
+--   Right [True, True, False]
+--   </pre>
+sivMatch :: (ToSivExpr siv) => siv -> String -> Ab Bool
+
+-- | Test sieve pattern matches text.
+sivMatchExpr :: SivExpr -> String -> Bool
+instance Koshucode.Baala.Subtext.Sieve.Tree.ToSivExpr Koshucode.Baala.Subtext.Sieve.Tree.SivExpr
+instance Koshucode.Baala.Subtext.Sieve.Tree.ToSivExpr [Koshucode.Baala.Subtext.Sieve.Token.SivToken GHC.Base.String]
+instance Koshucode.Baala.Subtext.Sieve.Tree.ToSivExpr GHC.Base.String
+
+
+-- | Sieve pattern.
+module Koshucode.Baala.Subtext.Sieve
 
 
 -- | A text matching library.
