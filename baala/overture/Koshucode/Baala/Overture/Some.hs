@@ -4,17 +4,19 @@
 -- | Something exists somewhere.
 
 module Koshucode.Baala.Overture.Some
- ( Some (..), orElse, (<||>),
+ ( Some (..),
+   (|?|),
+   orElse, (<||>),
  ) where
 
 -- | Something exists.
-class Some a where
+class Some s where
     -- | Test something exists.
     --
     --   >>> some $ Just "foo"
     --   True
     --
-    some :: a -> Bool
+    some :: s a -> Bool
     some = not . none
 
     -- | Test something does not exists.
@@ -22,33 +24,53 @@ class Some a where
     --   >>> none ["foo"]
     --   False
     --
-    none :: a -> Bool
+    none :: s a -> Bool
     none = not . some
 
--- | True.
-instance Some Bool where
-    some = id
+    -- | Extract something.
+    thing :: s a -> Maybe a
 
 -- | Just.
-instance Some (Maybe a) where
+instance Some Maybe where
     some (Just _)   = True
     some (Nothing)  = False
 
+    thing = id
+
 -- | Right.
-instance Some (Either a b) where
+instance Some (Either a) where
     some (Right _)  = True
     some (Left  _)  = False
 
+    thing (Right a) = Just a
+    thing (Left  _) = Nothing
+
 -- | Non-empty list.
-instance Some [a] where
+instance Some [] where
     none = null
+
+    thing (a : _) = Just a
+    thing []      = Nothing
+
+-- | Extract thing or return default thing.
+--
+--   >>> ["foo", "bar"] |?| "baz"
+--   "foo"
+--
+--   >>> [] |?| "baz"
+--   "baz"
+--
+(|?|) :: (Some s) => s a -> a -> a
+(|?|) s a0 = case thing s of
+               Just a  -> a
+               Nothing -> a0
 
 -- Same as ||
 infixr 2 <||>
 infixr 2 `orElse`
 
 -- | Calculate alternatives if prior expression failed.
-orElse :: (Some a) => a -> a -> a
+orElse :: (Some s) => s a -> s a -> s a
 orElse a b | some a     = a
            | otherwise  = b
 
@@ -57,6 +79,6 @@ orElse a b | some a     = a
 --   >>> Nothing <||> Just "foo" <||> Just "bar"
 --  Just "foo"
 --
-(<||>) :: (Some a) => a -> a -> a
+(<||>) :: (Some s) => s a -> s a -> s a
 (<||>) = orElse
 

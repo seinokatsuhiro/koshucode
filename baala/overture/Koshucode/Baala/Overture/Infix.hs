@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Overture.Infix
  ( -- * Infix operators
-   (&), (++), (|?|),
+   (&), (++),
 
    -- ** Map
    (/$/), (<++>),
@@ -46,17 +46,6 @@ infixr 6 ++
 {-# INLINE (++) #-}
 (++) :: (Monoid a) => a -> a -> a
 (++) = mappend
-
--- | Take maybe content with default value, like 'May.fromMaybe'.
---
---   >>> Just "foo" |?| "bar"
---   "foo"
---
---   >>> Nothing |?| "bar"
---   "bar"
---
-(|?|) :: Maybe a -> a -> a
-m |?| x = May.fromMaybe x m
 
 -- ----------------------  Map
 
