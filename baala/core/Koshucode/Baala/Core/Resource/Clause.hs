@@ -129,10 +129,10 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
              Left tok@(S.TShort _ pre _) -> unkClause [tok] $ Msg.unresPrefix pre
              Left tok                    -> unkClause [tok] $ Msg.bug "clause"
 
-    tokens | B.notNull unks   = Left $ head unks      -- include unknown tokens
-           | B.notNull sh     = mapM unshorten orig   -- unshorten short tokens
-           | B.notNull shorts = Left $ head shorts    -- include short tokens
-           | otherwise        = Right orig
+    tokens | B.some unks    = Left $ head unks     -- include unknown tokens
+           | B.some sh      = mapM unshorten orig  -- unshorten short tokens
+           | B.some shorts  = Left $ head shorts   -- include short tokens
+           | otherwise      = Right orig
 
     unshorten :: S.Token -> Either S.Token S.Token
     unshorten t@(S.TShort n pre b) =
@@ -237,15 +237,15 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     shortCheck :: [S.ShortDef] -> ClauseBody
     shortCheck sh'
-        | B.notNull prefix    = abort $ Msg.dupPrefix prefix
-        | B.notNull replace   = abort $ Msg.dupReplacement replace
-        | B.notNull invalid   = abort $ Msg.invalidPrefix invalid
-        | otherwise           = empty
-        where (pre, rep)      = unzip sh'
-              prefix          = B.duplicates pre
-              replace         = B.duplicates rep
-              invalid         = B.omit S.isShortPrefix pre
-              abort msg       = CUnknown $ unk orig msg
+        | B.some prefix    = abort $ Msg.dupPrefix prefix
+        | B.some replace   = abort $ Msg.dupReplacement replace
+        | B.some invalid   = abort $ Msg.invalidPrefix invalid
+        | otherwise        = empty
+        where (pre, rep)   = unzip sh'
+              prefix       = B.duplicates pre
+              replace      = B.duplicates rep
+              invalid      = B.omit S.isShortPrefix pre
+              abort msg    = CUnknown $ unk orig msg
 
     -- Others
     expt (P.T _ n : P.T _ ":" : xs)

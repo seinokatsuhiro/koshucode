@@ -95,7 +95,7 @@ resultShortChunks Result {..}
       violated  = S.shortTrim (filter hasJudge O.<$$> resultViolated)
 
       hasJudge :: ResultChunk c -> Bool
-      hasJudge (ResultJudge js)  = B.notNull js
+      hasJudge (ResultJudge js)  = B.some js
       hasJudge _                 = False
 
 
