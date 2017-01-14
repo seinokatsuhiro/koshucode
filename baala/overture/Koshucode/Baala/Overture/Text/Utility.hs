@@ -31,7 +31,7 @@ module Koshucode.Baala.Overture.Text.Utility
     putLn, hPutLn,
     putShow, putShowLn,
     putLines, hPutLines, 
-    prompt,
+    prompt, promptWith,
   ) where
 
 import qualified Data.Char                      as Ch
@@ -200,10 +200,17 @@ hPutLines :: IO.Handle -> [String] -> IO ()
 hPutLines h = (IO.hPutStrLn h `mapM_`)
 
 -- | Print prompt (@>>@) and read user input.
+--   It returns trimmed input string.
+--   Reread when input is empty.
 prompt :: IO String
-prompt = do putStr ">> "
-            IO.hFlush IO.stdout
-            s <- getLine
-            case trimBoth s of
-              "" -> prompt
-              s' -> return s'
+prompt = promptWith ">> "
+
+-- | Print prompt with give string and read user input.
+promptWith :: String -> IO String
+promptWith p =
+    do putStr p
+       IO.hFlush IO.stdout
+       s <- getLine
+       case trimBoth s of
+         "" -> promptWith p
+         s' -> return s'
