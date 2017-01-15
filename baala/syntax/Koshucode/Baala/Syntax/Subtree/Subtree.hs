@@ -7,6 +7,7 @@ module Koshucode.Baala.Syntax.Subtree.Subtree
   ( -- * Pattern
     SubtreePattern (..),
     subtreeL,
+    subtreeB,
     SubtreeTerm (..),
     subtreeText, subtreeTexts,
 
@@ -21,6 +22,7 @@ module Koshucode.Baala.Syntax.Subtree.Subtree
 
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Subtext                 as U
 import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Subtree.Filter   as S
 
@@ -37,6 +39,10 @@ data SubtreePattern
 -- | Create non-termification leaf pattern.
 subtreeL :: S.SubtreeFilter -> SubtreePattern
 subtreeL = SubtreeL SubtreeNone
+
+-- | Create non-termification branch pattern.
+subtreeB :: S.SubtreeFilter -> [SubtreePattern] -> SubtreePattern
+subtreeB = SubtreeB SubtreeNone
 
 -- | Termification of subtree content.
 data SubtreeTerm
@@ -72,7 +78,7 @@ type SubtreeOutput a = B.RawTree [SubtreePattern] (SubtreeTerm, a) (SubtreeTerm,
 --     > [] "Y2"
 --       - "Z3"
 --
---   >>> B.printTrees $ subtree [SubtreeB SubtreeNone (S.subtreeEq "Y1") [subtreeL (S.subtreeEq "Z1")]] [tree]
+--   >>> B.printTrees $ subtree [subtreeB (S.subtreeEq "Y1") [subtreeL (S.subtreeEq "Z1")]] [tree]
 --   > [] (SubtreeNone,"Y1")
 --     - (SubtreeNone,"Z1")
 --
@@ -90,30 +96,31 @@ type SubtreeOutput a = B.RawTree [SubtreePattern] (SubtreeTerm, a) (SubtreeTerm,
 --     - (SubtreeText ["A"] (TermName EQ "z"),"Z1")
 --
 subtree :: [SubtreePattern] -> [Subtree String] -> [SubtreeOutput String]
-subtree = subtreeBy stringTest
+subtree = subtreeBy subtreeStringTest
 
-stringTest :: String -> S.SubtreeFilter -> Bool
-stringTest _ (S.SubtreeId)         = True
-stringTest t (S.SubtreeEq s)       = s == t
-stringTest t (S.SubtreeKeep s _)   = s == t
-stringTest t (S.SubtreeOmit s _)   = s /= t
-stringTest t (S.SubtreeChain f g)  = stringTest t f && stringTest t g
-stringTest _ (S.SubtreeAttr _ _)   = False
+-- | Test string matches selection rule.
+subtreeStringTest :: S.SubtreeFilter -> String -> Bool
+subtreeStringTest (S.SubtreeId)        _  = True
+subtreeStringTest (S.SubtreeEq s)      t  = s == t
+subtreeStringTest (S.SubtreeKeep _ e)  t  =       U.sivMatchExpr e t
+subtreeStringTest (S.SubtreeOmit _ e)  t  = not $ U.sivMatchExpr e t
+subtreeStringTest (S.SubtreeChain f g) t  = subtreeStringTest f t && subtreeStringTest g t
+subtreeStringTest (S.SubtreeAttr _ _)  _  = False
 
 -- | Select subtree by element tester.
-subtreeBy :: (a -> S.SubtreeFilter -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
+subtreeBy :: (S.SubtreeFilter -> a -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
 subtreeBy test = loop where
     loop ps0 ts = p1 O.<++> ts where
         p1 t = p2 t O.<?> ps0
 
         p2 (B.TreeL z) (SubtreeL term f)
-            | test z f     = Just $ B.TreeL (term, z)
+            | test f z     = Just $ B.TreeL (term, z)
             | otherwise    = Nothing
         p2 (B.TreeB _ y xs) (SubtreeB term f ps)
-            | test y f     = Just $ B.TreeB [] (term, y) (loop ps xs)
+            | test f y     = Just $ B.TreeB [] (term, y) (loop ps xs)
             | otherwise    = Nothing
         p2 (B.TreeB _ y xs) (SubtreeR f ps)
-            | test y f     = case loop (SubtreeR f ps : ps) xs of
+            | test f y     = case loop (SubtreeR f ps : ps) xs of
                                []  -> Nothing
                                xs' -> Just $ B.TreeB [] (SubtreeNone, y) xs'
             | otherwise    = Nothing
