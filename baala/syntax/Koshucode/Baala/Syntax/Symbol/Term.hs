@@ -5,6 +5,7 @@
 
 module Koshucode.Baala.Syntax.Symbol.Term
   ( -- * Term
+    RawJudge,
     JudgeClass,
     Term, term,
 
@@ -34,7 +35,10 @@ import qualified Data.Text.Lazy             as Tz
 import qualified Koshucode.Baala.Overture   as O
 
 
--- ----------------------  Term
+-- ============================================  Term
+
+-- | Judgement material.
+type RawJudge c = (JudgeClass, [Term c])
 
 -- | Name of judgement class, in other words, name of propositional function.
 type JudgeClass = String
@@ -45,13 +49,13 @@ type Term c = (TermName, c)
 -- | Create term.
 --
 --   >>> term "size" 10 :: Term Int
---   (TermName "size", 10)
+--   (TermName EQ "size", 10)
 --
 term :: (ToTermName n) => n -> c -> Term c
 term n c = (toTermName n, c)
 
 
--- ----------------------  Term name
+-- ============================================  Term name
 
 -- | Name of term, e.g., @\"size\"@ for the term name @\/size@.
 data TermName =
@@ -160,7 +164,7 @@ orderingTermName :: TermName -> (Ordering, TermName)
 orderingTermName n@(TermName sign _) = (sign, n)
 
 
--- ----------------------  Term name tuple
+-- ============================================  Term name tuple
 
 -- | Tuple of 2 term names.
 type TermName2 = (TermName, TermName)
@@ -178,7 +182,7 @@ type TermName5 = (TermName, TermName, TermName, TermName, TermName)
 type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
 
 
--- ----------------------  Term index
+-- ============================================  Term index
 
 -- | Term index.
 type TermIndex = Int
