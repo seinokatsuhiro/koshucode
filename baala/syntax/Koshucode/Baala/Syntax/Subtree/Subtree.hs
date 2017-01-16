@@ -128,39 +128,22 @@ subtreeBy test = loop where
 
 -- | Select subtree.
 subtreeOne :: [SubtreePattern] -> O.Map [Subtree String]
-subtreeOne ps0 ts = p1 O.<++> ts where
+subtreeOne = subtreeOneBy subtreeStringTest
+
+subtreeOneBy :: (S.SubtreeFilter -> String -> Bool) -> [SubtreePattern] -> O.Map [Subtree String]
+subtreeOneBy test ps0 ts = p1 O.<++> ts where
     p1 t = p2 t O.<?> ps0
 
-    p2 t@(B.TreeL _) (SubtreeL _ f)
-        | nullZ id f t  = Nothing
-        | otherwise     = Just t
-    p2 t@(B.TreeB _ y xs) (SubtreeB _ f ps)
-        | nullY id f t  = Nothing
-        | otherwise     = Just $ B.TreeB ps y xs
-    p2 t@(B.TreeB _ y xs) (SubtreeR f ps)
-        | nullY id f t  = Nothing
-        | otherwise     = Just $ B.TreeB (SubtreeR f ps : ps) y xs
+    p2 t@(B.TreeL z) (SubtreeL _ f)
+        | test f z      = Just t
+        | otherwise     = Nothing
+    p2 (B.TreeB _ y xs) (SubtreeB _ f ps)
+        | test f y      = Just $ B.TreeB ps y xs
+        | otherwise     = Nothing
+    p2 (B.TreeB _ y xs) (SubtreeR f ps)
+        | test f y      = Just $ B.TreeB (SubtreeR f ps : ps) y xs
+        | otherwise     = Nothing
     p2 _ _ = Nothing
-
-nullY :: (a -> String) -> S.SubtreeFilter -> Subtree a -> Bool
-nullY get f t = null $ S.subtreeFilterOn (get <#.> getTreeY) f [t]
-
-nullZ :: (a -> String) -> S.SubtreeFilter -> Subtree a -> Bool
-nullZ get f t = null $ S.subtreeFilterOn (get <#.> getTreeZ) f [t]
-
--- | 'fmap' composition.
-(<#.>) :: (Functor f) => (b -> c) -> (a -> f b) -> a -> f c
-(<#.>) g f x = g <$> f x
-
--- | Branch element of tree.
-getTreeY :: B.RawTree b y z -> Maybe y
-getTreeY (B.TreeB _ y _)  = Just y
-getTreeY _                = Nothing
-
--- | Leaf element of tree.
-getTreeZ :: B.RawTree b y z -> Maybe z
-getTreeZ (B.TreeL z)  = Just z
-getTreeZ _            = Nothing
 
 -- | Extract data from subtree.
 subtreeData :: SubtreeOutput O.Value -> [(S.JudgeClass, [S.Term O.Value])]
