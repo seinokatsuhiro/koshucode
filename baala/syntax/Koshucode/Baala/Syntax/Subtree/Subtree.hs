@@ -14,8 +14,8 @@ module Koshucode.Baala.Syntax.Subtree.Subtree
     -- * Conversion
     Subtree,
     SubtreeOutput,
-    subtree,
-    subtreeBy,
+    subtreeStringTest,
+    subtree, subtreeBy,
     subtreeOne,
     subtreeData,
   ) where
@@ -68,6 +68,22 @@ type Subtree a = B.RawTree [SubtreePattern] a a
 -- | Subtree with termified elements.
 type SubtreeOutput a = B.RawTree [SubtreePattern] (SubtreeTerm, a) (SubtreeTerm, a)
 
+-- | Test string matches selection rule.
+--
+--   >>> subtreeStringTest (S.subtreeEq "foo") <$> ["foo", "foobar", "barfoo"]
+--   [True,False,False]
+--
+--   >>> subtreeStringTest (S.subtreeKeep "foo(*)") <$> ["foo", "foobar", "barfoo"]
+--   [True,True,False]
+--
+subtreeStringTest :: S.SubtreeFilter -> String -> Bool
+subtreeStringTest (S.SubtreeId)        _  = True
+subtreeStringTest (S.SubtreeEq s)      t  = s == t
+subtreeStringTest (S.SubtreeKeep _ e)  t  =       U.sivMatchExpr e t
+subtreeStringTest (S.SubtreeOmit _ e)  t  = not $ U.sivMatchExpr e t
+subtreeStringTest (S.SubtreeChain f g) t  = subtreeStringTest f t && subtreeStringTest g t
+subtreeStringTest (S.SubtreeAttr _ _)  _  = False
+
 -- | Select subtree.
 --
 --   >>> let tree = B.TreeB [] "Y1" [B.TreeL "Z1", B.TreeL "Z2", B.TreeB [] "Y2" [B.TreeL "Z3"]]
@@ -97,15 +113,6 @@ type SubtreeOutput a = B.RawTree [SubtreePattern] (SubtreeTerm, a) (SubtreeTerm,
 --
 subtree :: [SubtreePattern] -> [Subtree String] -> [SubtreeOutput String]
 subtree = subtreeBy subtreeStringTest
-
--- | Test string matches selection rule.
-subtreeStringTest :: S.SubtreeFilter -> String -> Bool
-subtreeStringTest (S.SubtreeId)        _  = True
-subtreeStringTest (S.SubtreeEq s)      t  = s == t
-subtreeStringTest (S.SubtreeKeep _ e)  t  =       U.sivMatchExpr e t
-subtreeStringTest (S.SubtreeOmit _ e)  t  = not $ U.sivMatchExpr e t
-subtreeStringTest (S.SubtreeChain f g) t  = subtreeStringTest f t && subtreeStringTest g t
-subtreeStringTest (S.SubtreeAttr _ _)  _  = False
 
 -- | Select subtree by element tester.
 subtreeBy :: (S.SubtreeFilter -> a -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
