@@ -35,7 +35,7 @@ type CacheT = O.CacheS S.TermName
 
 -- | Empty term name cache.
 cacheT :: CacheT
-cacheT = O.cache [] S.stringTermName
+cacheT = O.cache [] S.toTermName
 
 -- ---------------------------------  Term name
 

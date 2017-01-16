@@ -70,6 +70,13 @@ instance S.IsString TermName where
 type TermPath = [TermName]
 
 -- | Convert to term name.
+--
+--   >>> toTermName "/a"
+--   TermName EQ "a"
+--
+--   >>> toTermName "+/a"
+--   TermName GT "a"
+-- 
 class ToTermName a where
     toTermName :: a -> TermName
 
@@ -104,13 +111,7 @@ enslash n@('-' : '/' : _)  = n
 enslash n                  = '/' : n
 
 -- | Decode term name from string.
---
---   >>> stringTermName "/a"
---   TermName EQ "a"
---
---   >>> stringTermName "+/a"
---   TermName GT "a"
--- 
+{-# DEPRECATED stringTermName "Use 'toTermName' instead." #-}
 stringTermName :: String -> TermName
 stringTermName ('/' : n)        = TermName EQ n
 stringTermName ('+' : '/' : n)  = TermName GT n
@@ -123,11 +124,11 @@ stringTermName n                = TermName EQ n
 --   [TermName EQ "a", TermName EQ "b", TermName EQ "c"]
 --
 stringTermNames :: String -> [TermName]
-stringTermNames = fmap stringTermName . words
+stringTermNames = fmap toTermName . words
 
 -- | Encode term name into string.
 --
---   >>> termNameString $ stringTermName "/size"
+--   >>> termNameString $ toTermName "/size"
 --   "/size"
 --
 termNameString :: TermName -> String
@@ -137,7 +138,7 @@ termNameString (TermName LT n) = '-' : enslash n
 
 -- | Extract internal name.
 --
---   >>> termNameContent $ stringTermName "/size"
+--   >>> termNameContent $ toTermName "/size"
 --   "size"
 --
 termNameContent :: TermName -> String
@@ -145,7 +146,7 @@ termNameContent (TermName _ n) = n
 
 -- | Encode term path into string.
 --
---   >>> termPathString [stringTermName "r", stringTermName "x"]
+--   >>> termPathString [toTermName "r", toTermName "x"]
 --   "/r/x"
 --
 termPathString :: TermPath -> String
