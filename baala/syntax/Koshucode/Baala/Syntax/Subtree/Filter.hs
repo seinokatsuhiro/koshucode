@@ -4,10 +4,10 @@
 
 module Koshucode.Baala.Syntax.Subtree.Filter
   ( Sivmap (..),
-    subtreeId, subtreeEq,
-    subtreeKeep, subtreeOmit,
-    subtreeAssoc,
-    subtreeChain,
+    sivmapId, sivmapEq,
+    sivmapKeep, sivmapOmit,
+    sivmapAssoc,
+    sivmapChain,
   ) where
 
 import qualified Koshucode.Baala.Overture                as O
@@ -15,40 +15,40 @@ import qualified Koshucode.Baala.Subtext                 as S
 
 -- | Subtree filter.
 data Sivmap
-    = SubtreeId                         -- ^ Identity
-    | SubtreeEq    String               -- ^ Equality
-    | SubtreeKeep  String S.SivExpr     -- ^ Keep by sieve pattern
-    | SubtreeOmit  String S.SivExpr     -- ^ Omit by sieve pattern
-    | SubtreeAssoc String String        -- ^ Associatoin of key and value
-    | SubtreeChain Sivmap Sivmap        -- ^ Filter chain
+    = SivmapId                         -- ^ Identity
+    | SivmapEq    String               -- ^ Equality
+    | SivmapKeep  String S.SivExpr     -- ^ Keep by sieve pattern
+    | SivmapOmit  String S.SivExpr     -- ^ Omit by sieve pattern
+    | SivmapAssoc String String        -- ^ Associatoin of key and value
+    | SivmapChain Sivmap Sivmap        -- ^ Filter chain
       deriving (Show, Eq)
 
 instance Monoid Sivmap where
-    mempty  = SubtreeId
-    mappend = subtreeChain
+    mempty  = SivmapId
+    mappend = sivmapChain
 
 -- | Identity filter.
-subtreeId :: Sivmap
-subtreeId = SubtreeId
+sivmapId :: Sivmap
+sivmapId = SivmapId
 
 -- | Equal filter.
-subtreeEq :: String -> Sivmap
-subtreeEq = SubtreeEq
+sivmapEq :: String -> Sivmap
+sivmapEq = SivmapEq
 
 -- | Filter by sieve pattern.
-subtreeKeep :: String -> Sivmap
-subtreeKeep s = SubtreeKeep s (S.toSivExprOr S.fail s)
+sivmapKeep :: String -> Sivmap
+sivmapKeep s = SivmapKeep s (S.toSivExprOr S.fail s)
 
 -- | Anti-filter by sieve pattern.
-subtreeOmit :: String -> Sivmap
-subtreeOmit s = SubtreeOmit s (S.toSivExprOr S.fail s)
+sivmapOmit :: String -> Sivmap
+sivmapOmit s = SivmapOmit s (S.toSivExprOr S.fail s)
 
 -- | Filter chain.
-subtreeChain :: O.Bin Sivmap
-subtreeChain SubtreeId f = f
-subtreeChain f SubtreeId = f
-subtreeChain f g = SubtreeChain f g
+sivmapChain :: O.Bin Sivmap
+sivmapChain SivmapId f = f
+sivmapChain f SivmapId = f
+sivmapChain f g = SivmapChain f g
 
 -- | Association filter.
-subtreeAssoc :: String -> String -> Sivmap
-subtreeAssoc = SubtreeAssoc
+sivmapAssoc :: String -> String -> Sivmap
+sivmapAssoc = SivmapAssoc

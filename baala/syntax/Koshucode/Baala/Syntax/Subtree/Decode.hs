@@ -76,21 +76,21 @@ clauseFirstElem cl =
 -- | Decode token trees to subtree patterns.
 --
 --   >>> S.withTrees decodeSubtreePattern "- \"Z1\""
---   Right [SubtreeL SubtreeNone (SubtreeEq "Z1")]
+--   Right [SubtreeL SubtreeNone (SivmapEq "Z1")]
 --
 --   >>> S.withTrees decodeSubtreePattern "> \"Y1\" ( - \"Z1\" )"
---   Right [SubtreeB SubtreeNone (SubtreeEq "Y1") [SubtreeL SubtreeNone (SubtreeEq "Z1")]]
+--   Right [SubtreeB SubtreeNone (SivmapEq "Y1") [SubtreeL SubtreeNone (SivmapEq "Z1")]]
 --
---   >>> S.withTrees decodeSubtreePattern "> \"Y1\" ( - \"Z1\" | - \"Z2\" )"
---   Right [SubtreeB SubtreeNone (SubtreeEq "Y1")
---                   [SubtreeL SubtreeNone (SubtreeEq "Z1"),
---                    SubtreeL SubtreeNone (SubtreeEq "Z2")]]
+--   >>> S.withTrees decodeSubtreePattern "> \"Y1\" ( - \"Z1\" || - \"Z2\" )"
+--   Right [SubtreeB SubtreeNone (SivmapEq "Y1")
+--            [SubtreeL SubtreeNone (SivmapEq "Z1"),
+--             SubtreeL SubtreeNone (SivmapEq "Z2")]]
 --
 --   >>> S.withTrees decodeSubtreePattern ">> \"Y1\" ( - \"Z1\" )"
---   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL SubtreeNone (SubtreeEq "Z1")]]
+--   Right [SubtreeR (SivmapEq "Y1") [SubtreeL SubtreeNone (SivmapEq "Z1")]]
 --
 --   >>> S.withTrees decodeSubtreePattern ">> \"Y1\" ( - A B /z \"Z1\" )"
---   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL (SubtreeText ["A", "B"] (TermName EQ "z")) (SubtreeEq "Z1")]]
+--   Right [SubtreeR (SivmapEq "Y1") [SubtreeL (SubtreeText ["A","B"] (TermName EQ "z")) (SivmapEq "Z1")]]
 --
 decodeSubtreePattern :: [S.Tree] -> B.Ab [S.SubtreePattern]
 decodeSubtreePattern = pats where
@@ -117,11 +117,11 @@ decodeSubtreePattern = pats where
         (_, ts2) -> abSubtree ts2 $ Msg.adlib "Malformed subtree pattern"
 
     filt :: [S.Tree] -> B.Ab S.Sivmap
-    filt []                      = Right $ S.subtreeId
-    filt [P.LQq s]               = Right $ S.subtreeEq s
-    filt [P.LRaw "?", P.LQq s]   = Right $ S.subtreeKeep s
-    filt [P.LRaw "!", P.LQq s]   = Right $ S.subtreeOmit s
-    filt [P.LQq n, P.LRaw "=", P.LQq v]  = Right $ S.subtreeAssoc n v
+    filt []                      = Right $ S.sivmapId
+    filt [P.LQq s]               = Right $ S.sivmapEq s
+    filt [P.LRaw "?", P.LQq s]   = Right $ S.sivmapKeep s
+    filt [P.LRaw "!", P.LQq s]   = Right $ S.sivmapOmit s
+    filt [P.LQq n, P.LRaw "=", P.LQq v]  = Right $ S.sivmapAssoc n v
     filt ts = abSubtree ts $ Msg.adlib "Unknown subtree filter"
 
 splitFilter :: [S.Tree] -> ([[S.Tree]], [S.Tree])

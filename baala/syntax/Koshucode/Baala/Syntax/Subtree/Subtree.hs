@@ -39,8 +39,8 @@ data SubtreePattern
 
 -- | Create non-termification leaf pattern.
 --
---   >>> subtreeL $ S.subtreeEq "foo"
---   SubtreeL SubtreeNone (SubtreeEq "foo")
+--   >>> subtreeL $ S.sivmapEq "foo"
+--   SubtreeL SubtreeNone (SivmapEq "foo")
 --
 subtreeL :: S.Sivmap -> SubtreePattern
 subtreeL = SubtreeL SubtreeNone
@@ -82,19 +82,19 @@ type SubtreeValue = SubtreeOutput O.Value
 
 -- | Test string matches selection rule.
 --
---   >>> subtreeStringTest (S.subtreeEq "foo") <$> ["foo", "foobar", "barfoo"]
+--   >>> subtreeStringTest (S.sivmapEq "foo") <$> ["foo", "foobar", "barfoo"]
 --   [True,False,False]
 --
---   >>> subtreeStringTest (S.subtreeKeep "foo(*)") <$> ["foo", "foobar", "barfoo"]
+--   >>> subtreeStringTest (S.sivmapKeep "foo(*)") <$> ["foo", "foobar", "barfoo"]
 --   [True,True,False]
 --
 subtreeStringTest :: S.Sivmap -> String -> Bool
-subtreeStringTest (S.SubtreeId)        _  = True
-subtreeStringTest (S.SubtreeEq s)      t  = s == t
-subtreeStringTest (S.SubtreeKeep _ e)  t  =       U.sivMatchExpr e t
-subtreeStringTest (S.SubtreeOmit _ e)  t  = not $ U.sivMatchExpr e t
-subtreeStringTest (S.SubtreeChain f g) t  = subtreeStringTest f t && subtreeStringTest g t
-subtreeStringTest (S.SubtreeAssoc _ _) _  = False
+subtreeStringTest (S.SivmapId)        _  = True
+subtreeStringTest (S.SivmapEq s)      t  = s == t
+subtreeStringTest (S.SivmapKeep _ e)  t  =       U.sivMatchExpr e t
+subtreeStringTest (S.SivmapOmit _ e)  t  = not $ U.sivMatchExpr e t
+subtreeStringTest (S.SivmapChain f g) t  = subtreeStringTest f t && subtreeStringTest g t
+subtreeStringTest (S.SivmapAssoc _ _) _  = False
 
 -- | Select subtree.
 --
@@ -106,20 +106,20 @@ subtreeStringTest (S.SubtreeAssoc _ _) _  = False
 --     > [] "Y2"
 --       - "Z3"
 --
---   >>> B.printTrees $ subtree [subtreeB (S.subtreeEq "Y1") [subtreeL (S.subtreeEq "Z1")]] [tree]
+--   >>> B.printTrees $ subtree [subtreeB (S.sivmapEq "Y1") [subtreeL (S.sivmapEq "Z1")]] [tree]
 --   > [] (SubtreeNone,"Y1")
 --     - (SubtreeNone,"Z1")
 --
---   >>> B.printTrees $ subtree [SubtreeR (S.subtreeId) [subtreeL (S.subtreeEq "Z3")]] [tree]
+--   >>> B.printTrees $ subtree [SubtreeR (S.sivmapId) [subtreeL (S.sivmapEq "Z3")]] [tree]
 --   > [] (SubtreeNone,"Y1")
 --     > [] (SubtreeNone,"Y2")
 --       - (SubtreeNone,"Z3")
 --
---   >>> B.printTrees $ subtree [SubtreeR (S.subtreeId) [subtreeL (S.subtreeEq "Z1")]] [tree]
+--   >>> B.printTrees $ subtree [SubtreeR (S.sivmapId) [subtreeL (S.sivmapEq "Z1")]] [tree]
 --   > [] (SubtreeNone,"Y1")
 --     - (SubtreeNone,"Z1")
 --
---   >>> B.printTrees $ subtree [SubtreeB (subtreeText "A" "/y") (S.subtreeId) [SubtreeL (subtreeText "A" "/z") (S.subtreeEq "Z1")]] [tree]
+--   >>> B.printTrees $ subtree [SubtreeB (subtreeText "A" "/y") (S.sivmapId) [SubtreeL (subtreeText "A" "/z") (S.sivmapEq "Z1")]] [tree]
 --   > [] (SubtreeText ["A"] (TermName EQ "y"),"Y1")
 --     - (SubtreeText ["A"] (TermName EQ "z"),"Z1")
 --
