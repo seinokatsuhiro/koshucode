@@ -101,7 +101,7 @@ type ClipTokenCL = B.CodePos -> B.WordCache -> S.InputText -> ClipResultCL
 -- ============================================  Clip
 
 -- | Update token scanner by clip result.
-clipUpdate :: TokenScan String -> ClipResult String -> TokenScan String
+clipUpdate :: TokenScan t -> ClipResult t -> TokenScan t
 clipUpdate r (cs, tok) = B.codeUpdate cs tok r
 
 -- | Update token scanner by clip result with word cache.
@@ -119,7 +119,7 @@ clipUpdateCL r (wtab, cs, toks) = B.codeUpdateListWords wtab cs toks r
 --   >>> clipSpace B.def "  foo bar baz"
 --   ("foo bar baz", TSpace /0.0.0/ 3)
 --
-clipSpace :: ClipToken String
+clipSpace :: (O.Textual t) => ClipToken t
 clipSpace cp cs =
     let (cs', n) = S.nextSpace cs
     in (cs', S.TSpace cp $ n + 1)
@@ -194,11 +194,11 @@ symbolToken f w cp wtab cs =
 --   >>> clipSlot 1 B.def "foo bar baz"
 --   (" bar baz", TSlot /0.0.0/ 1 "foo")
 --
-clipSlot :: Int -> ClipToken String
+clipSlot :: (O.Textual t) => Int -> ClipToken t
 clipSlot n cp cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> (cs', S.TSlot cp n w)
-      Left a         -> ([], S.TUnknown cp cs a)
+      Left a         -> (O.tEmpty, S.TUnknown cp cs a)
 
 -- ---------------------------------  Term
 
@@ -268,7 +268,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
 --   >>> clipBar B.def "12:00| ..."
 --   (" ...", TText /0.0.0/ TextBar "|12:00|")
 --
-clipBar :: B.CodePos -> String -> ClipResult String
+clipBar :: (O.Textual t) => B.CodePos -> t -> ClipResult t
 clipBar cp cs0 = bar (0 :: Int) cs0 where
     text n = O.tAdd '|' $ O.tTake n cs0
     barToken n = S.TText cp S.TextBar $ text n
@@ -283,7 +283,7 @@ clipBar cp cs0 = bar (0 :: Int) cs0 where
     -- judgement sign, like |--, |-x
     judge n (O.tCut -> O.Jp c cs)
         | isJudge c || Ch.isAlpha c  = judge (n + 1) cs
-        | isSymbol c                 = clock n (c:cs)
+        | isSymbol c                 = clock n (O.tAdd c cs)
     judge n cs                       = (cs, barToken n)
 
     -- clock, like |03:30|
