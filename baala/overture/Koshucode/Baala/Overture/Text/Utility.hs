@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Text utility.
@@ -34,9 +35,10 @@ module Koshucode.Baala.Overture.Text.Utility
     prompt, promptWith,
   ) where
 
-import qualified Data.Char                      as Ch
-import qualified System.IO                      as IO
-import qualified Koshucode.Baala.Overture.Type  as O
+import qualified Data.Char                              as Ch
+import qualified System.IO                              as IO
+import qualified Koshucode.Baala.Overture.Type          as O
+import qualified Koshucode.Baala.Overture.Text.Textual  as O
 
 
 -- ============================================  Trim
@@ -46,20 +48,26 @@ import qualified Koshucode.Baala.Overture.Type  as O
 --   >>> trimBegin "  abc  "
 --   "abc  "
 --
-trimBegin :: O.StringMap
-trimBegin = dropWhile Ch.isSpace
+trimBegin :: (O.Textual t) => t -> t
+trimBegin = tDropWhile Ch.isSpace
+
+tDropWhile :: (O.Textual t) => O.Test Char -> t -> t
+tDropWhile f = loop where
+    loop (O.tCut -> Just (c, t)) | f c  = loop t
+    loop t = t
 
 -- | Remove space and space-like characters from the end of string.
 --
 --   >>> trimEnd "  abc  "
 --   "  abc"
 --
-trimEnd :: O.StringMap
-trimEnd [] = []
-trimEnd (x : xs) =
-    case x : trimEnd xs of
-      [y] | Ch.isSpace y -> []
-      ys -> ys
+trimEnd :: (O.Textual t) => t -> t
+trimEnd (O.tCut -> Just (x, xs)) =
+    let ys = x `O.tAdd` trimEnd xs
+    in case O.tCut2 ys of
+         Just (y, Nothing) | Ch.isSpace y -> O.tEmpty
+         _ -> ys
+trimEnd t = t
 
 -- | Remove space and space-like characters
 --   from the beginning and end of string.
@@ -67,7 +75,7 @@ trimEnd (x : xs) =
 --   >>> trimBoth "  abc  "
 --   "abc"
 --
-trimBoth :: O.StringMap
+trimBoth :: (O.Textual t) => t -> t
 trimBoth = trimEnd . trimBegin
 
 
