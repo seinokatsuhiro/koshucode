@@ -72,7 +72,7 @@ changeSection name =
       just scan   = Just $ B.codeChange $ scan changeSection
       unsupp n    = Just $ sectionUnsupported n
 
-sectionUnsupported :: String -> S.TokenScanMap
+sectionUnsupported :: String -> S.TokenScanMap String
 sectionUnsupported msg r@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok r where
     tok  = S.unknownToken cp cs $ Msg.unsupported msg
     cp   = B.codeInputPt r

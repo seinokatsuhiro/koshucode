@@ -130,7 +130,7 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | otherwise              = upd []  $ S.unknownToken cp cs
                                            $ Msg.forbiddenInput $ S.angleQuote (O.charT a)
 
-    aster :: String -> String -> S.TokenScan
+    aster :: String -> String -> S.TokenScan String
     aster (O.tCut -> O.Jp c cs) w
         | w == "****"            = upd (O.tAdd c cs) $ raw w
         | c == '*'               = aster cs (O.tAdd c w)
@@ -153,26 +153,26 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
 --   >>> clipAngle B.def "U+4B> ..."
 --   (" ...", TText /0.0.0/ TextKey "K")
 --
-clipAngle :: B.CodePos -> String -> S.ClipResult
+clipAngle :: B.CodePos -> String -> S.ClipResult String
 clipAngle cp cs0 = angle (0 :: Int) cs0 where
     raw = S.TText cp S.TextRaw
     text n = O.tTake n cs0
 
     -- <...
-    angle :: Int -> String -> S.ClipResult
+    angle :: Int -> String -> S.ClipResult String
     angle n (O.tCut -> O.Jp c cs)
         | S.isSymbol c  = sym n (c:cs)
     angle n cs          = (cs, raw $ O.tAdd '<' $ text n)
 
     -- <symbol ...
-    sym :: Int -> String -> S.ClipResult
+    sym :: Int -> String -> S.ClipResult String
     sym n (O.tCut -> O.Jp c cs)
         | c == '>'      = close n cs
         | S.isSymbol c  = sym (n + 1) cs
     sym n cs            = (cs, raw $ O.tAdd '<' $ text n) -- '<<'
 
     -- <symbol> ...
-    close :: Int -> String -> S.ClipResult
+    close :: Int -> String -> S.ClipResult String
     close n (O.tCut -> O.Jp c cs)
         | c == '>'    = close (n + 1) cs
     close n cs        = (cs, key $ text n)
@@ -192,7 +192,7 @@ clipAngle cp cs0 = angle (0 :: Int) cs0 where
                           Nothing  -> S.TText cp S.TextUnk s
 
 -- | Clip token beginning with "@".
-clipAt :: B.CodePos -> String -> Int -> S.ClipResult
+clipAt :: B.CodePos -> String -> Int -> S.ClipResult String
 clipAt cp = at where
     at (O.tCut -> O.Jp c cs)
        n | c == '@'    = at cs $ n + 1
@@ -200,7 +200,7 @@ clipAt cp = at where
     at cs n            = S.clipSlot n cp cs
 
 -- | Clip local reference token, like @^/g@.
-clipHat :: B.CodePos -> String -> S.ClipResult
+clipHat :: B.CodePos -> String -> S.ClipResult String
 clipHat cp = hat where
     hat (O.tCut -> O.Jp '/' cs) = localToken cs (S.LocalNest . S.toTermName)
     hat cs@(O.tCut -> O.Jp c _)

@@ -31,10 +31,10 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 -- --------------------------------------------
 
 -- | Select scanner based on section name.
-type ChangeSection = String -> Maybe S.TokenScanMap
+type ChangeSection = String -> Maybe (S.TokenScanMap String)
 
 -- | Line begins with triple equal signs is treated as section delimter.
-section :: ChangeSection -> (S.InputText -> S.TokenScan) -> S.TokenScanMap
+section :: ChangeSection -> (S.InputText -> S.TokenScan String) -> S.TokenScanMap String
 section change f
         sc@B.CodeScan { B.codeMap    = prev
                       , B.codeInput  = cs0
@@ -42,7 +42,7 @@ section change f
     body [] (O.tCut -> O.Jp '=' _) = B.codeChange (selectSection change prev) sc
     body _ cs = f cs
 
-selectSection :: ChangeSection -> S.TokenScanMap -> S.TokenScanMap
+selectSection :: ChangeSection -> S.TokenScanMap String -> S.TokenScanMap String
 selectSection change prev
               sc@B.CodeScan { B.codeInputPt  = cp
                             , B.codeInput    = cs0
@@ -61,7 +61,7 @@ selectSection change prev
         | otherwise      = sectionUnexp [] sc
     sec _                = dispatch out  -- end of line
 
-    dispatch :: [S.Token] -> S.TokenScan
+    dispatch :: [S.Token] -> S.TokenScan String
     dispatch [P.TSection] = B.codeChange prev sc
     dispatch ts@[P.TSection, P.TRaw name] =
         case change name of
@@ -69,7 +69,7 @@ selectSection change prev
           Nothing -> sectionUnexp ts sc
     dispatch ts    = sectionUnexp ts sc
 
-sectionUnexp :: [S.Token] -> S.TokenScanMap
+sectionUnexp :: [S.Token] -> S.TokenScanMap String
 sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok sc where
     tok  = S.unknownToken cp cs $ Msg.unexpSect help
     cp | null ts    = B.codeInputPt sc
@@ -83,7 +83,7 @@ sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok sc wher
 -- --------------------------------------------  Simple sections
 
 -- | Token scanner.
-type Scanner = ChangeSection -> S.TokenScanMap
+type Scanner = ChangeSection -> S.TokenScanMap String
 
 -- | Scan tokens in @end@ section.
 scanEnd :: Scanner
@@ -93,7 +93,7 @@ scanEnd _ sc@B.CodeScan { B.codeInput = cs } = comment cs sc
 scanNote :: Scanner
 scanNote change sc = section change (`comment` sc) sc
 
-comment :: S.InputText -> S.TokenScanMap
+comment :: S.InputText -> S.TokenScanMap String
 comment cs sc
     | O.tIsEmpty cs = sc
     | otherwise     = B.codeUpdate "" tok sc

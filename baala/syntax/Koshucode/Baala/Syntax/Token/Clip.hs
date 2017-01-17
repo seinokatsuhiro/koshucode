@@ -74,25 +74,25 @@ isClock c = Ch.isDigit c || c `elem` ".:'+-"
 -- ============================================  Type
 
 -- | Code scanner for token list.
-type TokenScan = B.CodeScan String S.Token
+type TokenScan t = B.CodeScan t (S.TToken t)
 
 -- | Read single token.
-type TokenScanMap = O.Map TokenScan
+type TokenScanMap t = O.Map (TokenScan t)
 
 -- | Clip single-token result.
-type ClipResult = (S.InputText, S.Token)
+type ClipResult t = (t, S.TToken t)
 
 -- | Clip single-token result with word cache.
-type ClipResultC = (B.WordCache, S.InputText, S.Token)
+type ClipResultC t = (B.WordCache, t, S.TToken t)
 
 -- | Clip multiple-tokens result with word cache.
 type ClipResultCL = (B.WordCache, S.InputText, [S.Token])
 
 -- | Clip a next token.
-type ClipToken = B.CodePos -> S.InputText -> ClipResult
+type ClipToken t = B.CodePos -> t -> ClipResult t
 
 -- | Clip a next token with word cache.
-type ClipTokenC = B.CodePos -> B.WordCache -> S.InputText -> ClipResultC
+type ClipTokenC = B.CodePos -> B.WordCache -> S.InputText -> ClipResultC String
 
 -- | Clip a next token with word cache.
 type ClipTokenCL = B.CodePos -> B.WordCache -> S.InputText -> ClipResultCL
@@ -101,15 +101,15 @@ type ClipTokenCL = B.CodePos -> B.WordCache -> S.InputText -> ClipResultCL
 -- ============================================  Clip
 
 -- | Update token scanner by clip result.
-clipUpdate :: TokenScan -> ClipResult -> TokenScan
+clipUpdate :: TokenScan String -> ClipResult String -> TokenScan String
 clipUpdate r (cs, tok) = B.codeUpdate cs tok r
 
 -- | Update token scanner by clip result with word cache.
-clipUpdateC :: TokenScan -> ClipResultC -> TokenScan
+clipUpdateC :: TokenScan String -> ClipResultC String -> TokenScan String
 clipUpdateC r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
 
 -- | Update token scanner by clip result with word cache.
-clipUpdateCL :: TokenScan -> ClipResultCL -> TokenScan
+clipUpdateCL :: TokenScan String -> ClipResultCL -> TokenScan String
 clipUpdateCL r (wtab, cs, toks) = B.codeUpdateListWords wtab cs toks r
 
 -- ---------------------------------  Textual
@@ -119,7 +119,7 @@ clipUpdateCL r (wtab, cs, toks) = B.codeUpdateListWords wtab cs toks r
 --   >>> clipSpace B.def "  foo bar baz"
 --   ("foo bar baz", TSpace /0.0.0/ 3)
 --
-clipSpace :: ClipToken
+clipSpace :: ClipToken String
 clipSpace cp cs =
     let (cs', n) = S.nextSpace cs
     in (cs', S.TSpace cp $ n + 1)
@@ -194,7 +194,7 @@ symbolToken f w cp wtab cs =
 --   >>> clipSlot 1 B.def "foo bar baz"
 --   (" bar baz", TSlot /0.0.0/ 1 "foo")
 --
-clipSlot :: Int -> ClipToken
+clipSlot :: Int -> ClipToken String
 clipSlot n cp cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> (cs', S.TSlot cp n w)
@@ -268,7 +268,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
 --   >>> clipBar B.def "12:00| ..."
 --   (" ...", TText /0.0.0/ TextBar "|12:00|")
 --
-clipBar :: B.CodePos -> String -> ClipResult
+clipBar :: B.CodePos -> String -> ClipResult String
 clipBar cp cs0 = bar (0 :: Int) cs0 where
     text n = O.tAdd '|' $ O.tTake n cs0
     barToken n = S.TText cp S.TextBar $ text n
