@@ -21,10 +21,10 @@ import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 type InputText = String
 
 -- | Split next character sequence from input text.
-type Next a = InputText -> (InputText, a)
+type Next t a = t -> (t, a)
 
 -- | Split next character sequence from input text.
-type AbNext a = InputText -> B.Ab (InputText, a)
+type AbNext t a = t -> B.Ab (t, a)
 
 -- | Test double punctuation character.
 isQQ :: O.Test Char
@@ -39,7 +39,7 @@ isQQ = (== '"')
 --   >>> nextSpace " \tabc"
 --   ("abc", 2)
 --
-nextSpace :: Next Int
+nextSpace :: (O.Textual t) => Next t Int
 nextSpace = loop 0 where
     loop n (O.tCut -> O.Jp c cs)
         | Ch.isSpace c   = loop (n + 1) cs
@@ -56,7 +56,7 @@ nextSpace = loop 0 where
 --   >>> nextQQ "abc\"\"def\" ghi"
 --   Right (" ghi","abc\"def")
 --
-nextQQ :: AbNext String
+nextQQ :: (O.Textual t) => AbNext t t
 nextQQ cs0 = loop O.zero cs0 where
     loop n (O.tCut -> O.Jp c cs)
         | isQQ c      = qq n cs
@@ -73,13 +73,13 @@ nextQQ cs0 = loop O.zero cs0 where
 --   >>> nextBefore "''" "abc'' def"
 --   Right (" def","abc")
 --
-nextBefore :: String -> AbNext String
-nextBefore "" _ = B.bug "nextBefore"
-nextBefore (t0 : to) cs0 = loop O.zero cs0 where
+nextBefore :: (O.Textual t) => t -> AbNext t t
+nextBefore (O.tCut -> O.Jp t0 to) cs0 = loop O.zero cs0 where
     loop n (O.tCut -> O.Jp c cs)
         | c == t0     = case O.tDropPrefix to cs of
                           Just cs' -> Right (cs', O.tTake n cs0)
                           Nothing  -> loop (n + 1) cs
         | otherwise   = loop (n + 1) cs
     loop _ _          = Msg.quotNotEnd
+nextBefore _ _ = B.bug "nextBefore"
 

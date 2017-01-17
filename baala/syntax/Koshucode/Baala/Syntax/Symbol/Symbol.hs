@@ -176,7 +176,7 @@ isCharN'  c  = isCharGn' c || isCharN  c
 --   >>> nextSymbol "= /a"
 --   (" /a", SymbolGeneral "=")
 --
-nextSymbol :: S.Next (Symbol String)
+nextSymbol :: (O.Textual t) => S.Next t (Symbol t)
 nextSymbol cs0 = symbolGpn O.zero cs0 where
     done n cs k           = (cs, k $ O.tTake n cs0)
 
@@ -228,7 +228,7 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
         | isSymbolChar c  = symbolUnk (n + 1) cs
     symbolUnk n cs        = done n cs SymbolUnknown
 
-shortBody :: String -> S.Next (Symbol String)
+shortBody :: (O.Textual t) => t -> S.Next t (Symbol t)
 shortBody pre cs0 = short O.zero cs0 where
     done n cs k           = (cs, k $ O.tTake n cs0)
 
@@ -253,7 +253,7 @@ shortBody pre cs0 = short O.zero cs0 where
 --   >>> nextSymbolPlain "12.0"
 --   Left (AbortReason "Expect ordinary symbol" ...)
 --
-nextSymbolPlain :: S.AbNext String
+nextSymbolPlain :: (O.Textual t) => S.AbNext t t
 nextSymbolPlain cs = getSymbolPlain O.<#> nextSymbol cs
 
 -- | Extract plain symbol text.
