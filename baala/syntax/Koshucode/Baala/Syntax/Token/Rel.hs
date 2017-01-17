@@ -207,6 +207,7 @@ clipHat cp = hat where
         | S.isSymbol c             = localToken cs S.LocalSymbol
     hat cs                         = ([], S.unknownToken cp cs $ Msg.adlib "local")
 
+    localToken :: String -> (String -> S.LocalRef) -> (String, S.Token)
     localToken cs k                = case S.nextSymbolPlain cs of
                                        Right (cs', w) -> (cs', S.TLocal cp (k w) (-1) [])
                                        Left a         -> ([],  S.TUnknown cp cs a)

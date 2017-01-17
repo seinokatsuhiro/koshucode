@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Tokens in Koshucode.
@@ -8,7 +9,8 @@ module Koshucode.Baala.Syntax.Token.Token
     SubtypeName (..),
 
     -- * Token
-    Token (..),
+    Token,
+    TToken (..),
     rawTextToken,
     unknownToken,
 
@@ -31,18 +33,21 @@ class SubtypeName a where
 
 -- --------------------------------------------  Token type
 
--- | There are eleven types of tokens.
-data Token
-    = TText     B.CodePos TextForm String
+-- | String token.
+type Token = TToken String
+
+-- | Textual token.
+data TToken t
+    = TText     B.CodePos TextForm t
                 -- ^ __1 Textual:__ Text — @'code@, @"text"@, etc
-    | TShort    B.CodePos String String
+    | TShort    B.CodePos t t
                 -- ^ __2 Textual:__ Prefixed shorten text — @short.proper@
-    | TTerm     B.CodePos String
+    | TTerm     B.CodePos t
                 -- ^ __3 Textual:__ Term name — @\/term@
 
     | TLocal    B.CodePos LocalRef Int [Token]
                 -- ^ __4 Symbolic:__ Local name — @^r@, @^\/r@
-    | TSlot     B.CodePos Int String
+    | TSlot     B.CodePos Int t
                 -- ^ __5 Symbolic:__ Slot name.
                 --   'Int' represents slot level, i.e.,
                 --   0 for local positional slots,
@@ -53,21 +58,21 @@ data Token
                 -- ^ __6 Symbolic:__ Blank name.
                 --   (This is only used in building content expression)
 
-    | TOpen     B.CodePos String
+    | TOpen     B.CodePos t
                 -- ^ __7 Punctuational:__ Opening bracket — @(@, @{@, @{=@, etc
-    | TClose    B.CodePos String
+    | TClose    B.CodePos t
                 -- ^ __8 Punctuational:__ Closing bracket — @=}@, @}@, @)@, etc
     | TSpace    B.CodePos Int
                 -- ^ __9 Punctuational:__ /N/ space characters
-    | TComment  B.CodePos String
+    | TComment  B.CodePos t
                 -- ^ __10 Punctuational:__ Comment — @** comment line@
-    | TUnknown  B.CodePos String B.AbortReason
+    | TUnknown  B.CodePos t B.AbortReason
                 -- ^ __11 Other:__ Unknown token
 
       deriving (Show, Eq, Ord)
 
 -- | @\"text\"@, @\"open\"@, ...
-instance SubtypeName Token where
+instance SubtypeName (TToken t) where
      subtypeName (TText     _ _ _  ) = "text"
      subtypeName (TShort    _ _ _  ) = "short"
      subtypeName (TTerm     _ _    ) = "term"
@@ -80,15 +85,7 @@ instance SubtypeName Token where
      subtypeName (TName     _ _    ) = "name"
      subtypeName (TUnknown  _ _ _  ) = "unknown"
 
-instance B.Name Token where
-    name (TSlot      _ _ s)  = s
-    name (TText      _ _ s)  = s
-    name (TOpen        _ s)  = s
-    name (TClose       _ s)  = s
-    name (TComment     _ s)  = s
-    name x = error $ "unknown name: " ++ show x
-
-instance B.GetCodePos Token where
+instance B.GetCodePos (TToken t) where
     getCPs (TText    cp _ _)    = [cp]
     getCPs (TShort   cp _ _)    = [cp]
     getCPs (TTerm    cp _)      = [cp]
@@ -102,11 +99,11 @@ instance B.GetCodePos Token where
     getCPs (TUnknown cp _ _)    = [cp]
 
 -- | Create raw text token.
-rawTextToken :: String -> Token
+rawTextToken :: t -> TToken t
 rawTextToken = TText B.def TextRaw
 
 -- | Create unknown token.
-unknownToken :: B.CodePos -> String -> B.Ab a -> Token
+unknownToken :: B.CodePos -> t -> B.Ab a -> TToken t
 unknownToken cp w (Left a)  = TUnknown cp w a
 unknownToken cp w (Right _) = TUnknown cp w $ B.abortBecause "bug?"
 
