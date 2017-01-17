@@ -14,11 +14,11 @@ module Koshucode.Baala.Syntax.Subtree.Decode
 
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Subtext                 as U
 import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Token            as S
 import qualified Koshucode.Baala.Syntax.Tree             as S
 import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
-import qualified Koshucode.Baala.Syntax.Subtree.Filter   as S
 import qualified Koshucode.Baala.Syntax.Token.Pattern    as P
 import qualified Koshucode.Baala.Syntax.Tree.Pattern     as P
 import qualified Koshucode.Baala.Base.Message            as Msg
@@ -116,12 +116,12 @@ decodeSubtreePattern = pats where
                        Right (mconcat fs', [])
         (_, ts2) -> abSubtree ts2 $ Msg.adlib "Malformed subtree pattern"
 
-    filt :: [S.Tree] -> B.Ab (S.Sivmap String)
-    filt []                      = Right $ S.sivmapId
-    filt [P.LQq s]               = Right $ S.sivmapEq s
-    filt [P.LRaw "?", P.LQq s]   = Right $ S.sivmapKeep s
-    filt [P.LRaw "!", P.LQq s]   = Right $ S.sivmapOmit s
-    filt [P.LQq n, P.LRaw "=", P.LQq v]  = Right $ S.sivmapAssoc n v
+    filt :: [S.Tree] -> B.Ab (U.Sivmap String)
+    filt []                      = Right $ U.sivmapId
+    filt [P.LQq s]               = Right $ U.sivmapEq s
+    filt [P.LRaw "?", P.LQq s]   = Right $ U.sivmapKeep s
+    filt [P.LRaw "!", P.LQq s]   = Right $ U.sivmapOmit s
+    filt [P.LQq n, P.LRaw "=", P.LQq v]  = Right $ U.sivmapAssoc n v
     filt ts = abSubtree ts $ Msg.adlib "Unknown subtree filter"
 
 splitFilter :: [S.Tree] -> ([[S.Tree]], [S.Tree])

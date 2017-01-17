@@ -25,16 +25,15 @@ import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Subtext                 as U
 import qualified Koshucode.Baala.Syntax.Symbol           as S
-import qualified Koshucode.Baala.Syntax.Subtree.Filter   as S
 
 
 -- ============================================  Pattern
 
 -- | Subtree pattern.
 data SubtreePattern
-    = SubtreeL SubtreeTerm (S.Sivmap String)                   -- ^ Leaf
-    | SubtreeB SubtreeTerm (S.Sivmap String) [SubtreePattern]  -- ^ Branch
-    | SubtreeR (S.Sivmap String) [SubtreePattern]              -- ^ Recursive branch
+    = SubtreeL SubtreeTerm (U.Sivmap String)                   -- ^ Leaf
+    | SubtreeB SubtreeTerm (U.Sivmap String) [SubtreePattern]  -- ^ Branch
+    | SubtreeR (U.Sivmap String) [SubtreePattern]              -- ^ Recursive branch
       deriving (Show, Eq)
 
 -- | Create non-termification leaf pattern.
@@ -42,11 +41,11 @@ data SubtreePattern
 --   >>> subtreeL $ S.sivmapEq "foo"
 --   SubtreeL SubtreeNone (SivmapEq "foo")
 --
-subtreeL :: S.Sivmap String -> SubtreePattern
+subtreeL :: U.Sivmap String -> SubtreePattern
 subtreeL = SubtreeL SubtreeNone
 
 -- | Create non-termification branch pattern.
-subtreeB :: S.Sivmap String -> [SubtreePattern] -> SubtreePattern
+subtreeB :: U.Sivmap String -> [SubtreePattern] -> SubtreePattern
 subtreeB = SubtreeB SubtreeNone
 
 -- | Termification of subtree content.
@@ -88,13 +87,13 @@ type SubtreeValue = SubtreeOutput O.Value
 --   >>> subtreeStringTest (S.sivmapKeep "foo(*)") <$> ["foo", "foobar", "barfoo"]
 --   [True,True,False]
 --
-subtreeStringTest :: S.Sivmap String -> String -> Bool
-subtreeStringTest (S.SivmapId)        _  = True
-subtreeStringTest (S.SivmapEq s)      t  = s == t
-subtreeStringTest (S.SivmapKeep _ e)  t  =       U.sivMatchExpr e t
-subtreeStringTest (S.SivmapOmit _ e)  t  = not $ U.sivMatchExpr e t
-subtreeStringTest (S.SivmapChain f g) t  = subtreeStringTest f t && subtreeStringTest g t
-subtreeStringTest (S.SivmapAssoc _ _) _  = False
+subtreeStringTest :: U.Sivmap String -> String -> Bool
+subtreeStringTest (U.SivmapId)        _  = True
+subtreeStringTest (U.SivmapEq s)      t  = s == t
+subtreeStringTest (U.SivmapKeep _ e)  t  =       U.sivMatchExpr e t
+subtreeStringTest (U.SivmapOmit _ e)  t  = not $ U.sivMatchExpr e t
+subtreeStringTest (U.SivmapChain f g) t  = subtreeStringTest f t && subtreeStringTest g t
+subtreeStringTest (U.SivmapAssoc _ _) _  = False
 
 -- | Select subtree.
 --
@@ -127,7 +126,7 @@ subtree :: [SubtreePattern] -> [Subtree String] -> [SubtreeOutput String]
 subtree = subtreeBy subtreeStringTest
 
 -- | Select subtree by element tester.
-subtreeBy :: (S.Sivmap String -> a -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
+subtreeBy :: (U.Sivmap String -> a -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
 subtreeBy test = loop where
     loop ps0 ts = p1 O.<++> ts where
         p1 t = p2 t O.<?> ps0
@@ -149,7 +148,7 @@ subtreeBy test = loop where
 subtreeOne :: [SubtreePattern] -> O.Map [Subtree String]
 subtreeOne = subtreeOneBy subtreeStringTest
 
-subtreeOneBy :: (S.Sivmap String -> String -> Bool) -> [SubtreePattern] -> O.Map [Subtree String]
+subtreeOneBy :: (U.Sivmap String -> String -> Bool) -> [SubtreePattern] -> O.Map [Subtree String]
 subtreeOneBy test ps0 ts = p1 O.<++> ts where
     p1 t = p2 t O.<?> ps0
 

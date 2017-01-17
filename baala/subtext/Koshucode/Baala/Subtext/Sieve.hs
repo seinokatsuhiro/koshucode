@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Subtext.Sieve
  ( -- * Module
+   module Koshucode.Baala.Subtext.Sieve.Sivmap,
    module Koshucode.Baala.Subtext.Sieve.Token,
    module Koshucode.Baala.Subtext.Sieve.Tree,
 
@@ -11,6 +12,7 @@ module Koshucode.Baala.Subtext.Sieve
    -- $Syntax
  ) where
 
+import Koshucode.Baala.Subtext.Sieve.Sivmap
 import Koshucode.Baala.Subtext.Sieve.Token
 import Koshucode.Baala.Subtext.Sieve.Tree
 

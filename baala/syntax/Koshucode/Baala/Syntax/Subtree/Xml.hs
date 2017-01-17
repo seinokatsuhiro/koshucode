@@ -27,7 +27,6 @@ import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Subtext                 as U
 import qualified Koshucode.Baala.Syntax.Symbol           as S
-import qualified Koshucode.Baala.Syntax.Subtree.Filter   as S
 import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 
 
@@ -133,17 +132,17 @@ xmlOutput :: [S.SubtreePattern] -> [XmlTree String] -> [XmlOutput String]
 xmlOutput = S.subtreeBy xmlTest
 
 -- | Test XML term matches selection rule.
-xmlTest :: S.Sivmap String -> XmlTerm String -> Bool
-xmlTest (S.SivmapId)        _  = True
-xmlTest (S.SivmapEq s)      t  = s == xmlString t
-xmlTest (S.SivmapKeep _ e)  t  =       U.sivMatchExpr e $ xmlString t
-xmlTest (S.SivmapOmit _ e)  t  = not $ U.sivMatchExpr e $ xmlString t
-xmlTest (S.SivmapChain f g) t  = xmlTest f t && xmlTest g t
-xmlTest (S.SivmapAssoc n v) (XmlElem _ xs, _) =
+xmlTest :: U.Sivmap String -> XmlTerm String -> Bool
+xmlTest (U.SivmapId)        _  = True
+xmlTest (U.SivmapEq s)      t  = s == xmlString t
+xmlTest (U.SivmapKeep _ e)  t  =       U.sivMatchExpr e $ xmlString t
+xmlTest (U.SivmapOmit _ e)  t  = not $ U.sivMatchExpr e $ xmlString t
+xmlTest (U.SivmapChain f g) t  = xmlTest f t && xmlTest g t
+xmlTest (U.SivmapAssoc n v) (XmlElem _ xs, _) =
     case lookup n xs of
       Nothing -> True
       Just v' -> v == v'
-xmlTest (S.SivmapAssoc _ _) _ = False
+xmlTest (U.SivmapAssoc _ _) _ = False
 
 xmlString :: XmlTerm String -> String
 xmlString (XmlElem s _ , _) = s

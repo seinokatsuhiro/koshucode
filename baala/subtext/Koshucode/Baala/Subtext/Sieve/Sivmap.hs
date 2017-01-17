@@ -2,7 +2,7 @@
 
 -- | Textual list mapping.
 
-module Koshucode.Baala.Syntax.Subtree.Filter
+module Koshucode.Baala.Subtext.Sieve.Sivmap
   ( Sivmap (..),
     sivmapId, sivmapEq,
     sivmapKeep, sivmapOmit,
@@ -11,7 +11,8 @@ module Koshucode.Baala.Syntax.Subtree.Filter
   ) where
 
 import qualified Koshucode.Baala.Overture                as O
-import qualified Koshucode.Baala.Subtext                 as S
+import qualified Koshucode.Baala.Subtext.Operator        as S
+import qualified Koshucode.Baala.Subtext.Sieve.Tree      as S
 
 -- | Mapping for textual lists.
 data Sivmap t
