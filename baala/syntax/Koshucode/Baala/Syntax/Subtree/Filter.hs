@@ -3,52 +3,52 @@
 -- | Subtree filter.
 
 module Koshucode.Baala.Syntax.Subtree.Filter
-  ( SubtreeFilter (..),
+  ( Sivmap (..),
     subtreeId, subtreeEq,
     subtreeKeep, subtreeOmit,
+    subtreeAssoc,
     subtreeChain,
-    subtreeAttr,
   ) where
 
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Subtext                 as S
 
 -- | Subtree filter.
-data SubtreeFilter
-    = SubtreeId                                 -- ^ Identity
-    | SubtreeEq    String                       -- ^ Equality
-    | SubtreeKeep  String S.SivExpr             -- ^ Keep by sieve pattern
-    | SubtreeOmit  String S.SivExpr             -- ^ Omit by sieve pattern
-    | SubtreeAttr  String String                -- ^ Attribute
-    | SubtreeChain SubtreeFilter SubtreeFilter  -- ^ Filter chain
+data Sivmap
+    = SubtreeId                         -- ^ Identity
+    | SubtreeEq    String               -- ^ Equality
+    | SubtreeKeep  String S.SivExpr     -- ^ Keep by sieve pattern
+    | SubtreeOmit  String S.SivExpr     -- ^ Omit by sieve pattern
+    | SubtreeAssoc String String        -- ^ Associatoin of key and value
+    | SubtreeChain Sivmap Sivmap        -- ^ Filter chain
       deriving (Show, Eq)
 
-instance Monoid SubtreeFilter where
+instance Monoid Sivmap where
     mempty  = SubtreeId
     mappend = subtreeChain
 
 -- | Identity filter.
-subtreeId :: SubtreeFilter
+subtreeId :: Sivmap
 subtreeId = SubtreeId
 
 -- | Equal filter.
-subtreeEq :: String -> SubtreeFilter
+subtreeEq :: String -> Sivmap
 subtreeEq = SubtreeEq
 
 -- | Filter by sieve pattern.
-subtreeKeep :: String -> SubtreeFilter
+subtreeKeep :: String -> Sivmap
 subtreeKeep s = SubtreeKeep s (S.toSivExprOr S.fail s)
 
 -- | Anti-filter by sieve pattern.
-subtreeOmit :: String -> SubtreeFilter
+subtreeOmit :: String -> Sivmap
 subtreeOmit s = SubtreeOmit s (S.toSivExprOr S.fail s)
 
 -- | Filter chain.
-subtreeChain :: O.Bin SubtreeFilter
+subtreeChain :: O.Bin Sivmap
 subtreeChain SubtreeId f = f
 subtreeChain f SubtreeId = f
 subtreeChain f g = SubtreeChain f g
 
--- | Attribute filter.
-subtreeAttr :: String -> String -> SubtreeFilter
-subtreeAttr = SubtreeAttr
+-- | Association filter.
+subtreeAssoc :: String -> String -> Sivmap
+subtreeAssoc = SubtreeAssoc

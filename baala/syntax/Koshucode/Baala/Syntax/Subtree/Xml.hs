@@ -133,17 +133,17 @@ xmlOutput :: [S.SubtreePattern] -> [XmlTree String] -> [XmlOutput String]
 xmlOutput = S.subtreeBy xmlTest
 
 -- | Test XML term matches selection rule.
-xmlTest :: S.SubtreeFilter -> XmlTerm String -> Bool
+xmlTest :: S.Sivmap -> XmlTerm String -> Bool
 xmlTest (S.SubtreeId)        _  = True
 xmlTest (S.SubtreeEq s)      t  = s == xmlString t
 xmlTest (S.SubtreeKeep _ e)  t  =       U.sivMatchExpr e $ xmlString t
 xmlTest (S.SubtreeOmit _ e)  t  = not $ U.sivMatchExpr e $ xmlString t
 xmlTest (S.SubtreeChain f g) t  = xmlTest f t && xmlTest g t
-xmlTest (S.SubtreeAttr n v) (XmlElem _ xs, _) =
+xmlTest (S.SubtreeAssoc n v) (XmlElem _ xs, _) =
     case lookup n xs of
       Nothing -> True
       Just v' -> v == v'
-xmlTest (S.SubtreeAttr _ _) _  = False
+xmlTest (S.SubtreeAssoc _ _) _ = False
 
 xmlString :: XmlTerm String -> String
 xmlString (XmlElem s _ , _) = s

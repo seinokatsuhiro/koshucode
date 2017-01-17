@@ -116,12 +116,12 @@ decodeSubtreePattern = pats where
                        Right (mconcat fs', [])
         (_, ts2) -> abSubtree ts2 $ Msg.adlib "Malformed subtree pattern"
 
-    filt :: [S.Tree] -> B.Ab S.SubtreeFilter
+    filt :: [S.Tree] -> B.Ab S.Sivmap
     filt []                      = Right $ S.subtreeId
     filt [P.LQq s]               = Right $ S.subtreeEq s
     filt [P.LRaw "?", P.LQq s]   = Right $ S.subtreeKeep s
     filt [P.LRaw "!", P.LQq s]   = Right $ S.subtreeOmit s
-    filt [P.LQq n, P.LRaw "=", P.LQq v]  = Right $ S.subtreeAttr n v
+    filt [P.LQq n, P.LRaw "=", P.LQq v]  = Right $ S.subtreeAssoc n v
     filt ts = abSubtree ts $ Msg.adlib "Unknown subtree filter"
 
 splitFilter :: [S.Tree] -> ([[S.Tree]], [S.Tree])
