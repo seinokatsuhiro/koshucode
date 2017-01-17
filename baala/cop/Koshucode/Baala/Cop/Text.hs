@@ -7,6 +7,7 @@
 module Koshucode.Baala.Cop.Text
   ( copsText,
     copSiv,
+    copPad,
     copSuffix, copUnsuffix,
   ) where
 
@@ -54,6 +55,9 @@ copsText =
     , D.CopCalc  (D.copNormal "divide-text-last")  $ copDivideTextBy divideLast
     , D.CopCalc  (D.copNormal "divide-text-end")   $ copDivideTextBy divideEnd
     , D.CopCalc  (D.copNormal "divide-text-all")   $ copDivideTextBy divideAll
+
+    , D.CopCalc  (D.copNormal "pad-begin")         $ copPad O.padBeginWith
+    , D.CopCalc  (D.copNormal "pad-end")           $ copPad O.padEndWith
 
     , D.CopCalc  (D.copNormal "unwords")          copUnwords
     , D.CopCalc  (D.copNormal "unwords-by")       copUnwordsBy
@@ -406,6 +410,17 @@ extractText c
     | D.isText c  = Just $ D.gText c
     | D.isTerm c  = Just $ S.termNameContent $ D.gTerm c
     | otherwise   = Nothing
+
+
+-- ----------------------  padding
+
+-- | [pad-begin /CHAR/ /SIZE/ /TEXT/] Pad /CHAR/ to beginning of /TEXT/ upto /SIZE/.
+--   [pad-end /CHAR/ /SIZE/ /TEXT/] Pad /CHAR/ to end of /TEXT/ upto /SIZE/.
+copPad :: (D.CContent c) => (Char -> Int -> O.StringMap) -> D.CopCalc c
+copPad pad [D.getText -> Right [c], D.getIntegral -> Right n, D.getText -> Right t] =
+    D.putText $ pad c n t
+copPad _ cs = Msg.unexpArg cs ["padding character", "max size", "text"]
+
 
 
 -- ----------------------  suffix & unsuffix
