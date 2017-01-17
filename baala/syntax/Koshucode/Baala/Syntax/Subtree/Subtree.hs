@@ -14,6 +14,7 @@ module Koshucode.Baala.Syntax.Subtree.Subtree
     -- * Conversion
     Subtree,
     SubtreeOutput,
+    SubtreeValue,
     subtreeStringTest,
     subtree, subtreeBy,
     subtreeOne,
@@ -67,6 +68,9 @@ type Subtree a = B.RawTree [SubtreePattern] a a
 
 -- | Subtree with termified elements.
 type SubtreeOutput a = B.RawTree [SubtreePattern] (SubtreeTerm, a) (SubtreeTerm, a)
+
+-- | Subtree with value.
+type SubtreeValue = SubtreeOutput O.Value
 
 -- | Test string matches selection rule.
 --
@@ -153,10 +157,10 @@ subtreeOneBy test ps0 ts = p1 O.<++> ts where
     p2 _ _ = Nothing
 
 -- | Extract data from subtree.
-subtreeData :: SubtreeOutput O.Value -> [(S.JudgeClass, [S.Term O.Value])]
+subtreeData :: SubtreeValue -> [S.RawJudge O.Value]
 subtreeData tree = gatherData O.<++> subtreeTerms tree
 
-gatherData :: [(S.JudgeClass, S.Term O.Value)] -> [(S.JudgeClass, [S.Term O.Value])]
+gatherData :: [(S.JudgeClass, S.Term O.Value)] -> [S.RawJudge O.Value]
 gatherData xs = gatherTerms O.<$$> B.gatherToAssocOrder xs
 
 gatherTerms :: O.Map [(S.Term O.Value)]
@@ -164,7 +168,7 @@ gatherTerms ts = content O.<$$> B.gatherToAssocOrder ts where
     content [c] = c
     content cs  = O.VList cs
 
-subtreeTerms :: SubtreeOutput O.Value -> [[(S.JudgeClass, S.Term O.Value)]]
+subtreeTerms :: SubtreeValue -> [[(S.JudgeClass, S.Term O.Value)]]
 subtreeTerms = branch where
     branch t@(B.TreeL _) = [leaf t]
     branch (B.TreeB _ term xs) =

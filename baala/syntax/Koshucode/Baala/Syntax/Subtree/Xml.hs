@@ -15,8 +15,8 @@ module Koshucode.Baala.Syntax.Subtree.Xml
     xmlDecode,
 
     -- * Conversion
-    XmlTreeOutput,
-    xmlSubtree,
+    XmlOutput,
+    xmlOutput,
     xmlData,
     xmlSubtreeData,
   ) where
@@ -126,36 +126,37 @@ xmlDecode = xmlTrees . xmlTokens
 -- ============================================  Conversion
 
 -- | XML output tree.
-type XmlTreeOutput s = S.SubtreeOutput (XmlTerm s)
+type XmlOutput s = S.SubtreeOutput (XmlTerm s)
 
 -- | Calculate subtree of XML tree.
-xmlSubtree :: [S.SubtreePattern] -> [XmlTree String] -> [XmlTreeOutput String]
-xmlSubtree = S.subtreeBy subtreeXmlTest
-
-xmlKeyString :: XmlTerm String -> String
-xmlKeyString (XmlElem s _ , _) = s
-xmlKeyString (XmlAttr s   , _) = s
-xmlKeyString (XmlText     , _) = "@text"
-xmlKeyString (XmlComment  , _) = "@comment"
+xmlOutput :: [S.SubtreePattern] -> [XmlTree String] -> [XmlOutput String]
+xmlOutput = S.subtreeBy xmlTest
 
 -- | Test XML term matches selection rule.
-subtreeXmlTest :: S.SubtreeFilter -> XmlTerm String -> Bool
-subtreeXmlTest (S.SubtreeId)        _  = True
-subtreeXmlTest (S.SubtreeEq s)      t  = s == xmlKeyString t
-subtreeXmlTest (S.SubtreeKeep _ e)  t  =       U.sivMatchExpr e $ xmlKeyString t
-subtreeXmlTest (S.SubtreeOmit _ e)  t  = not $ U.sivMatchExpr e $ xmlKeyString t
-subtreeXmlTest (S.SubtreeChain f g) t  = subtreeXmlTest f t && subtreeXmlTest g t
-subtreeXmlTest (S.SubtreeAttr n v) (XmlElem _ xs, _) =
+xmlTest :: S.SubtreeFilter -> XmlTerm String -> Bool
+xmlTest (S.SubtreeId)        _  = True
+xmlTest (S.SubtreeEq s)      t  = s == xmlString t
+xmlTest (S.SubtreeKeep _ e)  t  =       U.sivMatchExpr e $ xmlString t
+xmlTest (S.SubtreeOmit _ e)  t  = not $ U.sivMatchExpr e $ xmlString t
+xmlTest (S.SubtreeChain f g) t  = xmlTest f t && xmlTest g t
+xmlTest (S.SubtreeAttr n v) (XmlElem _ xs, _) =
     case lookup n xs of
       Nothing -> True
       Just v' -> v == v'
-subtreeXmlTest (S.SubtreeAttr _ _) _  = False
+xmlTest (S.SubtreeAttr _ _) _  = False
+
+xmlString :: XmlTerm String -> String
+xmlString (XmlElem s _ , _) = s
+xmlString (XmlAttr s   , _) = s
+xmlString (XmlText     , _) = "@text"
+xmlString (XmlComment  , _) = "@comment"
 
 -- | Extract data from XML output tree.
-xmlData :: XmlTreeOutput String -> [S.RawJudge O.Value]
+xmlData :: XmlOutput String -> [S.RawJudge O.Value]
 xmlData = S.subtreeData . xmlValue
 
-xmlValue :: XmlTreeOutput String -> S.SubtreeOutput O.Value
+-- | Convert XML output to value tree.
+xmlValue :: XmlOutput String -> S.SubtreeValue
 xmlValue = snd . loop 1 where
     loop i (B.TreeL z)      = (i + 1, B.TreeL (value i z))
     loop i (B.TreeB b y xs) = let (i', xs') = branch (i + 1) [] xs
@@ -171,4 +172,4 @@ xmlValue = snd . loop 1 where
 
 -- | Calculate XML subtree and extract data.
 xmlSubtreeData :: [S.SubtreePattern] -> [XmlTree String] -> [S.RawJudge O.Value]
-xmlSubtreeData ps ts = xmlData O.<++> xmlSubtree ps ts
+xmlSubtreeData ps ts = xmlData O.<++> xmlOutput ps ts
