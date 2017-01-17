@@ -31,7 +31,7 @@ data CodeScan i o = CodeScan
      , codeInputPt  :: B.CodePos          -- ^ Code position
      , codeInput    :: i                  -- ^ Input text
      , codeOutput   :: [o]                -- ^ Output tokens
-     , codeWords    :: WordCache          -- ^ Cached words
+     , codeWords    :: WordCache i        -- ^ Cached words
      }
 
 -- | Return 'codeInputPt'.
@@ -43,10 +43,10 @@ instance B.GetCodePos (CodeScan i o) where
 type CodeScanMap i o = O.Map (CodeScan i o)
 
 -- | Cached words.
-type WordCache = O.CacheS String
+type WordCache t = O.Cache t t
 
 -- | Empty word cache.
-emptyWordCache :: WordCache
+emptyWordCache :: WordCache t
 emptyWordCache = O.cache [] id
 
 -- | Test scanner at the beginning of line, i.e., no output collected.
@@ -125,7 +125,7 @@ codeUpdate cs tok sc =
        , codeOutput = tok : codeOutput sc }
 
 -- | Update code scanner with word table.
-codeUpdateWords :: WordCache -> i -> o -> CodeScanMap i o
+codeUpdateWords :: WordCache i -> i -> o -> CodeScanMap i o
 codeUpdateWords ws cs tok sc =
     sc { codeInput  = cs
        , codeOutput = tok : codeOutput sc
@@ -138,7 +138,7 @@ codeUpdateList cs toks sc =
        , codeOutput = toks ++ codeOutput sc }
 
 -- | Multi-element and cached version of 'codeUpdate'.
-codeUpdateListWords :: WordCache -> i -> [o] -> CodeScanMap i o
+codeUpdateListWords :: WordCache i -> i -> [o] -> CodeScanMap i o
 codeUpdateListWords ws cs toks sc =
     sc { codeInput  = cs
        , codeOutput = toks ++ codeOutput sc

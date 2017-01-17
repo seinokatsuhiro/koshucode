@@ -83,19 +83,19 @@ type TokenScanMap t = O.Map (TokenScan t)
 type ClipResult t = (t, S.TToken t)
 
 -- | Clip single-token result with word cache.
-type ClipResultC t = (B.WordCache, t, S.TToken t)
+type ClipResultC t = (B.WordCache t, t, S.TToken t)
 
 -- | Clip multiple-tokens result with word cache.
-type ClipResultCL = (B.WordCache, S.InputText, [S.Token])
+type ClipResultCL = (B.WordCache String, S.InputText, [S.Token])
 
 -- | Clip a next token.
 type ClipToken t = B.CodePos -> t -> ClipResult t
 
 -- | Clip a next token with word cache.
-type ClipTokenC = B.CodePos -> B.WordCache -> S.InputText -> ClipResultC String
+type ClipTokenC = B.CodePos -> B.WordCache String -> S.InputText -> ClipResultC String
 
 -- | Clip a next token with word cache.
-type ClipTokenCL = B.CodePos -> B.WordCache -> S.InputText -> ClipResultCL
+type ClipTokenCL = B.CodePos -> B.WordCache String -> S.InputText -> ClipResultCL
 
 
 -- ============================================  Clip
