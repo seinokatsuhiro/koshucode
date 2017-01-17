@@ -32,9 +32,9 @@ import qualified Koshucode.Baala.Syntax.Subtree.Filter   as S
 
 -- | Subtree pattern.
 data SubtreePattern
-    = SubtreeL SubtreeTerm S.Sivmap       -- ^ Leaf
-    | SubtreeB SubtreeTerm S.Sivmap [SubtreePattern]  -- ^ Branch
-    | SubtreeR S.Sivmap [SubtreePattern]  -- ^ Recursive branch
+    = SubtreeL SubtreeTerm (S.Sivmap String)                   -- ^ Leaf
+    | SubtreeB SubtreeTerm (S.Sivmap String) [SubtreePattern]  -- ^ Branch
+    | SubtreeR (S.Sivmap String) [SubtreePattern]              -- ^ Recursive branch
       deriving (Show, Eq)
 
 -- | Create non-termification leaf pattern.
@@ -42,11 +42,11 @@ data SubtreePattern
 --   >>> subtreeL $ S.sivmapEq "foo"
 --   SubtreeL SubtreeNone (SivmapEq "foo")
 --
-subtreeL :: S.Sivmap -> SubtreePattern
+subtreeL :: S.Sivmap String -> SubtreePattern
 subtreeL = SubtreeL SubtreeNone
 
 -- | Create non-termification branch pattern.
-subtreeB :: S.Sivmap -> [SubtreePattern] -> SubtreePattern
+subtreeB :: S.Sivmap String -> [SubtreePattern] -> SubtreePattern
 subtreeB = SubtreeB SubtreeNone
 
 -- | Termification of subtree content.
@@ -88,7 +88,7 @@ type SubtreeValue = SubtreeOutput O.Value
 --   >>> subtreeStringTest (S.sivmapKeep "foo(*)") <$> ["foo", "foobar", "barfoo"]
 --   [True,True,False]
 --
-subtreeStringTest :: S.Sivmap -> String -> Bool
+subtreeStringTest :: S.Sivmap String -> String -> Bool
 subtreeStringTest (S.SivmapId)        _  = True
 subtreeStringTest (S.SivmapEq s)      t  = s == t
 subtreeStringTest (S.SivmapKeep _ e)  t  =       U.sivMatchExpr e t
@@ -127,7 +127,7 @@ subtree :: [SubtreePattern] -> [Subtree String] -> [SubtreeOutput String]
 subtree = subtreeBy subtreeStringTest
 
 -- | Select subtree by element tester.
-subtreeBy :: (S.Sivmap -> a -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
+subtreeBy :: (S.Sivmap String -> a -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
 subtreeBy test = loop where
     loop ps0 ts = p1 O.<++> ts where
         p1 t = p2 t O.<?> ps0
@@ -149,7 +149,7 @@ subtreeBy test = loop where
 subtreeOne :: [SubtreePattern] -> O.Map [Subtree String]
 subtreeOne = subtreeOneBy subtreeStringTest
 
-subtreeOneBy :: (S.Sivmap -> String -> Bool) -> [SubtreePattern] -> O.Map [Subtree String]
+subtreeOneBy :: (S.Sivmap String -> String -> Bool) -> [SubtreePattern] -> O.Map [Subtree String]
 subtreeOneBy test ps0 ts = p1 O.<++> ts where
     p1 t = p2 t O.<?> ps0
 

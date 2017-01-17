@@ -116,7 +116,7 @@ decodeSubtreePattern = pats where
                        Right (mconcat fs', [])
         (_, ts2) -> abSubtree ts2 $ Msg.adlib "Malformed subtree pattern"
 
-    filt :: [S.Tree] -> B.Ab S.Sivmap
+    filt :: [S.Tree] -> B.Ab (S.Sivmap String)
     filt []                      = Right $ S.sivmapId
     filt [P.LQq s]               = Right $ S.sivmapEq s
     filt [P.LRaw "?", P.LQq s]   = Right $ S.sivmapKeep s

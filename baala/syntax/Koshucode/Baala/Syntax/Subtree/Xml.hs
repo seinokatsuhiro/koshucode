@@ -133,7 +133,7 @@ xmlOutput :: [S.SubtreePattern] -> [XmlTree String] -> [XmlOutput String]
 xmlOutput = S.subtreeBy xmlTest
 
 -- | Test XML term matches selection rule.
-xmlTest :: S.Sivmap -> XmlTerm String -> Bool
+xmlTest :: S.Sivmap String -> XmlTerm String -> Bool
 xmlTest (S.SivmapId)        _  = True
 xmlTest (S.SivmapEq s)      t  = s == xmlString t
 xmlTest (S.SivmapKeep _ e)  t  =       U.sivMatchExpr e $ xmlString t

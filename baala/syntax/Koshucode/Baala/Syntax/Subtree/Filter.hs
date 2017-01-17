@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Subtree filter.
+-- | Textual list mapping.
 
 module Koshucode.Baala.Syntax.Subtree.Filter
   ( Sivmap (..),
@@ -13,42 +13,42 @@ module Koshucode.Baala.Syntax.Subtree.Filter
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Subtext                 as S
 
--- | Subtree filter.
-data Sivmap
-    = SivmapId                         -- ^ Identity
-    | SivmapEq    String               -- ^ Equality
-    | SivmapKeep  String S.SivExpr     -- ^ Keep by sieve pattern
-    | SivmapOmit  String S.SivExpr     -- ^ Omit by sieve pattern
-    | SivmapAssoc String String        -- ^ Associatoin of key and value
-    | SivmapChain Sivmap Sivmap        -- ^ Filter chain
+-- | Mapping for textual lists.
+data Sivmap t
+    = SivmapId                    -- ^ Identity
+    | SivmapEq    t               -- ^ Equality
+    | SivmapKeep  t S.SivExpr     -- ^ Keep by sieve pattern
+    | SivmapOmit  t S.SivExpr     -- ^ Omit by sieve pattern
+    | SivmapAssoc t t             -- ^ Associatoin of key and value
+    | SivmapChain (Sivmap t) (Sivmap t)  -- ^ Sivmap chain
       deriving (Show, Eq)
 
-instance Monoid Sivmap where
+instance Monoid (Sivmap t) where
     mempty  = SivmapId
     mappend = sivmapChain
 
--- | Identity filter.
-sivmapId :: Sivmap
+-- | Identity mapping.
+sivmapId :: Sivmap t
 sivmapId = SivmapId
 
--- | Equal filter.
-sivmapEq :: String -> Sivmap
+-- | Equal mapping.
+sivmapEq :: t -> Sivmap t
 sivmapEq = SivmapEq
 
 -- | Filter by sieve pattern.
-sivmapKeep :: String -> Sivmap
-sivmapKeep s = SivmapKeep s (S.toSivExprOr S.fail s)
+sivmapKeep :: (S.ToSivExpr t) => t -> Sivmap t
+sivmapKeep t = SivmapKeep t (S.toSivExprOr S.fail t)
 
 -- | Anti-filter by sieve pattern.
-sivmapOmit :: String -> Sivmap
-sivmapOmit s = SivmapOmit s (S.toSivExprOr S.fail s)
+sivmapOmit :: (S.ToSivExpr t) => t -> Sivmap t
+sivmapOmit t = SivmapOmit t (S.toSivExprOr S.fail t)
 
--- | Filter chain.
-sivmapChain :: O.Bin Sivmap
+-- | Mapping chain.
+sivmapChain :: O.Bin (Sivmap t)
 sivmapChain SivmapId f = f
 sivmapChain f SivmapId = f
 sivmapChain f g = SivmapChain f g
 
--- | Association filter.
-sivmapAssoc :: String -> String -> Sivmap
+-- | Association mapping.
+sivmapAssoc :: t -> t -> Sivmap t
 sivmapAssoc = SivmapAssoc
