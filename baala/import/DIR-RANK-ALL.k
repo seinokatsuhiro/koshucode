@@ -88,9 +88,9 @@
     [ "Base" | "Token" ] ] [ 31 | "Parse" | [ "Base" | "Overture" | "Token" ] ] [ 31 | "Pattern" | [ "Base" | "Token" ]
     ] [ 32 | "Split" | [ "Base" | "Overture" | "Token" ] ] =}
 |-- DIR-RANK  /dir-rank 34  /dir "Koshucode.Baala.Syntax.Subtree"  /base-rank {= /rank /base /import-dir [ 23 | "Filter"
-    | [ "Overture" | "Subtext" ] ] [ 24 | "Subtree" | [ "Base" | "Overture" | "Symbol" ] ] [ 25 | "DirTree" | [ "Base" |
-    "Overture" ] ] [ 25 | "Xml" | [ "Base" | "Overture" | "Symbol" ] ] [ 34 | "Decode" | [ "Base" | "Overture" |
-    "Symbol" | "Token" | "Tree" ] ] =}
+    | [ "Overture" | "Subtext" ] ] [ 24 | "Subtree" | [ "Base" | "Overture" | "Subtext" | "Symbol" ] ] [ 25 | "DirTree"
+    | [ "Base" | "Overture" ] ] [ 25 | "Xml" | [ "Base" | "Overture" | "Subtext" | "Symbol" ] ] [ 34 | "Decode" | [
+    "Base" | "Overture" | "Symbol" | "Token" | "Tree" ] ] =}
 |-- DIR-RANK  /dir-rank 35  /dir "Koshucode.Baala.Syntax.Attr"  /base-rank {= /rank /base /import-dir [ 0 | "AttrName" |
     [ ] ] [ 24 | "Message" | [ "Base" | "Para" | "Symbol" ] ] [ 34 | "Attr" | [ "Base" | "Overture" | "Para" | "Tree" ]
     ] [ 34 | "Slot" | [ "Base" | "Overture" | "Token" | "Tree" ] ] [ 35 | "AttrEd" | [ "Base" | "Overture" | "Symbol" |
@@ -396,9 +396,9 @@ TABLE : DIR-RANK
   34        "Koshucode.Baala.Syntax.Subtree"     /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
                                                  23    "Filter"             [ "Overture" | "Subtext" ]
-                                                 24    "Subtree"            [ "Base" | "Overture" | "Symbol" ]
+                                                 24    "Subtree"            [ "Base" | "Overture" | "Subtext" | "Symbol" ]
                                                  25    "DirTree"            [ "Base" | "Overture" ]
-                                                 25    "Xml"                [ "Base" | "Overture" | "Symbol" ]
+                                                 25    "Xml"                [ "Base" | "Overture" | "Subtext" | "Symbol" ]
                                                  34    "Decode"             [ "Base" | "Overture" | "Symbol" | "Token" | "Tree" ]
                                                  
   35        "Koshucode.Baala.Syntax.Attr"        /rank /base                /import-dir
