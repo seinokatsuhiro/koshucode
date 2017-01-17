@@ -56,36 +56,36 @@ import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 -- >            :      :       :
 -- >            ................ Unknown
 
-data Symbol
-    = SymbolCommon    String         -- ^ __1.__ General-plain-numeric symbol
-                                     --
-                                     --   >>> nextSymbol "1"
-                                     --   ("", SymbolCommon "1")
+data Symbol t
+    = SymbolCommon   t     -- ^ __1.__ General-plain-numeric symbol
+                           --
+                           --   >>> nextSymbol "1"
+                           --   ("", SymbolCommon "1")
 
-    | SymbolPlain     String         -- ^ __2.__ Plain (include general) symbol
-                                     --
-                                     --   >>> nextSymbol "a"
-                                     --   ("", SymbolPlain "a")
+    | SymbolPlain    t     -- ^ __2.__ Plain (include general) symbol
+                           --
+                           --   >>> nextSymbol "a"
+                           --   ("", SymbolPlain "a")
 
-    | SymbolNumeric   String         -- ^ __3.__ Numeric (include general) symbol
-                                     --
-                                     --   >>> nextSymbol "+"
-                                     --   ("", SymbolNumeric "+")
+    | SymbolNumeric  t     -- ^ __3.__ Numeric (include general) symbol
+                           --
+                           --   >>> nextSymbol "+"
+                           --   ("", SymbolNumeric "+")
 
-    | SymbolGeneral   String         -- ^ __4.__ General (not plain nor numeric) symbol
-                                     --
-                                     --   >>> nextSymbol "="
-                                     --   ("", SymbolGeneral "=")
+    | SymbolGeneral  t     -- ^ __4.__ General (not plain nor numeric) symbol
+                           --
+                           --   >>> nextSymbol "="
+                           --   ("", SymbolGeneral "=")
 
-    | SymbolShort     String String  -- ^ __5.__ Short symbol (Plain @"."@ Plain)
-                                     --
-                                     --   >>> nextSymbol "a.xxx"
-                                     --   ("", SymbolShort "a" "xxx")
+    | SymbolShort    t t   -- ^ __5.__ Short symbol (Plain @"."@ Plain)
+                           --
+                           --   >>> nextSymbol "a.xxx"
+                           --   ("", SymbolShort "a" "xxx")
 
-    | SymbolUnknown   String         -- ^ __6.__ Unknown symbol
-                                     --
-                                     --   >>> nextSymbol "a+"
-                                     --   ("", SymbolUnknown "a+")
+    | SymbolUnknown  t     -- ^ __6.__ Unknown symbol
+                           --
+                           --   >>> nextSymbol "a+"
+                           --   ("", SymbolUnknown "a+")
 
       deriving (Show, Eq, Ord)
 
@@ -94,7 +94,7 @@ data Symbol
 
 -- | Test symbol is general, in other words,
 --   'SymbolCommon', 'SymbolPlain' or 'SymbolGeneral'.
-isGeneralSymbol :: O.Test Symbol
+isGeneralSymbol :: O.Test (Symbol t)
 isGeneralSymbol (SymbolCommon _)   = True
 isGeneralSymbol (SymbolPlain _)    = True
 isGeneralSymbol (SymbolGeneral _)  = True
@@ -102,20 +102,20 @@ isGeneralSymbol _                  = False
 
 -- | Test symbol is plain, in other words,
 --   'SymbolCommon' or 'SymbolPlain'.
-isPlainSymbol :: O.Test Symbol
+isPlainSymbol :: O.Test (Symbol t)
 isPlainSymbol (SymbolCommon _)     = True
 isPlainSymbol (SymbolPlain _)      = True
 isPlainSymbol _                    = False
 
 -- | Test symbol is numeric, in other words,
 --   'SymbolCommon' or 'SymbolNumeric'.
-isNumericSymbol :: O.Test Symbol
+isNumericSymbol :: O.Test (Symbol t)
 isNumericSymbol (SymbolCommon _)   = True
 isNumericSymbol (SymbolNumeric _)  = True
 isNumericSymbol _                  = False
 
 -- | Test symbol is 'SymbolShort'.
-isShortSymbol :: O.Test Symbol
+isShortSymbol :: O.Test (Symbol t)
 isShortSymbol (SymbolShort _ _)    = True
 isShortSymbol _                    = False
 
@@ -176,7 +176,7 @@ isCharN'  c  = isCharGn' c || isCharN  c
 --   >>> nextSymbol "= /a"
 --   (" /a", SymbolGeneral "=")
 --
-nextSymbol :: S.Next Symbol
+nextSymbol :: S.Next (Symbol String)
 nextSymbol cs0 = symbolGpn O.zero cs0 where
     done n cs k           = (cs, k $ O.tTake n cs0)
 
@@ -228,7 +228,7 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
         | isSymbolChar c  = symbolUnk (n + 1) cs
     symbolUnk n cs        = done n cs SymbolUnknown
 
-shortBody :: String -> S.Next Symbol
+shortBody :: String -> S.Next (Symbol String)
 shortBody pre cs0 = short O.zero cs0 where
     done n cs k           = (cs, k $ O.tTake n cs0)
 
@@ -257,7 +257,7 @@ nextSymbolPlain :: S.AbNext String
 nextSymbolPlain cs = getSymbolPlain O.<#> nextSymbol cs
 
 -- | Extract plain symbol text.
-getSymbolPlain :: Symbol -> B.Ab String
+getSymbolPlain :: Symbol t -> B.Ab t
 getSymbolPlain (SymbolCommon w)  = Right w
 getSymbolPlain (SymbolPlain  w)  = Right w
 getSymbolPlain _                 = Msg.expPlainSym

@@ -1,4 +1,3 @@
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -232,12 +231,12 @@ copWordsBy arg =
 
 -- ----------------------  unwords unwords-by
 
-copUnwords :: forall c. (D.CContent c) => D.CopCalc c
+copUnwords :: (D.CContent c) => D.CopCalc c
 copUnwords arg =
     do x <- D.getRightArg1 arg
        D.putText $ unwords $ wordList x
 
-copUnwordsBy :: forall c. (D.CContent c) => D.CopCalc c
+copUnwordsBy :: (D.CContent c) => D.CopCalc c
 copUnwordsBy arg =
     do (sep, x) <- D.getRightArg2 arg
        case D.isText sep of
@@ -383,19 +382,19 @@ divideAll p x =
 
 -- ----------------------  general-symbol?
 
-copGeneralSymbol :: forall c. (D.CContent c) => D.CopCalc c
+copGeneralSymbol :: (D.CContent c) => D.CopCalc c
 copGeneralSymbol = copTestSymbol S.isGeneralSymbol
 
-copPlainSymbol :: forall c. (D.CContent c) => D.CopCalc c
+copPlainSymbol :: (D.CContent c) => D.CopCalc c
 copPlainSymbol = copTestSymbol S.isPlainSymbol
 
-copNumericSymbol :: forall c. (D.CContent c) => D.CopCalc c
+copNumericSymbol :: (D.CContent c) => D.CopCalc c
 copNumericSymbol = copTestSymbol S.isNumericSymbol
 
-copShortSymbol :: forall c. (D.CContent c) => D.CopCalc c
+copShortSymbol :: (D.CContent c) => D.CopCalc c
 copShortSymbol = copTestSymbol S.isShortSymbol
 
-copTestSymbol :: forall c. (D.CContent c) => (S.Symbol -> Bool) -> D.CopCalc c
+copTestSymbol :: (D.CContent c) => (S.Symbol String -> Bool) -> D.CopCalc c
 copTestSymbol test arg =
     do c <- D.getRightArg1 arg
        D.putBool $ case extractText c of
@@ -434,7 +433,7 @@ copSuffix = op where
     op xs  = Msg.badArg xs
 
 -- | [unsuffix /C/] Remove integer suffixes from /C/.
-copUnsuffix :: forall c. (D.CContent c) => D.CopCalc c
+copUnsuffix :: (D.CContent c) => D.CopCalc c
 copUnsuffix = op where
     op [Right c] = Right $ unsuf c
     op [c]       = c
