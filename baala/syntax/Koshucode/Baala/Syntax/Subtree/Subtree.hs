@@ -160,15 +160,14 @@ subtreeOneBy test ps0 ts = p1 O.<++> ts where
 subtreeData :: SubtreeValue -> [S.RawJudge O.Value]
 subtreeData tree = gatherData O.<++> subtreeTerms tree
 
-gatherData :: [(S.JudgeClass, S.Term O.Value)] -> [S.RawJudge O.Value]
-gatherData xs = gatherTerms O.<$$> B.gatherToAssocOrder xs
-
-gatherTerms :: O.Map [(S.Term O.Value)]
-gatherTerms ts = content O.<$$> B.gatherToAssocOrder ts where
+gatherData :: [S.JudgeTerm O.Value] -> [S.RawJudge O.Value]
+gatherData = judges where
+    judges xs   = terms   O.<$$> B.gatherToAssocOrder xs
+    terms  ts   = content O.<$$> B.gatherToAssocOrder ts
     content [c] = c
     content cs  = O.VList cs
 
-subtreeTerms :: SubtreeValue -> [[(S.JudgeClass, S.Term O.Value)]]
+subtreeTerms :: SubtreeValue -> [[S.JudgeTerm O.Value]]
 subtreeTerms = branch where
     branch t@(B.TreeL _) = [leaf t]
     branch (B.TreeB _ term xs) =
