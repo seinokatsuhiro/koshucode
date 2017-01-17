@@ -38,6 +38,10 @@ data SubtreePattern
       deriving (Show, Eq)
 
 -- | Create non-termification leaf pattern.
+--
+--   >>> subtreeL $ S.subtreeEq "foo"
+--   SubtreeL SubtreeNone (SubtreeEq "foo")
+--
 subtreeL :: S.SubtreeFilter -> SubtreePattern
 subtreeL = SubtreeL SubtreeNone
 
@@ -53,11 +57,15 @@ data SubtreeTerm
       deriving (Show, Eq)
 
 -- | Create text term.
-subtreeText :: (S.ToTermName n) => String -> n -> SubtreeTerm
+--
+--   >>> subtreeText "A" "/x"
+--   SubtreeText ["A"] (TermName EQ "x")
+--
+subtreeText :: (S.ToTermName n) => S.JudgeClass -> n -> SubtreeTerm
 subtreeText c = subtreeTexts [c]
 
--- | Create text term.
-subtreeTexts :: (S.ToTermName n) => [String] -> n -> SubtreeTerm
+-- | Create text term with multiple classes.
+subtreeTexts :: (S.ToTermName n) => [S.JudgeClass] -> n -> SubtreeTerm
 subtreeTexts cs n = SubtreeText cs $ S.toTermName n
 
 
