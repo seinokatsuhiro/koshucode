@@ -45,6 +45,8 @@ module Koshucode.Baala.Base.Prelude.Import
     Data.Maybe.fromJust,
     Data.Maybe.fromMaybe,
 
+    Data.String.IsString,
+
     -- * Data.Text
     Tx, stringTx, txString,
     -- * Data.Text.Lazy
@@ -80,6 +82,7 @@ import qualified Data.Default
 import qualified Data.List
 import qualified Data.Map
 import qualified Data.Maybe
+import qualified Data.String
 import qualified Data.Text
 import qualified Data.Text.Lazy
 import qualified Data.Tuple
