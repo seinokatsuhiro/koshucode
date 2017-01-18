@@ -55,7 +55,7 @@ tokenLinesString = B.codeScanUp $ S.scanRel changeSection
 tokenLinesTextAssert :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine]
 tokenLinesTextAssert = tokenLinesWith S.scanTextAssert
 
-changeSection :: S.ChangeSection
+changeSection :: S.ChangeSection String
 changeSection name =
     case name of
       "rel"      -> just S.scanRel

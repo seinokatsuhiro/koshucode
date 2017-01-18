@@ -31,10 +31,10 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 -- --------------------------------------------
 
 -- | Select scanner based on section name.
-type ChangeSection = String -> Maybe (S.TokenScanMap String)
+type ChangeSection t = t -> Maybe (S.TokenScanMap t)
 
 -- | Line begins with triple equal signs is treated as section delimter.
-section :: ChangeSection -> (S.InputText -> S.TokenScan String) -> S.TokenScanMap String
+section :: ChangeSection String -> (S.InputText -> S.TokenScan String) -> S.TokenScanMap String
 section change f
         sc@B.CodeScan { B.codeMap    = prev
                       , B.codeInput  = cs0
@@ -42,7 +42,7 @@ section change f
     body [] (O.tCut -> O.Jp '=' _) = B.codeChange (selectSection change prev) sc
     body _ cs = f cs
 
-selectSection :: ChangeSection -> S.TokenScanMap String -> S.TokenScanMap String
+selectSection :: ChangeSection String -> S.TokenScanMap String -> S.TokenScanMap String
 selectSection change prev
               sc@B.CodeScan { B.codeInputPt  = cp
                             , B.codeInput    = cs0
@@ -70,7 +70,7 @@ selectSection change prev
     dispatch ts    = sectionUnexp ts sc
 
 sectionUnexp :: [S.Token] -> S.TokenScanMap String
-sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok sc where
+sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate O.tEmpty tok sc where
     tok  = S.unknownToken cp cs $ Msg.unexpSect help
     cp | null ts    = B.codeInputPt sc
        | otherwise  = B.getCP $ head ts
@@ -83,7 +83,7 @@ sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok sc wher
 -- --------------------------------------------  Simple sections
 
 -- | Token scanner.
-type Scanner = ChangeSection -> S.TokenScanMap String
+type Scanner = ChangeSection String -> S.TokenScanMap String
 
 -- | Scan tokens in @end@ section.
 scanEnd :: Scanner
@@ -96,7 +96,7 @@ scanNote change sc = section change (`comment` sc) sc
 comment :: S.InputText -> S.TokenScanMap String
 comment cs sc
     | O.tIsEmpty cs = sc
-    | otherwise     = B.codeUpdate "" tok sc
+    | otherwise     = B.codeUpdate O.tEmpty tok sc
     where tok = S.TComment (B.getCP sc) cs
 
 -- | Scan tokens in @license@ section.
@@ -108,7 +108,7 @@ scanLine :: S.TextForm -> Scanner
 scanLine form change sc = section change text sc where
     text cs | O.tIsEmpty cs = sc
             | otherwise     = let tok = S.TText (B.getCP sc) form cs
-                              in B.codeUpdate "" tok sc
+                              in B.codeUpdate O.tEmpty tok sc
 
 scanLineInClause :: S.TextForm -> Scanner
 scanLineInClause form change sc = section change text sc where
@@ -116,7 +116,7 @@ scanLineInClause form change sc = section change text sc where
         | S.isSpace c = S.clipUpdate sc $ S.clipSpace (B.getCP sc) cs
         | B.isBol sc  = B.codeScanRestore sc
         | otherwise   = let tok = S.TText (B.getCP sc) form cs
-                        in B.codeUpdate "" tok sc
+                        in B.codeUpdate O.tEmpty tok sc
     text _ = sc
 
 -- | Section for @koshu-text-assert@ command.
@@ -131,7 +131,7 @@ scanTextAssert change sc = section change text sc where
         | c == ':'     = B.codeChange (scanLineInClause S.TextRaw change)
                            $ B.codeScanSave $ S.clipUpdate sc (cs, raw [c])
         | otherwise    = case S.clipSymbol cp (B.codeWords sc) ccs of
-                           (ws', _, P.TRaw "") ->
+                           (ws', _, P.TRaw s) | O.tIsEmpty s ->
                                S.clipUpdateC sc (ws', cs, raw [c])
                            sym -> S.clipUpdateC sc sym
     text _ = sc
