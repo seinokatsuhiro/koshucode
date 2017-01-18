@@ -163,6 +163,15 @@ class (Eq a, Monoid a) => Textual a where
     char3T :: Char -> Char -> Char -> a
     char3T c d e = tAdd3 c d e tEmpty
 
+    -- | /N/-length textual value.
+    --
+    --   >>> charsT 4 '+' :: String
+    --   "++++"
+    --
+    charsT :: Int -> Char -> a
+    charsT n c | n > 0     = tAdd c $ charsT (n - 1) c
+               | otherwise = tEmpty
+
     -- ----------------------  Conversion
 
     -- | Convert textual value to string.
@@ -178,6 +187,14 @@ class (Eq a, Monoid a) => Textual a where
     --   "foo"
     --
     stringT :: String -> a
+
+    -- | Convert show instance to textual value.
+    --
+    --   >>> showT (120 :: Int) :: String
+    --   "120"
+    --
+    showT :: (Show b) => b -> a
+    showT = stringT . show
 
 instance Textual String where
     tEmpty       = ""
