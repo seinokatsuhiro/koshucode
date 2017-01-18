@@ -73,6 +73,8 @@ isClock c = Ch.isDigit c || c `elem` ".:'+-"
 
 -- ============================================  Type
 
+{-# WARNING ClipToken, ClipTokenC, ClipTokenCL "This is only used in defined module." #-}
+
 -- | Code scanner for token list.
 type TokenScan t = B.CodeScan t (S.TToken t)
 
@@ -86,16 +88,16 @@ type ClipResult t = (t, S.TToken t)
 type ClipResultC t = (B.WordCache t, t, S.TToken t)
 
 -- | Clip multiple-tokens result with word cache.
-type ClipResultCL = (B.WordCache String, S.InputText, [S.Token])
+type ClipResultCL t = (B.WordCache t, t, [S.TToken t])
 
 -- | Clip a next token.
 type ClipToken t = B.CodePos -> t -> ClipResult t
 
 -- | Clip a next token with word cache.
-type ClipTokenC = B.CodePos -> B.WordCache String -> S.InputText -> ClipResultC String
+type ClipTokenC t = B.CodePos -> B.WordCache t -> t -> ClipResultC t
 
 -- | Clip a next token with word cache.
-type ClipTokenCL = B.CodePos -> B.WordCache String -> S.InputText -> ClipResultCL
+type ClipTokenCL t = B.CodePos -> B.WordCache t -> t -> ClipResultCL t
 
 
 -- ============================================  Clip
@@ -105,11 +107,11 @@ clipUpdate :: TokenScan t -> ClipResult t -> TokenScan t
 clipUpdate r (cs, tok) = B.codeUpdate cs tok r
 
 -- | Update token scanner by clip result with word cache.
-clipUpdateC :: TokenScan String -> ClipResultC String -> TokenScan String
+clipUpdateC :: TokenScan t -> ClipResultC t -> TokenScan t
 clipUpdateC r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
 
 -- | Update token scanner by clip result with word cache.
-clipUpdateCL :: TokenScan String -> ClipResultCL -> TokenScan String
+clipUpdateCL :: TokenScan t -> ClipResultCL t -> TokenScan t
 clipUpdateCL r (wtab, cs, toks) = B.codeUpdateListWords wtab cs toks r
 
 -- ---------------------------------  Textual
@@ -129,21 +131,21 @@ clipSpace cp cs =
 --   >>> clipQ B.def O.emptyWordCache "foo bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQ "foo")
 --
-clipQ :: ClipTokenC
+clipQ :: (Ord t, O.Textual t) => ClipTokenC t
 clipQ cp wtab cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> symbolToken S.TextQ w cp wtab cs'
-      Left a         -> (wtab, [], S.TUnknown cp cs a)
+      Left a         -> (wtab, O.tEmpty, S.TUnknown cp cs a)
 
 -- | Clip double-quoted text.
 --
 --   >>> clipQq B.def O.emptyWordCache "foo\" bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --
-clipQq :: ClipTokenC
+clipQq :: (Ord t, O.Textual t) => ClipTokenC t
 clipQq cp wtab cs =
     case S.nextQQ cs of
-      Left a         -> (wtab, [], S.TUnknown cp cs a)
+      Left a         -> (wtab, O.tEmpty, S.TUnknown cp cs a)
       Right (cs', w) -> case O.cacheGet wtab w of
                           (wtab', w') -> (wtab', cs', S.TText cp S.TextQQ w')
 
@@ -153,10 +155,10 @@ clipQq cp wtab cs =
 --   >>> clipQn B.def B.emptyWordCache "'foo''' bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --
-clipQn :: ClipTokenC
+clipQn :: ClipTokenC String
 clipQn cp wtab (countQuote -> (n, cs)) =
     case S.nextBefore (replicate (n + 2) '\'') cs of
-      Left a         -> (wtab, [], S.TUnknown cp cs a)
+      Left a         -> (wtab, O.tEmpty, S.TUnknown cp cs a)
       Right (cs', w) -> case O.cacheGet wtab w of
                           (wtab', w') -> (wtab', cs', S.TText cp S.TextQQ w')
 
@@ -172,7 +174,7 @@ countQuote = loop 0 where
 --   >>> clipSymbol B.def O.emptyWordCache "foo bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextRaw "foo")
 --
-clipSymbol :: ClipTokenC
+clipSymbol :: ClipTokenC String
 clipSymbol cp wtab cs =
     let (cs', sym) = S.nextSymbol cs
     in case sym of
@@ -181,10 +183,10 @@ clipSymbol cp wtab cs =
          S.SymbolGeneral   w  -> symbolToken S.TextRaw w cp wtab cs'
          S.SymbolPlain     w  -> symbolToken S.TextRaw w cp wtab cs'
          S.SymbolNumeric   w  -> symbolToken S.TextRaw w cp wtab cs'
-         S.SymbolUnknown   w  -> (wtab, [], S.unknownToken cp cs $ Msg.forbiddenInput w)
+         S.SymbolUnknown   w  -> (wtab, O.tEmpty, S.unknownToken cp cs $ Msg.forbiddenInput w)
 
 -- | Create symbolic token.
-symbolToken :: S.TextForm -> String -> ClipTokenC
+symbolToken :: (Ord t) => S.TextForm -> t -> ClipTokenC t
 symbolToken f w cp wtab cs =
     case O.cacheGet wtab w of
       (wtab', w') -> (wtab', cs, S.TText cp f w')
@@ -207,7 +209,7 @@ clipSlot n cp cs =
 --   >>> clipTermSign "+/" B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "+/foo"])
 --
-clipTermSign :: String -> ClipTokenCL
+clipTermSign :: String -> ClipTokenCL String
 clipTermSign = clipTerm False
 
 -- | Clip term name.
@@ -215,7 +217,7 @@ clipTermSign = clipTerm False
 --   >>> clipTermName B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "/foo"])
 --
-clipTermName :: ClipTokenCL
+clipTermName :: ClipTokenCL String
 clipTermName = clipTerm False "/"
 
 -- | Clip quoted term.
@@ -223,20 +225,20 @@ clipTermName = clipTerm False "/"
 --   >>> clipTermQ B.def Map.empty "foo bar baz"
 --   (fromList [], " bar baz", [TText <I0-L0-C0> TextTerm "foo"])
 --
-clipTermQ :: ClipTokenCL
+clipTermQ :: ClipTokenCL String
 clipTermQ = clipTerm True "/"
 
 -- | Clip term name or a term path.
-clipTerm :: Bool -> String -> ClipTokenCL
+clipTerm :: Bool -> String -> ClipTokenCL String
 clipTerm q slash cp wtab cs0 = word [] cs0 where
     word ns ccs@(O.tCut -> O.Jp c cs)
         | c == '='    = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
         | isSymbol c  = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
         | isQQ c      = call (S.nextQQ cs)           (\w -> term (w : ns))
-    word _ _          = (wtab, [], [S.unknownToken cp cs0 Msg.expPlainSym])
+    word _ _          = (wtab, O.tEmpty, [S.unknownToken cp cs0 Msg.expPlainSym])
     call e f          = case e of
                           Right (cs', w) -> f w cs'
-                          Left a         -> (wtab, [], [S.TUnknown cp cs0 a])
+                          Left a         -> (wtab, O.tEmpty, [S.TUnknown cp cs0 a])
 
     nterm ns w cs'    = let w' = show (O.getIx cp) ++ (O.tAdd '=' w)
                         in term (w' : ns) cs'
