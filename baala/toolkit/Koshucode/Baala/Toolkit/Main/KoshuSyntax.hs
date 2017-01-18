@@ -107,7 +107,7 @@ judgeClause clseq c = T.affirm "CLAUSE" args where
     args = [ "clause"       // D.pInt clseq
            , "clause-type"  // D.pText $ C.clauseTypeText c ]
 
-judgeLine :: Int -> S.TokenLine -> D.JudgeC
+judgeLine :: Int -> S.TokenLine String -> D.JudgeC
 judgeLine clseq (B.CodeLine ln _ _) = T.affirm "LINE" args where
     args = [ "line"         // D.pInt ln
            , "clause"       // D.pInt clseq ]
@@ -150,10 +150,10 @@ dumpClause omit (clseq, c) =
     where
       comment line = "*** " ++ B.lineContent line
 
-dumpLine :: Int -> [S.TokenLine] -> IO ()
+dumpLine :: Int -> [S.TokenLine String] -> IO ()
 dumpLine clseq ls = putJudges $ map (judgeLine clseq) ls
 
-dumpToken :: Bool -> S.TokenLine -> IO ()
+dumpToken :: Bool -> S.TokenLine String -> IO ()
 dumpToken omit (B.CodeLine ln _ toks) =
     do putNewline
        putJudges $ map (judgeToken ln) toks'

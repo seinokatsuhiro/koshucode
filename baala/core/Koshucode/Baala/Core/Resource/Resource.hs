@@ -60,7 +60,7 @@ data Resource c = Resource
     , resAssert     :: [ShortAssert c]     -- ^ __Calc:__ Assertions of relmaps
 
     , resOutput     :: B.IOPoint           -- ^ __Output:__ Output point
-    , resEcho       :: [[S.TokenLine]]     -- ^ __Output:__ Echo text
+    , resEcho       :: [[S.TokenLine String]]  -- ^ __Output:__ Echo text
     , resLicense    :: [(C.SecNo, String)] -- ^ __Output:__ License text
     , resMessage    :: [String]            -- ^ __Output:__ Collection of messages
     }

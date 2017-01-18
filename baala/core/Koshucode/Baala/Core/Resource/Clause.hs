@@ -110,7 +110,7 @@ clauseTypeText (Clause _ body) =
 --                ]]
 
 -- | First step of constructing 'Resource'.
-consClause :: [S.Token] -> C.SecNo -> [S.TokenLine] -> [Clause]
+consClause :: [S.Token] -> C.SecNo -> [S.TokenLine String] -> [Clause]
 consClause resAbout sec = loop h0 . S.tokenClauses where
     h0 = B.def { clauseSecNo = sec }
 

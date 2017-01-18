@@ -37,22 +37,22 @@ import qualified Koshucode.Baala.Base.Message           as Msg
 -- --------------------------------------------  Token line
 
 -- | Token list on a line.
-type TokenLine = B.CodeLine S.Token
+type TokenLine t = B.CodeLine (S.TToken t)
 
 -- | Tokenize lazy bytestring.
-tokenLines :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine]
+tokenLines :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine String]
 tokenLines = tokenLinesWith S.scanRel
 
 -- | Tokenize with code scanner.
-tokenLinesWith :: (B.ToCode code) => S.Scanner String -> B.IxIOPoint -> code -> [TokenLine]
+tokenLinesWith :: (B.ToCode code) => S.Scanner String -> B.IxIOPoint -> code -> [TokenLine String]
 tokenLinesWith scan = B.codeScanUpBz $ scan changeSection
 
 -- | Tokenize text.
-tokenLinesString :: B.IxIOPoint -> S.InputText -> [TokenLine]
+tokenLinesString :: B.IxIOPoint -> S.InputText -> [TokenLine String]
 tokenLinesString = B.codeScanUp $ S.scanRel changeSection
 
 -- | Tokenize lazy bytestring.
-tokenLinesTextAssert :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine]
+tokenLinesTextAssert :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine String]
 tokenLinesTextAssert = tokenLinesWith S.scanTextAssert
 
 changeSection :: (Ord t, B.IsString t, O.Textual t, S.ToTermName t) => S.ChangeSection t
@@ -82,7 +82,7 @@ isShortPrefix :: O.Test String
 isShortPrefix  = all Ch.isAlpha
 
 -- | Read token lines from file.
-readTokenLines :: FilePath -> B.IOAb [TokenLine]
+readTokenLines :: FilePath -> B.IOAb [TokenLine String]
 readTokenLines path =
     do file <- B.readBzFile path
        bz   <- B.abortLeft $ B.bzFileContent file
@@ -95,20 +95,20 @@ readTokenLines path =
 type TokenClause = B.CodeClause S.Token
 
 -- | Convert token lines into token clauses
-tokenClauses :: [TokenLine] -> [TokenClause]
+tokenClauses :: [TokenLine String] -> [TokenClause]
 tokenClauses = map clause . split where
     clause ls = B.CodeClause ls $ list ls
 
-    list :: [TokenLine] -> [S.Token]
+    list :: [TokenLine String] -> [S.Token]
     list = concatMap $ S.sweepToken . B.lineTokens
 
-    split :: [TokenLine] -> [[TokenLine]]
+    split :: [TokenLine String] -> [[TokenLine String]]
     split = B.gather B.splitClause . map indent . B.omit blank
 
-    blank :: TokenLine -> Bool
+    blank :: TokenLine String -> Bool
     blank = all S.isBlankToken . B.lineTokens
 
-    indent :: TokenLine -> (B.IndentSize, TokenLine)
+    indent :: TokenLine String -> (B.IndentSize, TokenLine String)
     indent = B.lineIndentPair tokenIndent
 
 -- | Indent level.
