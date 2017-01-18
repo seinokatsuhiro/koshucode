@@ -36,7 +36,7 @@ tokenContent :: S.Token -> String
 tokenContent tok =
     case tok of
       S.TText     _ _ s    -> s
-      S.TShort    _ a b    -> a ++ "." ++ b
+      S.TShort    _ a b    -> a O.++ "." O.++ b
       S.TTerm     _ n      -> S.enslash n
       S.TLocal    _ n _ _  -> B.name n
       S.TSlot     _ _ s    -> s
@@ -52,7 +52,7 @@ tokenContent tok =
 --   >>> let tok = S.rawTextToken "flower" in (S.subtypeName tok, tokenDetailTypeString tok)
 --   ("text", Just "raw")
 --
-tokenDetailTypeString :: S.Token -> Maybe String
+tokenDetailTypeString :: S.TToken t -> Maybe String
 tokenDetailTypeString tok =
     case tok of
       S.TText     _ f _    -> Just $ S.subtypeName f
@@ -84,11 +84,11 @@ tokenParents _                   = []
 --   2. Remove comments.
 --   3. Join fragmented texts.
 --
-prepareTokens :: O.Map [S.Token]
+prepareTokens :: (O.Textual t) => O.Map [S.TToken t]
 prepareTokens = pre where
     pre ((S.TText cp f1 s1) : (S.TText _ f2 s2) : ts)
         | isQqKey f1 && isQqKey f2
-                          = let t' = S.TText cp S.TextQQ (s1 ++ s2)
+                          = let t' = S.TText cp S.TextQQ (s1 O.++ s2)
                             in pre (t' : ts)
     pre ((S.TText cp f1 s1) : ts)
         | isQqKey f1      = (S.TText cp S.TextQQ s1) : pre ts
@@ -102,40 +102,40 @@ isQqKey :: O.Test S.TextForm
 isQqKey f = f == S.TextQQ || f == S.TextKey
 
 -- | Remove blank tokens.
-sweepToken :: O.Map [S.Token]
+sweepToken :: O.Map [S.TToken t]
 sweepToken = B.omit isBlankToken
 
 
 -- ----------------------  Predicate
 
 -- | Test token is blank, i.e., comment or space.
-isBlankToken :: O.Test S.Token
+isBlankToken :: O.Test (S.TToken t)
 isBlankToken (S.TSpace _ _)       = True
 isBlankToken (S.TComment _ _)     = True
 isBlankToken _                    = False
 
 -- | Test token is unknown.
-isUnknownToken :: O.Test S.Token
+isUnknownToken :: O.Test (S.TToken t)
 isUnknownToken (S.TUnknown _ _ _) = True
 isUnknownToken _                  = False
 
 -- | Test token is short-type token.
-isShortToken :: O.Test S.Token
+isShortToken :: O.Test (S.TToken t)
 isShortToken (S.TShort _ _ _)     = True
 isShortToken _                    = False
 
 -- | Test token is term-type token.
-isTermToken :: O.Test S.Token
+isTermToken :: O.Test (S.TToken t)
 isTermToken (S.TTerm  _ _)        = True
 isTermToken _                     = False
 
 -- | Test token is open-type token.
-isOpenToken :: O.Test S.Token
+isOpenToken :: O.Test (S.TToken t)
 isOpenToken (S.TOpen _ _)         = True
 isOpenToken _                     = False
 
 -- | Test token is close-type token.
-isCloseToken :: O.Test S.Token
+isCloseToken :: O.Test (S.TToken t)
 isCloseToken (S.TClose _ _)       = True
 isCloseToken _                    = False
 
@@ -147,15 +147,15 @@ isCloseToken _                    = False
 --   >>> let tok = S.TOpen B.def "{" in isOpenTokenOf "(" tok
 --   False
 --
-isOpenTokenOf :: String -> O.Test S.Token
+isOpenTokenOf :: (Eq t) => t -> O.Test (S.TToken t)
 isOpenTokenOf p1 (S.TOpen _ p2)   = p1 == p2
 isOpenTokenOf _ _                 = False
 
 -- | Test token is a close-type of the specific bracket.
-isCloseTokenOf :: String -> O.Test S.Token
+isCloseTokenOf :: (Eq t) => t -> O.Test (S.TToken t)
 isCloseTokenOf p1 (S.TClose _ p2) = p1 == p2
 isCloseTokenOf _ _                = False
 
 -- | Create bracket testers.
-isBracketTokenOf :: (String, String) -> (O.Test S.Token, O.Test S.Token)
+isBracketTokenOf :: (Eq t) => (t, t) -> (O.Test (S.TToken t), O.Test (S.TToken t))
 isBracketTokenOf (a, b) = (isOpenTokenOf a, isCloseTokenOf b)
