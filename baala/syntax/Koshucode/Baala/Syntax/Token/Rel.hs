@@ -7,12 +7,6 @@ module Koshucode.Baala.Syntax.Token.Rel
   ( -- * Section
     scanRel,
     scanInterp,
-  
-    -- * Token type
-    -- $TokenType
-  
-    -- * Asterisks
-    -- $Asterisks
   ) where
 
 import qualified Data.Char                              as Ch
@@ -73,8 +67,8 @@ isSingle   = ( `elem` ":|#"    )  -- Punctuation | Symbol
 isQ        = (    ==  '\''     )  -- Punctuation
 isPM a     = (a == '+' || a == '-')
 
-isCodePoint :: O.Test String
-isCodePoint = all isCodePointDigit
+isCodePoint :: (O.Textual t) => O.Test t
+isCodePoint t = and $ O.tMap isCodePointDigit t
 
 isCodePointDigit :: O.Test Char
 isCodePointDigit c = isPM c || Ch.isDigit c
@@ -192,7 +186,7 @@ clipAngle cp cs0 = angle (0 :: Int) cs0 where
                           Nothing  -> S.TText cp S.TextUnk s
 
 -- | Clip token beginning with "@".
-clipAt :: B.CodePos -> String -> Int -> S.ClipResult String
+clipAt :: (O.Textual t) => B.CodePos -> t -> Int -> S.ClipResult t
 clipAt cp = at where
     at (O.tCut -> O.Jp c cs)
        n | c == '@'    = at cs $ n + 1
@@ -204,13 +198,13 @@ clipHat :: B.CodePos -> String -> S.ClipResult String
 clipHat cp = hat where
     hat (O.tCut -> O.Jp '/' cs) = localToken cs (S.LocalNest . S.toTermName)
     hat cs@(O.tCut -> O.Jp c _)
-        | S.isSymbol c             = localToken cs S.LocalSymbol
-    hat cs                         = ([], S.unknownToken cp cs $ Msg.adlib "local")
+        | S.isSymbol c          = localToken cs S.LocalSymbol
+    hat cs                      = (O.tEmpty, S.unknownToken cp cs $ Msg.adlib "local")
 
-    localToken :: String -> (String -> S.LocalRef) -> (String, S.Token)
-    localToken cs k                = case S.nextSymbolPlain cs of
-                                       Right (cs', w) -> (cs', S.TLocal cp (k w) (-1) [])
-                                       Left a         -> ([],  S.TUnknown cp cs a)
+    --localToken :: (O.Textual t) => t -> (t -> S.LocalRef) -> (t, S.TToken t)
+    localToken cs k = case S.nextSymbolPlain cs of
+                        Right (cs', w) -> (cs', S.TLocal cp (k w) (-1) [])
+                        Left a         -> (O.tEmpty, S.TUnknown cp cs a)
 
 
 -- ----------------------  Interpretation
@@ -239,68 +233,4 @@ scanInterp change sc@B.CodeScan { B.codeInputPt = cp
             | S.isTerm c    = upd  (O.tAdd c cs) $ raw n
             | otherwise     = loop (n + 1) cs
         loop n cs           = upd  cs            $ raw n
-
-
--- ------------------------------------------------------------------
--- $TokenType
---
---  [Bracket]   Open and closed brackets.
---              @(@ /group/ @)@ ,
---              @{@ /set/ @}@ ,
---              @[@ /list/ @]@ ,
---              @{-@ /tie/ @-}@ , and
---              @{=@ /relation/ @=}@
---
---  [TermName]  Words beginning with slash, e.g., @\/aa@.
---              Term name like @\/r\/x@ is used for nested relation,
---              that means term @\/x@ in the relation of term @\/r@.
---
---  [Word]      Character sequence not including special characters,
---              e.g., @aa@, @r2d2@, @12.0@, etc.
---              Colon @:@ is a one-letter word.
---              There are four types of quotations.
---              (1) non-quoted word like @aa@,
---              (2) single-quoted word like @\'aa@,
---              (3) double-quoted word like @\"aa\"@,
---              (4) doubly single-quoted word like @\'\' all-letters-to-end-of-line@.
---
---  [Comment]   Texts from double asterisks (@**@) or shebang (@#!@)
---              to end of line are comments.
---              Quadruple asterisks (@****@) comments are
---              treated in 'Koshucode.Baala.Core.Section.Clause.Clause'.
---
---  [Space]     /space/ , @\\t@ (tab)
---
-
--- ------------------------------------------------------------------
--- $Asterisks
---
---  There are three uses of asterisks (@*@) in koshucode,
---
---  [@*@]     Single asterisk means multiplication,
---            e.g., @3 * 4@ (three times four).
---
---  [@**@]    Double asterisk leads line comment.
---            Textx from @**@ to end of line are ignored.
---
---  [@****@]  Quadruple asterisk (fourfold asterisk) leads caluse comment.
---            Texts from @****@ to end of clause are ignored.
---            In other words, line staring with @****@
---            and following indented lines are ignored.
---
---  Triple asterisk @***@ is double and rest of text.
---  Quintuple (fivefold) asterisk @*****@ is quadruple and rest of text.
---
---  Line comments like this:
---
---  > ** aaa bbbbb cc
---
---  Clause comments like this:
---
---  > **** aaa bbb
---  >      ccccc dddddd
---  >      ee fffff
---
---  You can type @****@ on top of a clause to hide it.
---
 

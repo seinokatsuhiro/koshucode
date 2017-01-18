@@ -137,6 +137,16 @@ class (Eq a, Monoid a) => Textual a where
         | tIsEmpty cs  = Just as
         | otherwise    = Nothing
 
+    -- | Map function to characters of text value.
+    --
+    --   >>> tMap fromEnum "bar"
+    --   [98,97,114]
+    --
+    tMap :: (Char -> b) -> a -> [b]
+    tMap f = loop where
+        loop (tCut -> Just (c, cs)) = f c : loop cs
+        loop _ = []
+
     -- ----------------------  Creation
 
     -- | Create text from single character.
