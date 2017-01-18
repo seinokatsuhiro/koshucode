@@ -56,7 +56,7 @@ isPM a     = (a == '+' || a == '-')
 -- ----------------------  Relational section
 
 -- | Scan a next token in relational section.
-scanRel :: S.Scanner
+scanRel :: (Ord t, B.IsString t, O.Textual t, S.ToTermName t) => S.Scanner t
 scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' where
 
     clip         = S.clipUpdate   sc
@@ -100,17 +100,16 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | isSingle a             = upd bs  $ raw (O.charT a)
         | S.isSymbol a           = clipw   $ S.clipSymbol cp wtab $ O.tAdd a bs
         | n == 0                 = sc
-        | otherwise              = upd []  $ S.unknownToken cp cs
-                                           $ Msg.forbiddenInput $ S.angleQuote (O.charT a)
+        | otherwise              = upd O.tEmpty $ S.unknownToken cp cs
+                                                $ Msg.forbiddenInput $ S.angleQuote (O.charT a)
 
-    aster :: String -> String -> S.TokenScan String
     aster (O.tCut -> O.Jp c cs) w
-        | w == "****"            = upd (O.tAdd c cs) $ raw w
+        | w == O.stringT "****"  = upd (O.tAdd c cs) $ raw w
         | c == '*'               = aster cs (O.tAdd c w)
     aster cs w
-        | w == "**"              = updEnd  $ S.TComment cp cs
-        | w == "***"             = updEnd  $ S.TComment cp cs
-        | otherwise              = clipw   $ S.clipSymbol cp wtab $ w ++ cs
+        | w == O.stringT "**"    = updEnd  $ S.TComment cp cs
+        | w == O.stringT "***"   = updEnd  $ S.TComment cp cs
+        | otherwise              = clipw   $ S.clipSymbol cp wtab $ w O.++ cs
 
 -- | Clip token beginning with @'<'@.
 --
@@ -185,7 +184,7 @@ clipHat cp = hat where
 -- ----------------------  Interpretation
 
 -- | Scan interpretation content between @{|@ and @|}@.
-scanInterp :: S.Scanner
+scanInterp :: (Ord t, B.IsString t, O.Textual t) => S.Scanner t
 scanInterp change sc@B.CodeScan { B.codeInputPt = cp
                                 , B.codeWords = wtab } = S.section change int sc where
     clip        = S.clipUpdate   sc
@@ -196,7 +195,7 @@ scanInterp change sc@B.CodeScan { B.codeInputPt = cp
     int (O.tCut -> O.Jp c cs)
         | S.isSpace c   = clip   $ S.clipSpace    cp cs
         | S.isTerm c    = clipcl $ S.clipTermName cp wtab cs
-        | otherwise     = word (c:cs)
+        | otherwise     = word (O.tAdd c cs)
     int _               = sc
 
     word cs0 = loop O.zero cs0 where

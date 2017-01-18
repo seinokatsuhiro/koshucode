@@ -44,7 +44,7 @@ tokenLines :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine]
 tokenLines = tokenLinesWith S.scanRel
 
 -- | Tokenize with code scanner.
-tokenLinesWith :: (B.ToCode code) => S.Scanner -> B.IxIOPoint -> code -> [TokenLine]
+tokenLinesWith :: (B.ToCode code) => S.Scanner String -> B.IxIOPoint -> code -> [TokenLine]
 tokenLinesWith scan = B.codeScanUpBz $ scan changeSection
 
 -- | Tokenize text.
@@ -55,9 +55,9 @@ tokenLinesString = B.codeScanUp $ S.scanRel changeSection
 tokenLinesTextAssert :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine]
 tokenLinesTextAssert = tokenLinesWith S.scanTextAssert
 
-changeSection :: S.ChangeSection String
+changeSection :: (Ord t, B.IsString t, O.Textual t, S.ToTermName t) => S.ChangeSection t
 changeSection name =
-    case name of
+    case O.tString name of
       "rel"      -> just S.scanRel
       "note"     -> just S.scanNote
       "end"      -> just S.scanEnd
@@ -72,8 +72,8 @@ changeSection name =
       just scan   = Just $ B.codeChange $ scan changeSection
       unsupp n    = Just $ sectionUnsupported n
 
-sectionUnsupported :: String -> S.TokenScanMap String
-sectionUnsupported msg r@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok r where
+sectionUnsupported :: (O.Textual t) => String -> S.TokenScanMap t
+sectionUnsupported msg r@B.CodeScan { B.codeInput = cs } = B.codeUpdate O.tEmpty tok r where
     tok  = S.unknownToken cp cs $ Msg.unsupported msg
     cp   = B.codeInputPt r
 
