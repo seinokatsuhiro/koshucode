@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Text enclosed in angle brackets.
@@ -11,6 +12,7 @@ module Koshucode.Baala.Syntax.Symbol.AngleText
   ) where
 
 import qualified Koshucode.Baala.Overture     as O
+import qualified Koshucode.Baala.Base         as B
 
 -- | Convert string into double-quoted and angle-quoted form.
 --
@@ -81,7 +83,7 @@ angleChar c = "<U+" ++ O.intUpperHexString (fromEnum c) ++ ">"
 --   >>> lookup "lf" angleTexts
 --   Just "\n"
 --
-angleTexts :: [(String, String)]
+angleTexts :: (B.IsString s) => [(s, s)]
 angleTexts =
     --  NAME         REPLACEMENT
     [ o "cr"         "\r"

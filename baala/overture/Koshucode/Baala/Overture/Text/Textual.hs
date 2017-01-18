@@ -147,6 +147,18 @@ class (Eq a, Monoid a) => Textual a where
         loop (tCut -> Just (c, cs)) = f c : loop cs
         loop _ = []
 
+    -- | Divide textual value by delimiter character.
+    --
+    --   >>> tDivide (== '/') "foo/bar/baz"
+    --   ["foo","bar","baz"]
+    --
+    tDivide :: (Char -> Bool) -> a -> [a]
+    tDivide f t0 = loop (0 :: Int) t0 where
+        loop n (tCut -> Just (c, t))
+            | f c        = tTake n t0 : tDivide f t
+            | otherwise  = loop (n + 1) t
+        loop n _ = [tTake n t0]
+
     -- ----------------------  Creation
 
     -- | Create text from single character.

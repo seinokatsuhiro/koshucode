@@ -9,7 +9,6 @@ module Koshucode.Baala.Syntax.Token.Rel
     scanInterp,
   ) where
 
-import qualified Data.Char                              as Ch
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol          as S
@@ -36,27 +35,13 @@ tCut3 z f = first where
                      = f 3 a b c bs cs ds
     third a b bs _   = f 2 a b z bs O.tEmpty O.tEmpty
 
--- | Convert decimal string to integer.
+-- | Convert hexadecimal text to integers.
 --
---   >>> stringIntList "50"
---   Just [50]
---
---   >>> stringIntList "50-51"
---   Just [50, 51]
---
---   >>> stringIntList "A"
---   Nothing
---
-stringIntList :: S.InputText -> Maybe [Int]
-stringIntList = mapM O.stringInt . B.omit null . B.divide '-'
-
--- | Convert hexadecimal string to integer.
---
---   >>> stringHexIntList "20+21"
+--   >>> textHexInts "20+21"
 --   Just [32,33]
 --
-stringHexIntList :: S.InputText -> Maybe [Int]
-stringHexIntList = mapM O.stringHexInt . B.omit null . B.divide '+'
+textHexInts :: (O.Textual t) => t -> Maybe [Int]
+textHexInts = mapM O.stringHexInt . B.omit O.tIsEmpty . O.tDivide (== '+')
 
 -- Punctuations
 isOpen, isClose, isGrip, isSingle, isQ, isPM :: O.Test Char
@@ -66,12 +51,6 @@ isGrip     = ( `elem` "-=|?"   )  -- Punctuation | Symbol   -- :*+
 isSingle   = ( `elem` ":|#"    )  -- Punctuation | Symbol
 isQ        = (    ==  '\''     )  -- Punctuation
 isPM a     = (a == '+' || a == '-')
-
-isCodePoint :: (O.Textual t) => O.Test t
-isCodePoint t = and $ O.tMap isCodePointDigit t
-
-isCodePointDigit :: O.Test Char
-isCodePointDigit c = isPM c || Ch.isDigit c
 
 
 -- ----------------------  Relational section
@@ -147,43 +126,40 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
 --   >>> clipAngle B.def "U+4B> ..."
 --   (" ...", TText /0.0.0/ TextKey "K")
 --
-clipAngle :: B.CodePos -> String -> S.ClipResult String
+clipAngle :: (B.IsString t, O.Textual t) => B.CodePos -> t -> S.ClipResult t
 clipAngle cp cs0 = angle (0 :: Int) cs0 where
     raw = S.TText cp S.TextRaw
     text n = O.tTake n cs0
 
     -- <...
-    angle :: Int -> String -> S.ClipResult String
     angle n (O.tCut -> O.Jp c cs)
-        | S.isSymbol c  = sym n (c:cs)
+        | S.isSymbol c  = sym n (O.tAdd c cs)
     angle n cs          = (cs, raw $ O.tAdd '<' $ text n)
 
     -- <symbol ...
-    sym :: Int -> String -> S.ClipResult String
     sym n (O.tCut -> O.Jp c cs)
         | c == '>'      = close n cs
         | S.isSymbol c  = sym (n + 1) cs
     sym n cs            = (cs, raw $ O.tAdd '<' $ text n) -- '<<'
 
     -- <symbol> ...
-    close :: Int -> String -> S.ClipResult String
     close n (O.tCut -> O.Jp c cs)
         | c == '>'    = close (n + 1) cs
     close n cs        = (cs, key $ text n)
 
     -- symbol in '<symbol>'
-    key :: String -> S.Token
-    key (O.tCut2 -> O.Jp2 'U' '+' s) = fromCodePoint stringHexIntList s
-    key (O.tCut  -> O.Jp 'c' s)
-          | isCodePoint s  = fromCodePoint stringIntList s -- obsolete
-    key s | O.tIsEmpty s   = raw "<>"
+    key (O.tCut2 -> O.Jp2 'U' '+' s) = fromCodePoint textHexInts s
+    key s | O.tIsEmpty s   = raw $ O.stringT "<>"
           | otherwise      = case lookup s S.angleTexts of
                                Just w  -> S.TText cp S.TextKey w
                                Nothing -> S.TText cp S.TextUnk s
+    fromCodePoint f s =
+        case f s of
+          Just ns  -> S.TText cp S.TextKey $ tFromCode ns
+          Nothing  -> S.TText cp S.TextUnk s
 
-    fromCodePoint f s = case f s of
-                          Just ns  -> S.TText cp S.TextKey (toEnum <$> ns)
-                          Nothing  -> S.TText cp S.TextUnk s
+tFromCode :: (O.Textual t) => [Int] -> t
+tFromCode ns = O.stringT (toEnum <$> ns)
 
 -- | Clip token beginning with "@".
 clipAt :: (O.Textual t) => B.CodePos -> t -> Int -> S.ClipResult t
@@ -194,14 +170,13 @@ clipAt cp = at where
     at cs n            = S.clipSlot n cp cs
 
 -- | Clip local reference token, like @^/g@.
-clipHat :: B.CodePos -> String -> S.ClipResult String
+clipHat :: (O.Textual t, S.ToTermName t) => B.CodePos -> t -> S.ClipResult t
 clipHat cp = hat where
     hat (O.tCut -> O.Jp '/' cs) = localToken cs (S.LocalNest . S.toTermName)
     hat cs@(O.tCut -> O.Jp c _)
-        | S.isSymbol c          = localToken cs S.LocalSymbol
+        | S.isSymbol c          = localToken cs (S.LocalSymbol . O.tString)
     hat cs                      = (O.tEmpty, S.unknownToken cp cs $ Msg.adlib "local")
 
-    --localToken :: (O.Textual t) => t -> (t -> S.LocalRef) -> (t, S.TToken t)
     localToken cs k = case S.nextSymbolPlain cs of
                         Right (cs', w) -> (cs', S.TLocal cp (k w) (-1) [])
                         Left a         -> (O.tEmpty, S.TUnknown cp cs a)

@@ -14,22 +14,23 @@ module Koshucode.Baala.Overture.Text.Integer
     digitsLength,
   ) where
 
-import qualified Data.Char                      as Ch
-import qualified Data.IntMap.Strict             as Mi
-import qualified Data.Map.Strict                as Ms
-import qualified Numeric                        as Num
+import qualified Data.Char                              as Ch
+import qualified Data.IntMap.Strict                     as Mi
+import qualified Data.Map.Strict                        as Ms
+import qualified Numeric                                as Num
+import qualified Koshucode.Baala.Overture.Text.Textual  as O
 
 
 -- ----------------------  Decoder
 
-stringMaybe :: (String -> [(a, String)]) -> String -> Maybe a
-stringMaybe f s = case f s of
-                  [(x, "")] -> Just x
-                  _         -> Nothing
+textMaybe :: (O.Textual t) => (t -> [(a, t)]) -> t -> Maybe a
+textMaybe f s = case f s of
+                  [(x, s')] | O.tIsEmpty s' -> Just x
+                  _  -> Nothing
 
 -- | Decode decimal integer.
 stringDec :: (Eq n, Num n) => String -> Maybe n
-stringDec = stringMaybe Num.readDec
+stringDec = textMaybe Num.readDec
 
 -- | Decode decimal integer as 'Int'.
 --
@@ -54,15 +55,15 @@ stringInteger :: String -> Maybe Integer
 stringInteger = stringDec
 
 -- | Decode hexadecimal digits.
-stringHex :: (Eq n, Num n) => String -> Maybe n
-stringHex = stringMaybe Num.readHex
+stringHex :: (O.Textual t, Eq n, Num n) => t -> Maybe n
+stringHex = textMaybe Num.readHex . O.tString
 
 -- | Decode hexadecimal digits as 'Int'.
 --
 --   >>> stringHexInt "0F"
 --   Just 15
 --
-stringHexInt :: String -> Maybe Int
+stringHexInt :: (O.Textual t) => t -> Maybe Int
 stringHexInt = stringHex
 
 -- | Decode hexadecimal digits as 'Integer'.
@@ -70,7 +71,7 @@ stringHexInt = stringHex
 --   >>> stringHexInteger "0F"
 --   Just 15
 --
-stringHexInteger :: String -> Maybe Integer
+stringHexInteger :: (O.Textual t) => t -> Maybe Integer
 stringHexInteger = stringHex
 
 -- | Decode custom digits to integer.
