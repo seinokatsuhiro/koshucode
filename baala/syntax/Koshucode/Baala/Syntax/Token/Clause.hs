@@ -37,7 +37,7 @@ import qualified Koshucode.Baala.Base.Message           as Msg
 -- --------------------------------------------  Token line
 
 -- | Token list on a line.
-type TokenLine t = B.CodeLine t (S.TToken t)
+type TokenLine t = B.CodeLine S.TToken t
 
 -- | Tokenize lazy bytestring.
 tokenLines :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine String]
@@ -92,7 +92,7 @@ readTokenLines path =
 -- --------------------------------------------  Token clause
 
 -- | Code clause of tokens.
-type TokenClause t = B.CodeClause t S.Token
+type TokenClause t = B.CodeClause S.TToken t
 
 -- | Convert token lines into token clauses
 tokenClauses :: [TokenLine String] -> [TokenClause String]

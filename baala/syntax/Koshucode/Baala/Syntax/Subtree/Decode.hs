@@ -45,7 +45,7 @@ readSubtreeClauses path =
          Right ls -> subtreeClause O.<#> ls
 
 -- | Insert open\/sep\/close to subtree clause.
-subtreeClause :: S.TokenClause t -> B.Ab (S.TokenClause t)
+subtreeClause :: S.TokenClause String -> B.Ab (S.TokenClause String)
 subtreeClause cl = cl' where
     cl' = case clauseFirstElem cl of
             Just (P.TRaw s) | s `elem` [">", ">>"] ->
@@ -65,7 +65,7 @@ subtreeClause cl = cl' where
     sep    = S.TText  B.def S.TextRaw "||"
     close  = S.TClose B.def ")"
 
-clauseFirstElem :: B.CodeClause t a -> Maybe a
+clauseFirstElem :: B.CodeClause k t -> Maybe (k t)
 clauseFirstElem cl =
     case B.clauseLines cl of
       [] -> Nothing

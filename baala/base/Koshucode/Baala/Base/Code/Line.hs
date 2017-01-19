@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -94,20 +95,20 @@ dropBom code =
 -- ----------------------  CodeLine
 
 -- | Tokens in line.
-data CodeLine t a = CodeLine
+data CodeLine k t = CodeLine
     { lineNumber  :: LineNumber    -- ^ Line number, from 1.
     , lineContent :: t             -- ^ Line content without newline.
-    , lineTokens  :: [a]           -- ^ Tokens in the line.
+    , lineTokens  :: [k t]         -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord)
 
-instance (B.GetCodePos a) => B.GetCodePos (CodeLine t a) where
+instance (B.GetCodePos (k t)) => B.GetCodePos (CodeLine k t) where
     getCPs (CodeLine _ _ ts) = B.getCPs $ head ts
 
 -- | Type for indent size.
 type IndentSize = Int
 
 -- | Calculate indent of line and pairing it.
-lineIndentPair :: (a -> IndentSize) -> CodeLine t a -> (IndentSize, CodeLine t a)
+lineIndentPair :: (k t -> IndentSize) -> CodeLine k t -> (IndentSize, CodeLine k t)
 lineIndentPair ind ln@(CodeLine _ _ (tk : _)) = (ind tk, ln)
 lineIndentPair _   ln@(CodeLine _ _ [])       = (0, ln)
 

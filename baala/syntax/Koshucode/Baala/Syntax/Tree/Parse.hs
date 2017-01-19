@@ -70,13 +70,13 @@ instance ToTrees B.Bz where
 instance ToTrees B.Bs where
     toTrees = toTrees . B.bsString
 
-instance ToTrees [S.Token] where
+instance ToTrees [S.TToken String] where
     toTrees = tokenTrees
 
 instance ToTrees [Tree] where
     toTrees = Right
 
-instance ToTrees (S.TokenClause t) where
+instance ToTrees (S.TokenClause String) where
     toTrees = toTrees . B.clauseTokens
 
 -- | Parse tokens with brackets into trees.

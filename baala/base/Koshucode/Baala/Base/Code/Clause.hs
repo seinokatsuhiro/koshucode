@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | This module provides a container for tokens.
@@ -17,16 +18,13 @@ import qualified Koshucode.Baala.Base.List            as B
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Code.Line       as B
 
-
--- ----------------------  CodeClause
-
 -- | Tokens in clause.
-data CodeClause t a = CodeClause
-    { clauseLines     :: [B.CodeLine t a] -- ^ Source lines of clause
-    , clauseTokens    :: [a]              -- ^ Source tokens of clause
+data CodeClause k t = CodeClause
+    { clauseLines     :: [B.CodeLine k t]  -- ^ Source lines of clause
+    , clauseTokens    :: [k t]             -- ^ Source tokens of clause
     } deriving (Show)
 
-instance (B.GetCodePos a) => B.GetCodePos (CodeClause t a) where
+instance (B.GetCodePos (k t)) => B.GetCodePos (CodeClause k t) where
     getCPs (CodeClause _ ts) = B.getCPs $ head ts
 
 -- | No lines, no tokens.
