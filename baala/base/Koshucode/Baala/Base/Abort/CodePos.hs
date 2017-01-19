@@ -59,16 +59,18 @@ instance Ord CodePos where
 cpCompare :: CodePos -> CodePos -> Ordering
 cpCompare p1 p2 = line O.++ column where
     line   = cpLineNo p1 `compare` cpLineNo p2
-    column = size p2 `compare` size p1
-    size   = length . cpText
+    column = cpTextLength p2 `compare` cpTextLength p1
+
+cpTextLength :: CodePos -> Int
+cpTextLength = O.tLength . cpText
 
 -- | Empty code position, i.e., empty content and zero line number.
 instance B.Default CodePos where
     def = CodePos { cpIndex    = 0
                   , cpPath     = ""
                   , cpLineNo   = 0
-                  , cpLineText = ""
-                  , cpText     = "" }
+                  , cpLineText = O.tEmpty
+                  , cpText     = O.tEmpty }
 
 -- | Column number at which code starts.
 --
@@ -80,7 +82,7 @@ instance B.Default CodePos where
 --
 cpColumnNo :: CodePos -> Int
 cpColumnNo CodePos { cpLineText = line, cpText = subline }
-    = length line - length subline
+    = O.tLength line - O.tLength subline
 
 -- | Before and after text of code position.
 --
