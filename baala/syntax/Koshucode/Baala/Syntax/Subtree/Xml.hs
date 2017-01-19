@@ -85,7 +85,7 @@ convertTags = loop [] where
 -- | XML tree.
 type XmlTree s = S.Subtree (XmlTerm s)
 
-type XmlTree' s = B.CodeTree (XmlTerm s) (XmlToken s)
+type XmlTree' s = B.CodeTree (XmlTerm s) XmlToken s
 
 -- | Convert XML tokens to XML tree.
 xmlTrees :: (Ord s, X.StringLike s) => [XmlToken s] -> B.Ab [XmlTree s]

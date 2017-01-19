@@ -73,7 +73,7 @@ type InfixConv a tree = tree -> InfixAmb a tree
 type InfixAmb a tree = Either [(InfixHeight, a)] tree
 
 -- | Code tree with infix height.
-type InfixTree p a = B.CodeTree p (InfixHeight, a)
+type InfixTree b a = B.CodeTree' b (InfixHeight, a)
 
 -- | Split branches in a given tree at infixed binary operators.
 infixToPrefix :: forall p a.
@@ -81,11 +81,11 @@ infixToPrefix :: forall p a.
      -> (a -> InfixHeight)            -- ^ Height function
      -> B.Collect (InfixTree p a)     -- ^ Tree grouping function
      -> InfixMapper p a
-     -> InfixConv a (B.CodeTree p a) -- ^ Infix-to-prefix conversion.
+     -> InfixConv a (B.CodeTree' p a) -- ^ Infix-to-prefix conversion.
 infixToPrefix (pre, inf, post) ht group mapper tree =
     do let tree1 :: InfixTree p a = B.codeTreeFmap height tree
        tree2     :: InfixTree p a <- mapper binary tree1
-       Right (B.codeTreeFmap snd tree2 :: B.CodeTree p a)
+       Right (B.codeTreeFmap snd tree2 :: B.CodeTree' p a)
     where
       height :: a -> (InfixHeight, a)
       height x = (ht x, x)

@@ -178,7 +178,7 @@ mapper pre = loop where
            Right $ B.TreeB S.BracketForm p1 [vs, body']
     loop tree = Right tree
 
-undoubleGroup :: O.Map (B.CodeTree S.BracketType a)
+undoubleGroup :: O.Map (B.RawTree S.BracketType y z)
 undoubleGroup = B.undouble (== S.BracketGroup)
 
 -- expand tree-level syntax

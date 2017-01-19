@@ -85,7 +85,7 @@ codeScanUpBz :: (B.ToCode code) => CodeScanMap k String -> B.IxIOPoint -> code -
 codeScanUpBz f ixio = codeScanUpLines f ixio . B.linesCrlfBzNumbered
 
 codeScanUpLines :: CodeScanMap k String -> B.IxIOPoint -> [B.NumberedLine] -> [B.CodeLine k String]
-codeScanUpLines f ixio = loop (CodeScan [] f cp "" [] emptyWordCache) where
+codeScanUpLines f ixio = loop (CodeScan [] f cp O.tEmpty [] emptyWordCache) where
     cp = B.def { B.cpIndex = O.getIx ixio
                , B.cpPath  = O.getIOPath ixio }
 
@@ -109,7 +109,7 @@ setScan cp line sc =
        , codeInput   = line
        , codeOutput  = [] }
 
-codeScan :: CodeScanMap o String
+codeScan :: CodeScanMap k String
 codeScan sc@CodeScan { codeMap = f, codeInputPt = cp, codeInput = input }
     | null input  = call
     | otherwise   = codeScan call

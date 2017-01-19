@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Subtext.Sieve.Token    as S
 import qualified Koshucode.Baala.Base.Message           as Msg
 
 -- | Sieve tree.
-type SivTree t = B.CodeTree S.SivBracket (S.SivToken t)
+type SivTree t = B.CodeTree S.SivBracket S.SivToken t
 
 -- | Parse sieve token list.
 --

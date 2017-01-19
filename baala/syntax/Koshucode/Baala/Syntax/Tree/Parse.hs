@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Syntax.Tree.Bracket     as S
 type Tree = TTree String
 
 -- | Tree of tokens.
-type TTree t = B.CodeTree S.BracketType (S.TToken t)
+type TTree t = B.CodeTree S.BracketType S.TToken t
 
 -- | Pair of token trees and its name.
 type NamedTrees = B.Named [Tree]
