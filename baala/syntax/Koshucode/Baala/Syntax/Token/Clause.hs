@@ -92,7 +92,7 @@ readTokenLines path =
 -- --------------------------------------------  Token clause
 
 -- | Code clause of tokens.
-type TokenClause = B.CodeClause S.Token
+type TokenClause = B.CodeClause String S.Token
 
 -- | Convert token lines into token clauses
 tokenClauses :: [TokenLine String] -> [TokenClause]

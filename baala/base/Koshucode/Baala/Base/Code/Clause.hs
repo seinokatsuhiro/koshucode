@@ -21,16 +21,16 @@ import qualified Koshucode.Baala.Base.Code.Line       as B
 -- ----------------------  CodeClause
 
 -- | Tokens in clause.
-data CodeClause a = CodeClause
-    { clauseLines     :: [B.CodeLine String a]  -- ^ Source lines of clause
-    , clauseTokens    :: [a]             -- ^ Source tokens of clause
+data CodeClause t a = CodeClause
+    { clauseLines     :: [B.CodeLine t a] -- ^ Source lines of clause
+    , clauseTokens    :: [a]              -- ^ Source tokens of clause
     } deriving (Show)
 
-instance (B.GetCodePos a) => B.GetCodePos (CodeClause a) where
+instance (B.GetCodePos a) => B.GetCodePos (CodeClause t a) where
     getCPs (CodeClause _ ts) = B.getCPs $ head ts
 
 -- | No lines, no tokens.
-instance B.Default (CodeClause a) where
+instance B.Default (CodeClause t a) where
     def = CodeClause [] []
 
 -- | Split lines into clause based on indent size.

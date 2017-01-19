@@ -65,7 +65,7 @@ subtreeClause cl = cl' where
     sep    = S.TText  B.def S.TextRaw "||"
     close  = S.TClose B.def ")"
 
-clauseFirstElem :: B.CodeClause a -> Maybe a
+clauseFirstElem :: B.CodeClause t a -> Maybe a
 clauseFirstElem cl =
     case B.clauseLines cl of
       [] -> Nothing
