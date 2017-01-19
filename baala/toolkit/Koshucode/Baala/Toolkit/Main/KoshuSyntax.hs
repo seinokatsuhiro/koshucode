@@ -148,7 +148,7 @@ dumpClause omit (clseq, c) =
        dumpLine clseq ls
        dumpToken omit `mapM_` ls
     where
-      comment line = "*** " ++ B.lineContent line
+      comment line = "*** " ++ O.tString (B.lineContent line)
 
 dumpLine :: Int -> [S.TokenLine String] -> IO ()
 dumpLine clseq ls = putJudges $ map (judgeLine clseq) ls

@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Base.Code.Line       as B
 
 -- | Tokens in clause.
 data CodeClause a = CodeClause
-    { clauseLines     :: [B.CodeLine a]  -- ^ Source lines of clause
+    { clauseLines     :: [B.CodeLine String a]  -- ^ Source lines of clause
     , clauseTokens    :: [a]             -- ^ Source tokens of clause
     } deriving (Show)
 
