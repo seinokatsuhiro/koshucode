@@ -21,7 +21,6 @@ import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data.Class              as D
 import qualified Koshucode.Baala.Data.Decode.Content     as D
-import qualified Koshucode.Baala.Data.Decode.Content     as D
 import qualified Koshucode.Baala.Data.Decode.Term        as D
 import qualified Koshucode.Baala.Syntax.Pattern          as P
 

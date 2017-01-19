@@ -63,8 +63,8 @@ instance (B.MixEncode c) => B.MixEncode (Rel c) where
     mixTransEncode sh (Rel he bo) =
         let he'  = B.mixEncode he
             bo'  = B.mixJoin1 $ map d bo
-            d xs = B.mixBracketS S.bracketList $ mixBar xs
-        in B.mixBracketS S.bracketRel (he' `B.mixSep` bo')
+            d xs = S.bracketWith S.bracketList $ mixBar xs
+        in S.bracketWith S.bracketRel (he' `B.mixSep` bo')
         where mixBar cs = B.mixJoinBar $ map (B.mixTransEncode sh) cs
 
 -- | Relation with judgement class.

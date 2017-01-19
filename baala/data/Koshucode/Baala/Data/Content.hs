@@ -138,10 +138,10 @@ instance B.MixEncode Content where
 
           ContentList cs   -> D.mixBracketList $ mixBar cs
           ContentSet  cs   -> D.mixBracketSet  $ mixBar cs
-          ContentTie  ts   -> B.mixBracketS S.bracketTie $ T.termsToMix1 sh ts
+          ContentTie  ts   -> S.bracketWith S.bracketTie $ T.termsToMix1 sh ts
           ContentRel  r    -> B.mixTransEncode sh r
           ContentInterp i  -> B.mixEncode i
-          ContentType t    -> B.mixBracketS S.bracketType $ B.mixEncode t
+          ContentType t    -> S.bracketWith S.bracketType $ B.mixEncode t
         where
           mixBar cs   = B.mixJoinBar $ map (B.mixTransEncode sh) cs
 

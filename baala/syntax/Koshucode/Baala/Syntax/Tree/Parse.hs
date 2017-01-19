@@ -23,11 +23,10 @@ import qualified Koshucode.Baala.Syntax.Tree.Bracket     as S
 -- --------------------------------------------  Type
 
 -- | Tree of tokens.
-type Tree = B.CodeTree S.BracketType S.Token
+type Tree = TTree String
 
 -- | Tree of tokens.
-{-# DEPRECATED TTree "Use 'Tree' instead." #-}
-type TTree = Tree
+type TTree t = B.CodeTree S.BracketType (S.TToken t)
 
 -- | Pair of token trees and its name.
 type NamedTrees = B.Named [Tree]
@@ -70,7 +69,7 @@ instance ToTrees B.Bz where
 instance ToTrees B.Bs where
     toTrees = toTrees . B.bsString
 
-instance ToTrees [S.TToken String] where
+instance ToTrees [S.Token] where
     toTrees = tokenTrees
 
 instance ToTrees [Tree] where
@@ -81,7 +80,7 @@ instance ToTrees (S.TokenClause String) where
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
-tokenTrees :: [S.Token] -> B.Ab [Tree]
+tokenTrees :: (O.Textual t, B.IsString t) => [S.TToken t] -> B.Ab [TTree t]
 tokenTrees = B.codeTrees S.getBracketType B.BracketNone . S.prepareTokens
 
 -- | Call function with token trees.

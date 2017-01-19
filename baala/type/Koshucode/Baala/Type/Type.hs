@@ -104,7 +104,7 @@ typeToMix = wf where
 
     wrap :: Bool -> B.MixText -> B.MixText
     wrap False xs              = xs
-    wrap True  xs              = B.mixBracketS S.bracketGroup xs
+    wrap True  xs              = S.bracketWith S.bracketGroup xs
 
     termTypes = B.mixJoin1 . map termType
 

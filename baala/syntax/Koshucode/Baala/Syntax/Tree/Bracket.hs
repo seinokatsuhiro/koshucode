@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Bracket type.
@@ -8,6 +9,7 @@ module Koshucode.Baala.Syntax.Tree.Bracket
     getBracketType,
 
     -- * Open and close
+    bracketWith,
     bracketGroup,
     bracketTerm,
     bracketList,
@@ -80,7 +82,7 @@ instance B.Name BracketType where
     name BracketUnknown  = "unknown"
 
 -- | Bracket type of token.
-getBracketType :: B.GetBracket BracketType S.Token
+getBracketType :: (Eq t, B.IsString t) => B.GetBracket BracketType (S.TToken t)
 getBracketType = B.bracketTable
     [ BracketGroup   # bracketGroup
     , BracketTerm    # bracketTerm
@@ -94,39 +96,43 @@ getBracketType = B.bracketTable
     , (BracketUnknown, (S.isOpenToken, S.isCloseToken))
     ] where br # p = (br, S.isBracketTokenOf p)
 
+-- | Enclose mix text in brackets.
+bracketWith :: (B.Bs, B.Bs) -> B.MixText -> B.MixText
+bracketWith = B.mixBracketS
+
 -- | Group bracket — @"("@ and @")"@
-bracketGroup :: (String, String)
-bracketGroup = ("(", ")")
+bracketGroup :: (B.IsString t) => (t, t)
+bracketGroup = ( "(", ")" )
 
 -- | Term bracket — @"(-"@ and @"-)"@
-bracketTerm :: (String, String)
-bracketTerm = ("(-", "-)")
+bracketTerm :: (B.IsString t) => (t, t)
+bracketTerm = ( "(-", "-)" )
 
 -- | List bracket — @"["@ and @"]"@
-bracketList :: (String, String)
-bracketList = ("[", "]")
+bracketList :: (B.IsString t) => (t, t)
+bracketList = ( "[", "]" )
 
 -- | Set bracket — @"{"@ and @"}"@
-bracketSet :: (String, String)
-bracketSet = ("{", "}")
+bracketSet :: (B.IsString t) => (t, t)
+bracketSet = ( "{", "}" )
 
 -- | Tie bracket — @"{-"@ and @"-}"@
-bracketTie :: (String, String)
-bracketTie = ("{-", "-}")
+bracketTie :: (B.IsString t) => (t, t)
+bracketTie = ( "{-", "-}" )
 
 -- | Relation bracket — @"{="@ and @"=}"@
-bracketRel :: (String, String)
-bracketRel = ("{=", "=}")
+bracketRel :: (B.IsString t) => (t, t)
+bracketRel = ( "{=", "=}" )
 
 -- | Interpretation bracket — @"{|"@ and @"|}"@
-bracketInterp :: (String, String)
-bracketInterp = ("{|", "|}")
+bracketInterp :: (B.IsString t) => (t, t)
+bracketInterp = ( "{|", "|}" )
 
 -- | Type bracket — @"[-"@ and @"-]"@
-bracketType :: (String, String)
-bracketType = ("[-", "-]")
+bracketType :: (B.IsString t) => (t, t)
+bracketType = ( "[-", "-]" )
 
 -- | Form bracket — @"(|"@ and @"|)"@
-bracketForm :: (String, String)
-bracketForm = ("(|", "|)")
+bracketForm :: (B.IsString t) => (t, t)
+bracketForm = ( "(|", "|)" )
 
