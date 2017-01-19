@@ -58,7 +58,7 @@ readRun f path =
                     
 -- --------------------------------------------  Clause
 
-type ClauseMix = S.TokenClause -> B.MixText
+type ClauseMix = S.TokenClause String -> B.MixText
 
 clauseMixForBz :: ClauseMix -> B.Bz -> B.MixText
 clauseMixForBz f bz = B.mixLines texts where
@@ -67,7 +67,7 @@ clauseMixForBz f bz = B.mixLines texts where
 
 pattern Affirm name ts <- (TBar "|==") : (TRaw name) : (TRaw ":") : ts
 
-clauseMix :: S.TokenClause -> B.MixText
+clauseMix :: S.TokenClause String -> B.MixText
 clauseMix = dispatch . B.clauseTokens where
     dispatch (Affirm name ts) = B.mix name `B.mixSep` B.mix ":" `B.mixSep` tokensMix ts
     dispatch ts = B.mix "**" `B.mixSep` B.mixShow ts

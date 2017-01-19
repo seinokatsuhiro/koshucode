@@ -76,7 +76,7 @@ instance ToTrees [S.Token] where
 instance ToTrees [Tree] where
     toTrees = Right
 
-instance ToTrees S.TokenClause where
+instance ToTrees (S.TokenClause t) where
     toTrees = toTrees . B.clauseTokens
 
 -- | Parse tokens with brackets into trees.

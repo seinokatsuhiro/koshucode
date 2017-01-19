@@ -37,7 +37,7 @@ import qualified Koshucode.Baala.Base.Message            as Msg
 --   TText /0.12.4/ TextQQ "cc"
 --   TClose /0.0.0/ ")"
 --
-readSubtreeClauses :: FilePath -> B.IOAb [S.TokenClause]
+readSubtreeClauses :: FilePath -> B.IOAb [S.TokenClause String]
 readSubtreeClauses path =
     do ls' <- S.readClauses path
        return $ case ls' of
@@ -45,7 +45,7 @@ readSubtreeClauses path =
          Right ls -> subtreeClause O.<#> ls
 
 -- | Insert open\/sep\/close to subtree clause.
-subtreeClause :: S.TokenClause -> B.Ab S.TokenClause
+subtreeClause :: S.TokenClause t -> B.Ab (S.TokenClause t)
 subtreeClause cl = cl' where
     cl' = case clauseFirstElem cl of
             Just (P.TRaw s) | s `elem` [">", ">>"] ->

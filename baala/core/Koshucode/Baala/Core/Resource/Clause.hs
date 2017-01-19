@@ -37,7 +37,7 @@ data ClauseHead = ClauseHead
     { clauseSecNo   :: C.SecNo          -- ^ Section number of the clause.
     , clauseShort   :: [S.ShortDef]     -- ^ Short setting.
     , clauseAbout   :: [S.Token]        -- ^ About setting.
-    , clauseSource  :: S.TokenClause    -- ^ Source code of the clause.
+    , clauseSource  :: S.TokenClause String    -- ^ Source code of the clause.
     } deriving (Show)
 
 -- | Proper part of clause.
@@ -54,7 +54,7 @@ data ClauseBody
     | COption   [S.Token]           -- ^ __Resource:__ Option settings
     | CExport   String              -- ^ __Resource:__ Exporting name
 
-    | CEcho     S.TokenClause       -- ^ __Other:__ Echo text
+    | CEcho     (S.TokenClause String)     -- ^ __Other:__ Echo text
     | CLicense  String              -- ^ __Other:__ License text
     | CBodies   [ClauseBody]        -- ^ __Other:__ Multiple bodies
     | CUnknown  (B.Ab ())           -- ^ __Other:__ Unknown clause

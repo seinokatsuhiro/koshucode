@@ -92,10 +92,10 @@ readTokenLines path =
 -- --------------------------------------------  Token clause
 
 -- | Code clause of tokens.
-type TokenClause = B.CodeClause String S.Token
+type TokenClause t = B.CodeClause t S.Token
 
 -- | Convert token lines into token clauses
-tokenClauses :: [TokenLine String] -> [TokenClause]
+tokenClauses :: [TokenLine String] -> [TokenClause String]
 tokenClauses = map clause . split where
     clause ls = B.CodeClause ls $ list ls
 
@@ -140,7 +140,7 @@ tokenIndent             _  = 0
 --                                                  TText /0.3.1/ TextRaw "cc"]}
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.6.0/ TextRaw "ee"]}
 --
-readClauses :: FilePath -> B.IOAb [TokenClause]
+readClauses :: FilePath -> B.IOAb [TokenClause String]
 readClauses path =
     do ls <- readTokenLines path
        return (tokenClauses <$> ls)
