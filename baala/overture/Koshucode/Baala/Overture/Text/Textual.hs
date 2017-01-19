@@ -159,6 +159,15 @@ class (Eq a, Monoid a) => Textual a where
             | otherwise  = loop (n + 1) t
         loop n _ = [tTake n t0]
 
+    -- | Length of textual value.
+    --
+    --   >>> tLength "foo" :: Int
+    --   3
+    --
+    tLength :: (Integral n) => a -> n
+    tLength (tCut -> Just (_, t)) = 1 + tLength t
+    tLength _ = 0
+
     -- ----------------------  Creation
 
     -- | Create text from single character.
