@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    66 judges
+**    70 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Bundle"            /import "Data.Map.Strict"
@@ -70,6 +70,10 @@
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Para"              /import "Koshucode.Baala.Subtext.MinMax"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Para"              /import "Koshucode.Baala.Subtext.Operator"
 
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Sivmap"      /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Sivmap"      /import "Koshucode.Baala.Subtext.Operator"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Sivmap"      /import "Koshucode.Baala.Subtext.Sieve.Tree"
+
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Token"       /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Token"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Token"       /import "Koshucode.Baala.Base"
@@ -82,6 +86,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Tree"        /import "Koshucode.Baala.Subtext.Sieve.Token"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve.Tree"        /import "Koshucode.Baala.Base.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve"             /import "Koshucode.Baala.Subtext.Sieve.Sivmap"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve"             /import "Koshucode.Baala.Subtext.Sieve.Token"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Sieve"             /import "Koshucode.Baala.Subtext.Sieve.Tree"
 
