@@ -25,22 +25,22 @@ import qualified Koshucode.Baala.Base.Code.Line       as B
 
 
 -- | Code scanner divides input text into output tokens.
-data CodeScan i o = CodeScan
-     { codeMapSaved :: [CodeScanMap i o]  -- ^ Saved updater
-     , codeMap      :: CodeScanMap i o    -- ^ Updater
+data CodeScan k t = CodeScan
+     { codeMapSaved :: [CodeScanMap k t]  -- ^ Saved updater
+     , codeMap      :: CodeScanMap k t    -- ^ Updater
      , codeInputPt  :: B.CodePos          -- ^ Code position
-     , codeInput    :: i                  -- ^ Input text
-     , codeOutput   :: [o]                -- ^ Output tokens
-     , codeWords    :: WordCache i        -- ^ Cached words
+     , codeInput    :: t                  -- ^ Input text
+     , codeOutput   :: [k t]              -- ^ Output tokens
+     , codeWords    :: WordCache t        -- ^ Cached words
      }
 
 -- | Return 'codeInputPt'.
-instance B.GetCodePos (CodeScan i o) where
+instance B.GetCodePos (CodeScan k t) where
     getCPs cp = [codeInputPt cp]
     getCP  cp = codeInputPt cp
 
 -- | Update code scanner.
-type CodeScanMap i o = O.Map (CodeScan i o)
+type CodeScanMap k t = O.Map (CodeScan k t)
 
 -- | Cached words.
 type WordCache t = O.Cache t t
@@ -50,16 +50,16 @@ emptyWordCache :: WordCache t
 emptyWordCache = O.cache [] id
 
 -- | Test scanner at the beginning of line, i.e., no output collected.
-isBol :: O.Test (CodeScan i o)
+isBol :: O.Test (CodeScan k t)
 isBol CodeScan {..} = null codeOutput
 
 -- | Save current updater.
-codeScanSave :: CodeScanMap i o
+codeScanSave :: CodeScanMap k t
 codeScanSave sc@CodeScan { codeMapSaved = fs, codeMap = f } =
     sc { codeMapSaved = f : fs }
 
 -- | Restore saved updater.
-codeScanRestore :: CodeScanMap i o
+codeScanRestore :: CodeScanMap k t
 codeScanRestore sc =
     case codeMapSaved sc of
       []      -> sc
@@ -77,14 +77,14 @@ codeScanRestore sc =
 --   3. Tokenize each lines,
 --      and put tokens together in 'B.CodeLine'.
 --
-codeScanUp :: CodeScanMap String o -> B.IxIOPoint -> String -> [B.CodeLine String o]
+codeScanUp :: CodeScanMap o String -> B.IxIOPoint -> String -> [B.CodeLine String (o String)]
 codeScanUp f ixio = codeScanUpLines f ixio . B.linesCrlfNumbered
 
 -- | Lazy bytestring version of 'codeScanUp'.
-codeScanUpBz :: (B.ToCode code) => CodeScanMap String o -> B.IxIOPoint -> code -> [B.CodeLine String o]
+codeScanUpBz :: (B.ToCode code) => CodeScanMap o String -> B.IxIOPoint -> code -> [B.CodeLine String (o String)]
 codeScanUpBz f ixio = codeScanUpLines f ixio . B.linesCrlfBzNumbered
 
-codeScanUpLines :: CodeScanMap String o -> B.IxIOPoint -> [B.NumberedLine] -> [B.CodeLine String o]
+codeScanUpLines :: CodeScanMap o String -> B.IxIOPoint -> [B.NumberedLine] -> [B.CodeLine String (o String)]
 codeScanUpLines f ixio = loop (CodeScan [] f cp "" [] emptyWordCache) where
     cp = B.def { B.cpIndex = O.getIx ixio
                , B.cpPath  = O.getIOPath ixio }
@@ -103,13 +103,13 @@ setCodePos num line cp =
        , B.cpLineText  = line
        , B.cpText      = line }
 
-setScan :: B.CodePos -> i -> CodeScan i o -> CodeScan i o
+setScan :: B.CodePos -> t -> CodeScan k t -> CodeScan k t
 setScan cp line sc =
     sc { codeInputPt = cp
        , codeInput   = line
        , codeOutput  = [] }
 
-codeScan :: CodeScanMap String o
+codeScan :: CodeScanMap o String
 codeScan sc@CodeScan { codeMap = f, codeInputPt = cp, codeInput = input }
     | null input  = call
     | otherwise   = codeScan call
@@ -119,32 +119,32 @@ setText :: String -> O.Map B.CodePos
 setText text cp = cp { B.cpText = text }
 
 -- | Update 'codeInput' and push result element to 'codeOutput'.
-codeUpdate :: i -> o -> CodeScanMap i o
+codeUpdate :: t -> k t -> CodeScanMap k t
 codeUpdate cs tok sc =
     sc { codeInput  = cs
        , codeOutput = tok : codeOutput sc }
 
 -- | Update code scanner with word table.
-codeUpdateWords :: WordCache i -> i -> o -> CodeScanMap i o
+codeUpdateWords :: WordCache t -> t -> k t -> CodeScanMap k t
 codeUpdateWords ws cs tok sc =
     sc { codeInput  = cs
        , codeOutput = tok : codeOutput sc
        , codeWords  = ws }
 
 -- | Multi-element version of 'codeUpdate'.
-codeUpdateList :: i -> [o] -> CodeScanMap i o
+codeUpdateList :: t -> [k t] -> CodeScanMap k t
 codeUpdateList cs toks sc =
     sc { codeInput  = cs
        , codeOutput = toks ++ codeOutput sc }
 
 -- | Multi-element and cached version of 'codeUpdate'.
-codeUpdateListWords :: WordCache i -> i -> [o] -> CodeScanMap i o
+codeUpdateListWords :: WordCache t -> t -> [k t] -> CodeScanMap k t
 codeUpdateListWords ws cs toks sc =
     sc { codeInput  = cs
        , codeOutput = toks ++ codeOutput sc
        , codeWords  = ws }
 
 -- | Change mapper of code sc.
-codeChange :: O.Map (CodeScanMap i o)
+codeChange :: O.Map (CodeScanMap k t)
 codeChange f sc = sc { codeMap = f }
 

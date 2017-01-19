@@ -77,7 +77,7 @@ isClock c = Ch.isDigit c || c `elem` (".:'+-" :: String)
 {-# WARNING ClipToken, ClipTokenC, ClipTokenCL "This is only used in defined module." #-}
 
 -- | Code scanner for token list.
-type TokenScan t = B.CodeScan t (S.TToken t)
+type TokenScan t = B.CodeScan S.TToken t
 
 -- | Read single token.
 type TokenScanMap t = O.Map (TokenScan t)
