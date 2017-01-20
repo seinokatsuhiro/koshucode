@@ -1,5 +1,5 @@
-{-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Textual class.
@@ -8,10 +8,17 @@ module Koshucode.Baala.Overture.Text.Textual
   ( Textual (..),
   ) where
 
-import qualified Data.Text                       as Tx
-import qualified Data.Text.Lazy                  as Tz
-import qualified Koshucode.Baala.Overture.Infix  as O
-import qualified Koshucode.Baala.Overture.Misc   as O
+import qualified Data.Text                           as Tx
+import qualified Data.Text.Encoding                  as Tx
+import qualified Data.Text.Encoding.Error            as Err
+import qualified Data.Text.Lazy                      as Tz
+import qualified Data.Text.Lazy.Encoding             as Tz
+import qualified Data.ByteString.UTF8                as Bs
+import qualified Data.ByteString.Lazy                as Bz
+import qualified Data.ByteString.Lazy.UTF8           as Bz
+import qualified Koshucode.Baala.Overture.Infix      as O
+import qualified Koshucode.Baala.Overture.Misc       as O
+import qualified Koshucode.Baala.Overture.Shorthand  as O
 
 -- | Text-like value.
 class (Eq a, Monoid a) => Textual a where
@@ -227,6 +234,14 @@ class (Eq a, Monoid a) => Textual a where
     showT :: (Show b) => b -> a
     showT = stringT . show
 
+    -- | Convert strict bytestring to textual value.
+    bsT :: O.Bs -> a
+    bsT = bzT . Bz.fromStrict
+
+    -- | Convert lazy bytestring to textual value.
+    bzT :: O.Bz -> a
+    bzT = bsT . Bz.toStrict
+
 instance Textual String where
     tEmpty       = ""
     tIsEmpty     = null
@@ -238,6 +253,8 @@ instance Textual String where
 
     tString      = id
     stringT      = id
+    bsT          = Bs.toString
+    bzT          = Bz.toString
 
 -- | Strict text.
 instance Textual Tx.Text where
@@ -252,6 +269,8 @@ instance Textual Tx.Text where
 
     tString      = Tx.unpack
     stringT      = Tx.pack
+    bsT          = Tx.decodeUtf8With Err.lenientDecode
+    bzT          = bsT . Bz.toStrict
 
 -- | Lazy text.
 instance Textual Tz.Text where
@@ -266,4 +285,6 @@ instance Textual Tz.Text where
 
     tString      = Tz.unpack
     stringT      = Tz.pack
+    bsT          = bzT . Bz.fromStrict
+    bzT          = Tz.decodeUtf8With Err.lenientDecode
 
