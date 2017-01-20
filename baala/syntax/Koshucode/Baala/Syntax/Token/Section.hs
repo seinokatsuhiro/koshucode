@@ -35,21 +35,21 @@ type ChangeSection t = t -> Maybe (S.TokenScanMap t)
 -- | Line begins with triple equal signs is treated as section delimter.
 section :: (Ord t, O.Textual t) => ChangeSection t -> (t -> S.TokenScan t) -> S.TokenScanMap t
 section change f
-        sc@B.CodeScan { B.codeMap    = prev
-                      , B.codeInput  = cs0
-                      , B.codeOutput = out } = body out cs0 where
+        sc@B.CodeScan { B.scanMap    = prev
+                      , B.scanInput  = cs0
+                      , B.scanOutput = out } = body out cs0 where
     body [] (O.tCut -> O.Jp '=' _) = B.codeChange (selectSection change prev) sc
     body _ cs = f cs
 
 selectSection :: (Ord t, O.Textual t) => ChangeSection t -> S.TokenScanMap t -> S.TokenScanMap t
 selectSection change prev
-              sc@B.CodeScan { B.codeInputPt  = cp
-                            , B.codeInput    = cs0
-                            , B.codeWords    = ws
+              sc@B.CodeScan { B.scanCp     = cp
+                            , B.scanInput  = cs0
+                            , B.scanCache  = ws
                             } = sec cs0 where
     clip   = S.clipUpdate  sc
     clipw  = S.clipUpdateC sc
-    out    = reverse $ S.sweepToken $ B.codeOutput sc
+    out    = reverse $ S.sweepToken $ B.scanOutput sc
     cp'    = B.cpStringify cp
 
     sec (O.tCut2 -> O.Jp2 '*' '*' _)
@@ -69,10 +69,10 @@ selectSection change prev
     dispatch ts    = sectionUnexp ts sc
 
 sectionUnexp :: (O.Textual t) => [S.TToken t] -> S.TokenScanMap t
-sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate O.tEmpty tok sc where
+sectionUnexp ts sc@B.CodeScan { B.scanInput = cs } = B.codeUpdate O.tEmpty tok sc where
     tok  = S.unknownToken cp cs $ Msg.unexpSect help
     cp   = case ts of
-             []    -> B.cpStringify $ B.codeInputPt sc
+             []    -> B.cpStringify $ B.scanCp sc
              t : _ -> B.getCP t
     help = [ "=== rel      for relational calculation"
            , "=== note     for commentary section"
@@ -87,7 +87,7 @@ type Scanner t = ChangeSection t -> S.TokenScanMap t
 
 -- | Scan tokens in @end@ section.
 scanEnd :: (O.Textual t) => Scanner t
-scanEnd _ sc@B.CodeScan { B.codeInput = cs } = comment cs sc
+scanEnd _ sc@B.CodeScan { B.scanInput = cs } = comment cs sc
 
 -- | Scan tokens in @note@ section.
 scanNote :: (Ord t, O.Textual t) => Scanner t
@@ -130,7 +130,7 @@ scanTextAssert change sc = section change text sc where
         | c == '|'     = S.clipUpdate  sc $ S.clipBar cp cs
         | c == ':'     = B.codeChange (scanLineInClause S.TextRaw change)
                            $ B.codeScanSave $ S.clipUpdate sc (cs, raw [c])
-        | otherwise    = case S.clipSymbol cp (B.codeWords sc) ccs of
+        | otherwise    = case S.clipSymbol cp (B.scanCache sc) ccs of
                            (ws', _, P.TRaw s) | O.tIsEmpty s ->
                                S.clipUpdateC sc (ws', cs, raw [c])
                            sym -> S.clipUpdateC sc sym

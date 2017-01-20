@@ -57,7 +57,7 @@ isPM a     = (a == '+' || a == '-')
 
 -- | Scan a next token in relational section.
 scanRel :: (Ord t, B.IsString t, O.Textual t, S.ToTermName t) => S.Scanner t
-scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' where
+scanRel change sc@B.CodeScan { B.scanCp = cp, B.scanCache = wtab } = sc' where
 
     clip         = S.clipUpdate   sc
     clipw        = S.clipUpdateC  sc
@@ -186,8 +186,8 @@ clipHat cp = hat where
 
 -- | Scan interpretation content between @{|@ and @|}@.
 scanInterp :: (Ord t, B.IsString t, O.Textual t) => S.Scanner t
-scanInterp change sc@B.CodeScan { B.codeInputPt = cp
-                                , B.codeWords = wtab } = S.section change int sc where
+scanInterp change sc@B.CodeScan { B.scanCp = cp
+                                , B.scanCache = wtab } = S.section change int sc where
     clip        = S.clipUpdate   sc
     clipcl      = S.clipUpdateCL sc
     upd cs tok  = B.codeUpdate cs tok sc
