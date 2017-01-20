@@ -11,7 +11,7 @@ module Koshucode.Baala.Base.Code.Scan
     -- * Function
     isBol,
     codeScanSave, codeScanRestore,
-    codeScanUp, codeScanUpBz,
+    codeScanUp,
     codeUpdate, codeUpdateWords,
     codeUpdateList, codeUpdateListWords,
     codeChange,
@@ -72,19 +72,15 @@ codeScanRestore sc =
 --
 --   2. Numbering lines from 1.
 --      Internally, this is represented as
---      a list of pairs @(@'B.LineNumber'@, @'String'@)@.
+--      a list of pairs @(@'B.LineNumber'@, @'O.Textual'@)@.
 --
 --   3. Tokenize each lines,
 --      and put tokens together in 'B.CodeLine'.
 --
-codeScanUp :: CodeScanMap k String -> B.IxIOPoint -> String -> [B.CodeLine k String]
-codeScanUp f ixio = codeScanUpLines f ixio . B.linesCrlfNumbered
+codeScanUp :: (B.ToCode code, O.Textual t) => CodeScanMap k t -> B.IxIOPoint -> code -> [B.CodeLine k t]
+codeScanUp f ixio = codeScanUpLines f ixio . B.linesCrlfBzNumbered
 
--- | Lazy bytestring version of 'codeScanUp'.
-codeScanUpBz :: (B.ToCode code) => CodeScanMap k String -> B.IxIOPoint -> code -> [B.CodeLine k String]
-codeScanUpBz f ixio = codeScanUpLines f ixio . B.linesCrlfBzNumbered
-
-codeScanUpLines :: CodeScanMap k String -> B.IxIOPoint -> [B.NumberedLine String] -> [B.CodeLine k String]
+codeScanUpLines :: (O.Textual t) => CodeScanMap k t -> B.IxIOPoint -> [B.NumberedLine t] -> [B.CodeLine k t]
 codeScanUpLines f ixio = loop (CodeScan [] f cp O.tEmpty [] emptyWordCache) where
     cp = B.def { B.cpIndex = O.getIx ixio
                , B.cpPath  = O.getIOPath ixio }
@@ -97,7 +93,7 @@ codeScanUpLines f ixio = loop (CodeScan [] f cp O.tEmpty [] emptyWordCache) wher
            ls'  = loop r' ls
        in B.CodeLine num line toks : ls'
 
-setCodePos :: B.LineNumber -> String -> O.Map B.CodePos
+setCodePos :: B.LineNumber -> t -> O.Map (B.TCodePos t)
 setCodePos num line cp =
     cp { B.cpLineNo    = num
        , B.cpLineText  = line
@@ -109,13 +105,13 @@ setScan cp line sc =
        , scanInput   = line
        , scanOutput  = [] }
 
-codeScan :: CodeScanMap k String
-codeScan sc@CodeScan { scanMap = f, scanCp = cp, scanInput = input }
-    | null input  = call
-    | otherwise   = codeScan call
-    where call    = f sc { scanCp = setText input cp }
+codeScan :: (O.Textual t) => CodeScanMap k t
+codeScan sc@CodeScan { scanMap = f, scanCp = cp, scanInput = i }
+    | O.tIsEmpty i  = call
+    | otherwise     = codeScan call
+    where call      = f sc { scanCp = setText i cp }
 
-setText :: String -> O.Map B.CodePos
+setText :: t -> O.Map (B.TCodePos t)
 setText text cp = cp { B.cpText = text }
 
 -- | Update 'scanInput' and push result element to 'scanOutput'.

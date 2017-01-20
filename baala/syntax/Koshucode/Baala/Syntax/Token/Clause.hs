@@ -45,7 +45,7 @@ tokenLines = tokenLinesWith S.scanRel
 
 -- | Tokenize with code scanner.
 tokenLinesWith :: (B.ToCode code) => S.Scanner String -> B.IxIOPoint -> code -> [TokenLine String]
-tokenLinesWith scan = B.codeScanUpBz $ scan changeSection
+tokenLinesWith scan = B.codeScanUp $ scan changeSection
 
 -- | Tokenize text.
 tokenLinesString :: B.IxIOPoint -> S.InputText -> [TokenLine String]
