@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.203.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.206.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -87,6 +87,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RawJudge"
+	    >RawJudge</a
+	    > c = (<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:JudgeClass"
+	    >JudgeClass</a
+	    >, [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c])</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:JudgeTerm"
+	    >JudgeTerm</a
+	    > c = (<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:JudgeClass"
+	    >JudgeClass</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c)</li
+	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:JudgeClass"
@@ -355,6 +375,42 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
+	    > <a name="t:RawJudge" class="def"
+	    >RawJudge</a
+	    > c = (<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:JudgeClass"
+	    >JudgeClass</a
+	    >, [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c]) <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#RawJudge');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Judgement material.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:JudgeTerm" class="def"
+	    >JudgeTerm</a
+	    > c = (<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:JudgeClass"
+	    >JudgeClass</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#JudgeTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Term with judgement class.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
 	    > <a name="t:JudgeClass" class="def"
 	    >JudgeClass</a
 	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
@@ -405,7 +461,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		>term &quot;size&quot; 10 :: Term Int
 </code
 		></strong
-	      >(TermName &quot;size&quot;, 10)
+	      >(TermName EQ &quot;size&quot;, 10)
 </pre
 	    ></div
 	  ></div
@@ -441,7 +497,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 		      >TermName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-59');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-67');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -455,7 +511,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 		      >TermName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-59');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-67');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -469,7 +525,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 		      >TermName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-59');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-67');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -483,7 +539,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 		      >TermName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-61');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-69');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -497,7 +553,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 		      >TermName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-72');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-87');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -542,6 +598,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><div class="doc"
 	  ><p
 	    >Convert to term name.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>toTermName &quot;/a&quot;
+</code
+		></strong
+	      >TermName EQ &quot;a&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>toTermName &quot;+/a&quot;
+</code
+		></strong
+	      >TermName GT &quot;a&quot;
+</pre
 	    ></div
 	  ><div class="subs methods"
 	  ><p class="caption"
@@ -568,7 +644,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 		      >Int</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-88');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-103');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -584,7 +660,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 		      >String</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-76');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-91');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -598,7 +674,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		    ><a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
 		      >ToTermName</a
 		      > Text</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-80');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-95');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -612,7 +688,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		    ><a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
 		      >ToTermName</a
 		      > Text</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-84');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-99');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -628,7 +704,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 		      >TermName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-72');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-87');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -676,28 +752,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Syntax-Symbol-Term.html#v:toTermName"
+		  >toTermName</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Decode term name from string.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>stringTermName &quot;/a&quot;
-</code
-		></strong
-	      >TermName EQ &quot;a&quot;
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>stringTermName &quot;+/a&quot;
-</code
-		></strong
-	      >TermName GT &quot;a&quot;
-</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -745,7 +809,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>termNameString $ stringTermName &quot;/size&quot;
+		>termNameString $ toTermName &quot;/size&quot;
 </code
 		></strong
 	      >&quot;/size&quot;
@@ -771,7 +835,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>termPathString [stringTermName &quot;r&quot;, stringTermName &quot;x&quot;]
+		>termPathString [toTermName &quot;r&quot;, toTermName &quot;x&quot;]
 </code
 		></strong
 	      >&quot;/r/x&quot;
@@ -797,7 +861,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>termNameContent $ stringTermName &quot;/size&quot;
+		>termNameContent $ toTermName &quot;/size&quot;
 </code
 		></strong
 	      >&quot;size&quot;

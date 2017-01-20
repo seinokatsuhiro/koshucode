@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.203.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.206.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -83,66 +83,74 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a href="#t:ChangeSection"
 	    >ChangeSection</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > t = t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
 	    >TokenScanMap</a
-	    ></li
+	    > t)</li
 	  ><li class="src short"
 	  ><a href="#v:section"
 	    >section</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Section.html#t:ChangeSection"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Section.html#t:ChangeSection"
 	    >ChangeSection</a
-	    > -&gt; (<a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
-	    >InputText</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    > t -&gt; (t -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
 	    >TokenScan</a
-	    >) -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
+	    > t) -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
 	    >TokenScanMap</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:Scanner"
 	    >Scanner</a
-	    > = <a href="Koshucode-Baala-Syntax-Token-Section.html#t:ChangeSection"
+	    > t = <a href="Koshucode-Baala-Syntax-Token-Section.html#t:ChangeSection"
 	    >ChangeSection</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
+	    > t -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
 	    >TokenScanMap</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:scanEnd"
 	    >scanEnd</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
 	    >Scanner</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:scanNote"
 	    >scanNote</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
 	    >Scanner</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:scanLicense"
 	    >scanLicense</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
 	    >Scanner</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:scanLine"
 	    >scanLine</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
 	    >TextForm</a
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
 	    >Scanner</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:scanTextAssert"
 	    >scanTextAssert</a
 	    > :: <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
 	    >Scanner</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    ></li
 	  ></ul
 	></div
@@ -155,13 +163,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a name="t:ChangeSection" class="def"
 	    >ChangeSection</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > t = t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
 	    >TokenScanMap</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#ChangeSection');" href="javascript:void(0);" class="link"
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#ChangeSection');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -173,15 +179,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:section" class="def"
 	    >section</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Section.html#t:ChangeSection"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Section.html#t:ChangeSection"
 	    >ChangeSection</a
-	    > -&gt; (<a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
-	    >InputText</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    > t -&gt; (t -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
 	    >TokenScan</a
-	    >) -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
+	    > t) -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
 	    >TokenScanMap</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#section');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#section');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -197,11 +203,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a name="t:Scanner" class="def"
 	    >Scanner</a
-	    > = <a href="Koshucode-Baala-Syntax-Token-Section.html#t:ChangeSection"
+	    > t = <a href="Koshucode-Baala-Syntax-Token-Section.html#t:ChangeSection"
 	    >ChangeSection</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
+	    > t -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScanMap"
 	    >TokenScanMap</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#Scanner');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#Scanner');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -213,9 +219,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:scanEnd" class="def"
 	    >scanEnd</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
 	    >Scanner</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#scanEnd');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#scanEnd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -229,9 +237,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:scanNote" class="def"
 	    >scanNote</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
 	    >Scanner</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#scanNote');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#scanNote');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -245,9 +255,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:scanLicense" class="def"
 	    >scanLicense</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
 	    >Scanner</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#scanLicense');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#scanLicense');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -261,11 +273,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:scanLine" class="def"
 	    >scanLine</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
 	    >TextForm</a
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
 	    >Scanner</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#scanLine');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#scanLine');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -279,6 +293,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >scanTextAssert</a
 	    > :: <a href="Koshucode-Baala-Syntax-Token-Section.html#t:Scanner"
 	    >Scanner</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Section.html#scanTextAssert');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p

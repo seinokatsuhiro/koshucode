@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Subtext.Sieve.Sivmap</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('subtext', 'koshucode-baala-subtext', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtext-Sieve-Sivmap.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Sivmap.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-subtext-0.206.0.0: A text matching library</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Subtext.Sieve.Sivmap</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Textual list mapping.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Sivmap"
+	    >Sivmap</a
+	    > t<ul class="subs"
+	    ><li
+	      >= <a href="#v:SivmapId"
+		>SivmapId</a
+		></li
+	      ><li
+	      >| <a href="#v:SivmapEq"
+		>SivmapEq</a
+		> t</li
+	      ><li
+	      >| <a href="#v:SivmapKeep"
+		>SivmapKeep</a
+		> t <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+		>SivExpr</a
+		></li
+	      ><li
+	      >| <a href="#v:SivmapOmit"
+		>SivmapOmit</a
+		> t <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+		>SivExpr</a
+		></li
+	      ><li
+	      >| <a href="#v:SivmapAssoc"
+		>SivmapAssoc</a
+		> t t</li
+	      ><li
+	      >| <a href="#v:SivmapChain"
+		>SivmapChain</a
+		> (<a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+		>Sivmap</a
+		> t) (<a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+		>Sivmap</a
+		> t)</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:sivmapId"
+	    >sivmapId</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t</li
+	  ><li class="src short"
+	  ><a href="#v:sivmapEq"
+	    >sivmapEq</a
+	    > :: t -&gt; <a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t</li
+	  ><li class="src short"
+	  ><a href="#v:sivmapKeep"
+	    >sivmapKeep</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+	    >ToSivExpr</a
+	    > t =&gt; t -&gt; <a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t</li
+	  ><li class="src short"
+	  ><a href="#v:sivmapOmit"
+	    >sivmapOmit</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+	    >ToSivExpr</a
+	    > t =&gt; t -&gt; <a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t</li
+	  ><li class="src short"
+	  ><a href="#v:sivmapAssoc"
+	    >sivmapAssoc</a
+	    > :: t -&gt; t -&gt; <a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t</li
+	  ><li class="src short"
+	  ><a href="#v:sivmapChain"
+	    >sivmapChain</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > (<a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t)</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Sivmap" class="def"
+	    >Sivmap</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Sivmap.html#Sivmap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Mapping for textual lists.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:SivmapId" class="def"
+		  >SivmapId</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Identity</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivmapEq" class="def"
+		  >SivmapEq</a
+		  > t</td
+		><td class="doc"
+		><p
+		  >Equality</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivmapKeep" class="def"
+		  >SivmapKeep</a
+		  > t <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+		  >SivExpr</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Keep by sieve pattern</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivmapOmit" class="def"
+		  >SivmapOmit</a
+		  > t <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:SivExpr"
+		  >SivExpr</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Omit by sieve pattern</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivmapAssoc" class="def"
+		  >SivmapAssoc</a
+		  > t t</td
+		><td class="doc"
+		><p
+		  >Associatoin of key and value</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SivmapChain" class="def"
+		  >SivmapChain</a
+		  > (<a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+		  >Sivmap</a
+		  > t) (<a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+		  >Sivmap</a
+		  > t)</td
+		><td class="doc"
+		><p
+		  >Sivmap chain</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Sivmap" class="caption collapser" onclick="toggleSection('i:Sivmap')"
+	    >Instances</p
+	    ><div id="section.i:Sivmap" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+		      >Sivmap</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Sivmap.html#line-25');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+		      >Sivmap</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Sivmap.html#line-25');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+		      >Sivmap</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Sivmap.html#line-27');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sivmapId" class="def"
+	    >sivmapId</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Sivmap.html#sivmapId');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Identity mapping.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sivmapEq" class="def"
+	    >sivmapEq</a
+	    > :: t -&gt; <a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Sivmap.html#sivmapEq');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Equal mapping.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sivmapKeep" class="def"
+	    >sivmapKeep</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+	    >ToSivExpr</a
+	    > t =&gt; t -&gt; <a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Sivmap.html#sivmapKeep');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Filter by sieve pattern.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sivmapOmit" class="def"
+	    >sivmapOmit</a
+	    > :: <a href="Koshucode-Baala-Subtext-Sieve-Tree.html#t:ToSivExpr"
+	    >ToSivExpr</a
+	    > t =&gt; t -&gt; <a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Sivmap.html#sivmapOmit');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Anti-filter by sieve pattern.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sivmapAssoc" class="def"
+	    >sivmapAssoc</a
+	    > :: t -&gt; t -&gt; <a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Sivmap.html#sivmapAssoc');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Association mapping.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sivmapChain" class="def"
+	    >sivmapChain</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > (<a href="Koshucode-Baala-Subtext-Sieve-Sivmap.html#t:Sivmap"
+	    >Sivmap</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Subtext-Sieve-Sivmap.html#sivmapChain');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Mapping chain.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

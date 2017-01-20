@@ -8,7 +8,7 @@
 --   alternative, and repetitive expressions. It collects submatches and
 --   switch matching expression among multiple expressions.
 @package koshucode-baala-subtext
-@version 0.203.0.0
+@version 0.206.0.0
 
 
 -- | Token for sieve pattern.
@@ -486,7 +486,7 @@ matchBundle :: (Show a) => Bundle a -> GeneralMatch a
 module Koshucode.Baala.Subtext.Sieve.Tree
 
 -- | Sieve tree.
-type SivTree t = CodeTree SivBracket (SivToken t)
+type SivTree t = CodeTree SivBracket SivToken t
 
 -- | Parse sieve token list.
 --   
@@ -527,6 +527,52 @@ sivMatchExpr :: SivExpr -> String -> Bool
 instance Koshucode.Baala.Subtext.Sieve.Tree.ToSivExpr Koshucode.Baala.Subtext.Sieve.Tree.SivExpr
 instance Koshucode.Baala.Subtext.Sieve.Tree.ToSivExpr [Koshucode.Baala.Subtext.Sieve.Token.SivToken GHC.Base.String]
 instance Koshucode.Baala.Subtext.Sieve.Tree.ToSivExpr GHC.Base.String
+
+
+-- | Textual list mapping.
+module Koshucode.Baala.Subtext.Sieve.Sivmap
+
+-- | Mapping for textual lists.
+data Sivmap t
+
+-- | Identity
+SivmapId :: Sivmap t
+
+-- | Equality
+SivmapEq :: t -> Sivmap t
+
+-- | Keep by sieve pattern
+SivmapKeep :: t -> SivExpr -> Sivmap t
+
+-- | Omit by sieve pattern
+SivmapOmit :: t -> SivExpr -> Sivmap t
+
+-- | Associatoin of key and value
+SivmapAssoc :: t -> t -> Sivmap t
+
+-- | Sivmap chain
+SivmapChain :: (Sivmap t) -> (Sivmap t) -> Sivmap t
+
+-- | Identity mapping.
+sivmapId :: Sivmap t
+
+-- | Equal mapping.
+sivmapEq :: t -> Sivmap t
+
+-- | Filter by sieve pattern.
+sivmapKeep :: (ToSivExpr t) => t -> Sivmap t
+
+-- | Anti-filter by sieve pattern.
+sivmapOmit :: (ToSivExpr t) => t -> Sivmap t
+
+-- | Association mapping.
+sivmapAssoc :: t -> t -> Sivmap t
+
+-- | Mapping chain.
+sivmapChain :: Bin (Sivmap t)
+instance GHC.Classes.Eq t => GHC.Classes.Eq (Koshucode.Baala.Subtext.Sieve.Sivmap.Sivmap t)
+instance GHC.Show.Show t => GHC.Show.Show (Koshucode.Baala.Subtext.Sieve.Sivmap.Sivmap t)
+instance GHC.Base.Monoid (Koshucode.Baala.Subtext.Sieve.Sivmap.Sivmap t)
 
 
 -- | Sieve pattern.

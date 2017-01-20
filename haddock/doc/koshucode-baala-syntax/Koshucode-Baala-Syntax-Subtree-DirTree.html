@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.203.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.206.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -77,8 +77,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >IO</a
 	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:Subtree"
 	    >Subtree</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
 	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:withCurrentDirectory"
@@ -109,21 +109,59 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:dirTrees" class="def"
 	    >dirTrees</a
-	    > :: [<a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
-	    >FilePath</a
-	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
-	    >FilePath</a
-	    > -&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
-	    >SubtreePattern</a
-	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
-	    >IO</a
-	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:Subtree"
-	    >Subtree</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-DirTree.html#dirTrees');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-DirTree.html#dirTrees');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: [<a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+		  >FilePath</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Exclude directory names</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+		  >FilePath</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Beginning directory</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
+		  >SubtreePattern</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Directory tree patterns</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+		  >IO</a
+		  > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:Subtree"
+		  >Subtree</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+		  >FilePath</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Result directory trees</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
 	  ><div class="doc"
 	  ><p
 	    >Create selective directory trees.</p
@@ -132,7 +170,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>O.putLines . B.ppRawTrees O.# dirTrees [] &quot;.&quot; [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit &quot;dist&quot;) [S.subtreeL $ S.subtreeKeep &quot;S*&quot;]]
+		>import Koshucode.Baala.Syntax.Subtree.Filter as S
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>B.printTrees O.# dirTrees [] &quot;.&quot; [S.SubtreeR (S.sivmapId O.++ S.sivmapOmit &quot;dist&quot;) [S.subtreeL $ S.sivmapKeep &quot;S(*)&quot;]]
 </code
 		></strong
 	      >&gt; [] &quot;data&quot;
@@ -142,6 +187,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
     &gt; [] &quot;Syntax&quot;
       &gt; [] &quot;Attr&quot;
         - &quot;Slot.hs&quot;
+      &gt; [] &quot;Subtree&quot;
+        - &quot;Subtree.hs&quot;
+      - &quot;Subtree.hs&quot;
       &gt; [] &quot;Symbol&quot;
         - &quot;Short.hs&quot;
         - &quot;Symbol.hs&quot;
@@ -150,7 +198,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
         - &quot;Section.hs&quot;
       &gt; [] &quot;Tree&quot;
         - &quot;Split.hs&quot;
-        - &quot;Subtree.hs&quot;
     - &quot;Syntax.hs&quot;
 </pre
 	    ></div
@@ -168,6 +215,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    > a <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-DirTree.html#withCurrentDirectory');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Same as <code
+	      >withCurrentDirectory</code
+	      >.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -182,6 +235,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-DirTree.html#listDirectory');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Same as <code
+	      >listDirectory</code
+	      >.</p
+	    ></div
 	  ></div
 	></div
       ></div

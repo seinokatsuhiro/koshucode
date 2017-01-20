@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.203.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.206.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -93,25 +93,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >LText</a
 	    > ::   <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
 	    >TextForm</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > -&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >pattern</span
 	    > <a href="#v:LRaw"
 	    >LRaw</a
-	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >pattern</span
@@ -121,9 +117,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Char</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >])</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >pattern</span
@@ -133,33 +131,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Char</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >])</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >pattern</span
 	    > <a href="#v:LQ"
 	    >LQ</a
-	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >pattern</span
 	    > <a href="#v:LQq"
 	    >LQq</a
-	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >pattern</span
@@ -167,25 +163,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >LSlot</a
 	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > -&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >pattern</span
 	    > <a href="#v:LTerm"
 	    >LTerm</a
-	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >pattern</span
@@ -295,13 +287,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >LText</a
 	    > ::   <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
 	    >TextForm</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > -&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LText');" href="javascript:void(0);" class="link"
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LText');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -315,13 +305,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >pattern</span
 	    > <a name="v:LRaw" class="def"
 	    >LRaw</a
-	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LRaw');" href="javascript:void(0);" class="link"
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LRaw');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -339,9 +327,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Char</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LAtt1');" href="javascript:void(0);" class="link"
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >]) <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LAtt1');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -359,9 +349,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Char</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LAtt2');" href="javascript:void(0);" class="link"
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >]) <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LAtt2');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -375,13 +367,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >pattern</span
 	    > <a name="v:LQ" class="def"
 	    >LQ</a
-	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LQ');" href="javascript:void(0);" class="link"
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LQ');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -395,13 +385,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >pattern</span
 	    > <a name="v:LQq" class="def"
 	    >LQq</a
-	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LQq');" href="javascript:void(0);" class="link"
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LQq');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -417,13 +405,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >LSlot</a
 	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > -&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LSlot');" href="javascript:void(0);" class="link"
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LSlot');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -437,13 +423,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >pattern</span
 	    > <a name="v:LTerm" class="def"
 	    >LTerm</a
-	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
+	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 	    >RawTree</a
-	    > t t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LTerm');" href="javascript:void(0);" class="link"
+	    > t t (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Tree-Pattern.html#LTerm');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

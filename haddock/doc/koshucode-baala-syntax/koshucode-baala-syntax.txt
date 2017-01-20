@@ -6,11 +6,17 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.203.0.0
+@version 0.206.0.0
 
 
 -- | Term types and related functions.
 module Koshucode.Baala.Syntax.Symbol.Term
+
+-- | Judgement material.
+type RawJudge c = (JudgeClass, [Term c])
+
+-- | Term with judgement class.
+type JudgeTerm c = (JudgeClass, Term c)
 
 -- | Name of judgement class, in other words, name of propositional
 --   function.
@@ -23,7 +29,7 @@ type Term c = (TermName, c)
 --   
 --   <pre>
 --   &gt;&gt;&gt; term "size" 10 :: Term Int
---   (TermName "size", 10)
+--   (TermName EQ "size", 10)
 --   </pre>
 term :: (ToTermName n) => n -> c -> Term c
 
@@ -35,6 +41,16 @@ data TermName
 type TermPath = [TermName]
 
 -- | Convert to term name.
+--   
+--   <pre>
+--   &gt;&gt;&gt; toTermName "/a"
+--   TermName EQ "a"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; toTermName "+/a"
+--   TermName GT "a"
+--   </pre>
 class ToTermName a
 toTermName :: ToTermName a => a -> TermName
 
@@ -47,16 +63,8 @@ toTermName :: ToTermName a => a -> TermName
 enslash :: Map String
 
 -- | Decode term name from string.
---   
---   <pre>
---   &gt;&gt;&gt; stringTermName "/a"
---   TermName EQ "a"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; stringTermName "+/a"
---   TermName GT "a"
---   </pre>
+
+-- | <i>Deprecated: Use <a>toTermName</a> instead.</i>
 stringTermName :: String -> TermName
 
 -- | Convert string to multiple term names.
@@ -70,7 +78,7 @@ stringTermNames :: String -> [TermName]
 -- | Encode term name into string.
 --   
 --   <pre>
---   &gt;&gt;&gt; termNameString $ stringTermName "/size"
+--   &gt;&gt;&gt; termNameString $ toTermName "/size"
 --   "/size"
 --   </pre>
 termNameString :: TermName -> String
@@ -78,7 +86,7 @@ termNameString :: TermName -> String
 -- | Encode term path into string.
 --   
 --   <pre>
---   &gt;&gt;&gt; termPathString [stringTermName "r", stringTermName "x"]
+--   &gt;&gt;&gt; termPathString [toTermName "r", toTermName "x"]
 --   "/r/x"
 --   </pre>
 termPathString :: TermPath -> String
@@ -86,7 +94,7 @@ termPathString :: TermPath -> String
 -- | Extract internal name.
 --   
 --   <pre>
---   &gt;&gt;&gt; termNameContent $ stringTermName "/size"
+--   &gt;&gt;&gt; termNameContent $ toTermName "/size"
 --   "size"
 --   </pre>
 termNameContent :: TermName -> String
@@ -203,92 +211,7 @@ angleQuote :: StringMap
 --   &gt;&gt;&gt; lookup "lf" angleTexts
 --   Just "\n"
 --   </pre>
-angleTexts :: [(String, String)]
-
-
--- | Subtree filter.
-module Koshucode.Baala.Syntax.Subtree.Filter
-
--- | Subtree filter.
-data SubtreeFilter
-
--- | Identity
-SubtreeId :: SubtreeFilter
-
--- | Equality
-SubtreeEq :: String -> SubtreeFilter
-
--- | Keep by sieve pattern
-SubtreeKeep :: String -> SivExpr -> SubtreeFilter
-
--- | Omit by sieve pattern
-SubtreeOmit :: String -> SivExpr -> SubtreeFilter
-
--- | Attribute
-SubtreeAttr :: String -> String -> SubtreeFilter
-
--- | Filter chain
-SubtreeChain :: SubtreeFilter -> SubtreeFilter -> SubtreeFilter
-
--- | Identity filter.
-subtreeId :: SubtreeFilter
-
--- | Equal filter.
-subtreeEq :: String -> SubtreeFilter
-
--- | Filter by sieve pattern.
-subtreeKeep :: String -> SubtreeFilter
-
--- | Anti-filter by sieve pattern.
-subtreeOmit :: String -> SubtreeFilter
-
--- | Filter chain.
-subtreeChain :: Bin SubtreeFilter
-
--- | Attribute filter.
-subtreeAttr :: String -> String -> SubtreeFilter
-
--- | Filter strings by subtree filter.
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter subtreeId ["foo", "bar", "foobar"]
---   ["foo","bar","foobar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (SubtreeEq "bar") ["foo", "bar", "foobar"]
---   ["bar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (subtreeKeep "foo*") ["foo", "bar", "foobar"]
---   ["foo","foobar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (subtreeKeep "*bar") ["foo", "bar", "foobar"]
---   ["bar","foobar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
---   ["bar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
---   ["bar"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; subtreeFilter (subtreeKeep "foo*" O.++ subtreeOmit "*bar") ["foo", "bar", "foobar"]
---   ["foo"]
---   </pre>
-subtreeFilter :: SubtreeFilter -> Map [String]
-subtreeFilterOn :: (a -> Maybe String) -> SubtreeFilter -> Map [a]
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Subtree.Filter.SubtreeFilter
-instance GHC.Show.Show Koshucode.Baala.Syntax.Subtree.Filter.SubtreeFilter
-instance GHC.Base.Monoid Koshucode.Baala.Syntax.Subtree.Filter.SubtreeFilter
+angleTexts :: (IsString s) => [(s, s)]
 
 
 -- | Parameter type.
@@ -764,7 +687,7 @@ module Koshucode.Baala.Syntax.Token.Message
 abToken :: (GetCodePos cp) => Abortable cp b
 
 -- | Forbidden input
-forbiddenInput :: String -> Ab a
+forbiddenInput :: (Textual t) => t -> Ab a
 
 -- | Unexpedted section delimiter
 unexpSect :: [String] -> Ab a
@@ -794,10 +717,10 @@ module Koshucode.Baala.Syntax.Symbol.Next
 type InputText = String
 
 -- | Split next character sequence from input text.
-type Next a = InputText -> (InputText, a)
+type Next t a = t -> (t, a)
 
 -- | Split next character sequence from input text.
-type AbNext a = InputText -> Ab (InputText, a)
+type AbNext t a = t -> Ab (t, a)
 
 -- | Get next spaces. Space character is decided by <a>isSpace</a>.
 --   
@@ -810,7 +733,7 @@ type AbNext a = InputText -> Ab (InputText, a)
 --   &gt;&gt;&gt; nextSpace " \tabc"
 --   ("abc", 2)
 --   </pre>
-nextSpace :: Next Int
+nextSpace :: (Textual t) => Next t Int
 
 -- | Get next double quoted text. A single double quote ends text. A double
 --   double quote does not end text, but it is converted to double quote.
@@ -824,7 +747,7 @@ nextSpace :: Next Int
 --   &gt;&gt;&gt; nextQQ "abc\"\"def\" ghi"
 --   Right (" ghi","abc\"def")
 --   </pre>
-nextQQ :: AbNext String
+nextQQ :: (Textual t) => AbNext t t
 
 -- | Get next text before given delimiter.
 --   
@@ -832,7 +755,7 @@ nextQQ :: AbNext String
 --   &gt;&gt;&gt; nextBefore "''" "abc'' def"
 --   Right (" def","abc")
 --   </pre>
-nextBefore :: String -> AbNext String
+nextBefore :: (Textual t) => t -> AbNext t t
 
 
 -- | Symbol type.
@@ -873,7 +796,7 @@ module Koshucode.Baala.Syntax.Symbol.Symbol
 --            :      :       :
 --            ................ Unknown
 --   </pre>
-data Symbol
+data Symbol t
 
 -- | <b>1.</b> General-plain-numeric symbol
 --   
@@ -881,7 +804,7 @@ data Symbol
 --   &gt;&gt;&gt; nextSymbol "1"
 --   ("", SymbolCommon "1")
 --   </pre>
-SymbolCommon :: String -> Symbol
+SymbolCommon :: t -> Symbol t
 
 -- | <b>2.</b> Plain (include general) symbol
 --   
@@ -889,7 +812,7 @@ SymbolCommon :: String -> Symbol
 --   &gt;&gt;&gt; nextSymbol "a"
 --   ("", SymbolPlain "a")
 --   </pre>
-SymbolPlain :: String -> Symbol
+SymbolPlain :: t -> Symbol t
 
 -- | <b>3.</b> Numeric (include general) symbol
 --   
@@ -897,7 +820,7 @@ SymbolPlain :: String -> Symbol
 --   &gt;&gt;&gt; nextSymbol "+"
 --   ("", SymbolNumeric "+")
 --   </pre>
-SymbolNumeric :: String -> Symbol
+SymbolNumeric :: t -> Symbol t
 
 -- | <b>4.</b> General (not plain nor numeric) symbol
 --   
@@ -905,7 +828,7 @@ SymbolNumeric :: String -> Symbol
 --   &gt;&gt;&gt; nextSymbol "="
 --   ("", SymbolGeneral "=")
 --   </pre>
-SymbolGeneral :: String -> Symbol
+SymbolGeneral :: t -> Symbol t
 
 -- | <b>5.</b> Short symbol (Plain <tt>"."</tt> Plain)
 --   
@@ -913,7 +836,7 @@ SymbolGeneral :: String -> Symbol
 --   &gt;&gt;&gt; nextSymbol "a.xxx"
 --   ("", SymbolShort "a" "xxx")
 --   </pre>
-SymbolShort :: String -> String -> Symbol
+SymbolShort :: t -> t -> Symbol t
 
 -- | <b>6.</b> Unknown symbol
 --   
@@ -921,22 +844,22 @@ SymbolShort :: String -> String -> Symbol
 --   &gt;&gt;&gt; nextSymbol "a+"
 --   ("", SymbolUnknown "a+")
 --   </pre>
-SymbolUnknown :: String -> Symbol
+SymbolUnknown :: t -> Symbol t
 
 -- | Test symbol is general, in other words, <a>SymbolCommon</a>,
 --   <a>SymbolPlain</a> or <a>SymbolGeneral</a>.
-isGeneralSymbol :: Test Symbol
+isGeneralSymbol :: Test (Symbol t)
 
 -- | Test symbol is plain, in other words, <a>SymbolCommon</a> or
 --   <a>SymbolPlain</a>.
-isPlainSymbol :: Test Symbol
+isPlainSymbol :: Test (Symbol t)
 
 -- | Test symbol is numeric, in other words, <a>SymbolCommon</a> or
 --   <a>SymbolNumeric</a>.
-isNumericSymbol :: Test Symbol
+isNumericSymbol :: Test (Symbol t)
 
 -- | Test symbol is <a>SymbolShort</a>.
-isShortSymbol :: Test Symbol
+isShortSymbol :: Test (Symbol t)
 
 -- | Test character is a symbol component.
 isSymbolChar :: Test Char
@@ -966,7 +889,7 @@ isNumericChar :: Test Char
 --   &gt;&gt;&gt; nextSymbol "= /a"
 --   (" /a", SymbolGeneral "=")
 --   </pre>
-nextSymbol :: Next Symbol
+nextSymbol :: (Textual t) => Next t (Symbol t)
 
 -- | Get next plain symbol, i.e., <a>SymbolCommon</a> or
 --   <a>SymbolPlain</a>.
@@ -980,10 +903,10 @@ nextSymbol :: Next Symbol
 --   &gt;&gt;&gt; nextSymbolPlain "12.0"
 --   Left (AbortReason "Expect ordinary symbol" ...)
 --   </pre>
-nextSymbolPlain :: AbNext String
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.Symbol.Symbol.Symbol
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Symbol.Symbol.Symbol
-instance GHC.Show.Show Koshucode.Baala.Syntax.Symbol.Symbol.Symbol
+nextSymbolPlain :: (Textual t) => AbNext t t
+instance GHC.Classes.Ord t => GHC.Classes.Ord (Koshucode.Baala.Syntax.Symbol.Symbol.Symbol t)
+instance GHC.Classes.Eq t => GHC.Classes.Eq (Koshucode.Baala.Syntax.Symbol.Symbol.Symbol t)
+instance GHC.Show.Show t => GHC.Show.Show (Koshucode.Baala.Syntax.Symbol.Symbol.Symbol t)
 
 
 -- | Short sign.
@@ -1033,16 +956,24 @@ module Koshucode.Baala.Syntax.Subtree.Subtree
 data SubtreePattern
 
 -- | Leaf
-SubtreeL :: SubtreeTerm -> SubtreeFilter -> SubtreePattern
+SubtreeL :: SubtreeTerm -> (Sivmap String) -> SubtreePattern
 
 -- | Branch
-SubtreeB :: SubtreeTerm -> SubtreeFilter -> [SubtreePattern] -> SubtreePattern
+SubtreeB :: SubtreeTerm -> (Sivmap String) -> [SubtreePattern] -> SubtreePattern
 
 -- | Recursive branch
-SubtreeR :: SubtreeFilter -> [SubtreePattern] -> SubtreePattern
+SubtreeR :: (Sivmap String) -> [SubtreePattern] -> SubtreePattern
 
 -- | Create non-termification leaf pattern.
-subtreeL :: SubtreeFilter -> SubtreePattern
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeL $ S.sivmapEq "foo"
+--   SubtreeL SubtreeNone (SivmapEq "foo")
+--   </pre>
+subtreeL :: Sivmap String -> SubtreePattern
+
+-- | Create non-termification branch pattern.
+subtreeB :: Sivmap String -> [SubtreePattern] -> SubtreePattern
 
 -- | Termification of subtree content.
 data SubtreeTerm
@@ -1051,16 +982,37 @@ SubtreeText :: [JudgeClass] -> TermName -> SubtreeTerm
 SubtreeSeq :: [JudgeClass] -> TermName -> SubtreeTerm
 
 -- | Create text term.
-subtreeText :: (ToTermName n) => String -> n -> SubtreeTerm
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeText "A" "/x"
+--   SubtreeText ["A"] (TermName EQ "x")
+--   </pre>
+subtreeText :: (ToTermName n) => JudgeClass -> n -> SubtreeTerm
 
--- | Create text term.
-subtreeTexts :: (ToTermName n) => [String] -> n -> SubtreeTerm
+-- | Create text term with multiple classes.
+subtreeTexts :: (ToTermName n) => [JudgeClass] -> n -> SubtreeTerm
 
 -- | Subtree.
 type Subtree a = RawTree [SubtreePattern] a a
 
 -- | Subtree with termified elements.
 type SubtreeOutput a = RawTree [SubtreePattern] (SubtreeTerm, a) (SubtreeTerm, a)
+
+-- | Subtree with value.
+type SubtreeValue = SubtreeOutput Value
+
+-- | Test string matches selection rule.
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeStringTest (S.sivmapEq "foo") &lt;$&gt; ["foo", "foobar", "barfoo"]
+--   [True,False,False]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeStringTest (S.sivmapKeep "foo(*)") &lt;$&gt; ["foo", "foobar", "barfoo"]
+--   [True,True,False]
+--   </pre>
+subtreeStringTest :: Sivmap String -> String -> Bool
 
 -- | Select subtree.
 --   
@@ -1076,39 +1028,39 @@ type SubtreeOutput a = RawTree [SubtreePattern] (SubtreeTerm, a) (SubtreeTerm, a
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; B.printTrees $ subtree [SubtreeB SubtreeNone (S.subtreeEq "Y1") [subtreeL (S.subtreeEq "Z1")]] [tree]
+--   &gt;&gt;&gt; B.printTrees $ subtree [subtreeB (S.sivmapEq "Y1") [subtreeL (S.sivmapEq "Z1")]] [tree]
 --   &gt; [] (SubtreeNone,"Y1")
 --     - (SubtreeNone,"Z1")
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; B.printTrees $ subtree [SubtreeR (S.subtreeId) [subtreeL (S.subtreeEq "Z3")]] [tree]
+--   &gt;&gt;&gt; B.printTrees $ subtree [SubtreeR (S.sivmapId) [subtreeL (S.sivmapEq "Z3")]] [tree]
 --   &gt; [] (SubtreeNone,"Y1")
 --     &gt; [] (SubtreeNone,"Y2")
 --       - (SubtreeNone,"Z3")
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; B.printTrees $ subtree [SubtreeR (S.subtreeId) [subtreeL (S.subtreeEq "Z1")]] [tree]
+--   &gt;&gt;&gt; B.printTrees $ subtree [SubtreeR (S.sivmapId) [subtreeL (S.sivmapEq "Z1")]] [tree]
 --   &gt; [] (SubtreeNone,"Y1")
 --     - (SubtreeNone,"Z1")
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; B.printTrees $ subtree [SubtreeB (subtreeText "A" "/y") (S.subtreeId) [SubtreeL (subtreeText "A" "/z") (S.subtreeEq "Z1")]] [tree]
+--   &gt;&gt;&gt; B.printTrees $ subtree [SubtreeB (subtreeText "A" "/y") (S.sivmapId) [SubtreeL (subtreeText "A" "/z") (S.sivmapEq "Z1")]] [tree]
 --   &gt; [] (SubtreeText ["A"] (TermName EQ "y"),"Y1")
 --     - (SubtreeText ["A"] (TermName EQ "z"),"Z1")
 --   </pre>
 subtree :: [SubtreePattern] -> [Subtree String] -> [SubtreeOutput String]
 
 -- | Select subtree by element tester.
-subtreeBy :: (a -> SubtreeFilter -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
+subtreeBy :: (Sivmap String -> a -> Bool) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
 
 -- | Select subtree.
 subtreeOne :: [SubtreePattern] -> Map [Subtree String]
 
 -- | Extract data from subtree.
-subtreeData :: SubtreeOutput Value -> [(JudgeClass, [Term Value])]
+subtreeData :: SubtreeValue -> [RawJudge Value]
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Subtree.Subtree.SubtreePattern
 instance GHC.Show.Show Koshucode.Baala.Syntax.Subtree.Subtree.SubtreePattern
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Subtree.Subtree.SubtreeTerm
@@ -1121,7 +1073,9 @@ module Koshucode.Baala.Syntax.Subtree.DirTree
 -- | Create selective directory trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; O.putLines . B.ppRawTrees O.# dirTrees [] "." [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit "dist") [S.subtreeL $ S.subtreeKeep "S*"]]
+--   &gt;&gt;&gt; import Koshucode.Baala.Syntax.Subtree.Filter as S
+--   
+--   &gt;&gt;&gt; B.printTrees O.# dirTrees [] "." [S.SubtreeR (S.sivmapId O.++ S.sivmapOmit "dist") [S.subtreeL $ S.sivmapKeep "S(*)"]]
 --   &gt; [] "data"
 --     - "SLOC.k"
 --   &gt; [] "Koshucode"
@@ -1129,6 +1083,9 @@ module Koshucode.Baala.Syntax.Subtree.DirTree
 --       &gt; [] "Syntax"
 --         &gt; [] "Attr"
 --           - "Slot.hs"
+--         &gt; [] "Subtree"
+--           - "Subtree.hs"
+--         - "Subtree.hs"
 --         &gt; [] "Symbol"
 --           - "Short.hs"
 --           - "Symbol.hs"
@@ -1137,11 +1094,14 @@ module Koshucode.Baala.Syntax.Subtree.DirTree
 --           - "Section.hs"
 --         &gt; [] "Tree"
 --           - "Split.hs"
---           - "Subtree.hs"
 --       - "Syntax.hs"
 --   </pre>
-dirTrees :: [FilePath] -> FilePath -> [SubtreePattern] -> IO [Subtree String]
+dirTrees :: [FilePath] -> FilePath -> [SubtreePattern] -> IO [Subtree FilePath]
+
+-- | Same as <a>withCurrentDirectory</a>.
 withCurrentDirectory :: FilePath -> IO a -> IO a
+
+-- | Same as <a>listDirectory</a>.
 listDirectory :: FilePath -> IO [FilePath]
 
 
@@ -1214,16 +1174,13 @@ xmlTrees :: (Ord s, StringLike s) => [XmlToken s] -> Ab [XmlTree s]
 xmlDecode :: (Ord s, StringLike s) => s -> Ab [XmlTree s]
 
 -- | XML output tree.
-type XmlTreeOutput s = SubtreeOutput (XmlTerm s)
-
--- | Judgement material.
-type RawJudge c = (JudgeClass, [Term c])
+type XmlOutput s = SubtreeOutput (XmlTerm s)
 
 -- | Calculate subtree of XML tree.
-xmlSubtree :: [SubtreePattern] -> [XmlTree String] -> [XmlTreeOutput String]
+xmlOutput :: [SubtreePattern] -> [XmlTree String] -> [XmlOutput String]
 
 -- | Extract data from XML output tree.
-xmlData :: XmlTreeOutput String -> [RawJudge Value]
+xmlData :: XmlOutput String -> [RawJudge Value]
 
 -- | Calculate XML subtree and extract data.
 xmlSubtreeData :: [SubtreePattern] -> [XmlTree String] -> [RawJudge Value]
@@ -1243,52 +1200,58 @@ module Koshucode.Baala.Syntax.Token.Token
 class SubtypeName a
 subtypeName :: SubtypeName a => a -> String
 
--- | There are eleven types of tokens.
-data Token
+-- | String token.
+type Token = TToken String
+
+-- | Textual token.
+data TToken t
 
 -- | <b>1 Textual:</b> Text — <tt>'code</tt>, <tt>"text"</tt>, etc
-TText :: CodePos -> TextForm -> String -> Token
+TText :: (TCodePos t) -> TextForm -> t -> TToken t
 
 -- | <b>2 Textual:</b> Prefixed shorten text — <tt>short.proper</tt>
-TShort :: CodePos -> String -> String -> Token
+TShort :: (TCodePos t) -> t -> t -> TToken t
 
 -- | <b>3 Textual:</b> Term name — <tt>/term</tt>
-TTerm :: CodePos -> String -> Token
+TTerm :: (TCodePos t) -> t -> TToken t
 
 -- | <b>4 Symbolic:</b> Local name — <tt>^r</tt>, <tt>^/r</tt>
-TLocal :: CodePos -> LocalRef -> Int -> [Token] -> Token
+TLocal :: (TCodePos t) -> LocalRef -> Int -> [Token] -> TToken t
 
 -- | <b>5 Symbolic:</b> Slot name. <a>Int</a> represents slot level, i.e.,
 --   0 for local positional slots, 1 for local named slots, 2 for global
 --   slots — <tt>@slot</tt>, <tt>@@global</tt>
-TSlot :: CodePos -> Int -> String -> Token
+TSlot :: (TCodePos t) -> Int -> t -> TToken t
 
 -- | <b>6 Symbolic:</b> Blank name. (This is only used in building content
 --   expression)
-TName :: CodePos -> BlankName -> Token
+TName :: (TCodePos t) -> BlankName -> TToken t
 
 -- | <b>7 Punctuational:</b> Opening bracket — <tt>(</tt>, <tt>{</tt>,
 --   <tt>{=</tt>, etc
-TOpen :: CodePos -> String -> Token
+TOpen :: (TCodePos t) -> t -> TToken t
 
 -- | <b>8 Punctuational:</b> Closing bracket — <tt>=}</tt>, <tt>}</tt>,
 --   <tt>)</tt>, etc
-TClose :: CodePos -> String -> Token
+TClose :: (TCodePos t) -> t -> TToken t
 
 -- | <b>9 Punctuational:</b> <i>N</i> space characters
-TSpace :: CodePos -> Int -> Token
+TSpace :: (TCodePos t) -> Int -> TToken t
 
 -- | <b>10 Punctuational:</b> Comment — <tt>** comment line</tt>
-TComment :: CodePos -> String -> Token
+TComment :: (TCodePos t) -> t -> TToken t
 
 -- | <b>11 Other:</b> Unknown token
-TUnknown :: CodePos -> String -> AbortReason -> Token
+TUnknown :: (TCodePos t) -> t -> AbortReason -> TToken t
+
+-- | Code point of token.
+tokenCp :: TToken t -> TCodePos t
 
 -- | Create raw text token.
-rawTextToken :: String -> Token
+rawTextToken :: (Textual t) => t -> TToken t
 
 -- | Create unknown token.
-unknownToken :: CodePos -> String -> Ab a -> Token
+unknownToken :: TCodePos t -> t -> Ab a -> TToken t
 
 -- | Subtype of text token.
 data TextForm
@@ -1333,9 +1296,9 @@ BlankInternal :: String -> BlankName
 BlankPrefix :: String -> BlankName
 BlankInfix :: String -> BlankName
 BlankPostfix :: String -> BlankName
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.Token
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.Token
-instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.Token
+instance Koshucode.Baala.Overture.Text.Textual.Textual t => GHC.Classes.Ord (Koshucode.Baala.Syntax.Token.Token.TToken t)
+instance GHC.Classes.Eq t => GHC.Classes.Eq (Koshucode.Baala.Syntax.Token.Token.TToken t)
+instance (GHC.Show.Show t, Koshucode.Baala.Overture.Text.Textual.Textual t) => GHC.Show.Show (Koshucode.Baala.Syntax.Token.Token.TToken t)
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.BlankName
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.BlankName
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.BlankName
@@ -1345,9 +1308,8 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.LocalRef
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.TextForm
-instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.Token
-instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.Token
-instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos Koshucode.Baala.Syntax.Token.Token.Token
+instance Koshucode.Baala.Syntax.Token.Token.SubtypeName (Koshucode.Baala.Syntax.Token.Token.TToken t)
+instance Koshucode.Baala.Overture.Text.Textual.Textual t => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Syntax.Token.Token.TToken t)
 instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.TextForm
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.LocalRef
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.BlankName
@@ -1395,7 +1357,7 @@ tokenContent :: Token -> String
 --   &gt;&gt;&gt; let tok = S.rawTextToken "flower" in (S.subtypeName tok, tokenDetailTypeString tok)
 --   ("text", Just "raw")
 --   </pre>
-tokenDetailTypeString :: Token -> Maybe String
+tokenDetailTypeString :: TToken t -> Maybe String
 
 -- | Get token parents from local token.
 tokenParents :: Token -> [Token]
@@ -1407,31 +1369,31 @@ tokenParents :: Token -> [Token]
 --   <li>Remove comments.</li>
 --   <li>Join fragmented texts.</li>
 --   </ol>
-prepareTokens :: Map [Token]
+prepareTokens :: (Textual t) => Map [TToken t]
 
 -- | Remove blank tokens.
-sweepToken :: Map [Token]
+sweepToken :: Map [TToken t]
 
 -- | Test token is blank, i.e., comment or space.
-isBlankToken :: Test Token
+isBlankToken :: Test (TToken t)
 
 -- | Test token is short-type token.
-isShortToken :: Test Token
+isShortToken :: Test (TToken t)
 
 -- | Test token is term-type token.
-isTermToken :: Test Token
+isTermToken :: Test (TToken t)
 
 -- | Test token is open-type token.
-isOpenToken :: Test Token
+isOpenToken :: Test (TToken t)
 
 -- | Test token is close-type token.
-isCloseToken :: Test Token
+isCloseToken :: Test (TToken t)
 
 -- | Create bracket testers.
-isBracketTokenOf :: (String, String) -> (Test Token, Test Token)
+isBracketTokenOf :: (Eq t) => (t, t) -> (Test (TToken t), Test (TToken t))
 
 -- | Test token is unknown.
-isUnknownToken :: Test Token
+isUnknownToken :: Test (TToken t)
 
 
 -- | Clip token text.
@@ -1456,37 +1418,43 @@ isJudge :: Test Char
 isClock :: Test Char
 
 -- | Code scanner for token list.
-type TokenScan = CodeScan String Token
+type TokenScan t = CodeScan TToken t
 
 -- | Read single token.
-type TokenScanMap = Map TokenScan
+type TokenScanMap t = Map (TokenScan t)
 
 -- | Clip single-token result.
-type ClipResult = (InputText, Token)
+type ClipResult t = (t, TToken t)
 
 -- | Clip single-token result with word cache.
-type ClipResultC = (WordCache, InputText, Token)
+type ClipResultC t = (WordCache t, t, TToken t)
 
 -- | Clip multiple-tokens result with word cache.
-type ClipResultCL = (WordCache, InputText, [Token])
+type ClipResultCL t = (WordCache t, t, [TToken t])
 
 -- | Clip a next token.
-type ClipToken = CodePos -> InputText -> ClipResult
+
+-- | <i>Warning: This is only used in defined module.</i>
+type ClipToken t = TCodePos t -> t -> ClipResult t
 
 -- | Clip a next token with word cache.
-type ClipTokenC = CodePos -> WordCache -> InputText -> ClipResultC
+
+-- | <i>Warning: This is only used in defined module.</i>
+type ClipTokenC t = TCodePos t -> WordCache t -> t -> ClipResultC t
 
 -- | Clip a next token with word cache.
-type ClipTokenCL = CodePos -> WordCache -> InputText -> ClipResultCL
+
+-- | <i>Warning: This is only used in defined module.</i>
+type ClipTokenCL t = TCodePos t -> WordCache t -> t -> ClipResultCL t
 
 -- | Update token scanner by clip result.
-clipUpdate :: TokenScan -> ClipResult -> TokenScan
+clipUpdate :: TokenScan t -> ClipResult t -> TokenScan t
 
 -- | Update token scanner by clip result with word cache.
-clipUpdateC :: TokenScan -> ClipResultC -> TokenScan
+clipUpdateC :: TokenScan t -> ClipResultC t -> TokenScan t
 
 -- | Update token scanner by clip result with word cache.
-clipUpdateCL :: TokenScan -> ClipResultCL -> TokenScan
+clipUpdateCL :: TokenScan t -> ClipResultCL t -> TokenScan t
 
 -- | Clip space token.
 --   
@@ -1494,7 +1462,7 @@ clipUpdateCL :: TokenScan -> ClipResultCL -> TokenScan
 --   &gt;&gt;&gt; clipSpace B.def "  foo bar baz"
 --   ("foo bar baz", TSpace /0.0.0/ 3)
 --   </pre>
-clipSpace :: ClipToken
+clipSpace :: (Textual t) => ClipToken t
 
 -- | Clip single-quoted text.
 --   
@@ -1502,7 +1470,7 @@ clipSpace :: ClipToken
 --   &gt;&gt;&gt; clipQ B.def O.emptyWordCache "foo bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQ "foo")
 --   </pre>
-clipQ :: ClipTokenC
+clipQ :: (Ord t, Textual t) => ClipTokenC t
 
 -- | Clip double-quoted text.
 --   
@@ -1510,7 +1478,7 @@ clipQ :: ClipTokenC
 --   &gt;&gt;&gt; clipQq B.def O.emptyWordCache "foo\" bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --   </pre>
-clipQq :: ClipTokenC
+clipQq :: (Ord t, Textual t) => ClipTokenC t
 
 -- | Clip quoted text before delimiter. This function must be called after
 --   two single quotations.
@@ -1519,7 +1487,7 @@ clipQq :: ClipTokenC
 --   &gt;&gt;&gt; clipQn B.def B.emptyWordCache "'foo''' bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --   </pre>
-clipQn :: ClipTokenC
+clipQn :: (Ord t, Textual t) => ClipTokenC t
 
 -- | Clip symbolic token.
 --   
@@ -1527,7 +1495,7 @@ clipQn :: ClipTokenC
 --   &gt;&gt;&gt; clipSymbol B.def O.emptyWordCache "foo bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextRaw "foo")
 --   </pre>
-clipSymbol :: ClipTokenC
+clipSymbol :: (Ord t, Textual t) => ClipTokenC t
 
 -- | Clip slot name, like <tt>@foo</tt>.
 --   
@@ -1535,15 +1503,15 @@ clipSymbol :: ClipTokenC
 --   &gt;&gt;&gt; clipSlot 1 B.def "foo bar baz"
 --   (" bar baz", TSlot /0.0.0/ 1 "foo")
 --   </pre>
-clipSlot :: Int -> ClipToken
+clipSlot :: (Textual t) => Int -> ClipToken t
 
 -- | Clip signed term name.
 --   
 --   <pre>
---   &gt;&gt;&gt; clipTermSign "+/" B.def Map.empty "foo bar baz"
+--   &gt;&gt;&gt; clipTermSign "+/" B.def B.def "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm &lt;I0-L0-C0&gt; "+/foo"])
 --   </pre>
-clipTermSign :: String -> ClipTokenCL
+clipTermSign :: (Ord t, Textual t, IsString t) => t -> ClipTokenCL t
 
 -- | Clip term name.
 --   
@@ -1551,7 +1519,7 @@ clipTermSign :: String -> ClipTokenCL
 --   &gt;&gt;&gt; clipTermName B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm &lt;I0-L0-C0&gt; "/foo"])
 --   </pre>
-clipTermName :: ClipTokenCL
+clipTermName :: (Ord t, Textual t, IsString t) => ClipTokenCL t
 
 -- | Clip quoted term.
 --   
@@ -1559,7 +1527,7 @@ clipTermName :: ClipTokenCL
 --   &gt;&gt;&gt; clipTermQ B.def Map.empty "foo bar baz"
 --   (fromList [], " bar baz", [TText &lt;I0-L0-C0&gt; TextTerm "foo"])
 --   </pre>
-clipTermQ :: ClipTokenCL
+clipTermQ :: (Ord t, Textual t, IsString t) => ClipTokenCL t
 
 -- | Clip token beginning with <tt>"|"</tt>.
 --   
@@ -1577,70 +1545,70 @@ clipTermQ :: ClipTokenCL
 --   &gt;&gt;&gt; clipBar B.def "12:00| ..."
 --   (" ...", TText /0.0.0/ TextBar "|12:00|")
 --   </pre>
-clipBar :: CodePos -> String -> ClipResult
+clipBar :: (Textual t) => TCodePos t -> t -> ClipResult t
 
 
 -- | Code section.
 module Koshucode.Baala.Syntax.Token.Section
 
 -- | Select scanner based on section name.
-type ChangeSection = String -> Maybe TokenScanMap
+type ChangeSection t = t -> Maybe (TokenScanMap t)
 
 -- | Line begins with triple equal signs is treated as section delimter.
-section :: ChangeSection -> (InputText -> TokenScan) -> TokenScanMap
+section :: (Textual t) => ChangeSection t -> (t -> TokenScan t) -> TokenScanMap t
 
 -- | Token scanner.
-type Scanner = ChangeSection -> TokenScanMap
+type Scanner t = ChangeSection t -> TokenScanMap t
 
 -- | Scan tokens in <tt>end</tt> section.
-scanEnd :: Scanner
+scanEnd :: (Textual t) => Scanner t
 
 -- | Scan tokens in <tt>note</tt> section.
-scanNote :: Scanner
+scanNote :: (Textual t) => Scanner t
 
 -- | Scan tokens in <tt>license</tt> section.
-scanLicense :: Scanner
+scanLicense :: (Textual t) => Scanner t
 
 -- | Scan entire line as text.
-scanLine :: TextForm -> Scanner
+scanLine :: (Textual t) => TextForm -> Scanner t
 
 -- | Section for <tt>koshu-text-assert</tt> command.
-scanTextAssert :: Scanner
+scanTextAssert :: Scanner String
 
 
 -- | Tokenizer for relational section.
 module Koshucode.Baala.Syntax.Token.Rel
 
 -- | Scan a next token in relational section.
-scanRel :: Scanner
+scanRel :: (Textual t, ToTermName t) => Scanner t
 
 -- | Scan interpretation content between <tt>{|</tt> and <tt>|}</tt>.
-scanInterp :: Scanner
+scanInterp :: (Textual t) => Scanner t
 
 
 -- | Token line and clause.
 module Koshucode.Baala.Syntax.Token.Clause
 
 -- | Token list on a line.
-type TokenLine = CodeLine Token
+type TokenLine t = CodeLine TToken t
+
+-- | Tokenize with given scanner.
+tokenLinesBy :: (ToCode code, Textual t, ToTermName t) => Scanner t -> IxIOPoint -> code -> [TokenLine t]
+
+-- | Tokenize relational section.
+tokenLines :: (ToCode code, Textual t, ToTermName t) => IxIOPoint -> code -> [TokenLine t]
 
 -- | Tokenize lazy bytestring.
-tokenLines :: (ToCode code) => IxIOPoint -> code -> [TokenLine]
-
--- | Tokenize lazy bytestring.
-tokenLinesTextAssert :: (ToCode code) => IxIOPoint -> code -> [TokenLine]
-
--- | Test string is short prefix.
-isShortPrefix :: Test String
+tokenLinesTextAssert :: (ToCode code) => IxIOPoint -> code -> [TokenLine String]
 
 -- | Read token lines from file.
-readTokenLines :: FilePath -> IOAb [TokenLine]
+readTokenLines :: (Textual t, ToTermName t) => FilePath -> IOAb [TokenLine t]
 
 -- | Code clause of tokens.
-type TokenClause = CodeClause Token
+type TokenClause t = CodeClause TToken t
 
 -- | Convert token lines into token clauses
-tokenClauses :: [TokenLine] -> [TokenClause]
+tokenClauses :: [TokenLine t] -> [TokenClause t]
 
 -- | Read clause list from file.
 --   
@@ -1669,13 +1637,13 @@ tokenClauses :: [TokenLine] -> [TokenClause]
 --                                                  TText /0.3.1/ TextRaw "cc"]}
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.6.0/ TextRaw "ee"]}
 --   </pre>
-readClauses :: FilePath -> IOAb [TokenClause]
+readClauses :: (Textual t, ToTermName t) => FilePath -> IOAb [TokenClause t]
 
 -- | Read clauses and extract tokens.
-readClauseTokens :: FilePath -> IOAb [[Token]]
+readClauseTokens :: (Textual t, ToTermName t) => FilePath -> IOAb [[TToken t]]
 
 -- | Abbreviated tokenizer.
-toks :: String -> [Token]
+toks :: (Textual t, ToTermName t) => String -> [TToken t]
 
 -- | Print token list.
 printToks :: [Token] -> IO ()
@@ -1841,31 +1809,34 @@ BracketForm :: BracketType
 BracketUnknown :: BracketType
 
 -- | Bracket type of token.
-getBracketType :: GetBracket BracketType Token
+getBracketType :: (Eq t, IsString t) => GetBracket BracketType (TToken t)
+
+-- | Enclose mix text in brackets.
+bracketWith :: (Bs, Bs) -> MixText -> MixText
 
 -- | Group bracket — <tt>"("</tt> and <tt>")"</tt>
-bracketGroup :: (String, String)
+bracketGroup :: (IsString t) => (t, t)
 
 -- | Term bracket — <tt>"(-"</tt> and <tt>"-)"</tt>
-bracketTerm :: (String, String)
+bracketTerm :: (IsString t) => (t, t)
 
 -- | List bracket — <tt>"["</tt> and <tt>"]"</tt>
-bracketList :: (String, String)
+bracketList :: (IsString t) => (t, t)
 
 -- | Set bracket — <tt>"{"</tt> and <tt>"}"</tt>
-bracketSet :: (String, String)
+bracketSet :: (IsString t) => (t, t)
 
 -- | Tie bracket — <tt>"{-"</tt> and <tt>"-}"</tt>
-bracketTie :: (String, String)
+bracketTie :: (IsString t) => (t, t)
 
 -- | Relation bracket — <tt>"{="</tt> and <tt>"=}"</tt>
-bracketRel :: (String, String)
+bracketRel :: (IsString t) => (t, t)
 
 -- | Interpretation bracket — <tt>"{|"</tt> and <tt>"|}"</tt>
-bracketInterp :: (String, String)
+bracketInterp :: (IsString t) => (t, t)
 
 -- | Type bracket — <tt>"[-"</tt> and <tt>"-]"</tt>
-bracketType :: (String, String)
+bracketType :: (IsString t) => (t, t)
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Tree.Bracket.BracketType
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Tree.Bracket.BracketType
 instance GHC.Show.Show Koshucode.Baala.Syntax.Tree.Bracket.BracketType
@@ -1915,33 +1886,31 @@ module Koshucode.Baala.Syntax.Pattern
 module Koshucode.Baala.Syntax.Tree.Parse
 
 -- | Tree of tokens.
-type Tree = CodeTree BracketType Token
+type Tree = TTree String
 
 -- | Tree of tokens.
-
--- | <i>Deprecated: Use <a>Tree</a> instead.</i>
-type TTree = Tree
+type TTree t = CodeTree BracketType TToken t
 
 -- | Pair of token trees and its name.
 type NamedTrees = Named [Tree]
 
 -- | Convert to token trees.
-class ToTrees a where toTree a = ttreeGroup <$> toTrees a toTrees' = unabort . toTrees toTree' = unabort . toTree
+class ToTrees t a where toTree a = ttreeGroup <$> toTrees a toTrees' = unabort . toTrees toTree' = unabort . toTree
 
 -- | Convert to list of token trees.
-toTrees :: ToTrees a => a -> Ab [Tree]
+toTrees :: (ToTrees t a, Textual t, ToTermName t) => a -> Ab [TTree t]
 
 -- | Convert to token tree.
-toTree :: ToTrees a => a -> Ab Tree
+toTree :: (ToTrees t a, Textual t, ToTermName t) => a -> Ab (TTree t)
 
 -- | List of token trees or error.
-toTrees' :: ToTrees a => a -> [Tree]
+toTrees' :: (ToTrees t a, Textual t, ToTermName t) => a -> [TTree t]
 
 -- | Token tree or error.
-toTree' :: ToTrees a => a -> Tree
+toTree' :: (ToTrees t a, Textual t, ToTermName t) => a -> TTree t
 
 -- | Wrap trees in group.
-ttreeGroup :: [Tree] -> Tree
+ttreeGroup :: [TTree t] -> TTree t
 
 -- | Call function with token trees.
 --   
@@ -1949,18 +1918,18 @@ ttreeGroup :: [Tree] -> Tree
 --   &gt;&gt;&gt; withTrees Right "a"
 --   Right [TreeL (TText /0.1.0/ TextRaw "a")]
 --   </pre>
-withTrees :: (ToTrees a) => ([Tree] -> Ab b) -> a -> Ab b
+withTrees :: (Textual t, ToTermName t, ToTrees t a) => ([TTree t] -> Ab b) -> a -> Ab b
 
 -- | Read clauses and convert to token trees.
-readClauseTrees :: FilePath -> IOAb [[Tree]]
-instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees GHC.Base.String
-instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Base.Prelude.Import.Tx
-instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Base.Prelude.Import.Tz
-instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Base.Prelude.Import.Bz
-instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Base.Prelude.Import.Bs
-instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees [Koshucode.Baala.Syntax.Token.Token.Token]
-instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees [Koshucode.Baala.Syntax.Tree.Parse.Tree]
-instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Syntax.Token.Clause.TokenClause
+readClauseTrees :: FilePath -> IOAb [[TTree String]]
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees t GHC.Base.String
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees t Koshucode.Baala.Base.Prelude.Import.Tx
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees t Koshucode.Baala.Base.Prelude.Import.Tz
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees t Koshucode.Baala.Overture.Shorthand.Bz
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees t Koshucode.Baala.Overture.Shorthand.Bs
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees t [Koshucode.Baala.Syntax.Token.Token.TToken t]
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees t [Koshucode.Baala.Syntax.Tree.Parse.TTree t]
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees t (Koshucode.Baala.Syntax.Token.Clause.TokenClause t)
 
 
 -- | Split token trees.
@@ -2044,38 +2013,38 @@ module Koshucode.Baala.Syntax.Subtree.Decode
 --   TText /0.12.4/ TextQQ "cc"
 --   TClose /0.0.0/ ")"
 --   </pre>
-readSubtreeClauses :: FilePath -> IOAb [TokenClause]
+readSubtreeClauses :: FilePath -> IOAb [TokenClause String]
 
 -- | Insert open/sep/close to subtree clause.
-subtreeClause :: TokenClause -> Ab TokenClause
+subtreeClause :: TokenClause String -> Ab (TokenClause String)
 
 -- | Decode token trees to subtree patterns.
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "- \"Z1\""
---   Right [SubtreeL SubtreeNone (SubtreeEq "Z1")]
+--   Right [SubtreeL SubtreeNone (SivmapEq "Z1")]
 --   </pre>
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt; \"Y1\" ( - \"Z1\" )"
---   Right [SubtreeB SubtreeNone (SubtreeEq "Y1") [SubtreeL SubtreeNone (SubtreeEq "Z1")]]
+--   Right [SubtreeB SubtreeNone (SivmapEq "Y1") [SubtreeL SubtreeNone (SivmapEq "Z1")]]
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt; \"Y1\" ( - \"Z1\" | - \"Z2\" )"
---   Right [SubtreeB SubtreeNone (SubtreeEq "Y1")
---                   [SubtreeL SubtreeNone (SubtreeEq "Z1"),
---                    SubtreeL SubtreeNone (SubtreeEq "Z2")]]
+--   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt; \"Y1\" ( - \"Z1\" || - \"Z2\" )"
+--   Right [SubtreeB SubtreeNone (SivmapEq "Y1")
+--            [SubtreeL SubtreeNone (SivmapEq "Z1"),
+--             SubtreeL SubtreeNone (SivmapEq "Z2")]]
 --   </pre>
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt;&gt; \"Y1\" ( - \"Z1\" )"
---   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL SubtreeNone (SubtreeEq "Z1")]]
+--   Right [SubtreeR (SivmapEq "Y1") [SubtreeL SubtreeNone (SivmapEq "Z1")]]
 --   </pre>
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt;&gt; \"Y1\" ( - A B /z \"Z1\" )"
---   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL (SubtreeText ["A", "B"] (TermName EQ "z")) (SubtreeEq "Z1")]]
+--   Right [SubtreeR (SivmapEq "Y1") [SubtreeL (SubtreeText ["A","B"] (TermName EQ "z")) (SivmapEq "Z1")]]
 --   </pre>
 decodeSubtreePattern :: [Tree] -> Ab [SubtreePattern]
 

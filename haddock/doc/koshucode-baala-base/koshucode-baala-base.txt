@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.203.0.0
+@version 0.206.0.0
 
 
 -- | Suffix and prefix.
@@ -289,12 +289,6 @@ unless :: Applicative f => Bool -> f () -> f ()
 --   <tt>debug</tt> is <a>True</a>, and otherwise do nothing.
 when :: Applicative f => Bool -> f () -> f ()
 
--- | Strict bytestring.
-type Bs = ByteString
-
--- | Lazy bytestring.
-type Bz = ByteString
-
 -- | Convert string to strict bytestring. This is same as
 --   <a>fromString</a>.
 stringBs :: String -> Bs
@@ -507,6 +501,10 @@ fromJust :: Maybe a -> a
 --   0
 --   </pre>
 fromMaybe :: a -> Maybe a -> a
+
+-- | Class for string-like datastructures; used by the overloaded string
+--   extension (-XOverloadedStrings in GHC).
+class IsString a
 
 -- | Strict text.
 type Tx = Text
@@ -2067,37 +2065,43 @@ module Koshucode.Baala.Base.Prelude
 -- | Position on code string.
 module Koshucode.Baala.Base.Abort.CodePos
 
--- | Position on input code string.
-data CodePos
-CodePos :: Ix -> FilePath -> Int -> String -> String -> CodePos
+-- | Code position of string code.
+type CodePos = TCodePos String
+
+-- | Position on input code.
+data TCodePos t
+CodePos :: Ix -> IOPath -> Int -> t -> t -> TCodePos t
 
 -- | Index of code source
-[cpIndex] :: CodePos -> Ix
+[cpIndex] :: TCodePos t -> Ix
 
 -- | Path of code source
-[cpPath] :: CodePos -> FilePath
+[cpPath] :: TCodePos t -> IOPath
 
 -- | Line number
-[cpLineNo] :: CodePos -> Int
+[cpLineNo] :: TCodePos t -> Int
 
--- | Code string line
-[cpLineText] :: CodePos -> String
+-- | Code line
+[cpLineText] :: TCodePos t -> t
 
--- | Current code string
-[cpText] :: CodePos -> String
+-- | Current code text
+[cpText] :: TCodePos t -> t
 
--- | Column number at which code starts.
+-- | Character position at which code starts.
 --   
 --   <pre>
---   &gt;&gt;&gt; let cp = CodePos 0 "&lt;stdin&gt;" 1 "abcdefg" "defg"
+--   &gt;&gt;&gt; let cp = B.def { cpLineText = "abcdefg", cpText = "defg" }
 --   
 --   &gt;&gt;&gt; cp
---   /0.1.3/
+--   /0.0.3/
 --   
---   &gt;&gt;&gt; cpColumnNo cp
+--   &gt;&gt;&gt; cpCharNo cp
 --   3
 --   </pre>
-cpColumnNo :: CodePos -> Int
+cpCharNo :: (Textual t) => TCodePos t -> Int
+
+-- | Convert textual position to string position.
+cpStringify :: (Textual t) => TCodePos t -> CodePos
 
 -- | Before and after text of code position.
 --   
@@ -2130,12 +2134,13 @@ noCodic :: a -> Codic a
 instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Abort.CodePos.Codic a)
 instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Abort.CodePos.Codic a)
 instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Abort.CodePos.Codic a)
-instance GHC.Classes.Eq Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance GHC.Show.Show Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance Koshucode.Baala.Overture.Index.GetIx Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance Koshucode.Baala.Overture.Misc.GetIOPath Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance GHC.Classes.Ord Koshucode.Baala.Base.Abort.CodePos.CodePos
-instance Data.Default.Class.Default Koshucode.Baala.Base.Abort.CodePos.CodePos
+instance GHC.Classes.Eq t => GHC.Classes.Eq (Koshucode.Baala.Base.Abort.CodePos.TCodePos t)
+instance Koshucode.Baala.Overture.Text.Textual.Textual t => GHC.Show.Show (Koshucode.Baala.Base.Abort.CodePos.TCodePos t)
+instance GHC.Base.Functor Koshucode.Baala.Base.Abort.CodePos.TCodePos
+instance Koshucode.Baala.Overture.Index.GetIx (Koshucode.Baala.Base.Abort.CodePos.TCodePos t)
+instance Koshucode.Baala.Overture.Misc.GetIOPath (Koshucode.Baala.Base.Abort.CodePos.TCodePos t)
+instance Koshucode.Baala.Overture.Text.Textual.Textual t => GHC.Classes.Ord (Koshucode.Baala.Base.Abort.CodePos.TCodePos t)
+instance Koshucode.Baala.Overture.Text.Textual.Textual t => Data.Default.Class.Default (Koshucode.Baala.Base.Abort.CodePos.TCodePos t)
 instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos Koshucode.Baala.Base.Abort.CodePos.CodePos
 instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos cp => Koshucode.Baala.Base.Abort.CodePos.GetCodePos [cp]
 instance GHC.Base.Functor Koshucode.Baala.Base.Abort.CodePos.Codic
@@ -2501,7 +2506,7 @@ instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
 instance Data.Default.Class.Default Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
 instance Koshucode.Baala.Overture.Index.GetIx Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
 instance Koshucode.Baala.Overture.Misc.GetIOPath Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
-instance Koshucode.Baala.Base.IO.IOPoint.ToCode Koshucode.Baala.Base.Prelude.Import.Bz
+instance Koshucode.Baala.Base.IO.IOPoint.ToCode Koshucode.Baala.Overture.Shorthand.Bz
 instance Koshucode.Baala.Base.IO.IOPoint.ToCode GHC.Base.String
 
 
@@ -2874,31 +2879,34 @@ printTree :: (Show b, Show y, Show z) => RawTree b y z -> IO ()
 -- | Pretty print raw trees.
 printTrees :: (Show b, Show y, Show z) => [RawTree b y z] -> IO ()
 
+-- | Tree of bracket type (b), token type (k), and textual value (t).
+type CodeTree b k t = CodeTree' b (k t)
+
 -- | Tree with open/close brackets.
-type CodeTree b a = RawTree b (Maybe (a, a)) a
+type CodeTree' b z = RawTree b (Maybe (z, z)) z
 
 -- | Convert code elements to a single code tree.
-codeTree :: (Ord b, GetCodePos a) => GetBracket b a -> Bracket b -> b -> [a] -> Ab (CodeTree b a)
+codeTree :: (Ord b, GetCodePos (k t)) => GetBracket b (k t) -> Bracket b -> b -> [k t] -> Ab (CodeTree b k t)
 
 -- | Convert code elements to code trees.
-codeTrees :: (Ord b, GetCodePos a) => GetBracket b a -> Bracket b -> [a] -> Ab [CodeTree b a]
+codeTrees :: (Ord b, GetCodePos (k t)) => GetBracket b (k t) -> Bracket b -> [k t] -> Ab [CodeTree b k t]
 
 -- | Wrap trees into single tree.
-codeTreeWrap :: b -> [CodeTree b a] -> CodeTree b a
+codeTreeWrap :: b -> [CodeTree b k t] -> CodeTree b k t
 
--- | Mapping function for <a>CodeTree</a>.
-codeTreeFmap :: (a -> b) -> CodeTree p a -> CodeTree p b
-
--- | Convert tree to list of tokens.
-untree :: CodeTree b a -> [a]
+-- | Mapping function for code tree.
+codeTreeFmap :: (x -> y) -> CodeTree' b x -> CodeTree' b y
 
 -- | Convert tree to list of tokens.
-untrees :: [CodeTree b a] -> [a]
+untree :: CodeTree b k t -> [k t]
+
+-- | Convert tree to list of tokens.
+untrees :: [CodeTree b k t] -> [k t]
 instance (GHC.Classes.Ord b, GHC.Classes.Ord y, GHC.Classes.Ord z) => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Tree.RawTree b y z)
 instance (GHC.Classes.Eq b, GHC.Classes.Eq y, GHC.Classes.Eq z) => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Tree.RawTree b y z)
 instance (GHC.Show.Show b, GHC.Show.Show y, GHC.Show.Show z) => GHC.Show.Show (Koshucode.Baala.Base.Code.Tree.RawTree b y z)
 instance GHC.Base.Functor (Koshucode.Baala.Base.Code.Tree.RawTree p k)
-instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos a => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Tree.CodeTree p a)
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (k t) => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Tree.CodeTree b k t)
 
 
 -- | Convert infixed-operator trees into prefixed-operator trees.
@@ -2932,7 +2940,7 @@ type InfixHeight = Either Int Int
 infixHeight :: (Ord b) => (a -> Maybe b) -> [(b, InfixHeight)] -> (a -> InfixHeight)
 
 -- | Split branches in a given tree at infixed binary operators.
-infixToPrefix :: (Map a, Map a, Map a) -> (a -> InfixHeight) -> Collect (InfixTree p a) -> InfixMapper p a -> InfixConv a (CodeTree p a)
+infixToPrefix :: (Map a, Map a, Map a) -> (a -> InfixHeight) -> Collect (InfixTree p a) -> InfixMapper p a -> InfixConv a (CodeTree' p a)
 
 -- | Intermediate infix-to-prefix conversion.
 type InfixMapper p a = InfixConv a [InfixTree p a] -> InfixConv a (InfixTree p a)
@@ -2950,7 +2958,7 @@ type InfixAmb a tree = Either [(InfixHeight, a)] tree
 -- | Code tree with infix height.
 
 -- | <i>Warning: This is only used in defined module.</i>
-type InfixTree p a = CodeTree p (InfixHeight, a)
+type InfixTree b a = CodeTree' b (InfixHeight, a)
 
 
 -- | File path and content in lazy bytestring.
@@ -2996,7 +3004,27 @@ module Koshucode.Baala.Base.Code.Line
 type LineNumber = Int
 
 -- | Line with number.
-type NumberedLine = (LineNumber, String)
+type NumberedLine t = (LineNumber, t)
+
+-- | Remove UTF-8 BOM (EF BB BF in hexadecimal) from lazy bytestring.
+--   
+--   <pre>
+--   &gt;&gt;&gt; dropBom "\xEF\xBB\xBF|foo bar baz"
+--   "|foo bar baz"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; dropBom "\xEF|foo bar baz"
+--   "\239|foo bar baz"
+--   </pre>
+dropBom :: Bz -> Bz
+
+-- | Split lazy bytestring by newline character sequence. If bytestring
+--   begins with the UTF-8 BOM, this function drops it.
+bzLines :: Bz -> [Bz]
+
+-- | Create numbered lines from lazy bytestring.
+numberedLines :: (ToCode code, Textual t) => code -> [NumberedLine t]
 
 -- | Split string into lines. The result strings do not contain carriage
 --   returns (<tt>\r</tt>) and line feeds (<tt>\n</tt>).
@@ -3005,43 +3033,43 @@ type NumberedLine = (LineNumber, String)
 --   &gt;&gt;&gt; linesCrlf "aaa\nbbb\r\nccc\n\nddd\n"
 --   ["aaa","bbb","ccc","","ddd"]
 --   </pre>
-linesCrlf :: String -> [String]
 
--- | Line number and its content.
-linesCrlfNumbered :: String -> [NumberedLine]
+-- | <i>Deprecated: Consider <a>bzLines</a>.</i>
+linesCrlf :: String -> [String]
 
 -- | Split lazy bytestring by newline character sequence. This function
 --   drops the BOM sequence.
+
+-- | <i>Deprecated: Consider <a>bzLines</a>.</i>
 linesCrlfBz :: (ToCode code) => code -> [Bz]
 
--- | Create numbered lines from lazy bytestring.
-linesCrlfBzNumbered :: (ToCode code) => code -> [NumberedLine]
+-- | Line number and its content.
 
--- | Remove UTF-8 BOM (EF BB BF) from lazy bytestring.
-dropBom :: (ToCode code) => code -> Bz
+-- | <i>Deprecated: Consider <a>bzLines</a>.</i>
+linesCrlfNumbered :: String -> [NumberedLine String]
 
 -- | Tokens in line.
-data CodeLine a
-CodeLine :: LineNumber -> String -> [a] -> CodeLine a
+data CodeLine k t
+CodeLine :: LineNumber -> t -> [k t] -> CodeLine k t
 
 -- | Line number, from 1.
-[lineNumber] :: CodeLine a -> LineNumber
+[lineNumber] :: CodeLine k t -> LineNumber
 
 -- | Line content without newline.
-[lineContent] :: CodeLine a -> String
+[lineContent] :: CodeLine k t -> t
 
 -- | Tokens in the line.
-[lineTokens] :: CodeLine a -> [a]
+[lineTokens] :: CodeLine k t -> [k t]
 
 -- | Type for indent size.
 type IndentSize = Int
 
 -- | Calculate indent of line and pairing it.
-lineIndentPair :: (a -> IndentSize) -> CodeLine a -> (IndentSize, CodeLine a)
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Line.CodeLine a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Line.CodeLine a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Code.Line.CodeLine a)
-instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos a => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Line.CodeLine a)
+lineIndentPair :: (k t -> IndentSize) -> CodeLine k t -> (IndentSize, CodeLine k t)
+instance (GHC.Classes.Ord t, GHC.Classes.Ord (k t)) => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Line.CodeLine k t)
+instance (GHC.Classes.Eq t, GHC.Classes.Eq (k t)) => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Line.CodeLine k t)
+instance (GHC.Show.Show t, GHC.Show.Show (k t)) => GHC.Show.Show (Koshucode.Baala.Base.Code.Line.CodeLine k t)
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (k t) => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Line.CodeLine k t)
 
 
 -- | This module provides a container for tokens. No tokens in Koshucode
@@ -3051,14 +3079,14 @@ instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos a => Koshucode.Baala.Base
 module Koshucode.Baala.Base.Code.Clause
 
 -- | Tokens in clause.
-data CodeClause a
-CodeClause :: [CodeLine a] -> [a] -> CodeClause a
+data CodeClause k t
+CodeClause :: [CodeLine k t] -> [k t] -> CodeClause k t
 
 -- | Source lines of clause
-[clauseLines] :: CodeClause a -> [CodeLine a]
+[clauseLines] :: CodeClause k t -> [CodeLine k t]
 
 -- | Source tokens of clause
-[clauseTokens] :: CodeClause a -> [a]
+[clauseTokens] :: CodeClause k t -> [k t]
 
 -- | Split lines into clause based on indent size.
 --   
@@ -3067,53 +3095,53 @@ CodeClause :: [CodeLine a] -> [a] -> CodeClause a
 --   (["a","b"], [(0,"c"),(1,"d")])
 --   </pre>
 splitClause :: Gather [(IndentSize, a)] [a]
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Code.Clause.CodeClause a)
-instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos a => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Clause.CodeClause a)
-instance Data.Default.Class.Default (Koshucode.Baala.Base.Code.Clause.CodeClause a)
+instance (GHC.Show.Show t, GHC.Show.Show (k t)) => GHC.Show.Show (Koshucode.Baala.Base.Code.Clause.CodeClause k t)
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (k t) => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Clause.CodeClause k t)
+instance Data.Default.Class.Default (Koshucode.Baala.Base.Code.Clause.CodeClause t a)
 
 
 -- | Code scanner.
 module Koshucode.Baala.Base.Code.Scan
 
 -- | Code scanner divides input text into output tokens.
-data CodeScan i o
-CodeScan :: [CodeScanMap i o] -> CodeScanMap i o -> CodePos -> i -> [o] -> WordCache -> CodeScan i o
+data CodeScan k t
+CodeScan :: [CodeScanMap k t] -> CodeScanMap k t -> TCodePos t -> t -> [k t] -> WordCache t -> CodeScan k t
 
 -- | Saved updater
-[codeMapSaved] :: CodeScan i o -> [CodeScanMap i o]
+[scanMapSaved] :: CodeScan k t -> [CodeScanMap k t]
 
 -- | Updater
-[codeMap] :: CodeScan i o -> CodeScanMap i o
+[scanMap] :: CodeScan k t -> CodeScanMap k t
 
 -- | Code position
-[codeInputPt] :: CodeScan i o -> CodePos
+[scanCp] :: CodeScan k t -> TCodePos t
 
 -- | Input text
-[codeInput] :: CodeScan i o -> i
+[scanInput] :: CodeScan k t -> t
 
 -- | Output tokens
-[codeOutput] :: CodeScan i o -> [o]
+[scanOutput] :: CodeScan k t -> [k t]
 
 -- | Cached words
-[codeWords] :: CodeScan i o -> WordCache
+[scanCache] :: CodeScan k t -> WordCache t
 
 -- | Update code scanner.
-type CodeScanMap i o = Map (CodeScan i o)
+type CodeScanMap k t = Map (CodeScan k t)
 
 -- | Cached words.
-type WordCache = CacheS String
+type WordCache t = Cache t t
 
 -- | Empty word cache.
-emptyWordCache :: WordCache
+emptyWordCache :: WordCache t
 
 -- | Test scanner at the beginning of line, i.e., no output collected.
-isBol :: Test (CodeScan i o)
+isBol :: Test (CodeScan k t)
 
 -- | Save current updater.
-codeScanSave :: CodeScanMap i o
+codeScanSave :: CodeScanMap k t
 
 -- | Restore saved updater.
-codeScanRestore :: CodeScanMap i o
+codeScanRestore :: CodeScanMap k t
 
 -- | Split source text into <a>CodeLine</a> list.
 --   
@@ -3122,30 +3150,27 @@ codeScanRestore :: CodeScanMap i o
 --   <tt>\r</tt> or line feed <tt>\n</tt>).</li>
 --   <li>Numbering lines from 1. Internally, this is represented as a list
 --   of pairs <tt>(</tt><a>LineNumber</a><tt>,
---   </tt><a>String</a><tt>)</tt>.</li>
+--   </tt><a>Textual</a><tt>)</tt>.</li>
 --   <li>Tokenize each lines, and put tokens together in
 --   <a>CodeLine</a>.</li>
 --   </ol>
-codeScanUp :: CodeScanMap String o -> IxIOPoint -> String -> [CodeLine o]
+codeScanUp :: (ToCode code, Textual t) => CodeScanMap k t -> IxIOPoint -> code -> [CodeLine k t]
 
--- | Lazy bytestring version of <a>codeScanUp</a>.
-codeScanUpBz :: (ToCode code) => CodeScanMap String o -> IxIOPoint -> code -> [CodeLine o]
-
--- | Update <a>codeInput</a> and push result element to <a>codeOutput</a>.
-codeUpdate :: i -> o -> CodeScanMap i o
+-- | Update <a>scanInput</a> and push result element to <a>scanOutput</a>.
+codeUpdate :: t -> k t -> CodeScanMap k t
 
 -- | Update code scanner with word table.
-codeUpdateWords :: WordCache -> i -> o -> CodeScanMap i o
+codeUpdateWords :: WordCache t -> t -> k t -> CodeScanMap k t
 
 -- | Multi-element version of <a>codeUpdate</a>.
-codeUpdateList :: i -> [o] -> CodeScanMap i o
+codeUpdateList :: t -> [k t] -> CodeScanMap k t
 
 -- | Multi-element and cached version of <a>codeUpdate</a>.
-codeUpdateListWords :: WordCache -> i -> [o] -> CodeScanMap i o
+codeUpdateListWords :: WordCache t -> t -> [k t] -> CodeScanMap k t
 
 -- | Change mapper of code sc.
-codeChange :: Map (CodeScanMap i o)
-instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Scan.CodeScan i o)
+codeChange :: Map (CodeScanMap k t)
+instance Koshucode.Baala.Overture.Text.Textual.Textual t => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Scan.CodeScan k t)
 
 
 -- | Syntactic functions.

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.203.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.206.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -84,10 +84,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
-	    >data</span
+	    >type</span
 	    > <a href="#t:CodePos"
 	    >CodePos</a
-	    > = <a href="#v:CodePos"
+	    > = <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+	    >TCodePos</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:TCodePos"
+	    >TCodePos</a
+	    > t = <a href="#v:CodePos"
 	    >CodePos</a
 	    > {<ul class="subs"
 	    ><li
@@ -99,8 +109,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ><li
 	      ><a href="#v:cpPath"
 		>cpPath</a
-		> :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
-		>FilePath</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Misc.html#t:IOPath"
+		>IOPath</a
 		></li
 	      ><li
 	      ><a href="#v:cpLineNo"
@@ -111,24 +121,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ><li
 	      ><a href="#v:cpLineText"
 		>cpLineText</a
-		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		></li
+		> :: t</li
 	      ><li
 	      ><a href="#v:cpText"
 		>cpText</a
-		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		></li
+		> :: t</li
 	      ></ul
 	    >}</li
 	  ><li class="src short"
-	  ><a href="#v:cpColumnNo"
-	    >cpColumnNo</a
-	    > :: <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
-	    >CodePos</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	  ><a href="#v:cpCharNo"
+	    >cpCharNo</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+	    >TCodePos</a
+	    > t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:cpStringify"
+	    >cpStringify</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+	    >TCodePos</a
+	    > t -&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:cpSplit"
@@ -204,15 +222,33 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
-	    >data</span
+	    >type</span
 	    > <a name="t:CodePos" class="def"
 	    >CodePos</a
+	    > = <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+	    >TCodePos</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#CodePos');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Position on input code string.</p
+	    >Code position of string code.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:TCodePos" class="def"
+	    >TCodePos</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#TCodePos');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Position on input code.</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -245,8 +281,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      ><dt class="src"
 		      ><a name="v:cpPath" class="def"
 			>cpPath</a
-			> :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
-			>FilePath</a
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Misc.html#t:IOPath"
+			>IOPath</a
 			></dt
 		      ><dd class="doc"
 		      ><p
@@ -265,22 +301,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      ><dt class="src"
 		      ><a name="v:cpLineText" class="def"
 			>cpLineText</a
-			> :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-			>String</a
-			></dt
+			> :: t</dt
 		      ><dd class="doc"
 		      ><p
-			>Code string line</p
+			>Code line</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:cpText" class="def"
 			>cpText</a
-			> :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-			>String</a
-			></dt
+			> :: t</dt
 		      ><dd class="doc"
 		      ><p
-			>Current code string</p
+			>Current code text</p
 			></dd
 		      ></dl
 		    ><div class="clear"
@@ -291,19 +323,49 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ></table
 	    ></div
 	  ><div class="subs instances"
-	  ><p id="control.i:CodePos" class="caption collapser" onclick="toggleSection('i:CodePos')"
+	  ><p id="control.i:TCodePos" class="caption collapser" onclick="toggleSection('i:TCodePos')"
 	    >Instances</p
-	    ><div id="section.i:CodePos" class="show"
+	    ><div id="section.i:TCodePos" class="show"
 	    ><table
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+		      >Functor</a
+		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+		      >TCodePos</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-46');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
+		      >GetCodePos</a
+		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+		      >CodePos</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-129');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
 		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
 		      >Eq</a
-		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
-		      >CodePos</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-34');" href="javascript:void(0);" class="link"
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+		      >TCodePos</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-39');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -312,12 +374,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 		      >Ord</a
-		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
-		      >CodePos</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-56');" href="javascript:void(0);" class="link"
+		      > (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+		      >TCodePos</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-65');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -326,17 +390,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
 		      >Show</a
-		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
-		      >CodePos</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-38');" href="javascript:void(0);" class="link"
+		      > (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+		      >TCodePos</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-43');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
 		  ><p
-		    >Number of input point, line number, and column number,
+		    >Number of input point, line number, and character number,
    e.g., <code
 		      >/1.6.14/</code
 		      >.</p
@@ -347,10 +413,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		  ><span class="inst-left"
 		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Index.html#t:GetIx"
 		      >GetIx</a
-		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
-		      >CodePos</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-41');" href="javascript:void(0);" class="link"
+		      > (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+		      >TCodePos</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-50');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -361,10 +427,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		  ><span class="inst-left"
 		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Misc.html#t:GetIOPath"
 		      >GetIOPath</a
-		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
-		      >CodePos</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-44');" href="javascript:void(0);" class="link"
+		      > (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+		      >TCodePos</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-53');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -373,12 +439,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > t =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
 		      >Default</a
-		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
-		      >CodePos</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-66');" href="javascript:void(0);" class="link"
+		      > (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+		      >TCodePos</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-77');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -386,44 +454,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		    >Empty code position, i.e., empty content and zero line number.</p
 		    ></td
 		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
-		      >GetCodePos</a
-		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
-		      >CodePos</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-109');" href="javascript:void(0);" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
 		></table
 	      ></div
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:cpColumnNo" class="def"
-	    >cpColumnNo</a
-	    > :: <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
-	    >CodePos</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	  ><a name="v:cpCharNo" class="def"
+	    >cpCharNo</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+	    >TCodePos</a
+	    > t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#cpColumnNo');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#cpCharNo');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Column number at which code starts.</p
+	    >Character position at which code starts.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>let cp = CodePos 0 &quot;&lt;stdin&gt;&quot; 1 &quot;abcdefg&quot; &quot;defg&quot;
+		>let cp = B.def { cpLineText = &quot;abcdefg&quot;, cpText = &quot;defg&quot; }
 </code
 		></strong
 	      ><code class="prompt"
@@ -433,16 +489,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		>cp
 </code
 		></strong
-	      >/0.1.3/
+	      >/0.0.3/
 <code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>cpColumnNo cp
+		>cpCharNo cp
 </code
 		></strong
 	      >3
 </pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cpStringify" class="def"
+	    >cpStringify</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+	    >TCodePos</a
+	    > t -&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#cpStringify');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert textual position to string position.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -531,7 +605,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
 		      >CodePos</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-109');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-129');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -545,7 +619,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      > cp =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 		      >GetCodePos</a
 		      > [cp]</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-113');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-133');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -559,7 +633,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      > (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:Codic"
 		      >Codic</a
 		      > a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-128');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-148');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -570,12 +644,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		  ><span class="inst-left"
 		    ><a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 		      >GetCodePos</a
-		      > a =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
+		      > (k t) =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 		      >GetCodePos</a
 		      > (<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
 		      >CodeLine</a
-		      > a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-103');" href="javascript:void(0);" class="link"
+		      > k t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-116');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -586,12 +660,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		  ><span class="inst-left"
 		    ><a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 		      >GetCodePos</a
-		      > a =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
+		      > (k t) =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 		      >GetCodePos</a
 		      > (<a href="Koshucode-Baala-Base-Code-Clause.html#t:CodeClause"
 		      >CodeClause</a
-		      > a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-29');" href="javascript:void(0);" class="link"
+		      > k t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-27');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -600,38 +674,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
-		      >GetCodePos</a
-		      > a =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
-		      >GetCodePos</a
-		      > (<a href="Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
-		      >CodeTree</a
-		      > p a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-181');" href="javascript:void(0);" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > t =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 		      >GetCodePos</a
 		      > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
 		      >CodeScan</a
-		      > i o)</span
+		      > k t)</span
 		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-38');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
 		  ><p
 		    >Return <code
-		      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:codeInputPt"
-			>codeInputPt</a
+		      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:scanCp"
+			>scanCp</a
 			></code
 		      >.</p
 		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
+		      >GetCodePos</a
+		      > (k t) =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
+		      >GetCodePos</a
+		      > (<a href="Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+		      >CodeTree</a
+		      > b k t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-184');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
 		  ></tr
 		></table
 	      ></div
@@ -709,7 +785,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:Codic"
 		      >Codic</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-125');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-145');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -725,7 +801,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      > (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:Codic"
 		      >Codic</a
 		      > a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-123');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-143');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -741,7 +817,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      > (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:Codic"
 		      >Codic</a
 		      > a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-123');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-143');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -757,7 +833,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      > (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:Codic"
 		      >Codic</a
 		      > a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-123');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-143');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -771,7 +847,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      > (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:Codic"
 		      >Codic</a
 		      > a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-128');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-CodePos.html#line-148');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"

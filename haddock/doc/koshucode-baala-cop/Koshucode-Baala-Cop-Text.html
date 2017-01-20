@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Te
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-cop-0.203.0.0: Term-content operators in Koshucode</p
+      >koshucode-baala-cop-0.206.0.0: Term-content operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -83,6 +83,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Te
 	    >CopCalc</a
 	    > c</li
 	  ><li class="src short"
+	  ><a href="#v:copPad"
+	    >copPad</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
 	  ><a href="#v:copSuffix"
 	    >copSuffix</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
@@ -93,9 +107,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Te
 	  ><li class="src short"
 	  ><a href="#v:copUnsuffix"
 	    >copUnsuffix</a
-	    > :: <span class="keyword"
-	    >forall</span
-	    > c. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
 	    >CopCalc</a
@@ -169,6 +181,60 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Te
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:copPad" class="def"
+	    >copPad</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Text.html#copPad');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >pad-begin <em
+		>CHAR</em
+		> <em
+		>SIZE</em
+		> <em
+		>TEXT</em
+		></dt
+	      ><dd
+	      >Pad <em
+		>CHAR</em
+		> to beginning of <em
+		>TEXT</em
+		> upto <em
+		>SIZE</em
+		>.</dd
+	      ><dt
+	      >pad-end <em
+		>CHAR</em
+		> <em
+		>SIZE</em
+		> <em
+		>TEXT</em
+		></dt
+	      ><dd
+	      >Pad <em
+		>CHAR</em
+		> to end of <em
+		>TEXT</em
+		> upto <em
+		>SIZE</em
+		>.</dd
+	      ></dl
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:copSuffix" class="def"
 	    >copSuffix</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
@@ -195,9 +261,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Te
 	><p class="src"
 	  ><a name="v:copUnsuffix" class="def"
 	    >copUnsuffix</a
-	    > :: <span class="keyword"
-	    >forall</span
-	    > c. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
 	    >CopCalc</a

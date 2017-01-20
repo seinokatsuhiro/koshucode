@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.203.0.0
+@version 0.206.0.0
 
 
 -- | Result of relational calculation.
@@ -936,7 +936,7 @@ Clause :: ClauseHead -> ClauseBody -> Clause
 
 -- | Common part of clause.
 data ClauseHead
-ClauseHead :: SecNo -> [ShortDef] -> [Token] -> TokenClause -> ClauseHead
+ClauseHead :: SecNo -> [ShortDef] -> [Token] -> TokenClause String -> ClauseHead
 
 -- | Section number of the clause.
 [clauseSecNo] :: ClauseHead -> SecNo
@@ -948,7 +948,7 @@ ClauseHead :: SecNo -> [ShortDef] -> [Token] -> TokenClause -> ClauseHead
 [clauseAbout] :: ClauseHead -> [Token]
 
 -- | Source code of the clause.
-[clauseSource] :: ClauseHead -> TokenClause
+[clauseSource] :: ClauseHead -> TokenClause String
 
 -- | Proper part of clause.
 data ClauseBody
@@ -978,7 +978,7 @@ COption :: [Token] -> ClauseBody
 CExport :: String -> ClauseBody
 
 -- | <b>Other:</b> Echo text
-CEcho :: TokenClause -> ClauseBody
+CEcho :: (TokenClause String) -> ClauseBody
 
 -- | <b>Other:</b> License text
 CLicense :: String -> ClauseBody
@@ -1010,7 +1010,7 @@ clauseTypeText :: Clause -> String
 --   </pre>
 --   
 --   First step of constructing <tt>Resource</tt>.
-consClause :: [Token] -> SecNo -> [TokenLine] -> [Clause]
+consClause :: [Token] -> SecNo -> [TokenLine String] -> [Clause]
 instance GHC.Show.Show Koshucode.Baala.Core.Resource.Clause.Clause
 instance GHC.Show.Show Koshucode.Baala.Core.Resource.Clause.ClauseBody
 instance GHC.Show.Show Koshucode.Baala.Core.Resource.Clause.ClauseHead
@@ -1033,7 +1033,7 @@ module Koshucode.Baala.Core.Resource.Resource
 
 -- | Relational data resource
 data Resource c
-Resource :: Global c -> SecNo -> CacheT -> Option c -> [String] -> [Resource c] -> InputQueue -> [Judge c] -> Dataset c -> [NamedTrees] -> [LexmapClause] -> [ShortAssert c] -> IOPoint -> [[TokenLine]] -> [(SecNo, String)] -> [String] -> Resource c
+Resource :: Global c -> SecNo -> CacheT -> Option c -> [String] -> [Resource c] -> InputQueue -> [Judge c] -> Dataset c -> [NamedTrees] -> [LexmapClause] -> [ShortAssert c] -> IOPoint -> [[TokenLine String]] -> [(SecNo, String)] -> [String] -> Resource c
 
 -- | <b>Global:</b> Global parameter
 [resGlobal] :: Resource c -> Global c
@@ -1075,7 +1075,7 @@ Resource :: Global c -> SecNo -> CacheT -> Option c -> [String] -> [Resource c] 
 [resOutput] :: Resource c -> IOPoint
 
 -- | <b>Output:</b> Echo text
-[resEcho] :: Resource c -> [[TokenLine]]
+[resEcho] :: Resource c -> [[TokenLine String]]
 
 -- | <b>Output:</b> License text
 [resLicense] :: Resource c -> [(SecNo, String)]

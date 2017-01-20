@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.203.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.206.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -89,9 +89,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><a href="#v:tokenDetailTypeString"
 	    >tokenDetailTypeString</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
@@ -107,83 +107,83 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><a href="#v:prepareTokens"
 	    >prepareTokens</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
-	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >]</li
+	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t]</li
 	  ><li class="src short"
 	  ><a href="#v:sweepToken"
 	    >sweepToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
-	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >]</li
+	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t]</li
 	  ><li class="src short"
 	  ><a href="#v:isBlankToken"
 	    >isBlankToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ><li class="src short"
 	  ><a href="#v:isShortToken"
 	    >isShortToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ><li class="src short"
 	  ><a href="#v:isTermToken"
 	    >isTermToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ><li class="src short"
 	  ><a href="#v:isOpenToken"
 	    >isOpenToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ><li class="src short"
 	  ><a href="#v:isCloseToken"
 	    >isCloseToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ><li class="src short"
 	  ><a href="#v:isBracketTokenOf"
 	    >isBracketTokenOf</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >) -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > t =&gt; (t, t) -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t), <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >)</li
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t))</li
 	  ><li class="src short"
 	  ><a href="#v:isUnknownToken"
 	    >isUnknownToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    ></li
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -219,9 +219,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:tokenDetailTypeString" class="def"
 	    >tokenDetailTypeString</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
@@ -263,11 +263,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:prepareTokens" class="def"
 	    >prepareTokens</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
-	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#prepareTokens');" href="javascript:void(0);" class="link"
+	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t] <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#prepareTokens');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -289,9 +291,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >sweepToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
-	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#sweepToken');" href="javascript:void(0);" class="link"
+	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t] <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#sweepToken');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -307,9 +309,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >isBlankToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isBlankToken');" href="javascript:void(0);" class="link"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isBlankToken');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -323,9 +325,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >isShortToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isShortToken');" href="javascript:void(0);" class="link"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isShortToken');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -339,9 +341,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >isTermToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isTermToken');" href="javascript:void(0);" class="link"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isTermToken');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -355,9 +357,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >isOpenToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isOpenToken');" href="javascript:void(0);" class="link"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isOpenToken');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -371,9 +373,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >isCloseToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isCloseToken');" href="javascript:void(0);" class="link"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isCloseToken');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -385,19 +387,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:isBracketTokenOf" class="def"
 	    >isBracketTokenOf</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >) -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > t =&gt; (t, t) -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t), <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isBracketTokenOf');" href="javascript:void(0);" class="link"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t)) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isBracketTokenOf');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -411,9 +411,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >isUnknownToken</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isUnknownToken');" href="javascript:void(0);" class="link"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+	    >TToken</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isUnknownToken');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

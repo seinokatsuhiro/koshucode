@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.203.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.206.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -87,17 +87,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >IOAb</a
 	    > [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
 	    >TokenClause</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:subtreeClause"
 	    >subtreeClause</a
 	    > :: <a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
 	    >TokenClause</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
 	    >TokenClause</a
-	    ></li
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >)</li
 	  ><li class="src short"
 	  ><a href="#v:decodeSubtreePattern"
 	    >decodeSubtreePattern</a
@@ -123,6 +129,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >IOAb</a
 	    > [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
 	    >TokenClause</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Decode.html#readSubtreeClauses');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -156,11 +164,15 @@ TClose /0.0.0/ &quot;)&quot;
 	    >subtreeClause</a
 	    > :: <a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
 	    >TokenClause</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
+	    > (<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
 	    >TokenClause</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Decode.html#subtreeClause');" href="javascript:void(0);" class="link"
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Decode.html#subtreeClause');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -192,7 +204,7 @@ TClose /0.0.0/ &quot;)&quot;
 		>S.withTrees decodeSubtreePattern &quot;- \&quot;Z1\&quot;&quot;
 </code
 		></strong
-	      >Right [SubtreeL SubtreeNone (SubtreeEq &quot;Z1&quot;)]
+	      >Right [SubtreeL SubtreeNone (SivmapEq &quot;Z1&quot;)]
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -202,19 +214,19 @@ TClose /0.0.0/ &quot;)&quot;
 		>S.withTrees decodeSubtreePattern &quot;&gt; \&quot;Y1\&quot; ( - \&quot;Z1\&quot; )&quot;
 </code
 		></strong
-	      >Right [SubtreeB SubtreeNone (SubtreeEq &quot;Y1&quot;) [SubtreeL SubtreeNone (SubtreeEq &quot;Z1&quot;)]]
+	      >Right [SubtreeB SubtreeNone (SivmapEq &quot;Y1&quot;) [SubtreeL SubtreeNone (SivmapEq &quot;Z1&quot;)]]
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.withTrees decodeSubtreePattern &quot;&gt; \&quot;Y1\&quot; ( - \&quot;Z1\&quot; | - \&quot;Z2\&quot; )&quot;
+		>S.withTrees decodeSubtreePattern &quot;&gt; \&quot;Y1\&quot; ( - \&quot;Z1\&quot; || - \&quot;Z2\&quot; )&quot;
 </code
 		></strong
-	      >Right [SubtreeB SubtreeNone (SubtreeEq &quot;Y1&quot;)
-                [SubtreeL SubtreeNone (SubtreeEq &quot;Z1&quot;),
-                 SubtreeL SubtreeNone (SubtreeEq &quot;Z2&quot;)]]
+	      >Right [SubtreeB SubtreeNone (SivmapEq &quot;Y1&quot;)
+         [SubtreeL SubtreeNone (SivmapEq &quot;Z1&quot;),
+          SubtreeL SubtreeNone (SivmapEq &quot;Z2&quot;)]]
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -224,7 +236,7 @@ TClose /0.0.0/ &quot;)&quot;
 		>S.withTrees decodeSubtreePattern &quot;&gt;&gt; \&quot;Y1\&quot; ( - \&quot;Z1\&quot; )&quot;
 </code
 		></strong
-	      >Right [SubtreeR (SubtreeEq &quot;Y1&quot;) [SubtreeL SubtreeNone (SubtreeEq &quot;Z1&quot;)]]
+	      >Right [SubtreeR (SivmapEq &quot;Y1&quot;) [SubtreeL SubtreeNone (SivmapEq &quot;Z1&quot;)]]
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -234,7 +246,7 @@ TClose /0.0.0/ &quot;)&quot;
 		>S.withTrees decodeSubtreePattern &quot;&gt;&gt; \&quot;Y1\&quot; ( - A B /z \&quot;Z1\&quot; )&quot;
 </code
 		></strong
-	      >Right [SubtreeR (SubtreeEq &quot;Y1&quot;) [SubtreeL (SubtreeText [&quot;A&quot;, &quot;B&quot;] (TermName EQ &quot;z&quot;)) (SubtreeEq &quot;Z1&quot;)]]
+	      >Right [SubtreeR (SivmapEq &quot;Y1&quot;) [SubtreeL (SubtreeText [&quot;A&quot;,&quot;B&quot;] (TermName EQ &quot;z&quot;)) (SivmapEq &quot;Z1&quot;)]]
 </pre
 	    ></div
 	  ></div

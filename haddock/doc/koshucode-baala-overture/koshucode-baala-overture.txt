@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.203.0.0
+@version 0.206.0.0
 
 
 -- | Exit process.
@@ -230,124 +230,6 @@ instance GHC.Classes.Eq Koshucode.Baala.Overture.Text.Unicode.MajorGeneralCatego
 instance GHC.Show.Show Koshucode.Baala.Overture.Text.Unicode.MajorGeneralCategory
 
 
--- | Encode and decode integers.
-module Koshucode.Baala.Overture.Text.Integer
-
--- | Decode decimal integer.
-stringDec :: (Eq n, Num n) => String -> Maybe n
-
--- | Decode decimal integer as <a>Int</a>.
---   
---   <pre>
---   &gt;&gt;&gt; stringInt "12"
---   Just 12
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; stringInt "12.3"
---   Nothing
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; stringInt "12345678901234567890"
---   Just (-6101065172474983726)
---   </pre>
-stringInt :: String -> Maybe Int
-
--- | Decode decimal integer as <a>Integer</a>.
---   
---   <pre>
---   &gt;&gt;&gt; stringInteger "12345678901234567890"
---   Just 12345678901234567890
---   </pre>
-stringInteger :: String -> Maybe Integer
-
--- | Decode hexadecimal digits.
-stringHex :: (Eq n, Num n) => String -> Maybe n
-
--- | Decode hexadecimal digits as <a>Int</a>.
---   
---   <pre>
---   &gt;&gt;&gt; stringHexInt "0F"
---   Just 15
---   </pre>
-stringHexInt :: String -> Maybe Int
-
--- | Decode hexadecimal digits as <a>Integer</a>.
---   
---   <pre>
---   &gt;&gt;&gt; stringHexInteger "0F"
---   Just 15
---   </pre>
-stringHexInteger :: String -> Maybe Integer
-
--- | Decode custom digits to integer.
---   
---   <pre>
---   &gt;&gt;&gt; stringCustomInteger "01234567" "144"
---   Just 100
---   </pre>
-stringCustomInteger :: String -> String -> Maybe Integer
-
--- | Decode counting digits to integer.
---   
---   <pre>
---   &gt;&gt;&gt; stringCountInteger ['A'..'Z'] &lt;$&gt; ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
---   [Just 0, Just 1, Just 2, Just 25, Just 26, Just 27, Just 52, Just 53, Just 100, Just 1000, Just 5303449]
---   </pre>
-stringCountInteger :: String -> String -> Maybe Integer
-
--- | Encode integer to hexadecimal string.
---   
---   <pre>
---   &gt;&gt;&gt; intHexString 15
---   "f"
---   </pre>
-intLowerHexString :: Int -> String
-
--- | Encode integer to hexadecimal string.
---   
---   <pre>
---   &gt;&gt;&gt; intUpperHexString 15
---   "F"
---   </pre>
-intUpperHexString :: Int -> String
-
--- | Encode integer to custome-digit string.
---   
---   <pre>
---   &gt;&gt;&gt; integralCustomString "OI" &lt;$&gt; [0..8 :: Int]
---   ["O", "I", "IO", "II", "IOO", "IOI", "IIO", "III", "IOOO"]
---   </pre>
-integralCustomString :: (Integral n) => String -> n -> String
-
--- | Encode integer to counting string.
---   
---   <pre>
---   &gt;&gt;&gt; intReckonString ['A'..'Z'] &lt;$&gt; [0, 1, 2, 25, 26, 27, 52, 53, 100, 1000, 5303449]
---   ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
---   </pre>
-integralCountString :: (Integral n) => String -> n -> String
-
--- | Length of digits of integer.
---   
---   <pre>
---   &gt;&gt;&gt; digitsLength 10 12000
---   5
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; digitsLength 10 (-500)
---   4
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; digitsLength 2 15
---   4
---   </pre>
-digitsLength :: Int -> Int -> Int
-
-
 -- | Unicode general category.
 module Koshucode.Baala.Overture.Text.Category
 
@@ -534,143 +416,6 @@ type Test2 a b = a -> b -> Bool
 type Bin a = a -> a -> a
 
 
--- | Text utility.
-module Koshucode.Baala.Overture.Text.Utility
-
--- | Returns <a>True</a> for any Unicode space character, and the control
---   characters <tt>\t</tt>, <tt>\n</tt>, <tt>\r</tt>, <tt>\f</tt>,
---   <tt>\v</tt>.
-isSpace :: Char -> Bool
-
--- | Remove space and space-like characters from the beginning of string.
---   
---   <pre>
---   &gt;&gt;&gt; trimBegin "  abc  "
---   "abc  "
---   </pre>
-trimBegin :: StringMap
-
--- | Remove space and space-like characters from the end of string.
---   
---   <pre>
---   &gt;&gt;&gt; trimEnd "  abc  "
---   "  abc"
---   </pre>
-trimEnd :: StringMap
-
--- | Remove space and space-like characters from the beginning and end of
---   string.
---   
---   <pre>
---   &gt;&gt;&gt; trimBoth "  abc  "
---   "abc"
---   </pre>
-trimBoth :: StringMap
-
--- | Add spaces to the left.
---   
---   <pre>
---   &gt;&gt;&gt; padBegin 10 "abc"
---   "       abc"
---   </pre>
-padBegin :: Int -> StringMap
-
--- | Add spaces to the right.
---   
---   <pre>
---   &gt;&gt;&gt; padEnd 10 "abc"
---   "abc       "
---   </pre>
-padEnd :: Int -> StringMap
-
--- | Add given character to the left.
---   
---   <pre>
---   &gt;&gt;&gt; padBeginWith '.' 10 "abc"
---   ".......abc"
---   </pre>
-padBeginWith :: Char -> Int -> StringMap
-
--- | Add given character to the right.
-padEndWith :: Char -> Int -> StringMap
-
--- | Calculate width of string.
-stringWidth :: String -> Int
-
--- | Add space character if first character is non-space.
---   
---   <pre>
---   &gt;&gt;&gt; addSpace "aaa"
---   " aaa"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; addSpace " bbb"
---   " bbb"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; addSpace ""
---   ""
---   </pre>
-addSpace :: StringMap
-
--- | Test ASCII code point (0 .. 127).
-isAsciiCode :: (Integral n) => n -> Bool
-
--- | Test ASCII control code point (0 .. 31, 127).
-isControlCode :: (Integral n) => n -> Bool
-
--- | Test format code point (9 .. 13).
-isFormatCode :: (Integral n) => n -> Bool
-
--- | Test newline code point (10, 13).
-isNewlineCode :: (Integral n) => n -> Bool
-
--- | Generic code point (9) of horizontal tab character (<tt>'\t'</tt>).
-integralHT :: (Integral n) => n
-
--- | Generic code point (10) of line feed character (<tt>'\n'</tt>).
-integralLF :: (Integral n) => n
-
--- | Generic code point (11) of vertical tab character (<tt>'\v'</tt>).
-integralVT :: (Integral n) => n
-
--- | Generic code point (12) of form feed character (<tt>'\f'</tt>).
-integralFF :: (Integral n) => n
-
--- | Generic code point (13) of carriage return character (<tt>'\r'</tt>).
-integralCR :: (Integral n) => n
-
--- | Generic code point (32) of space character (<tt>' '</tt>).
-integralSpace :: (Integral n) => n
-
--- | Print newline.
-putLn :: IO ()
-
--- | Print newline.
-hPutLn :: Handle -> IO ()
-
--- | Print showing value.
-putShow :: (Show a) => a -> IO ()
-
--- | Print showing value with newline.
-putShowLn :: (Show a) => a -> IO ()
-
--- | Print multiple lines.
-putLines :: [String] -> IO ()
-
--- | Print multiple lines.
-hPutLines :: Handle -> [String] -> IO ()
-
--- | Print prompt (<tt>&gt;&gt;</tt>) and read user input. It returns
---   trimmed input string. Reread when input is empty.
-prompt :: IO String
-
--- | Print prompt with give string and read user input.
-promptWith :: String -> IO String
-
-
 -- | Something exists somewhere.
 module Koshucode.Baala.Overture.Some
 
@@ -732,6 +477,12 @@ type Pair a b = (a, b)
 
 -- | Twin pair.
 type Twin a = (a, a)
+
+-- | Strict bytestring.
+type Bs = ByteString
+
+-- | Lazy bytestring.
+type Bz = ByteString
 
 -- | Just pair: <b>Jp <i>a b</i></b> is equal to <b>Just (<i>a</i>,
 --   <i>b</i>)</b>.
@@ -936,7 +687,7 @@ module Koshucode.Baala.Overture.Infix
 module Koshucode.Baala.Overture.Text.Textual
 
 -- | Text-like value.
-class (Eq a, Monoid a) => Textual a where tEmpty = mempty tIsEmpty = (== tEmpty) tJoin = mappend tJoinAll = mconcat tAdd2 c d = tAdd c . tAdd d tAdd3 c d e = tAdd c . tAdd2 d e tCut2 a = tCut <$$> tCut a tCut3 a = tCut2 <$$> tCut a tDropPrefix (tCut -> Just (c, cs)) (tCut -> Just (a, as)) | c == a = tDropPrefix cs as | otherwise = Nothing tDropPrefix cs as | tIsEmpty cs = Just as | otherwise = Nothing charT c = tAdd c tEmpty char2T c d = tAdd2 c d tEmpty char3T c d e = tAdd3 c d e tEmpty
+class (Eq t, Ord t, Monoid t, IsString t) => Textual t where tEmpty = mempty tIsEmpty = (== tEmpty) tJoin = mappend tJoinAll = mconcat tAdd2 c d = tAdd c . tAdd d tAdd3 c d e = tAdd c . tAdd2 d e tCut2 a = tCut <$$> tCut a tCut3 a = tCut2 <$$> tCut a tDropPrefix (tCut -> Just (c, cs)) (tCut -> Just (a, as)) | c == a = tDropPrefix cs as | otherwise = Nothing tDropPrefix cs as | tIsEmpty cs = Just as | otherwise = Nothing tMap f = loop where loop (tCut -> Just (c, cs)) = f c : loop cs loop _ = [] tDivide f t0 = loop (0 :: Int) t0 where loop n (tCut -> Just (c, t)) | f c = tTake n t0 : tDivide f t | otherwise = loop (n + 1) t loop n _ = [tTake n t0] tLength (tCut -> Just (_, t)) = 1 + tLength t tLength _ = 0 charT c = tAdd c tEmpty char2T c d = tAdd2 c d tEmpty char3T c d e = tAdd3 c d e tEmpty charsT n c | n > 0 = tAdd c $ charsT (n - 1) c | otherwise = tEmpty showT = stringT . show bsT = bzT . fromStrict bzT = bsT . toStrict
 
 -- | Empty text.
 --   
@@ -944,7 +695,7 @@ class (Eq a, Monoid a) => Textual a where tEmpty = mempty tIsEmpty = (== tEmpty)
 --   &gt;&gt;&gt; tEmpty :: String
 --   ""
 --   </pre>
-tEmpty :: Textual a => a
+tEmpty :: Textual t => t
 
 -- | Test text is empty.
 --   
@@ -957,7 +708,7 @@ tEmpty :: Textual a => a
 --   &gt;&gt;&gt; tIsEmpty "foo"
 --   False
 --   </pre>
-tIsEmpty :: Textual a => a -> Bool
+tIsEmpty :: Textual t => t -> Bool
 
 -- | Append two texts.
 --   
@@ -965,7 +716,7 @@ tIsEmpty :: Textual a => a -> Bool
 --   &gt;&gt;&gt; tJoin "foo" "bar"
 --   "foobar"
 --   </pre>
-tJoin :: Textual a => a -> a -> a
+tJoin :: Textual t => t -> t -> t
 
 -- | Append multiple texts.
 --   
@@ -973,7 +724,7 @@ tJoin :: Textual a => a -> a -> a
 --   &gt;&gt;&gt; tJoinAll ["foo", "bar", "baz"]
 --   "foobarbaz"
 --   </pre>
-tJoinAll :: Textual a => [a] -> a
+tJoinAll :: Textual t => [t] -> t
 
 -- | Preppend character to text.
 --   
@@ -981,7 +732,7 @@ tJoinAll :: Textual a => [a] -> a
 --   &gt;&gt;&gt; tAdd 'g' "foo"
 --   "gfoo"
 --   </pre>
-tAdd :: Textual a => Char -> a -> a
+tAdd :: Textual t => Char -> t -> t
 
 -- | Preppend two characters to text.
 --   
@@ -989,7 +740,7 @@ tAdd :: Textual a => Char -> a -> a
 --   &gt;&gt;&gt; tAdd2 'b' 'a' "foo"
 --   "bafoo"
 --   </pre>
-tAdd2 :: Textual a => Char -> Char -> a -> a
+tAdd2 :: Textual t => Char -> Char -> t -> t
 
 -- | Preppend two characters to text.
 --   
@@ -997,7 +748,7 @@ tAdd2 :: Textual a => Char -> Char -> a -> a
 --   &gt;&gt;&gt; tAdd3 'b' 'a' 'r' "foo"
 --   "barfoo"
 --   </pre>
-tAdd3 :: Textual a => Char -> Char -> Char -> a -> a
+tAdd3 :: Textual t => Char -> Char -> Char -> t -> t
 
 -- | Split text into first character and rest of text.
 --   
@@ -1010,7 +761,7 @@ tAdd3 :: Textual a => Char -> Char -> Char -> a -> a
 --   &gt;&gt;&gt; tCut ""
 --   Nothing
 --   </pre>
-tCut :: Textual a => a -> Maybe (Char, a)
+tCut :: Textual t => t -> Maybe (Char, t)
 
 -- | Split one or two characters.
 --   
@@ -1018,7 +769,7 @@ tCut :: Textual a => a -> Maybe (Char, a)
 --   &gt;&gt;&gt; tCut2 "bar"
 --   Just ('b', Just ('a', "r"))
 --   </pre>
-tCut2 :: Textual a => a -> Maybe (Char, Maybe (Char, a))
+tCut2 :: Textual t => t -> Maybe (Char, Maybe (Char, t))
 
 -- | Split one, two, or three characters.
 --   
@@ -1031,7 +782,7 @@ tCut2 :: Textual a => a -> Maybe (Char, Maybe (Char, a))
 --   &gt;&gt;&gt; tCut3 "b"
 --   Just ('b', Nothing)
 --   </pre>
-tCut3 :: Textual a => a -> Maybe (Char, Maybe (Char, Maybe (Char, a)))
+tCut3 :: Textual t => t -> Maybe (Char, Maybe (Char, Maybe (Char, t)))
 
 -- | Take <i>N</i> characters.
 --   
@@ -1039,7 +790,7 @@ tCut3 :: Textual a => a -> Maybe (Char, Maybe (Char, Maybe (Char, a)))
 --   &gt;&gt;&gt; tTake 3 "foobar"
 --   "foo"
 --   </pre>
-tTake :: Textual a => Int -> a -> a
+tTake :: Textual t => Int -> t -> t
 
 -- | Drop <i>N</i> characters.
 --   
@@ -1047,7 +798,7 @@ tTake :: Textual a => Int -> a -> a
 --   &gt;&gt;&gt; tDrop 3 "foobar"
 --   "bar"
 --   </pre>
-tDrop :: Textual a => Int -> a -> a
+tDrop :: Textual t => Int -> t -> t
 
 -- | Drop prefix from text.
 --   
@@ -1060,7 +811,31 @@ tDrop :: Textual a => Int -> a -> a
 --   &gt;&gt;&gt; tDropPrefix "bar" "foobar"
 --   Nothing
 --   </pre>
-tDropPrefix :: (Textual a, Textual b) => b -> a -> Maybe a
+tDropPrefix :: (Textual t, Textual a) => a -> t -> Maybe t
+
+-- | Map function to characters of text value.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tMap fromEnum "bar"
+--   [98,97,114]
+--   </pre>
+tMap :: Textual t => (Char -> a) -> t -> [a]
+
+-- | Divide textual value by delimiter character.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tDivide (== '/') "foo/bar/baz"
+--   ["foo","bar","baz"]
+--   </pre>
+tDivide :: Textual t => (Char -> Bool) -> t -> [t]
+
+-- | Length of textual value.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tLength "foo" :: Int
+--   3
+--   </pre>
+tLength :: (Textual t, Integral n) => t -> n
 
 -- | Create text from single character.
 --   
@@ -1068,7 +843,7 @@ tDropPrefix :: (Textual a, Textual b) => b -> a -> Maybe a
 --   &gt;&gt;&gt; charT 'b' :: String
 --   "b"
 --   </pre>
-charT :: Textual a => Char -> a
+charT :: Textual t => Char -> t
 
 -- | Create text from two characters.
 --   
@@ -1076,7 +851,7 @@ charT :: Textual a => Char -> a
 --   &gt;&gt;&gt; char2T 'b' 'a' :: String
 --   "ba"
 --   </pre>
-char2T :: Textual a => Char -> Char -> a
+char2T :: Textual t => Char -> Char -> t
 
 -- | Create text from three characters.
 --   
@@ -1084,7 +859,15 @@ char2T :: Textual a => Char -> Char -> a
 --   &gt;&gt;&gt; char3T 'b' 'a' 'r' :: String
 --   "bar"
 --   </pre>
-char3T :: Textual a => Char -> Char -> Char -> a
+char3T :: Textual t => Char -> Char -> Char -> t
+
+-- | <i>N</i>-length textual value.
+--   
+--   <pre>
+--   &gt;&gt;&gt; charsT 4 '+' :: String
+--   "++++"
+--   </pre>
+charsT :: Textual t => Int -> Char -> t
 
 -- | Convert textual value to string.
 --   
@@ -1092,7 +875,7 @@ char3T :: Textual a => Char -> Char -> Char -> a
 --   &gt;&gt;&gt; tString "foo"
 --   "foo"
 --   </pre>
-tString :: Textual a => a -> String
+tString :: Textual t => t -> String
 
 -- | Convert string to textual value.
 --   
@@ -1100,10 +883,279 @@ tString :: Textual a => a -> String
 --   &gt;&gt;&gt; stringT "foo" :: String
 --   "foo"
 --   </pre>
-stringT :: Textual a => String -> a
+stringT :: Textual t => String -> t
+
+-- | Convert show instance to textual value.
+--   
+--   <pre>
+--   &gt;&gt;&gt; showT (120 :: Int) :: String
+--   "120"
+--   </pre>
+showT :: (Textual t, Show a) => a -> t
+
+-- | Convert strict bytestring to textual value.
+bsT :: Textual t => Bs -> t
+
+-- | Convert lazy bytestring to textual value.
+bzT :: Textual t => Bz -> t
 instance Koshucode.Baala.Overture.Text.Textual.Textual GHC.Base.String
 instance Koshucode.Baala.Overture.Text.Textual.Textual Data.Text.Internal.Text
 instance Koshucode.Baala.Overture.Text.Textual.Textual Data.Text.Internal.Lazy.Text
+
+
+-- | Encode and decode integers.
+module Koshucode.Baala.Overture.Text.Integer
+
+-- | Decode decimal integer.
+stringDec :: (Eq n, Num n) => String -> Maybe n
+
+-- | Decode decimal integer as <a>Int</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringInt "12"
+--   Just 12
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringInt "12.3"
+--   Nothing
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringInt "12345678901234567890"
+--   Just (-6101065172474983726)
+--   </pre>
+stringInt :: String -> Maybe Int
+
+-- | Decode decimal integer as <a>Integer</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringInteger "12345678901234567890"
+--   Just 12345678901234567890
+--   </pre>
+stringInteger :: String -> Maybe Integer
+
+-- | Decode hexadecimal digits.
+stringHex :: (Textual t, Eq n, Num n) => t -> Maybe n
+
+-- | Decode hexadecimal digits as <a>Int</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringHexInt "0F"
+--   Just 15
+--   </pre>
+stringHexInt :: (Textual t) => t -> Maybe Int
+
+-- | Decode hexadecimal digits as <a>Integer</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringHexInteger "0F"
+--   Just 15
+--   </pre>
+stringHexInteger :: (Textual t) => t -> Maybe Integer
+
+-- | Decode custom digits to integer.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringCustomInteger "01234567" "144"
+--   Just 100
+--   </pre>
+stringCustomInteger :: String -> String -> Maybe Integer
+
+-- | Decode counting digits to integer.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringCountInteger ['A'..'Z'] &lt;$&gt; ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
+--   [Just 0, Just 1, Just 2, Just 25, Just 26, Just 27, Just 52, Just 53, Just 100, Just 1000, Just 5303449]
+--   </pre>
+stringCountInteger :: String -> String -> Maybe Integer
+
+-- | Encode integer to hexadecimal string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; intHexString 15
+--   "f"
+--   </pre>
+intLowerHexString :: Int -> String
+
+-- | Encode integer to hexadecimal string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; intUpperHexString 15
+--   "F"
+--   </pre>
+intUpperHexString :: Int -> String
+
+-- | Encode integer to custome-digit string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; integralCustomString "OI" &lt;$&gt; [0..8 :: Int]
+--   ["O", "I", "IO", "II", "IOO", "IOI", "IIO", "III", "IOOO"]
+--   </pre>
+integralCustomString :: (Integral n) => String -> n -> String
+
+-- | Encode integer to counting string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; intReckonString ['A'..'Z'] &lt;$&gt; [0, 1, 2, 25, 26, 27, 52, 53, 100, 1000, 5303449]
+--   ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
+--   </pre>
+integralCountString :: (Integral n) => String -> n -> String
+
+-- | Length of digits of integer.
+--   
+--   <pre>
+--   &gt;&gt;&gt; digitsLength 10 12000
+--   5
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; digitsLength 10 (-500)
+--   4
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; digitsLength 2 15
+--   4
+--   </pre>
+digitsLength :: Int -> Int -> Int
+
+
+-- | Text utility.
+module Koshucode.Baala.Overture.Text.Utility
+
+-- | Returns <a>True</a> for any Unicode space character, and the control
+--   characters <tt>\t</tt>, <tt>\n</tt>, <tt>\r</tt>, <tt>\f</tt>,
+--   <tt>\v</tt>.
+isSpace :: Char -> Bool
+
+-- | Remove space and space-like characters from the beginning of string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; trimBegin "  abc  "
+--   "abc  "
+--   </pre>
+trimBegin :: (Textual t) => t -> t
+
+-- | Remove space and space-like characters from the end of string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; trimEnd "  abc  "
+--   "  abc"
+--   </pre>
+trimEnd :: (Textual t) => t -> t
+
+-- | Remove space and space-like characters from the beginning and end of
+--   string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; trimBoth "  abc  "
+--   "abc"
+--   </pre>
+trimBoth :: (Textual t) => t -> t
+
+-- | Add spaces to the left.
+--   
+--   <pre>
+--   &gt;&gt;&gt; padBegin 10 "abc"
+--   "       abc"
+--   </pre>
+padBegin :: Int -> StringMap
+
+-- | Add spaces to the right.
+--   
+--   <pre>
+--   &gt;&gt;&gt; padEnd 10 "abc"
+--   "abc       "
+--   </pre>
+padEnd :: Int -> StringMap
+
+-- | Add given character to the left.
+--   
+--   <pre>
+--   &gt;&gt;&gt; padBeginWith '.' 10 "abc"
+--   ".......abc"
+--   </pre>
+padBeginWith :: Char -> Int -> StringMap
+
+-- | Add given character to the right.
+padEndWith :: Char -> Int -> StringMap
+
+-- | Calculate width of string.
+stringWidth :: String -> Int
+
+-- | Add space character if first character is non-space.
+--   
+--   <pre>
+--   &gt;&gt;&gt; addSpace "aaa"
+--   " aaa"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; addSpace " bbb"
+--   " bbb"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; addSpace ""
+--   ""
+--   </pre>
+addSpace :: StringMap
+
+-- | Test ASCII code point (0 .. 127).
+isAsciiCode :: (Integral n) => n -> Bool
+
+-- | Test ASCII control code point (0 .. 31, 127).
+isControlCode :: (Integral n) => n -> Bool
+
+-- | Test format code point (9 .. 13).
+isFormatCode :: (Integral n) => n -> Bool
+
+-- | Test newline code point (10, 13).
+isNewlineCode :: (Integral n) => n -> Bool
+
+-- | Generic code point (9) of horizontal tab character (<tt>'\t'</tt>).
+integralHT :: (Integral n) => n
+
+-- | Generic code point (10) of line feed character (<tt>'\n'</tt>).
+integralLF :: (Integral n) => n
+
+-- | Generic code point (11) of vertical tab character (<tt>'\v'</tt>).
+integralVT :: (Integral n) => n
+
+-- | Generic code point (12) of form feed character (<tt>'\f'</tt>).
+integralFF :: (Integral n) => n
+
+-- | Generic code point (13) of carriage return character (<tt>'\r'</tt>).
+integralCR :: (Integral n) => n
+
+-- | Generic code point (32) of space character (<tt>' '</tt>).
+integralSpace :: (Integral n) => n
+
+-- | Print newline.
+putLn :: IO ()
+
+-- | Print newline.
+hPutLn :: Handle -> IO ()
+
+-- | Print showing value.
+putShow :: (Show a) => a -> IO ()
+
+-- | Print showing value with newline.
+putShowLn :: (Show a) => a -> IO ()
+
+-- | Print multiple lines.
+putLines :: [String] -> IO ()
+
+-- | Print multiple lines.
+hPutLines :: Handle -> [String] -> IO ()
+
+-- | Print prompt (<tt>&gt;&gt;</tt>) and read user input. It returns
+--   trimmed input string. Reread when input is empty.
+prompt :: IO String
+
+-- | Print prompt with give string and read user input.
+promptWith :: String -> IO String
 
 
 -- | Bundle of text modules.

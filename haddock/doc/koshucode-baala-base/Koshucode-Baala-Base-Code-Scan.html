@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.203.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.206.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -83,41 +83,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >data</span
 	    > <a href="#t:CodeScan"
 	    >CodeScan</a
-	    > i o = <a href="#v:CodeScan"
+	    > k t = <a href="#v:CodeScan"
 	    >CodeScan</a
 	    > {<ul class="subs"
 	    ><li
-	      ><a href="#v:codeMapSaved"
-		>codeMapSaved</a
+	      ><a href="#v:scanMapSaved"
+		>scanMapSaved</a
 		> :: [<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 		>CodeScanMap</a
-		> i o]</li
+		> k t]</li
 	      ><li
-	      ><a href="#v:codeMap"
-		>codeMap</a
+	      ><a href="#v:scanMap"
+		>scanMap</a
 		> :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 		>CodeScanMap</a
-		> i o</li
+		> k t</li
 	      ><li
-	      ><a href="#v:codeInputPt"
-		>codeInputPt</a
-		> :: <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
-		>CodePos</a
-		></li
+	      ><a href="#v:scanCp"
+		>scanCp</a
+		> :: <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+		>TCodePos</a
+		> t</li
 	      ><li
-	      ><a href="#v:codeInput"
-		>codeInput</a
-		> :: i</li
+	      ><a href="#v:scanInput"
+		>scanInput</a
+		> :: t</li
 	      ><li
-	      ><a href="#v:codeOutput"
-		>codeOutput</a
-		> :: [o]</li
+	      ><a href="#v:scanOutput"
+		>scanOutput</a
+		> :: [k t]</li
 	      ><li
-	      ><a href="#v:codeWords"
-		>codeWords</a
+	      ><a href="#v:scanCache"
+		>scanCache</a
 		> :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
 		>WordCache</a
-		></li
+		> t</li
 	      ></ul
 	    >}</li
 	  ><li class="src short"
@@ -125,27 +125,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >type</span
 	    > <a href="#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    > k t = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
 	    >CodeScan</a
-	    > i o)</li
+	    > k t)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:WordCache"
 	    >WordCache</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Cache.html#t:CacheS"
-	    >CacheS</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    ></li
+	    > t = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > t t</li
 	  ><li class="src short"
 	  ><a href="#v:emptyWordCache"
 	    >emptyWordCache</a
 	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
 	    >WordCache</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:isBol"
 	    >isBol</a
@@ -153,75 +151,61 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >Test</a
 	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
 	    >CodeScan</a
-	    > i o)</li
+	    > k t)</li
 	  ><li class="src short"
 	  ><a href="#v:codeScanSave"
 	    >codeScanSave</a
 	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o</li
+	    > k t</li
 	  ><li class="src short"
 	  ><a href="#v:codeScanRestore"
 	    >codeScanRestore</a
 	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o</li
+	    > k t</li
 	  ><li class="src short"
 	  ><a href="#v:codeScanUp"
 	    >codeScanUp</a
-	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
-	    >CodeScanMap</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > o -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
-	    >IxIOPoint</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
-	    >CodeLine</a
-	    > o]</li
-	  ><li class="src short"
-	  ><a href="#v:codeScanUpBz"
-	    >codeScanUpBz</a
-	    > :: <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
+	    > :: (<a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
 	    >ToCode</a
-	    > code =&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    > code, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t) =&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > o -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
+	    > k t -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
 	    >IxIOPoint</a
 	    > -&gt; code -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
 	    >CodeLine</a
-	    > o]</li
+	    > k t]</li
 	  ><li class="src short"
 	  ><a href="#v:codeUpdate"
 	    >codeUpdate</a
-	    > :: i -&gt; o -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    > :: t -&gt; k t -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o</li
+	    > k t</li
 	  ><li class="src short"
 	  ><a href="#v:codeUpdateWords"
 	    >codeUpdateWords</a
 	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
 	    >WordCache</a
-	    > -&gt; i -&gt; o -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    > t -&gt; t -&gt; k t -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o</li
+	    > k t</li
 	  ><li class="src short"
 	  ><a href="#v:codeUpdateList"
 	    >codeUpdateList</a
-	    > :: i -&gt; [o] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    > :: t -&gt; [k t] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o</li
+	    > k t</li
 	  ><li class="src short"
 	  ><a href="#v:codeUpdateListWords"
 	    >codeUpdateListWords</a
 	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
 	    >WordCache</a
-	    > -&gt; i -&gt; [o] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    > t -&gt; t -&gt; [k t] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o</li
+	    > k t</li
 	  ><li class="src short"
 	  ><a href="#v:codeChange"
 	    >codeChange</a
@@ -229,7 +213,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o)</li
+	    > k t)</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -241,7 +225,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >data</span
 	    > <a name="t:CodeScan" class="def"
 	    >CodeScan</a
-	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#CodeScan');" href="javascript:void(0);" class="link"
+	    > k t <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#CodeScan');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -267,57 +251,57 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		    >Fields</p
 		    ><dl
 		    ><dt class="src"
-		      ><a name="v:codeMapSaved" class="def"
-			>codeMapSaved</a
+		      ><a name="v:scanMapSaved" class="def"
+			>scanMapSaved</a
 			> :: [<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 			>CodeScanMap</a
-			> i o]</dt
+			> k t]</dt
 		      ><dd class="doc"
 		      ><p
 			>Saved updater</p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:codeMap" class="def"
-			>codeMap</a
+		      ><a name="v:scanMap" class="def"
+			>scanMap</a
 			> :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 			>CodeScanMap</a
-			> i o</dt
+			> k t</dt
 		      ><dd class="doc"
 		      ><p
 			>Updater</p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:codeInputPt" class="def"
-			>codeInputPt</a
-			> :: <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
-			>CodePos</a
-			></dt
+		      ><a name="v:scanCp" class="def"
+			>scanCp</a
+			> :: <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
+			>TCodePos</a
+			> t</dt
 		      ><dd class="doc"
 		      ><p
 			>Code position</p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:codeInput" class="def"
-			>codeInput</a
-			> :: i</dt
+		      ><a name="v:scanInput" class="def"
+			>scanInput</a
+			> :: t</dt
 		      ><dd class="doc"
 		      ><p
 			>Input text</p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:codeOutput" class="def"
-			>codeOutput</a
-			> :: [o]</dt
+		      ><a name="v:scanOutput" class="def"
+			>scanOutput</a
+			> :: [k t]</dt
 		      ><dd class="doc"
 		      ><p
 			>Output tokens</p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:codeWords" class="def"
-			>codeWords</a
+		      ><a name="v:scanCache" class="def"
+			>scanCache</a
 			> :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
 			>WordCache</a
-			></dt
+			> t</dt
 		      ><dd class="doc"
 		      ><p
 			>Cached words</p
@@ -338,19 +322,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > t =&gt; <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 		      >GetCodePos</a
 		      > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
 		      >CodeScan</a
-		      > i o)</span
+		      > k t)</span
 		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#line-38');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
 		  ><p
 		    >Return <code
-		      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:codeInputPt"
-			>codeInputPt</a
+		      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:scanCp"
+			>scanCp</a
 			></code
 		      >.</p
 		    ></td
@@ -365,11 +351,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >type</span
 	    > <a name="t:CodeScanMap" class="def"
 	    >CodeScanMap</a
-	    > i o = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    > k t = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
 	    >CodeScan</a
-	    > i o) <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#CodeScanMap');" href="javascript:void(0);" class="link"
+	    > k t) <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#CodeScanMap');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -383,11 +369,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >type</span
 	    > <a name="t:WordCache" class="def"
 	    >WordCache</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Cache.html#t:CacheS"
-	    >CacheS</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#WordCache');" href="javascript:void(0);" class="link"
+	    > t = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > t t <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#WordCache');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -401,7 +385,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >emptyWordCache</a
 	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
 	    >WordCache</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#emptyWordCache');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#emptyWordCache');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -419,7 +403,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >Test</a
 	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
 	    >CodeScan</a
-	    > i o) <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#isBol');" href="javascript:void(0);" class="link"
+	    > k t) <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#isBol');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -433,7 +417,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >codeScanSave</a
 	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeScanSave');" href="javascript:void(0);" class="link"
+	    > k t <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeScanSave');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -447,7 +431,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >codeScanRestore</a
 	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeScanRestore');" href="javascript:void(0);" class="link"
+	    > k t <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeScanRestore');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -459,17 +443,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><a name="v:codeScanUp" class="def"
 	    >codeScanUp</a
-	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    > :: (<a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
+	    >ToCode</a
+	    > code, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t) =&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > o -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
+	    > k t -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
 	    >IxIOPoint</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
+	    > -&gt; code -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
 	    >CodeLine</a
-	    > o] <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeScanUp');" href="javascript:void(0);" class="link"
+	    > k t] <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeScanUp');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -499,8 +483,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		><code
 		>, </code
 		><code
-		><a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
+		><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		  >Textual</a
 		  ></code
 		><code
 		>)</code
@@ -517,48 +501,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:codeScanUpBz" class="def"
-	    >codeScanUpBz</a
-	    > :: <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
-	    >ToCode</a
-	    > code =&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
-	    >CodeScanMap</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > o -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
-	    >IxIOPoint</a
-	    > -&gt; code -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
-	    >CodeLine</a
-	    > o] <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeScanUpBz');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Lazy bytestring version of <code
-	      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:codeScanUp"
-		>codeScanUp</a
-		></code
-	      >.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
 	  ><a name="v:codeUpdate" class="def"
 	    >codeUpdate</a
-	    > :: i -&gt; o -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    > :: t -&gt; k t -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdate');" href="javascript:void(0);" class="link"
+	    > k t <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdate');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Update <code
-	      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:codeInput"
-		>codeInput</a
+	      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:scanInput"
+		>scanInput</a
 		></code
 	      > and push result element to <code
-	      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:codeOutput"
-		>codeOutput</a
+	      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:scanOutput"
+		>scanOutput</a
 		></code
 	      >.</p
 	    ></div
@@ -569,9 +527,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >codeUpdateWords</a
 	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
 	    >WordCache</a
-	    > -&gt; i -&gt; o -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    > t -&gt; t -&gt; k t -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdateWords');" href="javascript:void(0);" class="link"
+	    > k t <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdateWords');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -583,9 +541,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><a name="v:codeUpdateList" class="def"
 	    >codeUpdateList</a
-	    > :: i -&gt; [o] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    > :: t -&gt; [k t] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdateList');" href="javascript:void(0);" class="link"
+	    > k t <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdateList');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -603,9 +561,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >codeUpdateListWords</a
 	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
 	    >WordCache</a
-	    > -&gt; i -&gt; [o] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    > t -&gt; t -&gt; [k t] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdateListWords');" href="javascript:void(0);" class="link"
+	    > k t <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdateListWords');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -625,7 +583,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
 	    >CodeScanMap</a
-	    > i o) <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeChange');" href="javascript:void(0);" class="link"
+	    > k t) <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeChange');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

@@ -8,7 +8,7 @@
 --   in the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-cop
-@version 0.203.0.0
+@version 0.206.0.0
 
 
 -- | Replace sublists.
@@ -162,6 +162,14 @@ copsText :: (CContent c) => [Cop c]
 --   not matches <i>PATTERN</i>.</li>
 --   </ul>
 copSiv :: (CContent c) => Bool -> CopCalc c
+
+-- | <ul>
+--   <li><i>pad-begin <i>CHAR</i> <i>SIZE</i> <i>TEXT</i></i> Pad
+--   <i>CHAR</i> to beginning of <i>TEXT</i> upto <i>SIZE</i>.</li>
+--   <li><i>pad-end <i>CHAR</i> <i>SIZE</i> <i>TEXT</i></i> Pad <i>CHAR</i>
+--   to end of <i>TEXT</i> upto <i>SIZE</i>.</li>
+--   </ul>
+copPad :: (CContent c) => (Char -> Int -> StringMap) -> CopCalc c
 
 -- | <ul>
 --   <li><i>suffix <i>LIST</i></i> Add unique suffixes to text elements of
