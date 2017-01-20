@@ -40,22 +40,23 @@ import qualified Koshucode.Baala.Base.Message           as Msg
 type TokenLine t = B.CodeLine S.TToken t
 
 -- | Tokenize lazy bytestring.
-tokenLines :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine String]
+tokenLines :: (B.ToCode code, O.Textual t, S.ToTermName t) => B.IxIOPoint -> code -> [TokenLine t]
 tokenLines = tokenLinesWith S.scanRel
 
 -- | Tokenize with code scanner.
-tokenLinesWith :: (B.ToCode code) => S.Scanner String -> B.IxIOPoint -> code -> [TokenLine String]
+tokenLinesWith :: (B.ToCode code, O.Textual t, S.ToTermName t)
+               => S.Scanner t -> B.IxIOPoint -> code -> [TokenLine t]
 tokenLinesWith scan = B.codeScanUp $ scan changeSection
 
 -- | Tokenize text.
-tokenLinesString :: B.IxIOPoint -> S.InputText -> [TokenLine String]
+tokenLinesString :: (B.ToCode code, O.Textual t, S.ToTermName t) => B.IxIOPoint -> code -> [TokenLine t]
 tokenLinesString = B.codeScanUp $ S.scanRel changeSection
 
 -- | Tokenize lazy bytestring.
 tokenLinesTextAssert :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine String]
 tokenLinesTextAssert = tokenLinesWith S.scanTextAssert
 
-changeSection :: (Ord t, B.IsString t, O.Textual t, S.ToTermName t) => S.ChangeSection t
+changeSection :: (O.Textual t, S.ToTermName t) => S.ChangeSection t
 changeSection name =
     case O.tString name of
       "rel"      -> just S.scanRel
@@ -82,7 +83,7 @@ isShortPrefix :: O.Test String
 isShortPrefix  = all Ch.isAlpha
 
 -- | Read token lines from file.
-readTokenLines :: FilePath -> B.IOAb [TokenLine String]
+readTokenLines :: (O.Textual t, S.ToTermName t) => FilePath -> B.IOAb [TokenLine t]
 readTokenLines path =
     do file <- B.readBzFile path
        bz   <- B.abortLeft $ B.bzFileContent file
@@ -95,24 +96,24 @@ readTokenLines path =
 type TokenClause t = B.CodeClause S.TToken t
 
 -- | Convert token lines into token clauses
-tokenClauses :: [TokenLine String] -> [TokenClause String]
+tokenClauses :: [TokenLine t] -> [TokenClause t]
 tokenClauses = map clause . split where
     clause ls = B.CodeClause ls $ list ls
 
-    list :: [TokenLine String] -> [S.Token]
+    list :: [TokenLine t] -> [S.TToken t]
     list = concatMap $ S.sweepToken . B.lineTokens
 
-    split :: [TokenLine String] -> [[TokenLine String]]
+    split :: [TokenLine t] -> [[TokenLine t]]
     split = B.gather B.splitClause . map indent . B.omit blank
 
-    blank :: TokenLine String -> Bool
+    blank :: TokenLine t -> Bool
     blank = all S.isBlankToken . B.lineTokens
 
-    indent :: TokenLine String -> (B.IndentSize, TokenLine String)
+    indent :: TokenLine t -> (B.IndentSize, TokenLine t)
     indent = B.lineIndentPair tokenIndent
 
 -- | Indent level.
-tokenIndent :: S.Token -> Int
+tokenIndent :: S.TToken t -> Int
 tokenIndent (S.TSpace _ n) = n
 tokenIndent             _  = 0
 
@@ -140,13 +141,13 @@ tokenIndent             _  = 0
 --                                                  TText /0.3.1/ TextRaw "cc"]}
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.6.0/ TextRaw "ee"]}
 --
-readClauses :: FilePath -> B.IOAb [TokenClause String]
+readClauses :: (O.Textual t, S.ToTermName t) => FilePath -> B.IOAb [TokenClause t]
 readClauses path =
     do ls <- readTokenLines path
        return (tokenClauses <$> ls)
 
 -- | Read clauses and extract tokens.
-readClauseTokens :: FilePath -> B.IOAb [[S.Token]]
+readClauseTokens :: (O.Textual t, S.ToTermName t) => FilePath -> B.IOAb [[S.TToken t]]
 readClauseTokens path =
     do ls <- readClauses path
        return (B.clauseTokens O.<$$> ls)

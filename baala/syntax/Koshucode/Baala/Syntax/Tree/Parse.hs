@@ -92,10 +92,10 @@ withTrees :: (ToTrees a) => ([Tree] -> B.Ab b) -> a -> B.Ab b
 withTrees f a = f O.# toTrees a
 
 -- | Read clauses and convert to token trees.
-readClauseTrees :: FilePath -> B.IOAb [[Tree]]
+readClauseTrees :: FilePath -> B.IOAb [[TTree String]]
 readClauseTrees path =
     do ls' <- S.readClauses path
-       return $ case ls' of
+       return $ case ls' :: B.Ab [S.TokenClause String] of
          Right ls   -> toTrees O.<#> ls
          Left a     -> Left a
 
