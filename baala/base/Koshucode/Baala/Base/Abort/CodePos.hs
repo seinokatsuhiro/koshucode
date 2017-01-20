@@ -8,6 +8,7 @@ module Koshucode.Baala.Base.Abort.CodePos
     CodePos,
     TCodePos (..),
     cpCharNo,
+    cpStringify,
     cpSplit,
 
     -- * Get code positions
@@ -91,6 +92,10 @@ instance (O.Textual t) => B.Default (TCodePos t) where
 cpCharNo :: (O.Textual t) => TCodePos t -> Int
 cpCharNo CodePos { cpLineText = line, cpText = subline }
     = O.tLength line - O.tLength subline
+
+-- | Convert textual position to string position.
+cpStringify :: (O.Textual t) => TCodePos t -> CodePos
+cpStringify = (O.tString <$>)
 
 -- | Before and after text of code position.
 --

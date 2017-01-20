@@ -50,12 +50,13 @@ selectSection change prev
     clip   = S.clipUpdate  sc
     clipw  = S.clipUpdateC sc
     out    = reverse $ S.sweepToken $ B.codeOutput sc
+    cp'    = B.cpStringify cp
 
     sec (O.tCut2 -> O.Jp2 '*' '*' _)
                          = dispatch out  -- end of effective text
     sec ccs@(O.tCut -> O.Jp c cs)
-        | S.isSpace c    = clip  $ S.clipSpace  cp cs
-        | S.isSymbol c   = clipw $ S.clipSymbol cp ws ccs
+        | S.isSpace c    = clip  $ S.clipSpace  cp' cs
+        | S.isSymbol c   = clipw $ S.clipSymbol cp' ws ccs
         | otherwise      = sectionUnexp [] sc
     sec _                = dispatch out  -- end of line
 
@@ -70,8 +71,9 @@ selectSection change prev
 sectionUnexp :: (O.Textual t) => [S.TToken t] -> S.TokenScanMap t
 sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate O.tEmpty tok sc where
     tok  = S.unknownToken cp cs $ Msg.unexpSect help
-    cp | null ts    = B.codeInputPt sc
-       | otherwise  = B.getCP $ head ts
+    cp   = case ts of
+             []    -> B.cpStringify $ B.codeInputPt sc
+             t : _ -> B.getCP t
     help = [ "=== rel      for relational calculation"
            , "=== note     for commentary section"
            , "=== license  for license section"

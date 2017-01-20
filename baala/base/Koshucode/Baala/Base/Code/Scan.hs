@@ -28,16 +28,16 @@ import qualified Koshucode.Baala.Base.Code.Line       as B
 data CodeScan k t = CodeScan
      { codeMapSaved :: [CodeScanMap k t]  -- ^ Saved updater
      , codeMap      :: CodeScanMap k t    -- ^ Updater
-     , codeInputPt  :: B.CodePos          -- ^ Code position
+     , codeInputPt  :: B.TCodePos t       -- ^ Code position
      , codeInput    :: t                  -- ^ Input text
      , codeOutput   :: [k t]              -- ^ Output tokens
      , codeWords    :: WordCache t        -- ^ Cached words
      }
 
 -- | Return 'codeInputPt'.
-instance B.GetCodePos (CodeScan k t) where
-    getCPs cp = [codeInputPt cp]
-    getCP  cp = codeInputPt cp
+instance (O.Textual t) => B.GetCodePos (CodeScan k t) where
+    getCPs scan = [B.getCP scan]
+    getCP  scan = B.cpStringify $ codeInputPt scan
 
 -- | Update code scanner.
 type CodeScanMap k t = O.Map (CodeScan k t)
@@ -103,7 +103,7 @@ setCodePos num line cp =
        , B.cpLineText  = line
        , B.cpText      = line }
 
-setScan :: B.CodePos -> t -> CodeScan k t -> CodeScan k t
+setScan :: B.TCodePos t -> t -> CodeScan k t -> CodeScan k t
 setScan cp line sc =
     sc { codeInputPt = cp
        , codeInput   = line
