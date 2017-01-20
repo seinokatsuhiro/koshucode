@@ -5,7 +5,8 @@
 
 module Koshucode.Baala.Base.Abort.CodePos
   ( -- * Code position
-    CodePos (..),
+    CodePos,
+    TCodePos (..),
     cpCharNo,
     cpSplit,
 
@@ -24,48 +25,55 @@ import qualified Koshucode.Baala.Base.Prelude       as B
 
 -- ----------------------  CodePos
 
--- | Position on input code string.
-data CodePos = CodePos
+-- | Code position of string code.
+type CodePos = TCodePos String
+
+-- | Position on input code.
+data TCodePos t = CodePos
       { cpIndex      :: O.Ix       -- ^ Index of code source
-      , cpPath       :: FilePath   -- ^ Path of code source
+      , cpPath       :: O.IOPath   -- ^ Path of code source
       , cpLineNo     :: Int        -- ^ Line number
-      , cpLineText   :: String     -- ^ Code string line
-      , cpText       :: String     -- ^ Current code string
+      , cpLineText   :: t          -- ^ Code line
+      , cpText       :: t          -- ^ Current code text
       } deriving (Eq)
 
--- | Number of input point, line number, and column number,
+-- | Number of input point, line number, and character number,
 --   e.g., @\/1.6.14\/@.
-instance Show CodePos where
+instance (O.Textual t) => Show (TCodePos t) where
     show = showCp posText
 
-instance O.GetIx CodePos where
+instance Functor TCodePos where
+    fmap f cp@CodePos { cpLineText = line, cpText = text } =
+        cp { cpLineText = f line, cpText = f text }
+
+instance O.GetIx (TCodePos t) where
     getIx = cpIndex
 
-instance O.GetIOPath CodePos where
+instance O.GetIOPath (TCodePos t) where
     getIOPath = cpPath
 
 posText :: String -> String -> String -> String
 posText s l c = "/" ++ s ++ "." ++ l ++ "." ++ c ++ "/"
 
-showCp :: (String -> String -> String -> String) -> CodePos -> String
+showCp :: (O.Textual t) => (String -> String -> String -> String) -> TCodePos t -> String
 showCp f cp = f s l c where
     s = show $ O.getIx cp
     l = show $ cpLineNo cp
     c = show $ cpCharNo cp
 
-instance Ord CodePos where
+instance (O.Textual t) => Ord (TCodePos t) where
     compare = cpCompare
 
-cpCompare :: CodePos -> CodePos -> Ordering
+cpCompare :: (O.Textual t) => TCodePos t -> TCodePos t -> Ordering
 cpCompare p1 p2 = line O.++ char where
     line = cpLineNo p1 `compare` cpLineNo p2
     char = cpTextLength p2 `compare` cpTextLength p1
 
-cpTextLength :: CodePos -> Int
+cpTextLength :: (O.Textual t) => TCodePos t -> Int
 cpTextLength = O.tLength . cpText
 
 -- | Empty code position, i.e., empty content and zero line number.
-instance B.Default CodePos where
+instance (O.Textual t) => B.Default (TCodePos t) where
     def = CodePos { cpIndex    = 0
                   , cpPath     = O.tEmpty
                   , cpLineNo   = 0
@@ -80,7 +88,7 @@ instance B.Default CodePos where
 --   >>> cpCharNo cp
 --   3
 --
-cpCharNo :: CodePos -> Int
+cpCharNo :: (O.Textual t) => TCodePos t -> Int
 cpCharNo CodePos { cpLineText = line, cpText = subline }
     = O.tLength line - O.tLength subline
 
