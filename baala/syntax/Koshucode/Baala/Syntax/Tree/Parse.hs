@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Parser for token tree.
@@ -16,6 +17,7 @@ module Koshucode.Baala.Syntax.Tree.Parse
 
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Token            as S
 import qualified Koshucode.Baala.Syntax.Tree.Bracket     as S
 
@@ -32,50 +34,51 @@ type TTree t = B.CodeTree S.BracketType S.TToken t
 type NamedTrees = B.Named [Tree]
 
 -- | Wrap trees in group.
-ttreeGroup :: [Tree] -> Tree
+ttreeGroup :: [TTree t] -> TTree t
 ttreeGroup = B.codeTreeWrap S.BracketGroup
+
 
 -- --------------------------------------------  Parser
 
 -- | Convert to token trees.
-class ToTrees a where
+class ToTrees t a where
     -- | Convert to list of token trees.
-    toTrees :: a -> B.Ab [Tree]
+    toTrees :: (O.Textual t, S.ToTermName t) => a -> B.Ab [TTree t]
 
     -- | Convert to token tree.
-    toTree :: a -> B.Ab Tree
+    toTree :: (O.Textual t, S.ToTermName t) => a -> B.Ab (TTree t)
     toTree a = ttreeGroup <$> toTrees a
 
     -- | List of token trees or error.
-    toTrees' :: a -> [Tree]
+    toTrees' :: (O.Textual t, S.ToTermName t) => a -> [TTree t]
     toTrees' = B.unabort . toTrees
 
     -- | Token tree or error.
-    toTree' :: a -> Tree
+    toTree' :: (O.Textual t, S.ToTermName t) => a -> TTree t
     toTree' = B.unabort . toTree
 
-instance ToTrees String where
+instance ToTrees t String where
     toTrees = tokenTrees . S.toks
 
-instance ToTrees B.Tx where
+instance ToTrees t B.Tx where
     toTrees = toTrees . B.txString
 
-instance ToTrees B.Tz where
+instance ToTrees t B.Tz where
     toTrees = toTrees . B.tzString
 
-instance ToTrees O.Bz where
+instance ToTrees t O.Bz where
     toTrees = toTrees . B.bzString
 
-instance ToTrees O.Bs where
+instance ToTrees t O.Bs where
     toTrees = toTrees . B.bsString
 
-instance ToTrees [S.Token] where
+instance ToTrees t [S.TToken t] where
     toTrees = tokenTrees
 
-instance ToTrees [Tree] where
+instance ToTrees t [TTree t] where
     toTrees = Right
 
-instance ToTrees (S.TokenClause String) where
+instance ToTrees t (S.TokenClause t) where
     toTrees = toTrees . B.clauseTokens
 
 -- | Parse tokens with brackets into trees.
@@ -88,7 +91,7 @@ tokenTrees = B.codeTrees S.getBracketType B.BracketNone . S.prepareTokens
 --   >>> withTrees Right "a"
 --   Right [TreeL (TText /0.1.0/ TextRaw "a")]
 --
-withTrees :: (ToTrees a) => ([Tree] -> B.Ab b) -> a -> B.Ab b
+withTrees :: (O.Textual t, S.ToTermName t, ToTrees t a) => ([TTree t] -> B.Ab b) -> a -> B.Ab b
 withTrees f a = f O.# toTrees a
 
 -- | Read clauses and convert to token trees.

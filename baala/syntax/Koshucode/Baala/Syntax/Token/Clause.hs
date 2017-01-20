@@ -156,7 +156,7 @@ readClauseTokens path =
 -- --------------------------------------------  Abbreviation
 
 -- | Abbreviated tokenizer.
-toks :: String -> [S.Token]
+toks :: (O.Textual t, S.ToTermName t) => String -> [S.TToken t]
 toks s = concatMap B.lineTokens $ tokenLinesString (B.codeIxIO s) s
 
 -- | Print token list.
