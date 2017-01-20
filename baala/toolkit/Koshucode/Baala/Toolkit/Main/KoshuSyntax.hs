@@ -115,7 +115,7 @@ judgeLine clseq (B.CodeLine ln _ _) = T.affirm "LINE" args where
 judgeToken :: Int -> S.Token -> D.JudgeC
 judgeToken ln tok = T.affirm "TOKEN" $ D.cutEmpty args where
     args = [ "line"           // D.pInt ln
-           , "column"         // D.pInt $ B.cpColumnNo $ head $ B.getCPs tok
+           , "column"         // D.pInt $ B.cpCharNo $ head $ B.getCPs tok
            , "token-type"     // D.pText $ S.subtypeName tok
            , "token-subtype"  // D.maybeEmpty D.pText $ S.tokenDetailTypeString tok
            , "cont"           // D.pText $ S.tokenContent tok ]

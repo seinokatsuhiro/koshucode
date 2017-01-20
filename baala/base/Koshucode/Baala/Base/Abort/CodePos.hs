@@ -6,7 +6,7 @@
 module Koshucode.Baala.Base.Abort.CodePos
   ( -- * Code position
     CodePos (..),
-    cpColumnNo,
+    cpCharNo,
     cpSplit,
 
     -- * Get code positions
@@ -51,15 +51,15 @@ showCp :: (String -> String -> String -> String) -> CodePos -> String
 showCp f cp = f s l c where
     s = show $ O.getIx cp
     l = show $ cpLineNo cp
-    c = show $ cpColumnNo cp
+    c = show $ cpCharNo cp
 
 instance Ord CodePos where
     compare = cpCompare
 
 cpCompare :: CodePos -> CodePos -> Ordering
-cpCompare p1 p2 = line O.++ column where
-    line   = cpLineNo p1 `compare` cpLineNo p2
-    column = cpTextLength p2 `compare` cpTextLength p1
+cpCompare p1 p2 = line O.++ char where
+    line = cpLineNo p1 `compare` cpLineNo p2
+    char = cpTextLength p2 `compare` cpTextLength p1
 
 cpTextLength :: CodePos -> Int
 cpTextLength = O.tLength . cpText
@@ -67,21 +67,21 @@ cpTextLength = O.tLength . cpText
 -- | Empty code position, i.e., empty content and zero line number.
 instance B.Default CodePos where
     def = CodePos { cpIndex    = 0
-                  , cpPath     = ""
+                  , cpPath     = O.tEmpty
                   , cpLineNo   = 0
                   , cpLineText = O.tEmpty
                   , cpText     = O.tEmpty }
 
--- | Column number at which code starts.
+-- | Character position at which code starts.
 --
---   >>> let cp = CodePos 0 "<stdin>" 1 "abcdefg" "defg"
+--   >>> let cp = B.def { cpLineText = "abcdefg", cpText = "defg" }
 --   >>> cp
---   /0.1.3/
---   >>> cpColumnNo cp
+--   /0.0.3/
+--   >>> cpCharNo cp
 --   3
 --
-cpColumnNo :: CodePos -> Int
-cpColumnNo CodePos { cpLineText = line, cpText = subline }
+cpCharNo :: CodePos -> Int
+cpCharNo CodePos { cpLineText = line, cpText = subline }
     = O.tLength line - O.tLength subline
 
 -- | Before and after text of code position.
@@ -91,12 +91,17 @@ cpColumnNo CodePos { cpLineText = line, cpText = subline }
 --
 cpSplit :: CodePos -> (String, String)
 cpSplit CodePos { cpLineText = ln, cpText = t } =
-    case stripSuffix t ln of
+    case tStripSuffix t ln of
       Just s  -> (s, t)
       Nothing -> (ln, t)
 
-stripSuffix :: (Eq a) => [a] -> [a] -> Maybe [a]
-stripSuffix suf s = reverse <$> Li.stripPrefix (reverse suf) (reverse s)
+-- >>> tStripSuffix "defg" "abcdefg"
+-- Just "abc"
+tStripSuffix :: (O.Textual t) => t -> t -> Maybe t
+tStripSuffix suf s = stripped where
+    stripped = (O.stringT . reverse) <$> Li.stripPrefix suf' s'
+    suf'     = reverse $ O.tString suf
+    s'       = reverse $ O.tString s
 
 
 -- ----------------------  GetCodePos

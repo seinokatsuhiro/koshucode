@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -180,7 +181,7 @@ type CodeTree b k t = CodeTree' b (k t)
 -- | Tree with open/close brackets.
 type CodeTree' b z = RawTree b (Maybe (z, z)) z
 
-instance (B.GetCodePos (k t)) => B.GetCodePos (CodeTree p k t) where
+instance (B.GetCodePos (k t)) => B.GetCodePos (CodeTree b k t) where
     getCPs t = B.getCP <$> untree t
 
 -- | Mapping function for code tree.

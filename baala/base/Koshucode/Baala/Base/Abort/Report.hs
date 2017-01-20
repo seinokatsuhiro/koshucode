@@ -73,7 +73,7 @@ cpMessage cp@B.CodePos { B.cpLineNo = lno }
     | otherwise     = (Just pos, Just before', Just after')
     where
       pos      = (lno, cno, O.getIOPath cp)
-      cno      = B.cpColumnNo cp
+      cno      = B.cpCharNo cp
       before'  = O.trimBegin b
       after'   = O.trimBegin a
       (b, a)   = B.cpSplit cp

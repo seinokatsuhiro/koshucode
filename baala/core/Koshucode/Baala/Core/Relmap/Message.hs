@@ -51,7 +51,7 @@ tokenAtPoint tok = unwords ws where
     ws    = [S.tokenContent tok, "at L" ++ line, "C" ++ col]
     cp    = B.getCP tok
     line  = show $ B.cpLineNo   cp
-    col   = show $ B.cpColumnNo cp
+    col   = show $ B.cpCharNo cp
 
 -- | Disabled feature: input clause
 disabledInputClause :: B.Ab b
