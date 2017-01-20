@@ -8,6 +8,7 @@ module Koshucode.Baala.Overture.Text.Textual
   ( Textual (..),
   ) where
 
+import qualified Data.String                         as Str
 import qualified Data.Text                           as Tx
 import qualified Data.Text.Encoding                  as Tx
 import qualified Data.Text.Encoding.Error            as Err
@@ -21,7 +22,7 @@ import qualified Koshucode.Baala.Overture.Misc       as O
 import qualified Koshucode.Baala.Overture.Shorthand  as O
 
 -- | Text-like value.
-class (Eq a, Monoid a) => Textual a where
+class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
 
     -- ----------------------  Monoid
 
@@ -30,7 +31,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tEmpty :: String
     --   ""
     --
-    tEmpty :: a
+    tEmpty :: t
     tEmpty = mempty
 
     -- | Test text is empty.
@@ -41,7 +42,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tIsEmpty "foo"
     --   False
     --
-    tIsEmpty :: a -> Bool
+    tIsEmpty :: t -> Bool
     tIsEmpty = (== tEmpty)
 
     -- | Append two texts.
@@ -49,7 +50,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tJoin "foo" "bar"
     --   "foobar"
     --
-    tJoin :: a -> a -> a
+    tJoin :: t -> t -> t
     tJoin = mappend
 
     -- | Append multiple texts.
@@ -57,7 +58,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tJoinAll ["foo", "bar", "baz"]
     --   "foobarbaz"
     --
-    tJoinAll :: [a] -> a
+    tJoinAll :: [t] -> t
     tJoinAll = mconcat
 
     -- ----------------------  Subtext
@@ -67,14 +68,14 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tAdd 'g' "foo"
     --   "gfoo"
     --
-    tAdd :: Char -> a -> a
+    tAdd :: Char -> t -> t
 
     -- | Preppend two characters to text.
     --
     --   >>> tAdd2 'b' 'a' "foo"
     --   "bafoo"
     --
-    tAdd2 :: Char -> Char -> a -> a
+    tAdd2 :: Char -> Char -> t -> t
     tAdd2 c d = tAdd c . tAdd d
 
     -- | Preppend two characters to text.
@@ -82,7 +83,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tAdd3 'b' 'a' 'r' "foo"
     --   "barfoo"
     --
-    tAdd3 :: Char -> Char ->  Char -> a -> a
+    tAdd3 :: Char -> Char ->  Char -> t -> t
     tAdd3 c d e = tAdd c . tAdd2 d e
 
     -- | Split text into first character and rest of text.
@@ -93,14 +94,14 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tCut ""
     --   Nothing
     --
-    tCut :: a -> Maybe (Char, a)
+    tCut :: t -> Maybe (Char, t)
 
     -- | Split one or two characters.
     --
     --   >>> tCut2 "bar"
     --   Just ('b', Just ('a', "r"))
     --
-    tCut2 :: a -> Maybe (Char, Maybe (Char, a))
+    tCut2 :: t -> Maybe (Char, Maybe (Char, t))
     tCut2 a = tCut O.<$$> tCut a
 
     -- | Split one, two, or three characters.
@@ -111,7 +112,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tCut3 "b"
     --   Just ('b', Nothing)
     --
-    tCut3 :: a -> Maybe (Char, Maybe (Char, Maybe (Char, a)))
+    tCut3 :: t -> Maybe (Char, Maybe (Char, Maybe (Char, t)))
     tCut3 a = tCut2 O.<$$> tCut a
 
     -- | Take /N/ characters.
@@ -119,14 +120,14 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tTake 3 "foobar"
     --   "foo"
     --
-    tTake :: Int -> a -> a
+    tTake :: Int -> t -> t
 
     -- | Drop /N/ characters.
     --
     --   >>> tDrop 3 "foobar"
     --   "bar"
     --
-    tDrop :: Int -> a -> a
+    tDrop :: Int -> t -> t
 
     -- | Drop prefix from text.
     --
@@ -136,7 +137,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tDropPrefix "bar" "foobar"
     --   Nothing
     --
-    tDropPrefix :: (Textual b) => b -> a -> Maybe a
+    tDropPrefix :: (Textual a) => a -> t -> Maybe t
     tDropPrefix (tCut -> Just (c, cs)) (tCut -> Just (a, as))
         | c == a       = tDropPrefix cs as
         | otherwise    = Nothing
@@ -149,7 +150,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tMap fromEnum "bar"
     --   [98,97,114]
     --
-    tMap :: (Char -> b) -> a -> [b]
+    tMap :: (Char -> a) -> t -> [a]
     tMap f = loop where
         loop (tCut -> Just (c, cs)) = f c : loop cs
         loop _ = []
@@ -159,7 +160,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tDivide (== '/') "foo/bar/baz"
     --   ["foo","bar","baz"]
     --
-    tDivide :: (Char -> Bool) -> a -> [a]
+    tDivide :: (Char -> Bool) -> t -> [t]
     tDivide f t0 = loop (0 :: Int) t0 where
         loop n (tCut -> Just (c, t))
             | f c        = tTake n t0 : tDivide f t
@@ -171,7 +172,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tLength "foo" :: Int
     --   3
     --
-    tLength :: (Integral n) => a -> n
+    tLength :: (Integral n) => t -> n
     tLength (tCut -> Just (_, t)) = 1 + tLength t
     tLength _ = 0
 
@@ -182,7 +183,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> charT 'b' :: String
     --   "b"
     --
-    charT :: Char -> a
+    charT :: Char -> t
     charT c = tAdd c tEmpty
 
     -- | Create text from two characters.
@@ -190,7 +191,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> char2T 'b' 'a' :: String
     --   "ba"
     --
-    char2T :: Char -> Char -> a
+    char2T :: Char -> Char -> t
     char2T c d = tAdd2 c d tEmpty
 
     -- | Create text from three characters.
@@ -198,7 +199,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> char3T 'b' 'a' 'r' :: String
     --   "bar"
     --
-    char3T :: Char -> Char -> Char -> a
+    char3T :: Char -> Char -> Char -> t
     char3T c d e = tAdd3 c d e tEmpty
 
     -- | /N/-length textual value.
@@ -206,7 +207,7 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> charsT 4 '+' :: String
     --   "++++"
     --
-    charsT :: Int -> Char -> a
+    charsT :: Int -> Char -> t
     charsT n c | n > 0     = tAdd c $ charsT (n - 1) c
                | otherwise = tEmpty
 
@@ -217,29 +218,29 @@ class (Eq a, Monoid a) => Textual a where
     --   >>> tString "foo"
     --   "foo"
     --
-    tString :: a -> String
+    tString :: t -> String
 
     -- | Convert string to textual value.
     --
     --   >>> stringT "foo" :: String
     --   "foo"
     --
-    stringT :: String -> a
+    stringT :: String -> t
 
     -- | Convert show instance to textual value.
     --
     --   >>> showT (120 :: Int) :: String
     --   "120"
     --
-    showT :: (Show b) => b -> a
+    showT :: (Show a) => a -> t
     showT = stringT . show
 
     -- | Convert strict bytestring to textual value.
-    bsT :: O.Bs -> a
+    bsT :: O.Bs -> t
     bsT = bzT . Bz.fromStrict
 
     -- | Convert lazy bytestring to textual value.
-    bzT :: O.Bz -> a
+    bzT :: O.Bz -> t
     bzT = bsT . Bz.toStrict
 
 instance Textual String where
