@@ -24,7 +24,6 @@ import qualified Data.ByteString.Lazy                 as Bz
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.IO              as B
-import qualified Koshucode.Baala.Base.Prelude         as B
 
 
 -- ----------------------  Line
@@ -58,12 +57,12 @@ linesCrlfNumbered :: String -> [NumberedLine String]
 linesCrlfNumbered = zip [1..] . linesCrlf
 
 -- | Create numbered lines from lazy bytestring.
-linesCrlfBzNumbered :: (B.ToCode code) => code -> [NumberedLine String]
-linesCrlfBzNumbered = zip [1..] . linesCrlfBzString
+linesCrlfBzNumbered :: (B.ToCode code, O.Textual t) => code -> [NumberedLine t]
+linesCrlfBzNumbered = zip [1..] . textualLines
 
--- | Create string lines from lazy bytestring.
-linesCrlfBzString :: (B.ToCode code) => code -> [String]
-linesCrlfBzString = map B.bzString . linesCrlfBz
+-- | Create textual lines from lazy bytestring.
+textualLines :: (B.ToCode code, O.Textual t) => code -> [t]
+textualLines = map O.bzT . linesCrlfBz
 
 -- | Split lazy bytestring by newline character sequence.
 --   This function drops the BOM sequence.
