@@ -78,7 +78,7 @@ codeScanRestore sc =
 --      and put tokens together in 'B.CodeLine'.
 --
 codeScanUp :: (B.ToCode code, O.Textual t) => CodeScanMap k t -> B.IxIOPoint -> code -> [B.CodeLine k t]
-codeScanUp f ixio = codeScanUpLines f ixio . B.linesCrlfBzNumbered
+codeScanUp f ixio = codeScanUpLines f ixio . B.numberedLines
 
 codeScanUpLines :: (O.Textual t) => CodeScanMap k t -> B.IxIOPoint -> [B.NumberedLine t] -> [B.CodeLine k t]
 codeScanUpLines f ixio = loop (CodeScan [] f cp O.tEmpty [] emptyWordCache) where

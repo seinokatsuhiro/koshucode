@@ -9,10 +9,10 @@ module Koshucode.Baala.Base.Code.Line
   ( -- * Line
     LineNumber,
     NumberedLine,
-    linesCrlf, linesCrlfNumbered,
-    linesCrlfBz, linesCrlfBzNumbered,
-    bzLines,
     dropBom,
+    bzLines,
+    numberedLines,
+    linesCrlf, linesCrlfBz, linesCrlfNumbered,
 
     -- * CodeLine
     CodeLine (..),
@@ -34,48 +34,18 @@ type LineNumber = Int
 -- | Line with number.
 type NumberedLine t = (LineNumber, t)
 
--- | Split string into lines.
---   The result strings do not contain
---   carriage returns (@\\r@)
---   and line feeds (@\\n@).
---
---   >>> linesCrlf "aaa\nbbb\r\nccc\n\nddd\n"
---   ["aaa","bbb","ccc","","ddd"]
---
-linesCrlf :: String -> [String]
-linesCrlf s
-    | O.tIsEmpty s = []
-    | otherwise = ln : next s2
-    where
-      (ln, s2) = break (`elem` ("\r\n" :: String)) s
-      next (O.tCut -> O.Jp '\r' s3) = next s3
-      next (O.tCut -> O.Jp '\n' s3) = linesCrlf s3
-      next s3                       = linesCrlf s3
-
--- | Line number and its content.
-linesCrlfNumbered :: String -> [NumberedLine String]
-linesCrlfNumbered = zip [1..] . linesCrlf
-
 -- | Create numbered lines from lazy bytestring.
-linesCrlfBzNumbered :: (B.ToCode code, O.Textual t) => code -> [NumberedLine t]
-linesCrlfBzNumbered = zip [1..] . textualLines
+numberedLines :: (B.ToCode code, O.Textual t) => code -> [NumberedLine t]
+numberedLines = zip [1..] . textualLines
 
 -- | Create textual lines from lazy bytestring.
 textualLines :: (B.ToCode code, O.Textual t) => code -> [t]
-textualLines = map O.bzT . linesCrlfBz
+textualLines = map O.bzT . bzLines . B.toCode
 
 -- | Split lazy bytestring by newline character sequence.
---   This function drops the BOM sequence.
-linesCrlfBz :: (B.ToCode code) => code -> [O.Bz]
-linesCrlfBz = linesCrlfBzRaw . dropBom . B.toCode
-
--- | Split lazy bytestring by newline character sequence.
-linesCrlfBzRaw :: (B.ToCode code) => code -> [O.Bz]
-linesCrlfBzRaw = bzLines . B.toCode
-
--- | Split lazy bytestring by newline character sequence.
+--   If bytestring begins with the UTF-8 BOM, this function drops it.
 bzLines :: O.Bz -> [O.Bz]
-bzLines = loop where
+bzLines = loop . dropBom where
     loop bz | Bz.null bz  = []
             | otherwise   = case Bz.break crlf bz of
                               (ln, bz') -> ln : loop (strip bz')
@@ -102,6 +72,36 @@ dropBom :: O.Bz -> O.Bz
 dropBom bz = case Bz.splitAt 3 bz of
                (bom, body) | "\xEF\xBB\xBF" == bom -> body
                            | otherwise             -> bz
+
+-- | Split string into lines.
+--   The result strings do not contain
+--   carriage returns (@\\r@)
+--   and line feeds (@\\n@).
+--
+--   >>> linesCrlf "aaa\nbbb\r\nccc\n\nddd\n"
+--   ["aaa","bbb","ccc","","ddd"]
+--
+{-# DEPRECATED linesCrlf "Consider 'bzLines'." #-}
+linesCrlf :: String -> [String]
+linesCrlf s
+    | O.tIsEmpty s = []
+    | otherwise = ln : next s2
+    where
+      (ln, s2) = break (`elem` ("\r\n" :: String)) s
+      next (O.tCut -> O.Jp '\r' s3) = next s3
+      next (O.tCut -> O.Jp '\n' s3) = linesCrlf s3
+      next s3                       = linesCrlf s3
+
+-- | Line number and its content.
+{-# DEPRECATED linesCrlfNumbered "Consider 'bzLines'." #-}
+linesCrlfNumbered :: String -> [NumberedLine String]
+linesCrlfNumbered = zip [1..] . linesCrlf
+
+-- | Split lazy bytestring by newline character sequence.
+--   This function drops the BOM sequence.
+{-# DEPRECATED linesCrlfBz "Consider 'bzLines'." #-}
+linesCrlfBz :: (B.ToCode code) => code -> [O.Bz]
+linesCrlfBz = bzLines . B.toCode
 
 
 -- ----------------------  CodeLine
