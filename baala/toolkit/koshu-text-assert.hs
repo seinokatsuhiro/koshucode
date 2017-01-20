@@ -5,6 +5,7 @@
 
 module Main (main) where
 
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.System            as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
