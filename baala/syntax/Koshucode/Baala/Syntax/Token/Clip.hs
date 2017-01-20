@@ -132,7 +132,7 @@ clipSpace cp cs =
 --   >>> clipQ B.def O.emptyWordCache "foo bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQ "foo")
 --
-clipQ :: (Ord t, O.Textual t) => ClipTokenC t
+clipQ :: (O.Textual t) => ClipTokenC t
 clipQ cp wtab cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> symbolToken S.TextQ w cp wtab cs'
@@ -143,7 +143,7 @@ clipQ cp wtab cs =
 --   >>> clipQq B.def O.emptyWordCache "foo\" bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --
-clipQq :: (Ord t, O.Textual t) => ClipTokenC t
+clipQq :: (O.Textual t) => ClipTokenC t
 clipQq cp wtab cs =
     case S.nextQQ cs of
       Left a         -> (wtab, O.tEmpty, S.TUnknown cp cs a)
@@ -156,7 +156,7 @@ clipQq cp wtab cs =
 --   >>> clipQn B.def B.emptyWordCache "'foo''' bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --
-clipQn :: (Ord t, O.Textual t) => ClipTokenC t
+clipQn :: (O.Textual t) => ClipTokenC t
 clipQn cp wtab (countQuote -> (n, cs)) =
     case S.nextBefore (O.charsT (n + 2) '\'') cs of
       Left a         -> (wtab, O.tEmpty, S.TUnknown cp cs a)
@@ -175,7 +175,7 @@ countQuote = loop 0 where
 --   >>> clipSymbol B.def O.emptyWordCache "foo bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextRaw "foo")
 --
-clipSymbol :: (Ord t, O.Textual t) => ClipTokenC t
+clipSymbol :: (O.Textual t) => ClipTokenC t
 clipSymbol cp wtab cs =
     let (cs', sym) = S.nextSymbol cs
     in case sym of
@@ -210,7 +210,7 @@ clipSlot n cp cs =
 --   >>> clipTermSign "+/" B.def B.def "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "+/foo"])
 --
-clipTermSign :: (Ord t, O.Textual t, B.IsString t) => t -> ClipTokenCL t
+clipTermSign :: (O.Textual t) => t -> ClipTokenCL t
 clipTermSign = clipTerm False
 
 -- | Clip term name.
@@ -218,7 +218,7 @@ clipTermSign = clipTerm False
 --   >>> clipTermName B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "/foo"])
 --
-clipTermName :: (Ord t, O.Textual t, B.IsString t) => ClipTokenCL t
+clipTermName :: (O.Textual t) => ClipTokenCL t
 clipTermName = clipTerm False "/"
 
 -- | Clip quoted term.
@@ -226,11 +226,11 @@ clipTermName = clipTerm False "/"
 --   >>> clipTermQ B.def Map.empty "foo bar baz"
 --   (fromList [], " bar baz", [TText <I0-L0-C0> TextTerm "foo"])
 --
-clipTermQ :: (Ord t, O.Textual t, B.IsString t) => ClipTokenCL t
+clipTermQ :: (O.Textual t) => ClipTokenCL t
 clipTermQ = clipTerm True "/"
 
 -- | Clip term name or a term path.
-clipTerm :: (Ord t, O.Textual t, B.IsString t) => Bool -> t -> ClipTokenCL t
+clipTerm :: (O.Textual t) => Bool -> t -> ClipTokenCL t
 clipTerm q slash cp wtab cs0 = word [] cs0 where
     word ns ccs@(O.tCut -> O.Jp c cs)
         | c == '='    = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)

@@ -33,7 +33,7 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 type ChangeSection t = t -> Maybe (S.TokenScanMap t)
 
 -- | Line begins with triple equal signs is treated as section delimter.
-section :: (Ord t, O.Textual t) => ChangeSection t -> (t -> S.TokenScan t) -> S.TokenScanMap t
+section :: (O.Textual t) => ChangeSection t -> (t -> S.TokenScan t) -> S.TokenScanMap t
 section change f
         sc@B.CodeScan { B.scanMap    = prev
                       , B.scanInput  = cs0
@@ -41,7 +41,7 @@ section change f
     body [] (O.tCut -> O.Jp '=' _) = B.codeChange (selectSection change prev) sc
     body _ cs = f cs
 
-selectSection :: (Ord t, O.Textual t) => ChangeSection t -> S.TokenScanMap t -> S.TokenScanMap t
+selectSection :: (O.Textual t) => ChangeSection t -> S.TokenScanMap t -> S.TokenScanMap t
 selectSection change prev
               sc@B.CodeScan { B.scanCp     = cp
                             , B.scanInput  = cs0
@@ -89,7 +89,7 @@ scanEnd :: (O.Textual t) => Scanner t
 scanEnd _ sc@B.CodeScan { B.scanInput = cs } = comment cs sc
 
 -- | Scan tokens in @note@ section.
-scanNote :: (Ord t, O.Textual t) => Scanner t
+scanNote :: (O.Textual t) => Scanner t
 scanNote change sc = section change (`comment` sc) sc
 
 comment :: (O.Textual t) => t -> S.TokenScanMap t
@@ -99,17 +99,17 @@ comment cs sc
     where tok = S.TComment (B.scanCp sc) cs
 
 -- | Scan tokens in @license@ section.
-scanLicense :: (Ord t, O.Textual t) => Scanner t
+scanLicense :: (O.Textual t) => Scanner t
 scanLicense = scanLine S.TextLicense
 
 -- | Scan entire line as text.
-scanLine :: (Ord t, O.Textual t) => S.TextForm -> Scanner t
+scanLine :: (O.Textual t) => S.TextForm -> Scanner t
 scanLine form change sc = section change text sc where
     text cs | O.tIsEmpty cs = sc
             | otherwise     = let tok = S.TText (B.scanCp sc) form cs
                               in B.codeUpdate O.tEmpty tok sc
 
-scanLineInClause :: (Ord t, O.Textual t) => S.TextForm -> Scanner t
+scanLineInClause :: (O.Textual t) => S.TextForm -> Scanner t
 scanLineInClause form change sc = section change text sc where
     text cs@(O.tCut -> O.Jp c _)
         | S.isSpace c = S.clipUpdate sc $ S.clipSpace (B.scanCp sc) cs

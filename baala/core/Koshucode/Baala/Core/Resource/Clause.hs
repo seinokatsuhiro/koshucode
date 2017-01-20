@@ -244,7 +244,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
         where (pre, rep)   = unzip sh'
               prefix       = B.duplicates pre
               replace      = B.duplicates rep
-              invalid      = B.omit S.isShortPrefix pre
+              invalid      = B.omit isShortPrefix pre
               abort msg    = CUnknown $ unk orig msg
 
     -- Others
@@ -253,6 +253,9 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     expt [P.T _ n]     = CExport n
     expt _             = CUnknown $ unkAtStart []
 
+-- | Test string is short prefix.
+isShortPrefix :: O.Test String
+isShortPrefix = all Ch.isAlpha
 
 pairs :: [a] -> Maybe [(a, a)]
 pairs (a:b:cs)  = do cs' <- pairs cs

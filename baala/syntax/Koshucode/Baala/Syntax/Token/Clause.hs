@@ -4,9 +4,9 @@
 module Koshucode.Baala.Syntax.Token.Clause
   ( -- * Token line
     TokenLine,
+    tokenLinesBy,
     tokenLines,
     tokenLinesTextAssert,
-    isShortPrefix,
     readTokenLines,
   
     -- * Token clause
@@ -22,7 +22,6 @@ module Koshucode.Baala.Syntax.Token.Clause
     clausePrint,
   ) where
 
-import qualified Data.Char                              as Ch
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol          as S
@@ -39,14 +38,18 @@ import qualified Koshucode.Baala.Base.Message           as Msg
 -- | Token list on a line.
 type TokenLine t = B.CodeLine S.TToken t
 
--- | Tokenize lazy bytestring.
-tokenLines :: (B.ToCode code, O.Textual t, S.ToTermName t) => B.IxIOPoint -> code -> [TokenLine t]
-tokenLines = tokenLinesWith S.scanRel
+-- | Tokenize with given scanner.
+tokenLinesBy
+    :: (B.ToCode code, O.Textual t, S.ToTermName t)
+    => S.Scanner t       -- ^ Section scanner
+    -> B.IxIOPoint       -- ^ I/O point of input code
+    -> code              -- ^ Input code
+    -> [TokenLine t]     -- ^ Result lines of tokens
+tokenLinesBy scan = B.codeScanUp $ scan changeSection
 
--- | Tokenize with code scanner.
-tokenLinesWith :: (B.ToCode code, O.Textual t, S.ToTermName t)
-               => S.Scanner t -> B.IxIOPoint -> code -> [TokenLine t]
-tokenLinesWith scan = B.codeScanUp $ scan changeSection
+-- | Tokenize relational section.
+tokenLines :: (B.ToCode code, O.Textual t, S.ToTermName t) => B.IxIOPoint -> code -> [TokenLine t]
+tokenLines = tokenLinesBy S.scanRel
 
 -- | Tokenize text.
 tokenLinesString :: (B.ToCode code, O.Textual t, S.ToTermName t) => B.IxIOPoint -> code -> [TokenLine t]
@@ -54,7 +57,7 @@ tokenLinesString = B.codeScanUp $ S.scanRel changeSection
 
 -- | Tokenize lazy bytestring.
 tokenLinesTextAssert :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine String]
-tokenLinesTextAssert = tokenLinesWith S.scanTextAssert
+tokenLinesTextAssert = tokenLinesBy S.scanTextAssert
 
 changeSection :: (O.Textual t, S.ToTermName t) => S.ChangeSection t
 changeSection name =
@@ -77,10 +80,6 @@ sectionUnsupported :: (O.Textual t) => String -> S.TokenScanMap t
 sectionUnsupported msg r@B.CodeScan { B.scanInput = cs } = B.codeUpdate O.tEmpty tok r where
     tok  = S.unknownToken cp cs $ Msg.unsupported msg
     cp   = B.scanCp r
-
--- | Test string is short prefix.
-isShortPrefix :: O.Test String
-isShortPrefix  = all Ch.isAlpha
 
 -- | Read token lines from file.
 readTokenLines :: (O.Textual t, S.ToTermName t) => FilePath -> B.IOAb [TokenLine t]

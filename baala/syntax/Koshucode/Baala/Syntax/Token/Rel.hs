@@ -4,8 +4,7 @@
 -- | Tokenizer for relational section.
 
 module Koshucode.Baala.Syntax.Token.Rel
-  ( -- * Section
-    scanRel,
+  ( scanRel,
     scanInterp,
   ) where
 
@@ -56,7 +55,7 @@ isPM a     = (a == '+' || a == '-')
 -- ----------------------  Relational section
 
 -- | Scan a next token in relational section.
-scanRel :: (Ord t, B.IsString t, O.Textual t, S.ToTermName t) => S.Scanner t
+scanRel :: (O.Textual t, S.ToTermName t) => S.Scanner t
 scanRel change sc@B.CodeScan { B.scanCp = cp, B.scanCache = wtab } = sc' where
 
     clip         = S.clipUpdate   sc
@@ -125,7 +124,7 @@ scanRel change sc@B.CodeScan { B.scanCp = cp, B.scanCache = wtab } = sc' where
 --   >>> clipAngle B.def "U+4B> ..."
 --   (" ...", TText /0.0.0/ TextKey "K")
 --
-clipAngle :: (B.IsString t, O.Textual t) => B.TCodePos t -> t -> S.ClipResult t
+clipAngle :: (O.Textual t) => B.TCodePos t -> t -> S.ClipResult t
 clipAngle cp cs0 = angle (0 :: Int) cs0 where
     raw = S.TText cp S.TextRaw
     text n = O.tTake n cs0
@@ -184,7 +183,7 @@ clipHat cp = hat where
 -- ----------------------  Interpretation
 
 -- | Scan interpretation content between @{|@ and @|}@.
-scanInterp :: (Ord t, B.IsString t, O.Textual t) => S.Scanner t
+scanInterp :: (O.Textual t) => S.Scanner t
 scanInterp change sc@B.CodeScan { B.scanCp = cp
                                 , B.scanCache = wtab } = S.section change int sc where
     clip        = S.clipUpdate   sc
