@@ -63,10 +63,10 @@ instance ToTrees B.Tx where
 instance ToTrees B.Tz where
     toTrees = toTrees . B.tzString
 
-instance ToTrees B.Bz where
+instance ToTrees O.Bz where
     toTrees = toTrees . B.bzString
 
-instance ToTrees B.Bs where
+instance ToTrees O.Bs where
     toTrees = toTrees . B.bsString
 
 instance ToTrees [S.Token] where

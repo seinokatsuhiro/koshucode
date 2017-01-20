@@ -44,7 +44,7 @@ data Param c = Param
     { paramAutoOutput    :: Bool
     , paramElement       :: Bool
     , paramWriter        :: C.ResultWriter c
-    , paramLiner         :: [B.Bz]
+    , paramLiner         :: [O.Bz]
     , paramPretty        :: Bool
     , paramRun           :: Bool
     , paramShowEncoding  :: Bool

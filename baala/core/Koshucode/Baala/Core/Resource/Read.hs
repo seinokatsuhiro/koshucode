@@ -57,7 +57,7 @@ nextSourceCount =
 -- --------------------------------------------  Read resource
 
 -- | Read data resource from lazy bytestring.
-resReadBz :: (D.CContent c) => C.Resource c -> B.Bz -> C.AbResource c
+resReadBz :: (D.CContent c) => C.Resource c -> O.Bz -> C.AbResource c
 resReadBz base code = C.resInclude [] "" base (B.codeIxIO code) code
 
 -- | Read data resource from text.
@@ -133,10 +133,10 @@ readCode res src add = dispatch $ B.nioPoint src where
     cutDot ('.' : '/' : path) = cutDot path
     cutDot path               = path
 
-    include :: B.Bz -> IO (C.AbResource c)
+    include :: O.Bz -> IO (C.AbResource c)
     include = includeUnder ""
 
-    includeUnder :: FilePath -> B.Bz -> IO (C.AbResource c)
+    includeUnder :: FilePath -> O.Bz -> IO (C.AbResource c)
     includeUnder cd = return . C.resInclude add' cd res src
 
     add' = concatMap B.untree add

@@ -6,6 +6,7 @@
 module Koshucode.Baala.Overture.Shorthand
  ( -- * Derived types
    Pair, Twin,
+   Bs, Bz,
    pattern Jp,
    pattern Jp2,
    pattern Jp3,
@@ -16,7 +17,9 @@ module Koshucode.Baala.Overture.Shorthand
    nothing,
  ) where
 
-import qualified Koshucode.Baala.Overture.Type as O
+import qualified Data.ByteString                as Bs
+import qualified Data.ByteString.Lazy           as Bz
+import qualified Koshucode.Baala.Overture.Type  as O
 
 
 -- ============================================  Types
@@ -26,6 +29,12 @@ type Pair a b = (a, b)
 
 -- | Twin pair.
 type Twin a = (a, a)
+
+-- | Strict bytestring.
+type Bs = Bs.ByteString
+
+-- | Lazy bytestring.
+type Bz = Bz.ByteString
 
 -- | Just pair: __Jp /a b/__ is equal to __Just (/a/, /b/)__.
 pattern Jp a b = Just (a, b)

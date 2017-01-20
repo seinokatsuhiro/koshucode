@@ -8,10 +8,10 @@ module Koshucode.Baala.Base.IO.BzFile
     tryReadFile,
   ) where
 
-import qualified Control.Exception             as E
-import qualified Data.ByteString.Lazy          as Bz
-import qualified Koshucode.Baala.Base.Abort    as B
-import qualified Koshucode.Baala.Base.Prelude  as B
+import qualified Control.Exception               as E
+import qualified Data.ByteString.Lazy            as Bz
+import qualified Koshucode.Baala.Overture        as O
+import qualified Koshucode.Baala.Base.Abort      as B
 
 -- | File path and content in lazy bytestring.
 --   The function 'readBzFile' creates:
@@ -21,7 +21,7 @@ import qualified Koshucode.Baala.Base.Prelude  as B
 --
 data BzFile = BzFile
     { bzFilePath       :: FilePath               -- ^ Path of file.
-    , bzFileContent    :: B.Ab B.Bz              -- ^ File content as lazy bytestring.
+    , bzFileContent    :: B.Ab O.Bz              -- ^ File content as lazy bytestring.
     , bzFileException  :: Maybe E.SomeException  -- ^ Exception when reading file.
     } deriving (Show)
 
@@ -41,7 +41,7 @@ readBzFile path =
                                    , bzFileException = Just e }
 
 -- | Read file content as lazy bytestring.
-tryReadFile :: (E.Exception e) => FilePath -> IO (Either e B.Bz)
+tryReadFile :: (E.Exception e) => FilePath -> IO (Either e O.Bz)
 tryReadFile = E.try . Bz.readFile
 
 notInit :: B.AbortReason

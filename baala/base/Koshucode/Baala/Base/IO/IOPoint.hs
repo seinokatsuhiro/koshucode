@@ -52,7 +52,7 @@ data IOPoint
     = IOPointFile   FilePath FilePath    -- ^ __1 Input/Output:__ Context directory and target path.
     | IOPointUri    O.IOPath             -- ^ __2 Input:__ Universal resource identifier.
     | IOPointText   (Maybe String) Code  -- ^ __3 Input:__ Code and its name.
-    | IOPointCustom String B.Bz          -- ^ __4 Input:__ Custom I/O.
+    | IOPointCustom String O.Bz          -- ^ __4 Input:__ Custom I/O.
     | IOPointStdin  (Maybe String)       -- ^ __5 Input:__ The sandard input.
     | IOPointStdout (Maybe String)       -- ^ __6 Output:__ The sandard output.
     | IOPointOutput NamedHandle          -- ^ __7 Output:__ Output handler.
@@ -149,13 +149,13 @@ pathIxIO :: FilePath -> IxIOPoint
 pathIxIO path = IxIOPoint 0 $ IOPointFile "" path
 
 -- | This implementation uses lazy bytestring as code string.
-type Code = B.Bz
+type Code = O.Bz
 
 -- | Convert to code string.
 class ToCode a where
     toCode :: a -> Code
 
-instance ToCode B.Bz where
+instance ToCode O.Bz where
     toCode = id
 
 instance ToCode String where

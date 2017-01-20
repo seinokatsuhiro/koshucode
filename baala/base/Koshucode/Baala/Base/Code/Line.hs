@@ -67,15 +67,15 @@ linesCrlfBzString = map B.bzString . linesCrlfBz
 
 -- | Split lazy bytestring by newline character sequence.
 --   This function drops the BOM sequence.
-linesCrlfBz :: (B.ToCode code) => code -> [B.Bz]
+linesCrlfBz :: (B.ToCode code) => code -> [O.Bz]
 linesCrlfBz = linesCrlfBzRaw . dropBom . B.toCode
 
 -- | Split lazy bytestring by newline character sequence.
-linesCrlfBzRaw :: (B.ToCode code) => code -> [B.Bz]
+linesCrlfBzRaw :: (B.ToCode code) => code -> [O.Bz]
 linesCrlfBzRaw = bzLines . B.toCode
 
 -- | Split lazy bytestring by newline character sequence.
-bzLines :: B.Bz -> [B.Bz]
+bzLines :: O.Bz -> [O.Bz]
 bzLines = loop where
     loop bz | Bz.null bz  = []
             | otherwise   = case Bz.break crlf bz of
@@ -99,7 +99,7 @@ bzLines = loop where
 --   >>> dropBom "\xEF|foo bar baz"
 --   "\239|foo bar baz"
 --
-dropBom :: B.Bz -> B.Bz
+dropBom :: O.Bz -> O.Bz
 dropBom bz = case Bz.splitAt 3 bz of
                (bom, body) | "\xEF\xBB\xBF" == bom -> body
                            | otherwise             -> bz

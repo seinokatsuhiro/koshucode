@@ -34,7 +34,7 @@ type HttpProxy = (String, Maybe O.IOPath)
 --   Left (403, "FORBIDDEN")
 --   Left (404, "NOT FOUND")
 --
-httpGet :: [HttpProxy] -> O.IOPath -> IO (Either (Int, String) B.Bz)
+httpGet :: [HttpProxy] -> O.IOPath -> IO (Either (Int, String) O.Bz)
 httpGet proxies uri =
     do req <- requestFromURI proxies uri
        catchHttpException $ do
@@ -50,7 +50,7 @@ httpGet proxies uri =
 --   >>> httpGetDoc [] "https://httpbin.org/robots.txt"
 --   Right "<document id=\"https://httpbin.org/robots.txt\"\r\n>User-agent: *\nDisallow: /deny\n</document>\r\n"
 --
-httpGetDoc :: [HttpProxy] -> O.IOPath -> IO (Either (Int, String) B.Bz)
+httpGetDoc :: [HttpProxy] -> O.IOPath -> IO (Either (Int, String) O.Bz)
 httpGetDoc proxies uri =
     do result <- httpGet proxies uri
        return (doc <$> result)
@@ -93,7 +93,7 @@ selectProxy proxies uri =
        proxy <- lookup scheme proxies
        proxy
 
-catchHttpException :: O.Map (IO (Either (Int, String) B.Bz))
+catchHttpException :: O.Map (IO (Either (Int, String) O.Bz))
 catchHttpException = ( `Ex.catch` handler ) where
     handler (H.HttpExceptionRequest _ (H.StatusCodeException res _))
               = return $ Left (httpStatus res)

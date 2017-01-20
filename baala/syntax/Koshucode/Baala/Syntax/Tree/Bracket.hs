@@ -20,6 +20,7 @@ module Koshucode.Baala.Syntax.Tree.Bracket
     bracketType,
   ) where
 
+import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax.Token          as S
 
@@ -97,7 +98,7 @@ getBracketType = B.bracketTable
     ] where br # p = (br, S.isBracketTokenOf p)
 
 -- | Enclose mix text in brackets.
-bracketWith :: (B.Bs, B.Bs) -> B.MixText -> B.MixText
+bracketWith :: (O.Bs, O.Bs) -> B.MixText -> B.MixText
 bracketWith = B.mixBracketS
 
 -- | Group bracket — @"("@ and @")"@

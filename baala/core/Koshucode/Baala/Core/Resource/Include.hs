@@ -28,7 +28,7 @@ resInclude :: forall c. (D.CContent c)
     -> FilePath         -- ^ Context directory
     -> C.Resource c     -- ^ Base resource
     -> B.IxIOPoint      -- ^ Input point
-    -> B.Bz             -- ^ Source code
+    -> O.Bz             -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
 resInclude resAbout cd base xio code =
     do let ls   = S.tokenLines xio code

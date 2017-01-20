@@ -14,10 +14,6 @@ module Koshucode.Baala.Base.Prelude.Import
     Control.Monad.unless,
     Control.Monad.when,
   
-    -- * Data.ByteString
-    Bs,
-    -- * Data.ByteString.Lazy
-    Bz,
     -- * Data.ByteString.UTF8
     stringBs, bsString,
     -- * Data.ByteString.Lazy.UTF8

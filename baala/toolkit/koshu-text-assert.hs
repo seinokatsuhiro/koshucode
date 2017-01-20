@@ -49,7 +49,7 @@ run :: ClauseMix -> FilePath -> IO ()
 run f = readRun g where
     g = B.putMix B.crlfBreak . clauseMixForBz f
 
-readRun :: (B.Bz -> IO()) -> FilePath -> IO ()
+readRun :: (O.Bz -> IO()) -> FilePath -> IO ()
 readRun f path =
     do file <- B.readBzFile path
        bz   <- B.abortLeft $ B.bzFileContent file
@@ -60,7 +60,7 @@ readRun f path =
 
 type ClauseMix = S.TokenClause String -> B.MixText
 
-clauseMixForBz :: ClauseMix -> B.Bz -> B.MixText
+clauseMixForBz :: ClauseMix -> O.Bz -> B.MixText
 clauseMixForBz f bz = B.mixLines texts where
     texts   = f <$> clauses
     clauses = S.tokenClauses $ S.tokenLinesTextAssert B.def bz
