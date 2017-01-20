@@ -54,9 +54,9 @@
     "Prelude" ] ] [ 8 | "Http" | [ "Overture" | "Prelude" ] ] [ 10 | "IOPoint" | [ "List" | "Overture" | "Prelude" ] ] [
     14 | "BzFile" | [ "Abort" | "Prelude" ] ] =}
 |-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Base.Code"  /base-rank {= /rank /base /import-dir [ 14 | "Message" | [
-    "Abort" ] ] [ 15 | "Bracket" | [ "Abort" | "List" | "Overture" ] ] [ 16 | "Line" | [ "Abort" | "IO" | "Prelude" ] ]
-    [ 16 | "Tree" | [ "Abort" | "Overture" ] ] [ 17 | "Clause" | [ "Abort" | "List" | "Prelude" ] ] [ 17 | "Infix" | [
-    "Overture" | "Prelude" ] ] [ 17 | "Scan" | [ "Abort" | "IO" | "Overture" | "Prelude" ] ] =}
+    "Abort" ] ] [ 15 | "Bracket" | [ "Abort" | "List" | "Overture" ] ] [ 16 | "Line" | [ "Abort" | "IO" | "Overture" |
+    "Prelude" ] ] [ 16 | "Tree" | [ "Abort" | "Overture" ] ] [ 17 | "Clause" | [ "Abort" | "List" | "Prelude" ] ] [ 17 |
+    "Infix" | [ "Overture" | "Prelude" ] ] [ 17 | "Scan" | [ "Abort" | "IO" | "Overture" | "Prelude" ] ] =}
 |-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 7 | "Prelude" | [ ] ] [
     9 | "List" | [ ] ] [ 9 | "MixText" | [ ] ] [ 11 | "Text" | [ ] ] [ 13 | "Abort" | [ ] ] [ 15 | "IO" | [ ] ] [ 15 |
     "Message" | [ ] ] [ 18 | "Code" | [ ] ] =}
@@ -80,10 +80,10 @@
     "Base" ] ] [ 22 | "Date" | [ "Base" | "Overture" ] ] [ 23 | "Clock" | [ "Base" | "Overture" ] ] [ 24 | "ClockCalc" |
     [ "Base" | "Overture" ] ] [ 25 | "Time" | [ "Base" | "Overture" ] ] [ 26 | "TimeCalc" | [ "Base" | "Overture" ] ] =}
 |-- DIR-RANK  /dir-rank 29  /dir "Koshucode.Baala.Syntax.Token"  /base-rank {= /rank /base /import-dir [ 20 | "Message"
-    | [ "Base" | "Overture" ] ] [ 25 | "Token" | [ "Base" | "Symbol" ] ] [ 26 | "Clip" | [ "Base" | "Overture" |
-    "Symbol" ] ] [ 26 | "Pattern" | [ ] ] [ 26 | "Utility" | [ "Base" | "Overture" | "Symbol" ] ] [ 27 | "Section" | [
-    "Base" | "Overture" ] ] [ 28 | "Rel" | [ "Base" | "Overture" | "Symbol" ] ] [ 29 | "Clause" | [ "Base" | "Overture"
-    | "Symbol" ] ] =}
+    | [ "Base" | "Overture" ] ] [ 25 | "Token" | [ "Base" | "Overture" | "Symbol" ] ] [ 26 | "Clip" | [ "Base" |
+    "Overture" | "Symbol" ] ] [ 26 | "Pattern" | [ ] ] [ 26 | "Utility" | [ "Base" | "Overture" | "Symbol" ] ] [ 27 |
+    "Section" | [ "Base" | "Overture" ] ] [ 28 | "Rel" | [ "Base" | "Overture" | "Symbol" ] ] [ 29 | "Clause" | [ "Base"
+    | "Overture" | "Symbol" ] ] =}
 
 |-- DIR-RANK  /dir-rank 33  /dir "Koshucode.Baala.Syntax.Tree"  /base-rank {= /rank /base /import-dir [ 31 | "Bracket" |
     [ "Base" | "Token" ] ] [ 32 | "Parse" | [ "Base" | "Overture" | "Token" ] ] [ 32 | "Pattern" | [ "Base" | "Token" ]
@@ -311,7 +311,7 @@ TABLE : DIR-RANK
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
                                                  14    "Message"            [ "Abort" ]
                                                  15    "Bracket"            [ "Abort" | "List" | "Overture" ]
-                                                 16    "Line"               [ "Abort" | "IO" | "Prelude" ]
+                                                 16    "Line"               [ "Abort" | "IO" | "Overture" | "Prelude" ]
                                                  16    "Tree"               [ "Abort" | "Overture" ]
                                                  17    "Clause"             [ "Abort" | "List" | "Prelude" ]
                                                  17    "Infix"              [ "Overture" | "Prelude" ]
@@ -380,7 +380,7 @@ TABLE : DIR-RANK
   29        "Koshucode.Baala.Syntax.Token"       /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
                                                  20    "Message"            [ "Base" | "Overture" ]
-                                                 25    "Token"              [ "Base" | "Symbol" ]
+                                                 25    "Token"              [ "Base" | "Overture" | "Symbol" ]
                                                  26    "Clip"               [ "Base" | "Overture" | "Symbol" ]
                                                  26    "Pattern"            [ ]
                                                  26    "Utility"            [ "Base" | "Overture" | "Symbol" ]
