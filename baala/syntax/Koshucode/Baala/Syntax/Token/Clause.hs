@@ -74,7 +74,7 @@ changeSection name =
 
 sectionUnsupported :: (O.Textual t) => String -> S.TokenScanMap t
 sectionUnsupported msg r@B.CodeScan { B.scanInput = cs } = B.codeUpdate O.tEmpty tok r where
-    tok  = S.unknownToken (B.cpStringify cp) cs $ Msg.unsupported msg
+    tok  = S.unknownToken cp cs $ Msg.unsupported msg
     cp   = B.scanCp r
 
 -- | Test string is short prefix.

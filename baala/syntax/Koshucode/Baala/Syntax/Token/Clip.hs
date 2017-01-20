@@ -92,13 +92,13 @@ type ClipResultC t = (B.WordCache t, t, S.TToken t)
 type ClipResultCL t = (B.WordCache t, t, [S.TToken t])
 
 -- | Clip a next token.
-type ClipToken t = B.CodePos -> t -> ClipResult t
+type ClipToken t = B.TCodePos t -> t -> ClipResult t
 
 -- | Clip a next token with word cache.
-type ClipTokenC t = B.CodePos -> B.WordCache t -> t -> ClipResultC t
+type ClipTokenC t = B.TCodePos t -> B.WordCache t -> t -> ClipResultC t
 
 -- | Clip a next token with word cache.
-type ClipTokenCL t = B.CodePos -> B.WordCache t -> t -> ClipResultCL t
+type ClipTokenCL t = B.TCodePos t -> B.WordCache t -> t -> ClipResultCL t
 
 
 -- ============================================  Clip
@@ -271,7 +271,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
 --   >>> clipBar B.def "12:00| ..."
 --   (" ...", TText /0.0.0/ TextBar "|12:00|")
 --
-clipBar :: (O.Textual t) => B.CodePos -> t -> ClipResult t
+clipBar :: (O.Textual t) => B.TCodePos t -> t -> ClipResult t
 clipBar cp cs0 = bar (0 :: Int) cs0 where
     text n = O.tAdd '|' $ O.tTake n cs0
     barToken n = S.TText cp S.TextBar $ text n

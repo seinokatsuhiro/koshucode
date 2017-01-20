@@ -50,13 +50,12 @@ selectSection change prev
     clip   = S.clipUpdate  sc
     clipw  = S.clipUpdateC sc
     out    = reverse $ S.sweepToken $ B.scanOutput sc
-    cp'    = B.cpStringify cp
 
     sec (O.tCut2 -> O.Jp2 '*' '*' _)
                          = dispatch out  -- end of effective text
     sec ccs@(O.tCut -> O.Jp c cs)
-        | S.isSpace c    = clip  $ S.clipSpace  cp' cs
-        | S.isSymbol c   = clipw $ S.clipSymbol cp' ws ccs
+        | S.isSpace c    = clip  $ S.clipSpace  cp cs
+        | S.isSymbol c   = clipw $ S.clipSymbol cp ws ccs
         | otherwise      = sectionUnexp [] sc
     sec _                = dispatch out  -- end of line
 
@@ -72,8 +71,8 @@ sectionUnexp :: (O.Textual t) => [S.TToken t] -> S.TokenScanMap t
 sectionUnexp ts sc@B.CodeScan { B.scanInput = cs } = B.codeUpdate O.tEmpty tok sc where
     tok  = S.unknownToken cp cs $ Msg.unexpSect help
     cp   = case ts of
-             []    -> B.cpStringify $ B.scanCp sc
-             t : _ -> B.getCP t
+             []    -> B.scanCp sc
+             t : _ -> S.tokenCp t
     help = [ "=== rel      for relational calculation"
            , "=== note     for commentary section"
            , "=== license  for license section"
@@ -97,7 +96,7 @@ comment :: (O.Textual t) => t -> S.TokenScanMap t
 comment cs sc
     | O.tIsEmpty cs = sc
     | otherwise     = B.codeUpdate O.tEmpty tok sc
-    where tok = S.TComment (B.getCP sc) cs
+    where tok = S.TComment (B.scanCp sc) cs
 
 -- | Scan tokens in @license@ section.
 scanLicense :: (Ord t, O.Textual t) => Scanner t
@@ -107,15 +106,15 @@ scanLicense = scanLine S.TextLicense
 scanLine :: (Ord t, O.Textual t) => S.TextForm -> Scanner t
 scanLine form change sc = section change text sc where
     text cs | O.tIsEmpty cs = sc
-            | otherwise     = let tok = S.TText (B.getCP sc) form cs
+            | otherwise     = let tok = S.TText (B.scanCp sc) form cs
                               in B.codeUpdate O.tEmpty tok sc
 
 scanLineInClause :: (Ord t, O.Textual t) => S.TextForm -> Scanner t
 scanLineInClause form change sc = section change text sc where
     text cs@(O.tCut -> O.Jp c _)
-        | S.isSpace c = S.clipUpdate sc $ S.clipSpace (B.getCP sc) cs
+        | S.isSpace c = S.clipUpdate sc $ S.clipSpace (B.scanCp sc) cs
         | B.isBol sc  = B.codeScanRestore sc
-        | otherwise   = let tok = S.TText (B.getCP sc) form cs
+        | otherwise   = let tok = S.TText (B.scanCp sc) form cs
                         in B.codeUpdate O.tEmpty tok sc
     text _ = sc
 

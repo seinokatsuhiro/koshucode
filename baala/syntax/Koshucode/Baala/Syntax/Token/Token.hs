@@ -11,6 +11,7 @@ module Koshucode.Baala.Syntax.Token.Token
     -- * Token
     Token,
     TToken (..),
+    tokenCp,
     rawTextToken,
     unknownToken,
 
@@ -23,6 +24,7 @@ module Koshucode.Baala.Syntax.Token.Token
     BlankName (..),
   ) where
 
+import qualified Koshucode.Baala.Overture         as O
 import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax.Symbol    as S
 
@@ -38,35 +40,35 @@ type Token = TToken String
 
 -- | Textual token.
 data TToken t
-    = TText     B.CodePos TextForm t
+    = TText     (B.TCodePos t) TextForm t
                 -- ^ __1 Textual:__ Text — @'code@, @"text"@, etc
-    | TShort    B.CodePos t t
+    | TShort    (B.TCodePos t) t t
                 -- ^ __2 Textual:__ Prefixed shorten text — @short.proper@
-    | TTerm     B.CodePos t
+    | TTerm     (B.TCodePos t) t
                 -- ^ __3 Textual:__ Term name — @\/term@
 
-    | TLocal    B.CodePos LocalRef Int [Token]
+    | TLocal    (B.TCodePos t) LocalRef Int [Token]
                 -- ^ __4 Symbolic:__ Local name — @^r@, @^\/r@
-    | TSlot     B.CodePos Int t
+    | TSlot     (B.TCodePos t) Int t
                 -- ^ __5 Symbolic:__ Slot name.
                 --   'Int' represents slot level, i.e.,
                 --   0 for local positional slots,
                 --   1 for local named slots,
                 --   2 for global slots
                 --   —  @\@slot@, @\@\@global@
-    | TName     B.CodePos BlankName
+    | TName     (B.TCodePos t) BlankName
                 -- ^ __6 Symbolic:__ Blank name.
                 --   (This is only used in building content expression)
 
-    | TOpen     B.CodePos t
+    | TOpen     (B.TCodePos t) t
                 -- ^ __7 Punctuational:__ Opening bracket — @(@, @{@, @{=@, etc
-    | TClose    B.CodePos t
+    | TClose    (B.TCodePos t) t
                 -- ^ __8 Punctuational:__ Closing bracket — @=}@, @}@, @)@, etc
-    | TSpace    B.CodePos Int
+    | TSpace    (B.TCodePos t) Int
                 -- ^ __9 Punctuational:__ /N/ space characters
-    | TComment  B.CodePos t
+    | TComment  (B.TCodePos t) t
                 -- ^ __10 Punctuational:__ Comment — @** comment line@
-    | TUnknown  B.CodePos t B.AbortReason
+    | TUnknown  (B.TCodePos t) t B.AbortReason
                 -- ^ __11 Other:__ Unknown token
 
       deriving (Show, Eq, Ord)
@@ -85,25 +87,29 @@ instance SubtypeName (TToken t) where
      subtypeName (TName     _ _    ) = "name"
      subtypeName (TUnknown  _ _ _  ) = "unknown"
 
-instance B.GetCodePos (TToken t) where
-    getCPs (TText    cp _ _)    = [cp]
-    getCPs (TShort   cp _ _)    = [cp]
-    getCPs (TTerm    cp _)      = [cp]
-    getCPs (TLocal   cp _ _ _)  = [cp]
-    getCPs (TSlot    cp _ _)    = [cp]
-    getCPs (TOpen    cp _)      = [cp]
-    getCPs (TClose   cp _)      = [cp]
-    getCPs (TSpace   cp _)      = [cp]
-    getCPs (TComment cp _)      = [cp]
-    getCPs (TName    cp _)      = [cp]
-    getCPs (TUnknown cp _ _)    = [cp]
+instance (O.Textual t) => B.GetCodePos (TToken t) where
+    getCPs tok = [B.cpStringify $ tokenCp tok]
+
+-- | Code point of token.
+tokenCp :: TToken t -> B.TCodePos t
+tokenCp (TText    cp _ _)    = cp
+tokenCp (TShort   cp _ _)    = cp
+tokenCp (TTerm    cp _)      = cp
+tokenCp (TLocal   cp _ _ _)  = cp
+tokenCp (TSlot    cp _ _)    = cp
+tokenCp (TOpen    cp _)      = cp
+tokenCp (TClose   cp _)      = cp
+tokenCp (TSpace   cp _)      = cp
+tokenCp (TComment cp _)      = cp
+tokenCp (TName    cp _)      = cp
+tokenCp (TUnknown cp _ _)    = cp
 
 -- | Create raw text token.
-rawTextToken :: t -> TToken t
+rawTextToken :: (O.Textual t) => t -> TToken t
 rawTextToken = TText B.def TextRaw
 
 -- | Create unknown token.
-unknownToken :: B.CodePos -> t -> B.Ab a -> TToken t
+unknownToken :: B.TCodePos t -> t -> B.Ab a -> TToken t
 unknownToken cp w (Left a)  = TUnknown cp w a
 unknownToken cp w (Right _) = TUnknown cp w $ B.abortBecause "bug?"
 
