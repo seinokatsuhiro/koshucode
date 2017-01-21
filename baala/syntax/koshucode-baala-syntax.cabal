@@ -99,7 +99,6 @@ library
          base                      == 4.*
        , containers                == 0.5.*
        , pretty                    == 1.*
-       , text                      == 1.*
        , directory                 == 1.*
        , tagsoup                   == 0.*
        , koshucode-baala-overture  == 0.207.0.0

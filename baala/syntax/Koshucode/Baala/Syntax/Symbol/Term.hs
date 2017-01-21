@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Term types and related functions.
@@ -14,7 +15,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
     TermName, TermPath,
     ToTermName (..),
     enslash,
-    stringTermName, stringTermNames,
+    textualTermName, stringTermNames,
     termNameString, termPathString,
     termNameContent,
     termNameSign, termNameAltSign,
@@ -31,8 +32,6 @@ module Koshucode.Baala.Syntax.Symbol.Term
   ) where
 
 import qualified Data.String                as S
-import qualified Data.Text                  as Tx
-import qualified Data.Text.Lazy             as Tz
 import qualified Koshucode.Baala.Overture   as O
 
 
@@ -89,15 +88,15 @@ instance ToTermName TermName where
 
 -- | Remove leading slash character.
 instance ToTermName String where
-    toTermName = stringTermName
+    toTermName = textualTermName
 
 -- | Strict text.
-instance ToTermName Tx.Text where
-    toTermName = toTermName . Tx.unpack
+instance ToTermName O.Tx where
+    toTermName = toTermName
 
 -- | Lazy text.
-instance ToTermName Tz.Text where
-    toTermName = toTermName . Tz.unpack
+instance ToTermName O.Tz where
+    toTermName = toTermName
 
 -- | Integer term name.
 instance ToTermName Int where
@@ -108,19 +107,19 @@ instance ToTermName Int where
 --   >>> enslash <$> ["foo", "/bar", "+/baz", "-/qux"]
 --   ["/foo", "/bar", "+/baz", "-/qux"]
 --
-enslash :: O.Map String
-enslash n@('/' : _)        = n
-enslash n@('+' : '/' : _)  = n
-enslash n@('-' : '/' : _)  = n
-enslash n                  = '/' : n
+enslash :: (O.Textual t) => O.Map t
+enslash n@(O.tCut  -> O.Jp '/' _)        = n
+enslash n@(O.tCut2 -> O.Jp2 '+' '/' _)   = n
+enslash n@(O.tCut2 -> O.Jp2 '-' '/' _)   = n
+enslash n                                = O.tAdd '/' n
 
 -- | Decode term name from string.
-{-# DEPRECATED stringTermName "Use 'toTermName' instead." #-}
-stringTermName :: String -> TermName
-stringTermName ('/' : n)        = TermName EQ n
-stringTermName ('+' : '/' : n)  = TermName GT n
-stringTermName ('-' : '/' : n)  = TermName LT n
-stringTermName n                = TermName EQ n
+{-# DEPRECATED textualTermName "Use 'toTermName' instead." #-}
+textualTermName :: (O.Textual t) => t -> TermName
+textualTermName (O.tCut  -> O.Jp '/' n)       = TermName EQ $ O.tString n
+textualTermName (O.tCut2 -> O.Jp2 '+' '/' n)  = TermName GT $ O.tString n
+textualTermName (O.tCut2 -> O.Jp2 '-' '/' n)  = TermName LT $ O.tString n
+textualTermName n                             = TermName EQ $ O.tString n
 
 -- | Convert string to multiple term names.
 --
@@ -137,8 +136,8 @@ stringTermNames = fmap toTermName . words
 --
 termNameString :: TermName -> String
 termNameString (TermName EQ n) = enslash n
-termNameString (TermName GT n) = '+' : enslash n
-termNameString (TermName LT n) = '-' : enslash n
+termNameString (TermName GT n) = O.tAdd '+' $ enslash n
+termNameString (TermName LT n) = O.tAdd '-' $ enslash n
 
 -- | Extract internal name.
 --
