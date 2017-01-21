@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
@@ -7,14 +8,13 @@
 
 module Koshucode.Baala.Base.Code.Line
   ( -- * Line
-    LineNumber,
-    NumberedLine,
+    ToLines (..),
     dropBom,
     bzLines,
-    numberedLines,
     linesCrlf, linesCrlfBz, linesCrlfNumbered,
 
     -- * CodeLine
+    LineNumber,
     CodeLine (..),
     IndentSize,
     lineIndentPair,
@@ -26,21 +26,21 @@ import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.IO              as B
 
 
--- ----------------------  Line
+-- ============================================  Line
 
--- | Line number.
-type LineNumber = Int
+-- | Split input into textual lines.
+--
+--   >>> toLines "aaa\nbbb\r\nccc\n\nddd\n" :: [String]
+--   ["aaa", "bbb", "ccc", "", "ddd"]
+--
+class ToLines i where
+    toLines :: (O.Textual t) => i -> [t]
 
--- | Line with number.
-type NumberedLine t = (LineNumber, t)
+instance ToLines O.Bz where
+    toLines = map O.bzT . bzLines
 
--- | Create numbered lines from lazy bytestring.
-numberedLines :: (B.ToBytes code, O.Textual t) => code -> [NumberedLine t]
-numberedLines = zip [1..] . textualLines
-
--- | Create textual lines from lazy bytestring.
-textualLines :: (B.ToBytes code, O.Textual t) => code -> [t]
-textualLines = map O.bzT . bzLines . B.toBytes
+instance ToLines String where
+    toLines = map O.stringT . linesCrlf
 
 -- | Split lazy bytestring by newline character sequence.
 --   If bytestring begins with the UTF-8 BOM, this function drops it.
@@ -94,7 +94,7 @@ linesCrlf s
 
 -- | Line number and its content.
 {-# DEPRECATED linesCrlfNumbered "Consider 'bzLines'." #-}
-linesCrlfNumbered :: String -> [NumberedLine String]
+linesCrlfNumbered :: String -> [(LineNumber, String)]
 linesCrlfNumbered = zip [1..] . linesCrlf
 
 -- | Split lazy bytestring by newline character sequence.
@@ -104,7 +104,10 @@ linesCrlfBz :: (B.ToBytes code) => code -> [O.Bz]
 linesCrlfBz = bzLines . B.toBytes
 
 
--- ----------------------  CodeLine
+-- ============================================  CodeLine
+
+-- | Line number.
+type LineNumber = Int
 
 -- | Tokens in line.
 data CodeLine k t = CodeLine
