@@ -100,7 +100,7 @@ scanRel change sc@B.CodeScan { B.scanCp = cp, B.scanCache = wtab } = sc' where
         | S.isSymbol a           = clipw   $ S.clipSymbol cp wtab $ O.tAdd a bs
         | n == 0                 = sc
         | otherwise              = upd O.tEmpty $ S.unknownToken cp cs
-                                                $ Msg.forbiddenInput $ S.angleQuote (O.charT a)
+                                                $ Msg.forbiddenInput $ S.angleQuote [a]
 
     aster (O.tCut -> O.Jp c cs) w
         | w == O.stringT "****"  = upd (O.tAdd c cs) $ raw w

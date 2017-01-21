@@ -70,13 +70,13 @@ shortText = loop . reverse . B.sortWith len where
     loop [] _ = Nothing
     loop ((prefix, replace) : sh) s =
         case L.stripPrefix replace s of
-          Just s2             -> Just $ prefix ++ "." ++ text2 s2
+          Just s2             -> Just $ prefix O.++ "." O.++ text2 s2
           _                   -> loop sh s
 
     text2 s   | isGeneralText s   = s
               | otherwise         = S.angleQuote s
 
--- | Test string is general sign.
-isGeneralText :: O.Test String
-isGeneralText = all S.isGeneralChar
+-- | Test text value is general sign.
+isGeneralText :: (O.Textual t) => O.Test t
+isGeneralText = O.tAll S.isGeneralChar
 

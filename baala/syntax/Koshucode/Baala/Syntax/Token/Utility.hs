@@ -42,7 +42,7 @@ tokenContent tok =
       S.TSlot     _ _ s    -> s
       S.TOpen     _ s      -> s
       S.TClose    _ s      -> s
-      S.TSpace    _ n      -> replicate n ' '
+      S.TSpace    _ n      -> O.charsT n ' '
       S.TComment  _ s      -> s
       S.TName     _ op     -> B.name op
       S.TUnknown  _ s _    -> s

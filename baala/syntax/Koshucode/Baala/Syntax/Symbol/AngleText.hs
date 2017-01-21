@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Text enclosed in angle brackets.
@@ -12,7 +13,6 @@ module Koshucode.Baala.Syntax.Symbol.AngleText
   ) where
 
 import qualified Koshucode.Baala.Overture     as O
-import qualified Koshucode.Baala.Base         as B
 
 -- | Convert string into double-quoted and angle-quoted form.
 --
@@ -25,18 +25,18 @@ import qualified Koshucode.Baala.Base         as B
 --   >>> putStrLn $ angleQuote "aaa\nbbb\r\nccc\r\n\r\nddd"
 --   "aaa" <lf> "bbb" <crlf> "ccc" <crlf> <crlf> "ddd"
 --
-angleQuote :: O.StringMap
+angleQuote :: (O.Textual t) => t -> t
 angleQuote = openLoop where
     openLoop = open . loop
 
-    loop (c : cs) = case angleSplit c cs of
-                      Nothing       -> c : loop cs
-                      Just (w, cs2) -> "\" " ++ w ++
-                                       O.addSpace (openLoop cs2)
-    loop "" = "\""
+    loop (O.tCut -> O.Jp c cs) =
+        case angleSplit c cs of
+          Nothing       -> c `O.tAdd` loop cs
+          Just (w, cs2) -> "\" " O.++ w O.++ O.addSpace (openLoop cs2)
+    loop _ = "\""
 
-    open ('"' : cs)  = O.trimBegin cs   -- omit closing double quote
-    open cs          = '"' : cs         -- append opening double quote
+    open (O.tCut -> O.Jp '"' cs)  = O.trimBegin cs   -- omit closing double quote
+    open cs                       = O.tAdd '"' cs    -- append opening double quote
 
 -- | Split angle keyword.
 --
@@ -47,9 +47,9 @@ angleQuote = openLoop where
 --   Just ("<lf>", "abc")
 --
 --   >>> let (c : cs) =  "\0abc" in angleSplit c cs
---   Just ("<c0>", "abc")
+--   Just ("<U+0>", "abc")
 --
-angleSplit :: Char -> String -> Maybe (String, String)
+angleSplit :: (O.Textual t) => Char -> t -> Maybe (t, t)
 angleSplit c cs =
     case O.majorGeneralCategory c of
       O.UnicodePunctuation -> punct c
@@ -67,23 +67,23 @@ angleSplit c cs =
       other '\t'           = just "<tab>"
       other _              = just (angleChar c)
 
-      cr ('\n' : cs2)      = just2 "<crlf>" cs2
-      cr _                 = just "<cr>"
+      cr (O.tCut -> O.Jp '\n' cs2)  = just2 "<crlf>" cs2
+      cr _                          = just "<cr>"
 
 -- | Angle text of the Unicode code point.
 --
---   >>> angleChar 'K'
+--   >>> angleChar 'K' :: String
 --   "<U+4B>"
 --
-angleChar :: Char -> String
-angleChar c = "<U+" ++ O.intUpperHexString (fromEnum c) ++ ">"
+angleChar :: (O.Textual t) => Char -> t
+angleChar c = "<U+" O.++ O.intUpperHexString (fromEnum c) O.++ ">"
 
 -- | Table of coresspondences of angle text and its replacement.
 --
 --   >>> lookup "lf" angleTexts
 --   Just "\n"
 --
-angleTexts :: (B.IsString s) => [(s, s)]
+angleTexts :: (O.Textual t) => [(t, t)]
 angleTexts =
     --  NAME         REPLACEMENT
     [ o "cr"         "\r"

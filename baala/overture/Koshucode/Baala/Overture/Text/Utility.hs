@@ -132,10 +132,11 @@ charWidth c
 --   >>> addSpace ""
 --   ""
 --
-addSpace :: O.StringMap
-addSpace cs@(c : _) | Ch.isSpace c  = cs
-                    | otherwise     = ' ' : cs
-addSpace ""                         = ""
+addSpace :: (O.Textual t) => t -> t
+addSpace cs@(O.tCut -> Just (c, _))
+    | Ch.isSpace c   = cs
+    | otherwise      = O.tAdd ' ' cs
+addSpace _           = O.tEmpty
 
 
 -- ============================================  Code point

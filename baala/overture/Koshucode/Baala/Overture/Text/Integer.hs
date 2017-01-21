@@ -103,18 +103,18 @@ stringIntegerFrom from digits = loop 0 where
 
 -- ----------------------  Encoder
 
-integralLowerHexString :: (Integral n, Show n) => n -> String
-integralLowerHexString n = Num.showHex n ""
+integralLowerHexString :: (Integral n, Show n, O.Textual t) => n -> t
+integralLowerHexString n = O.stringT $ Num.showHex n O.tEmpty
 
-integralUpperHexString :: (Integral n, Show n) => n -> String
-integralUpperHexString = map Ch.toUpper . integralLowerHexString
+integralUpperHexString :: (Integral n, Show n, O.Textual t) => n -> t
+integralUpperHexString = O.tMap Ch.toUpper . integralLowerHexString
 
 -- | Encode integer to hexadecimal string.
 --
 --   >>> intHexString 15
 --   "f"
 --
-intLowerHexString :: Int -> String
+intLowerHexString :: (O.Textual t) => Int -> t
 intLowerHexString = integralLowerHexString
 
 -- | Encode integer to hexadecimal string.
@@ -122,7 +122,7 @@ intLowerHexString = integralLowerHexString
 --   >>> intUpperHexString 15
 --   "F"
 --
-intUpperHexString :: Int -> String
+intUpperHexString :: (O.Textual t) => Int -> t
 intUpperHexString = integralUpperHexString
 
 -- | Encode integer to custome-digit string.
