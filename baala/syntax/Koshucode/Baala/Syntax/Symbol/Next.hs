@@ -5,7 +5,6 @@
 
 module Koshucode.Baala.Syntax.Symbol.Next
   ( -- * Next
-    InputText,
     Next, AbNext,
     nextSpace,
     nextQQ,
@@ -16,9 +15,6 @@ import qualified Data.Char                              as Ch
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
-
--- | Input data type.
-type InputText = String
 
 -- | Split next character sequence from input text.
 type Next t a = t -> (t, a)
