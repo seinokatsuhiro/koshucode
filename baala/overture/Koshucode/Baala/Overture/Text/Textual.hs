@@ -269,7 +269,7 @@ instance Textual String where
     bzT          = Bz.toString
 
 -- | Strict text.
-instance Textual Tx.Text where
+instance Textual O.Tx where
     tEmpty       = Tx.empty
     tIsEmpty     = Tx.null
     tJoin        = Tx.append
@@ -285,7 +285,7 @@ instance Textual Tx.Text where
     bzT          = bsT . Bz.toStrict
 
 -- | Lazy text.
-instance Textual Tz.Text where
+instance Textual O.Tz where
     tEmpty       = Tz.empty
     tIsEmpty     = Tz.null
     tJoin        = Tz.append

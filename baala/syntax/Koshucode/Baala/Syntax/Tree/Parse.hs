@@ -60,10 +60,10 @@ class ToTrees t a where
 instance ToTrees t String where
     toTrees = tokenTrees . S.toks
 
-instance ToTrees t B.Tx where
+instance ToTrees t O.Tx where
     toTrees = toTrees . B.txString
 
-instance ToTrees t B.Tz where
+instance ToTrees t O.Tz where
     toTrees = toTrees . B.tzString
 
 instance ToTrees t O.Bz where

@@ -44,9 +44,9 @@ module Koshucode.Baala.Base.Prelude.Import
     Data.String.IsString,
 
     -- * Data.Text
-    Tx, stringTx, txString,
+    stringTx, txString,
     -- * Data.Text.Lazy
-    Tz, stringTz, tzString,
+    stringTz, tzString,
   
     -- * Data.Tuple
     Data.Tuple.swap,
@@ -86,6 +86,8 @@ import qualified System.IO
 import qualified System.Exit
 import qualified Text.PrettyPrint
 
+import qualified Koshucode.Baala.Overture as O
+
 
 -- ----------------------  Data
 
@@ -115,30 +117,24 @@ stringBz = Data.ByteString.Lazy.UTF8.fromString
 bzString :: Bz -> String
 bzString = Data.ByteString.Lazy.UTF8.toString
 
--- | Strict text.
-type Tx = Data.Text.Text
-
 -- | Convert strict text to string.
 --   This is same as 'Data.Text.unpack'.
-txString :: Tx -> String
+txString :: O.Tx -> String
 txString = Data.Text.unpack
 
 -- | Convert string to strict text.
 --   This is same as 'Data.Text.pack'.
-stringTx :: String -> Tx
+stringTx :: String -> O.Tx
 stringTx = Data.Text.pack
-
--- | Lazy text.
-type Tz = Data.Text.Lazy.Text
 
 -- | Convert lazy text to string.
 --   This is same as 'Data.Text.Lazy.unpack'.
-tzString :: Tz -> String
+tzString :: O.Tz -> String
 tzString = Data.Text.Lazy.unpack
 
 -- | Convert string to lazy text.
 --   This is same as 'Data.Text.Lazy.pack'.
-stringTz :: String -> Tz
+stringTz :: String -> O.Tz
 stringTz = Data.Text.Lazy.pack
 
 -- | Same as 'Map.lookup' in @Data.Map@ module.
