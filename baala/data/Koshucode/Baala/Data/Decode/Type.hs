@@ -21,26 +21,23 @@ import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 
 -- | Get single text from token trees.
 --
---   >>> S.toTrees "'aa 'bb" >>= treesTexts True
+--   >>> S.withTrees (treesTexts True :: [S.Tree] -> B.Ab [String]) "'aa 'bb"
 --   Right ["aa","bb"]
 --
---   >>> S.toTrees "\"aa\" \"bb\"" >>= treesTexts True
---   Right ["aabb"]
---
-treesTexts :: Bool -> [S.Tree] -> B.Ab [String]
-treesTexts q = mapM $ treeText q
+treesTexts :: Bool -> [S.TTree t] -> B.Ab [t]
+treesTexts = mapM . treeText
 
 -- | Get text from token tree.
 --
 --   >>> S.toTree "aa" >>= treeText False
 --   Right "aa"
 --
-treeText :: Bool -> S.Tree -> B.Ab String
+treeText :: Bool -> S.TTree t -> B.Ab t
 treeText q (P.L tok) = tokenString q tok
 treeText _ _ = Msg.nothing
 
 -- | Get quoted/unquoted text.
-tokenString :: Bool -> S.Token -> B.Ab String
+tokenString :: Bool -> S.TToken t -> B.Ab t
 tokenString True  (P.T q w) | q > S.TextRaw  = Right w
 tokenString False (P.TRaw w)                 = Right w
 tokenString _ _  = Msg.nothing

@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Decode numeric contents.
@@ -22,19 +23,20 @@ import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 
 -- | Get digits from token trees.
 --
---   >>> S.toTrees "-123 450.00" >>= treesDigits
+--   >>> S.withTrees treesDigits "-123 450.00"
 --   Right "-123450.00"
 --
-treesDigits :: [S.Tree] -> B.Ab String
+treesDigits :: (O.Textual t) => [S.TTree t] -> B.Ab t
 treesDigits = concatDigits O.#. D.treesTexts False
 
-concatDigits :: [String] -> B.Ab String
+concatDigits :: (O.Textual t) => [t] -> B.Ab t
 concatDigits = first where
-    first ((c : cs) : xs) | c `elem` "+-0123456789o" = loop [[c]] $ cs : xs
+    first ((O.tCut -> O.Jp c cs) : xs)
+        | c `elem` "+-0123456789o" = loop [O.charT c] $ cs : xs
     first _ = Msg.nothing
 
-    loop ss [] = Right $ concat $ reverse ss
-    loop ss (w : xs) | all (`elem` "0123456789.o") w = loop (w:ss) xs
+    loop ss [] = Right $ O.tJoinAll $ reverse ss
+    loop ss (w : xs) | O.tAll (`elem` "0123456789.o") w = loop (w : ss) xs
     loop _ _ = Msg.nothing
 
 
