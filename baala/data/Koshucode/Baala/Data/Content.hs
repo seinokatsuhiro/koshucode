@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Data.Content
   ( -- * Type
+    Chars, CharsMap,
     Content (..),
 
     -- * Dispatcher
@@ -31,6 +32,12 @@ import qualified Koshucode.Baala.Data.Decode             as D
 
 -- ----------------------  Content type
 
+-- | Character sequence.
+type Chars = String
+
+-- | Mapping from chars to chars.
+type CharsMap = O.Map Chars
+
 {-# WARNING ContentEmpty   "Use 'empty' instead." #-}
 {-# WARNING ContentBool    "Use 'pBool' instead." #-}
 {-# WARNING ContentDec     "Use 'pDec' instead." #-}
@@ -54,9 +61,9 @@ data Content
     | ContentDec    T.Decimal   -- ^ __3.  Numeric:__                Decimal number type
     | ContentClock  T.Clock     -- ^ __4.  Numeric:__                Clock type
     | ContentTime   T.Time      -- ^ __5.  Numeric:__                Time type
-    | ContentCode   String      -- ^ __6.  Textual:__                Code type
+    | ContentCode   Chars       -- ^ __6.  Textual:__                Code type
     | ContentTerm   S.TermName  -- ^ __7.  Textual:__                Term name type
-    | ContentText   String      -- ^ __8.  Textual:__                Text type
+    | ContentText   Chars       -- ^ __8.  Textual:__                Text type
     | ContentList   [Content]   -- ^ __9.  Recursive, Collective:__  List type
     | ContentSet    [Content]   -- ^ __10. Recursive, Collective:__  Set type
     | ContentTie    [TermC]     -- ^ __11. Recursive, Relational:__  Tie type (set of terms)
@@ -145,14 +152,14 @@ instance B.MixEncode Content where
         where
           mixBar cs   = B.mixJoinBar $ map (B.mixTransEncode sh) cs
 
-quote :: Maybe String -> O.StringMap
-quote (Nothing) s   = "'" ++ s
-quote (Just s)  _   = s
+quote :: Maybe Chars -> CharsMap
+quote (Nothing) t   = "'" O.++ t
+quote (Just t)  _   = t
 
-qquote :: Maybe String -> O.StringMap
-qquote (Nothing) "" = "\"\""
-qquote (Nothing) s  = S.angleQuote s
-qquote (Just s)  _  = s
+qquote :: Maybe Chars -> CharsMap
+qquote (Nothing) t | O.tIsEmpty t  = "\"\""
+                   | otherwise     = S.angleQuote t
+qquote (Just t)  _                 = t
 
 
 -- ----------------------  Edge
@@ -274,9 +281,9 @@ type DispatchSimple a =
     , T.Decimal   -> a
     , T.Clock     -> a
     , T.Time      -> a
-    , String      -> a
+    , Chars       -> a
     , S.TermName  -> a
-    , String      -> a
+    , Chars       -> a
     )
 
 -- | Functions for complex content, i.e.,
