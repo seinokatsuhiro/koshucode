@@ -50,7 +50,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Code.Line"            /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.Code.Line"            /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Code.Line"            /import "Koshucode.Baala.Base.IO"
-|-- IMPORT  /module "Koshucode.Baala.Base.Code.Line"            /import "Koshucode.Baala.Base.Prelude"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Code.Message"         /import "Koshucode.Baala.Base.Abort"
 
@@ -75,8 +74,8 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.BzFile"            /import "Control.Exception"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.BzFile"            /import "Data.ByteString.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.BzFile"            /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.BzFile"            /import "Koshucode.Baala.Base.Abort"
-|-- IMPORT  /module "Koshucode.Baala.Base.IO.BzFile"            /import "Koshucode.Baala.Base.Prelude"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Encoding"          /import "GHC.IO.Encoding"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.Encoding"          /import "System.IO"
@@ -195,6 +194,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "System.Exit"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Text.PrettyPrint"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Koshucode.Baala.Overture"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Pair"         /import "Koshucode.Baala.Overture"
 

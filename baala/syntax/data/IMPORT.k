@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    178 judges
+**    179 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Data.List"
@@ -143,7 +143,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol"             /import "Koshucode.Baala.Syntax.Symbol.Symbol"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol"             /import "Koshucode.Baala.Syntax.Symbol.Term"
 
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Syntax.Symbol"
@@ -197,11 +196,13 @@
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token"              /import "Koshucode.Baala.Syntax.Token.Token"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token"              /import "Koshucode.Baala.Syntax.Token.Utility"
 
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Tree.Bracket"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Tree.Bracket"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Tree.Bracket"       /import "Koshucode.Baala.Syntax.Token"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Tree.Parse"         /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Tree.Parse"         /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Tree.Parse"         /import "Koshucode.Baala.Syntax.Symbol"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Tree.Parse"         /import "Koshucode.Baala.Syntax.Token"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Tree.Parse"         /import "Koshucode.Baala.Syntax.Tree.Bracket"
 

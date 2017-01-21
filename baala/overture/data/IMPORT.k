@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    50 judges
+**    62 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Cache"            /import "Data.Map.Strict"
@@ -26,6 +26,10 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Name.Text"        /import "Data.Text"
 
+|-- IMPORT  /module "Koshucode.Baala.Overture.Shorthand"        /import "Data.ByteString"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Shorthand"        /import "Data.ByteString.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Shorthand"        /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Shorthand"        /import "Data.Text.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Shorthand"        /import "Koshucode.Baala.Overture.Type"
 
 
@@ -38,10 +42,18 @@
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Integer"     /import "Numeric"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Integer"     /import "Koshucode.Baala.Overture.Text.Textual"
 
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.String"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.Text.Encoding"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.Text.Encoding.Error"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.Text.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.Text.Lazy.Encoding"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.ByteString.UTF8"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.ByteString.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.ByteString.Lazy.UTF8"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Koshucode.Baala.Overture.Infix"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Koshucode.Baala.Overture.Misc"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Koshucode.Baala.Overture.Shorthand"
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Unicode"     /import "Data.Char"
 
