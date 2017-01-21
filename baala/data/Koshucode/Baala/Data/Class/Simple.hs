@@ -173,12 +173,12 @@ class (D.Basis c) => CTerm c where
 class (D.Basis c) => CText c where
     isText      :: c -> Bool
     gText       :: c -> String
-    pText       :: String -> c
+    pText       :: (O.Textual t) => t -> c
 
     getText     :: D.GetContent String c
     getText      = D.getContent isText gText
 
-    putText     :: String -> B.Ab c
+    putText     :: (O.Textual t) => t -> B.Ab c
     putText      = Right . pText
 
 -- | Create text or empty content.
@@ -189,15 +189,17 @@ class (D.Basis c) => CText c where
 --   >>> pMaybeText "" :: Content
 --   ContentEmpty
 --
-pMaybeText :: (CText c, D.CEmpty c) => String -> c
-pMaybeText s | O.trimBegin s == "" = D.empty
-             | otherwise           = pText s
+pMaybeText :: (O.Textual t, CText c, D.CEmpty c) => t -> c
+pMaybeText s | O.tIsEmpty $ O.trimBegin s  = D.empty
+             | otherwise                   = pText s
 
 -- | Create text content from strict text.
+{-# DEPRECATED pTx "Consider 'pText'." #-}
 pTx :: (CText c) => Tx.Text -> c
-pTx = pText . Tx.unpack
+pTx = pText
 
 -- | Create text content from lazy text.
+{-# DEPRECATED pTz "Consider 'pText'." #-}
 pTz :: (CText c) => Tz.Text -> c
-pTz = pText . Tz.unpack
+pTz = pText
 

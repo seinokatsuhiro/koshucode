@@ -71,7 +71,7 @@ valueContent (O.VBool b)     = D.pBool b
 valueContent (O.VInt i)      = D.pInt i
 valueContent (O.VInteger i)  = D.pInteger i
 valueContent (O.VStr s)      = D.pText s
-valueContent (O.VTx s)       = D.pTx s
-valueContent (O.VTz s)       = D.pTz s
+valueContent (O.VTx s)       = D.pText s
+valueContent (O.VTz s)       = D.pText s
 valueContent (O.VList cs)    = D.pList (valueContent <$> cs)
 

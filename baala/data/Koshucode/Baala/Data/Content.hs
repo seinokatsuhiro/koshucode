@@ -212,8 +212,8 @@ instance D.CTerm Content where
     isTerm _                    = False
 
 instance D.CText Content where
-    pText                       = ContentText
-    gText  (ContentText s)      = s
+    pText                       = ContentText . O.tString
+    gText  (ContentText s)      = O.stringT s
     gText  _                    = B.bug "gText"
     isText (ContentText _)      = True
     isText _                    = False
