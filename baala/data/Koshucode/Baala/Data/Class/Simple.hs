@@ -144,12 +144,12 @@ class (D.Basis c) => CTime c where
 class (D.Basis c) => CCode c where
     isCode       ::           c -> Bool
     gCode        ::           c -> String
-    pCode        ::      String -> c
+    pCode        ::      (O.Textual t) => t -> c
 
     getCode      ::      D.GetContent String c
     getCode      =       D.getContent isCode gCode
 
-    putCode      ::      String -> B.Ab c
+    putCode      ::      (O.Textual t) => t -> B.Ab c
     putCode      =       Right . pCode
 
 -- ---------------------------------  Term

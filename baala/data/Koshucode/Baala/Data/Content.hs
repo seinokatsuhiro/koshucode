@@ -198,7 +198,7 @@ instance D.CTime Content where
     isTime _                    = False
 
 instance D.CCode Content where
-    pCode                       = ContentCode
+    pCode                       = ContentCode . O.tString
     gCode  (ContentCode s)      = s
     gCode  _                    = B.bug "gCode"
     isCode (ContentCode _)      = True
@@ -213,7 +213,7 @@ instance D.CTerm Content where
 
 instance D.CText Content where
     pText                       = ContentText . O.tString
-    gText  (ContentText s)      = O.stringT s
+    gText  (ContentText s)      = s
     gText  _                    = B.bug "gText"
     isText (ContentText _)      = True
     isText _                    = False
