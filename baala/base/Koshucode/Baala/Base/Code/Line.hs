@@ -11,6 +11,7 @@ module Koshucode.Baala.Base.Code.Line
     ToLines (..),
     dropBom,
     bzLines,
+    textualLines,
     linesCrlf, linesCrlfBz, linesCrlfNumbered,
 
     -- * CodeLine
@@ -40,7 +41,20 @@ instance ToLines O.Bz where
     toLines = map O.bzT . bzLines
 
 instance ToLines String where
-    toLines = map O.stringT . linesCrlf
+    toLines = textualLines . O.stringT
+
+-- | Remove UTF-8 BOM (EF BB BF in hexadecimal) from lazy bytestring.
+--
+--   >>> dropBom "\xEF\xBB\xBF|foo bar baz"
+--   "|foo bar baz"
+--
+--   >>> dropBom "\xEF|foo bar baz"
+--   "\239|foo bar baz"
+--
+dropBom :: O.Bz -> O.Bz
+dropBom bz = case Bz.splitAt 3 bz of
+               (bom, body) | "\xEF\xBB\xBF" == bom -> body
+                           | otherwise             -> bz
 
 -- | Split lazy bytestring by newline character sequence.
 --   If bytestring begins with the UTF-8 BOM, this function drops it.
@@ -60,37 +74,33 @@ bzLines = loop . dropBom where
                | otherwise = bz2
     strip bz2 = bz2
                   
--- | Remove UTF-8 BOM (EF BB BF in hexadecimal) from lazy bytestring.
---
---   >>> dropBom "\xEF\xBB\xBF|foo bar baz"
---   "|foo bar baz"
---
---   >>> dropBom "\xEF|foo bar baz"
---   "\239|foo bar baz"
---
-dropBom :: O.Bz -> O.Bz
-dropBom bz = case Bz.splitAt 3 bz of
-               (bom, body) | "\xEF\xBB\xBF" == bom -> body
-                           | otherwise             -> bz
-
--- | Split string into lines.
---   The result strings do not contain
+-- | Split /textual-value-#1/ into lines.
+--   The result texts do not contain
 --   carriage returns (@\\r@)
 --   and line feeds (@\\n@).
 --
---   >>> linesCrlf "aaa\nbbb\r\nccc\n\nddd\n"
---   ["aaa","bbb","ccc","","ddd"]
+--   >>> textualLines "aaa\nbbb\r\nccc\n\nddd\n"
+--   ["aaa", "bbb", "ccc", "", "ddd"]
 --
-{-# DEPRECATED linesCrlf "Consider 'bzLines'." #-}
-linesCrlf :: String -> [String]
-linesCrlf s
+textualLines :: (O.Textual t) => t -> [t]
+textualLines s
     | O.tIsEmpty s = []
     | otherwise = ln : next s2
     where
-      (ln, s2) = break (`elem` ("\r\n" :: String)) s
+      (ln, s2) = O.tWhile (not . isCrlf) s
       next (O.tCut -> O.Jp '\r' s3) = next s3
-      next (O.tCut -> O.Jp '\n' s3) = linesCrlf s3
-      next s3                       = linesCrlf s3
+      next (O.tCut -> O.Jp '\n' s3) = textualLines s3
+      next s3                       = textualLines s3
+
+isCrlf :: Char -> Bool
+isCrlf '\r' = True
+isCrlf '\n' = True
+isCrlf _    = False
+
+-- | Split string into lines.
+{-# DEPRECATED linesCrlf "Consider 'bzLines'." #-}
+linesCrlf :: String -> [String]
+linesCrlf = textualLines
 
 -- | Line number and its content.
 {-# DEPRECATED linesCrlfNumbered "Consider 'bzLines'." #-}
