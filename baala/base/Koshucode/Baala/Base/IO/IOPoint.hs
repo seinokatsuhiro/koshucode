@@ -1,11 +1,13 @@
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | I/O point: file, standard input, direct text, etc.
 
 module Koshucode.Baala.Base.IO.IOPoint
-  ( -- * Named handle
+  ( -- * Input bytes
+    Bytes, ToBytes (..),
+
+    -- * Named handle
     NamedHandle (..),
 
     -- * I/O point
@@ -17,7 +19,6 @@ module Koshucode.Baala.Base.IO.IOPoint
     IxIOPoint (..),
     codeIxIO,
     pathIxIO,
-    Code, ToCode (..),
   ) where
 
 import qualified System.IO                     as IO
@@ -27,7 +28,23 @@ import qualified Koshucode.Baala.Base.List     as B
 import qualified Koshucode.Baala.Base.Prelude  as B
 
 
--- ----------------------  Named handle
+-- ============================================  Bytes
+
+-- | This implementation uses lazy bytestring as input code.
+type Bytes = O.Bz
+
+-- | Convert to bytes.
+class ToBytes a where
+    toBytes :: a -> Bytes
+
+instance ToBytes O.Bz where
+    toBytes = id
+
+instance ToBytes String where
+    toBytes = B.stringBz
+
+
+-- ============================================  Named handle
 
 -- | Named I/O handle.
 data NamedHandle = NamedHandle
@@ -45,17 +62,17 @@ instance Ord NamedHandle where
     h1 `compare` h2 = handleName h1 `compare` handleName h2
 
 
--- ----------------------  IOPoint
+-- ============================================  I/O point
 
 -- | I/O point: file, standard input, direct text, etc.
 data IOPoint
-    = IOPointFile   FilePath FilePath    -- ^ __1 Input/Output:__ Context directory and target path.
-    | IOPointUri    O.IOPath             -- ^ __2 Input:__ Universal resource identifier.
-    | IOPointText   (Maybe String) Code  -- ^ __3 Input:__ Code and its name.
-    | IOPointCustom String O.Bz          -- ^ __4 Input:__ Custom I/O.
-    | IOPointStdin  (Maybe String)       -- ^ __5 Input:__ The sandard input.
-    | IOPointStdout (Maybe String)       -- ^ __6 Output:__ The sandard output.
-    | IOPointOutput NamedHandle          -- ^ __7 Output:__ Output handler.
+    = IOPointFile   FilePath FilePath     -- ^ __1 Input/Output:__ Context directory and target path.
+    | IOPointUri    O.IOPath              -- ^ __2 Input:__ Universal resource identifier.
+    | IOPointText   (Maybe String) Bytes  -- ^ __3 Input:__ Input bytes and its name.
+    | IOPointCustom String O.Bz           -- ^ __4 Input:__ Custom I/O.
+    | IOPointStdin  (Maybe String)        -- ^ __5 Input:__ The sandard input.
+    | IOPointStdout (Maybe String)        -- ^ __6 Output:__ The sandard output.
+    | IOPointOutput NamedHandle           -- ^ __7 Output:__ Output handler.
       deriving (Show, Eq, Ord)
 
 instance O.GetIOPath IOPoint where
@@ -101,14 +118,14 @@ isUri path = B.isPrefixOf "http://"  path
           || B.isPrefixOf "ftp://"   path
 
 -- | Create I/O points from using stdin, texts itself, filenames, and URIs.
-ioPointTogether :: Bool -> [Code] -> [FilePath] -> [IOPoint]
+ioPointTogether :: Bool -> [Bytes] -> [FilePath] -> [IOPoint]
 ioPointTogether stdin texts paths =
     let ts = IOPointText Nothing <$> texts
         ps = ioPoint <$> paths
     in B.consIf stdin (IOPointStdin Nothing) $ ts ++ ps
 
 
--- ----------------------  Indexed I/O point
+-- ============================================  Indexed I/O point
 
 -- | Indexed I/O point.
 data IxIOPoint = IxIOPoint
@@ -141,23 +158,10 @@ instance O.GetIOPath IxIOPoint where
 --   >>> codeIxIO "abc"
 --   IxIOPoint {nioNumber = 0, nioPoint = IOPointText Nothing "abc"}
 --
-codeIxIO :: (ToCode code) => code -> IxIOPoint
-codeIxIO = IxIOPoint 0 . IOPointText Nothing . toCode
+codeIxIO :: (ToBytes code) => code -> IxIOPoint
+codeIxIO = IxIOPoint 0 . IOPointText Nothing . toBytes
 
 -- | Create input point from file path.
 pathIxIO :: FilePath -> IxIOPoint
 pathIxIO path = IxIOPoint 0 $ IOPointFile "" path
-
--- | This implementation uses lazy bytestring as code string.
-type Code = O.Bz
-
--- | Convert to code string.
-class ToCode a where
-    toCode :: a -> Code
-
-instance ToCode O.Bz where
-    toCode = id
-
-instance ToCode String where
-    toCode = B.stringBz
 

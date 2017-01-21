@@ -40,7 +40,7 @@ type TokenLine t = B.CodeLine S.TToken t
 
 -- | Tokenize with given scanner.
 tokenLinesBy
-    :: (B.ToCode code, O.Textual t, S.ToTermName t)
+    :: (B.ToBytes code, O.Textual t, S.ToTermName t)
     => S.Scanner t       -- ^ Section scanner
     -> B.IxIOPoint       -- ^ I/O point of input code
     -> code              -- ^ Input code
@@ -48,15 +48,15 @@ tokenLinesBy
 tokenLinesBy scan = B.codeScanUp $ scan changeSection
 
 -- | Tokenize relational section.
-tokenLines :: (B.ToCode code, O.Textual t, S.ToTermName t) => B.IxIOPoint -> code -> [TokenLine t]
+tokenLines :: (B.ToBytes code, O.Textual t, S.ToTermName t) => B.IxIOPoint -> code -> [TokenLine t]
 tokenLines = tokenLinesBy S.scanRel
 
 -- | Tokenize text.
-tokenLinesString :: (B.ToCode code, O.Textual t, S.ToTermName t) => B.IxIOPoint -> code -> [TokenLine t]
+tokenLinesString :: (B.ToBytes code, O.Textual t, S.ToTermName t) => B.IxIOPoint -> code -> [TokenLine t]
 tokenLinesString = B.codeScanUp $ S.scanRel changeSection
 
 -- | Tokenize lazy bytestring.
-tokenLinesTextAssert :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine String]
+tokenLinesTextAssert :: (B.ToBytes code) => B.IxIOPoint -> code -> [TokenLine String]
 tokenLinesTextAssert = tokenLinesBy S.scanTextAssert
 
 changeSection :: (O.Textual t, S.ToTermName t) => S.ChangeSection t

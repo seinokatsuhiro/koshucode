@@ -35,12 +35,12 @@ type LineNumber = Int
 type NumberedLine t = (LineNumber, t)
 
 -- | Create numbered lines from lazy bytestring.
-numberedLines :: (B.ToCode code, O.Textual t) => code -> [NumberedLine t]
+numberedLines :: (B.ToBytes code, O.Textual t) => code -> [NumberedLine t]
 numberedLines = zip [1..] . textualLines
 
 -- | Create textual lines from lazy bytestring.
-textualLines :: (B.ToCode code, O.Textual t) => code -> [t]
-textualLines = map O.bzT . bzLines . B.toCode
+textualLines :: (B.ToBytes code, O.Textual t) => code -> [t]
+textualLines = map O.bzT . bzLines . B.toBytes
 
 -- | Split lazy bytestring by newline character sequence.
 --   If bytestring begins with the UTF-8 BOM, this function drops it.
@@ -100,8 +100,8 @@ linesCrlfNumbered = zip [1..] . linesCrlf
 -- | Split lazy bytestring by newline character sequence.
 --   This function drops the BOM sequence.
 {-# DEPRECATED linesCrlfBz "Consider 'bzLines'." #-}
-linesCrlfBz :: (B.ToCode code) => code -> [O.Bz]
-linesCrlfBz = bzLines . B.toCode
+linesCrlfBz :: (B.ToBytes code) => code -> [O.Bz]
+linesCrlfBz = bzLines . B.toBytes
 
 
 -- ----------------------  CodeLine
