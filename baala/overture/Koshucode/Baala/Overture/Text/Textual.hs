@@ -115,21 +115,21 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
     tCut3 :: t -> Maybe (Char, Maybe (Char, Maybe (Char, t)))
     tCut3 a = tCut2 O.<$$> tCut a
 
-    -- | Take /N/ characters.
+    -- | Take /N-#1/ characters from /text-#2/.
     --
     --   >>> tTake 3 "foobar"
     --   "foo"
     --
     tTake :: Int -> t -> t
 
-    -- | Drop /N/ characters.
+    -- | Drop /N-#1/ characters from /text-#2/.
     --
     --   >>> tDrop 3 "foobar"
     --   "bar"
     --
     tDrop :: Int -> t -> t
 
-    -- | Drop prefix from text.
+    -- | Drop /prefix-#1/ from /text-#2/.
     --
     --   >>> tDropPrefix "foo" "foobar"
     --   Just "bar"
@@ -145,7 +145,7 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
         | tIsEmpty cs  = Just as
         | otherwise    = Nothing
 
-    -- | Map function to characters of text value.
+    -- | Map /function-#1/ to characters of /text-value-#2/.
     --
     --   >>> tMap fromEnum "bar"
     --   [98,97,114]
@@ -155,7 +155,7 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
         loop (tCut -> Just (c, cs)) = f c : loop cs
         loop _ = []
 
-    -- | Divide textual value by delimiter character.
+    -- | Divide /textual-value-#2/ to textual list by /delimiter-tester-#1/.
     --
     --   >>> tDivide (== '/') "foo/bar/baz"
     --   ["foo","bar","baz"]
@@ -167,7 +167,7 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
             | otherwise  = loop (n + 1) t
         loop n _ = [tTake n t0]
 
-    -- | Length of textual value.
+    -- | Length of /textual-value-#1/.
     --
     --   >>> tLength "foo" :: Int
     --   3
@@ -175,6 +175,17 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
     tLength :: (Integral n) => t -> n
     tLength (tCut -> Just (_, t)) = 1 + tLength t
     tLength _ = 0
+
+    -- | Take subtext from /textual-value-#2/ while /tester-#1/ holds,
+    --   and pairing the subtext with after.
+    --
+    --   >>> tWhile (/= ' ') "foo bar baz"
+    --   ("foo", " bar baz")
+    --
+    tWhile :: (Char -> Bool) -> t -> (t, t)
+    tWhile f t0 = loop 0 t0 where
+        loop n (tCut -> Just (c, t)) | f c = loop (n + 1) t
+        loop n t = (tTake n t0, t)
 
     -- ----------------------  Creation
 
