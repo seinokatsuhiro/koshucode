@@ -146,14 +146,31 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
         | otherwise    = Nothing
 
     -- | Map /function-#1/ to characters of /text-value-#2/.
+    tMap :: (Char -> Char) -> t -> t
+    tMap f = loop where
+        loop (tCut -> Just (c, cs)) = f c `tAdd` loop cs
+        loop _ = tEmpty
+
+    -- | Map /function-#1/ to characters of /text-value-#2/.
     --
-    --   >>> tMap fromEnum "bar"
+    --   >>> tList fromEnum "bar"
     --   [98,97,114]
     --
-    tMap :: (Char -> a) -> t -> [a]
-    tMap f = loop where
+    tList :: (Char -> a) -> t -> [a]
+    tList f = loop where
         loop (tCut -> Just (c, cs)) = f c : loop cs
         loop _ = []
+
+    -- | Test all characters of text value.
+    --
+    --   >>> tAll (`elem` "0123456789.") "120.5"
+    --   True
+    --
+    --   >>> tAll (`elem` "0123456789.") "120,000"
+    --   False
+    --
+    tAll :: (Char -> Bool) -> t -> Bool
+    tAll f = and . tList f
 
     -- | Divide /textual-value-#2/ to textual list by /delimiter-tester-#1/.
     --
