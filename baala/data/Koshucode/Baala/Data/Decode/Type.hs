@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Decode specific-type contents.
@@ -66,7 +67,7 @@ treeInterpWord (B.TreeL x) =
 -- ----------------------  Type
 
 -- | Decode type content.
-treesType :: [S.Tree] -> B.Ab T.Type
+treesType :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab T.Type
 treesType = gen where
     gen xs = case S.divideTreesByBar xs of
                [x] ->  single x
@@ -75,11 +76,11 @@ treesType = gen where
     single [P.B _ xs]        = gen xs
     single (P.LText f n : xs)
         | f == S.TextRaw     = dispatch n xs
-        | otherwise          = Msg.quoteType n
+        | otherwise          = Msg.quoteType $ O.tString n
     single []                = Right $ T.TypeSum []
     single _                 = Msg.unkType ""
 
-    precision ws [P.LRaw w] | w `elem` ws = Right $ Just w
+    precision ws [P.LRaw w] | w `elem` ws = Right $ Just $ O.tString w
     precision _ []  = Right Nothing
     precision _ _   = Msg.unkType "precision"
 
@@ -104,7 +105,7 @@ treesType = gen where
                                     | treeText False colon == Right ":"
                                       -> do tag' <- treeText False tag
                                             typ' <- gen [typ]
-                                            Right $ T.TypeTag tag' typ'
+                                            Right $ T.TypeTag (O.tString tag') typ'
                                 _   -> Msg.unkType "tag"
     dispatch "list"  xs     = Right . T.TypeList O.# gen xs
     dispatch "set"   xs     = Right . T.TypeSet  O.# gen xs
@@ -116,4 +117,4 @@ treesType = gen where
     dispatch "rel"   xs     = do ts1 <- D.treesTerms xs
                                  ts2 <- B.sequenceSnd (gen O.<$$> ts1)
                                  Right $ T.TypeRel ts2
-    dispatch n _            = Msg.unkType n
+    dispatch n _            = Msg.unkType $ O.tString n

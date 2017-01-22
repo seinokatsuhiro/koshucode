@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Split token trees.
@@ -43,24 +44,24 @@ import qualified Koshucode.Baala.Syntax.Tree.Pattern     as P
 --           , TText  CodePos {..} TextRaw "|"
 --           , TText  CodePos {..} TextRaw "c" ] )
 --
-splitTokensBy :: O.Test String -> B.SplitList3e S.Token
+splitTokensBy :: O.Test t -> B.SplitList3e (S.TToken t)
 splitTokensBy p = B.splitBy p2 where
     p2 (P.TRaw x) = p x
     p2 _          = False
 
-raw :: O.Test String -> S.Tree -> Bool
+raw :: O.Test t -> S.TTree t -> Bool
 raw p (P.LRaw w) = p w
 raw _ _          = False
 
 -- | Split token trees by quoteless token of given string.
-splitTreesBy :: O.Test String -> B.SplitList3e S.Tree
+splitTreesBy :: O.Test t -> B.SplitList3e (S.TTree t)
 splitTreesBy = B.splitBy . raw
 
 
 -- ============================================  Divide
 
 -- | Divide token trees by raw text of given string.
-divideTreesBy :: O.Test String -> [S.Tree] -> [[S.Tree]]
+divideTreesBy :: O.Test t -> [S.TTree t] -> [[S.TTree t]]
 divideTreesBy = B.divideBy . raw
 
 -- | Divide token trees by vertical bar @\"|\"@.
@@ -73,18 +74,18 @@ divideTreesBy = B.divideBy . raw
 --           , TreeL (TText /0.1.12/ TextRaw "y")
 --           , TreeL (TText /0.1.14/ TextRaw "z") ]]
 --
-divideTreesByBar :: [S.Tree] -> [[S.Tree]]
+divideTreesByBar :: (O.Textual t) => [S.TTree t] -> [[S.TTree t]]
 divideTreesByBar = divideTreesBy (== "|")
 
 -- | Divide token trees by double vertical bar @\"||\"@.
-divideTreesByBar2 :: [S.Tree] -> [[S.Tree]]
+divideTreesByBar2 :: (O.Textual t) => [S.TTree t] -> [[S.TTree t]]
 divideTreesByBar2 = divideTreesBy (== "||")
 
 -- | Divide token trees by colon @\":\"@.
-divideTreesByColon :: [S.Tree] -> [[S.Tree]]
+divideTreesByColon :: (O.Textual t) => [S.TTree t] -> [[S.TTree t]]
 divideTreesByColon = divideTreesBy (== ":")
 
 -- | Divide token trees by equal sign @\"=\"@.
-divideTreesByEqual :: [S.Tree] -> [[S.Tree]]
+divideTreesByEqual :: (O.Textual t) => [S.TTree t] -> [[S.TTree t]]
 divideTreesByEqual = divideTreesBy (== "=")
 
