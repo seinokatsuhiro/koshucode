@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    179 judges
+**    176 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Data.List"
@@ -112,7 +112,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree"            /import "Koshucode.Baala.Syntax.Subtree.Xml"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.AngleText"   /import "Koshucode.Baala.Overture"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.AngleText"   /import "Koshucode.Baala.Base"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Message"     /import "Koshucode.Baala.Base"
 
@@ -133,8 +132,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Symbol"      /import "Koshucode.Baala.Syntax.Symbol.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Term"        /import "Data.String"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Term"        /import "Data.Text"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Term"        /import "Data.Text.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Term"        /import "Koshucode.Baala.Overture"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol"             /import "Koshucode.Baala.Syntax.Symbol.AngleText"

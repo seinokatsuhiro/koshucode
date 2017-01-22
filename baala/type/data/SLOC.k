@@ -4,18 +4,18 @@ about /package 'type
 
 |-- DIR  /code 12   /comment 5    /dir "type/Koshucode/Baala"
 |-- DIR  /code 232  /comment 176  /dir "type/Koshucode/Baala/Type"
-|-- DIR  /code 484  /comment 415  /dir "type/Koshucode/Baala/Type/Decimal"
+|-- DIR  /code 484  /comment 417  /dir "type/Koshucode/Baala/Type/Decimal"
 |-- DIR  /code 203  /comment 148  /dir "type/Koshucode/Baala/Type/Judge"
 |-- DIR  /code 300  /comment 379  /dir "type/Koshucode/Baala/Type/Rel"
 |-- DIR  /code 713  /comment 610  /dir "type/Koshucode/Baala/Type/Time"
 |-- DIR  /code 102  /comment 156  /dir "type/Koshucode/Baala/Type/Type"
 
-|-- DIR-TOTAL  /code 2046  /comment 1889
+|-- DIR-TOTAL  /code 2046  /comment 1891
 
 |-- FILE  /code 12   /comment 5    /file "Type.hs"        /dir "type/Koshucode/Baala"
 |-- FILE  /code 12   /comment 6    /file "Decimal.hs"     /dir "type/Koshucode/Baala/Type"
 |-- FILE  /code 52   /comment 42   /file "BinaryAb.hs"    /dir "type/Koshucode/Baala/Type/Decimal"
-|-- FILE  /code 132  /comment 88   /file "Coder.hs"       /dir "type/Koshucode/Baala/Type/Decimal"
+|-- FILE  /code 132  /comment 90   /file "Coder.hs"       /dir "type/Koshucode/Baala/Type/Decimal"
 |-- FILE  /code 88   /comment 91   /file "Decimal.hs"     /dir "type/Koshucode/Baala/Type/Decimal"
 |-- FILE  /code 133  /comment 104  /file "Fraction.hs"    /dir "type/Koshucode/Baala/Type/Decimal"
 |-- FILE  /code 79   /comment 90   /file "Rational.hs"    /dir "type/Koshucode/Baala/Type/Decimal"
@@ -41,4 +41,4 @@ about /package 'type
 |-- FILE  /code 69   /comment 135  /file "Genus.hs"       /dir "type/Koshucode/Baala/Type/Type"
 |-- FILE  /code 33   /comment 21   /file "Predefined.hs"  /dir "type/Koshucode/Baala/Type/Type"
 
-|-- FILE-TOTAL  /code 2046  /comment 1889
+|-- FILE-TOTAL  /code 2046  /comment 1891

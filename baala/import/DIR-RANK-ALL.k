@@ -70,8 +70,8 @@
 |-- DIR-RANK  /dir-rank 24  /dir "Koshucode.Baala.Subtext"  /base-rank {= /rank /base /import-dir [ 0 | "MinMax" | [ ] ]
     [ 2 | "Expr" | [ ] ] [ 7 | "Operator" | [ ] ] [ 8 | "Bundle" | [ "Operator" ] ] [ 9 | "Para" | [ "Operator" |
     "Overture" ] ] [ 10 | "Match" | [ "Operator" ] ] [ 24 | "Sieve" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 24  /dir "Koshucode.Baala.Syntax.Symbol"  /base-rank {= /rank /base /import-dir [ 6 | "Term" | [
-    "Overture" ] ] [ 21 | "AngleText" | [ "Base" | "Overture" ] ] [ 21 | "Message" | [ "Base" ] ] [ 22 | "Next" | [
+|-- DIR-RANK  /dir-rank 24  /dir "Koshucode.Baala.Syntax.Symbol"  /base-rank {= /rank /base /import-dir [ 6 |
+    "AngleText" | [ "Overture" ] ] [ 6 | "Term" | [ "Overture" ] ] [ 21 | "Message" | [ "Base" ] ] [ 22 | "Next" | [
     "Base" | "Overture" ] ] [ 23 | "Symbol" | [ "Base" | "Overture" ] ] [ 24 | "Short" | [ "Base" | "Overture" ] ] =}
 |-- DIR-RANK  /dir-rank 24  /dir "Koshucode.Baala.Type.Decimal"  /base-rank {= /rank /base /import-dir [ 6 | "Rational"
     | [ "Overture" ] ] [ 21 | "Decimal" | [ "Base" | "Overture" ] ] [ 22 | "Fraction" | [ "Overture" ] ] [ 23 | "Coder"
@@ -118,11 +118,10 @@
     [ "Base" ] ] [ 50 | "Edge" | [ "Base" | "Overture" | "Syntax" | "Type" ] ] [ 51 | "Simple" | [ "Base" | "Overture" |
     "Syntax" | "Type" ] ] [ 52 | "Complex" | [ "Base" | "Syntax" | "Type" ] ] [ 53 | "Content" | [ "Base" | "Overture" |
     "Type" ] ] [ 53 | "Map" | [ "Overture" ] ] [ 54 | "Encode" | [ "Base" | "Syntax" | "Type" ] ] =}
-|-- DIR-RANK  /dir-rank 57  /dir "Koshucode.Baala.Data.Decode"  /base-rank {= /rank /base /import-dir [ 40 | "Message" |
-    [ "Base" | "Syntax" ] ] [ 41 | "Term" | [ "Base" | "Overture" | "Syntax" ] ] [ 50 | "Type" | [ "Base" | "Overture" |
-    "Syntax" | "Type" ] ] [ 51 | "Numeric" | [ "Base" | "Overture" | "Syntax" | "Type" ] ] [ 56 | "Content" | [ "Base" |
-    "Class" | "Overture" | "Syntax" | "Type" ] ] [ 57 | "Dataset" | [ "Base" | "Class" | "Overture" | "Syntax" | "Type"
-    ] ] =}
+|-- DIR-RANK  /dir-rank 57  /dir "Koshucode.Baala.Data.Decode"  /base-rank {= /rank /base /import-dir [ 21 | "Message" |
+    [ "Base" ] ] [ 40 | "Term" | [ "Base" | "Overture" | "Syntax" ] ] [ 50 | "Type" | [ "Base" | "Overture" | "Syntax" |
+    "Type" ] ] [ 51 | "Numeric" | [ "Base" | "Overture" | "Syntax" | "Type" ] ] [ 56 | "Content" | [ "Base" | "Class" |
+    "Overture" | "Syntax" | "Type" ] ] [ 57 | "Dataset" | [ "Base" | "Class" | "Overture" | "Syntax" | "Type" ] ] =}
 
 |-- DIR-RANK  /dir-rank 60  /dir "Koshucode.Baala.Data.Church"  /base-rank {= /rank /base /import-dir [ 50 | "Message" |
     [ "Base" | "Syntax" | "Type" ] ] [ 51 | "Cox" | [ "Base" | "Overture" | "Syntax" ] ] [ 52 | "Cop" | [ "Base" |
@@ -353,8 +352,8 @@ TABLE : DIR-RANK
                                                  
   24        "Koshucode.Baala.Syntax.Symbol"      /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
+                                                 6     "AngleText"          [ "Overture" ]
                                                  6     "Term"               [ "Overture" ]
-                                                 21    "AngleText"          [ "Base" | "Overture" ]
                                                  21    "Message"            [ "Base" ]
                                                  22    "Next"               [ "Base" | "Overture" ]
                                                  23    "Symbol"             [ "Base" | "Overture" ]
@@ -463,8 +462,8 @@ TABLE : DIR-RANK
                                                  
   57        "Koshucode.Baala.Data.Decode"        /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
-                                                 40    "Message"            [ "Base" | "Syntax" ]
-                                                 41    "Term"               [ "Base" | "Overture" | "Syntax" ]
+                                                 21    "Message"            [ "Base" ]
+                                                 40    "Term"               [ "Base" | "Overture" | "Syntax" ]
                                                  50    "Type"               [ "Base" | "Overture" | "Syntax" | "Type" ]
                                                  51    "Numeric"            [ "Base" | "Overture" | "Syntax" | "Type" ]
                                                  56    "Content"            [ "Base" | "Class" | "Overture" | "Syntax" | "Type" ]
