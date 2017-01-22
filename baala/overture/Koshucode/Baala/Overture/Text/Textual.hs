@@ -8,18 +8,19 @@ module Koshucode.Baala.Overture.Text.Textual
   ( Textual (..),
   ) where
 
-import qualified Data.String                         as Str
-import qualified Data.Text                           as Tx
-import qualified Data.Text.Encoding                  as Tx
-import qualified Data.Text.Encoding.Error            as Err
-import qualified Data.Text.Lazy                      as Tz
-import qualified Data.Text.Lazy.Encoding             as Tz
-import qualified Data.ByteString.UTF8                as Bs
-import qualified Data.ByteString.Lazy                as Bz
-import qualified Data.ByteString.Lazy.UTF8           as Bz
-import qualified Koshucode.Baala.Overture.Infix      as O
-import qualified Koshucode.Baala.Overture.Misc       as O
-import qualified Koshucode.Baala.Overture.Shorthand  as O
+import qualified Data.Char                              as Ch
+import qualified Data.String                            as Str
+import qualified Data.Text                              as Tx
+import qualified Data.Text.Encoding                     as Tx
+import qualified Data.Text.Encoding.Error               as Err
+import qualified Data.Text.Lazy                         as Tz
+import qualified Data.Text.Lazy.Encoding                as Tz
+import qualified Data.ByteString.UTF8                   as Bs
+import qualified Data.ByteString.Lazy                   as Bz
+import qualified Data.ByteString.Lazy.UTF8              as Bz
+import qualified Koshucode.Baala.Overture.Infix         as O
+import qualified Koshucode.Baala.Overture.Misc          as O
+import qualified Koshucode.Baala.Overture.Shorthand     as O
 
 -- | Text-like value.
 class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
@@ -172,6 +173,17 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
     tAll :: (Char -> Bool) -> t -> Bool
     tAll f = and . tList f
 
+    -- | Length of /textual-value-#1/.
+    --
+    --   >>> tLength "foo" :: Int
+    --   3
+    --
+    tLength :: (Integral n) => t -> n
+    tLength (tCut -> Just (_, t)) = 1 + tLength t
+    tLength _ = 0
+
+    -- ----------------------  Divide and split
+
     -- | Divide /textual-value-#2/ to textual list by /delimiter-tester-#1/.
     --
     --   >>> tDivide (== '/') "foo/bar/baz"
@@ -184,14 +196,26 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
             | otherwise  = loop (n + 1) t
         loop n _ = [tTake n t0]
 
-    -- | Length of /textual-value-#1/.
+    -- | Divide text into words.
     --
-    --   >>> tLength "foo" :: Int
-    --   3
+    --   >>> tWords "a bb  ccc "
+    --   ["a", "bb", "ccc"]
     --
-    tLength :: (Integral n) => t -> n
-    tLength (tCut -> Just (_, t)) = 1 + tLength t
-    tLength _ = 0
+    tWords :: t -> [t]
+    tWords = tWordsBy Ch.isSpace
+
+    -- | Divide text into words by character tester.
+    --
+    --   >>> tWordsBy (== '|') "a|bb||ccc|"
+    --   ["a", "bb", "ccc"]
+    --
+    tWordsBy :: (Char -> Bool) -> t -> [t]
+    tWordsBy f t0 = loop (0 :: Int) t0 where
+        loop n (tCut -> Just (c, t))
+            | f c        = tTake n t0 : (tWordsBy f $ snd $ tWhile f t)
+            | otherwise  = loop (n + 1) t
+        loop 0 _ = []
+        loop n _ = [tTake n t0]
 
     -- | Take subtext from /textual-value-#2/ while /tester-#1/ holds,
     --   and pairing the subtext with after.
