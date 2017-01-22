@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -32,51 +33,54 @@ treesDigits = concatDigits O.#. D.treesTexts False
 concatDigits :: (O.Textual t) => [t] -> B.Ab t
 concatDigits = first where
     first ((O.tCut -> O.Jp c cs) : xs)
-        | c `elem` "+-0123456789o" = loop [O.charT c] $ cs : xs
+        | c `elem` ("+-0123456789o" :: String) = loop [O.charT c] $ cs : xs
     first _ = Msg.nothing
 
     loop ss [] = Right $ O.tJoinAll $ reverse ss
-    loop ss (w : xs) | O.tAll (`elem` "0123456789.o") w = loop (w : ss) xs
+    loop ss (w : xs) | O.tAll (`elem` ("0123456789.o" :: String)) w = loop (w : ss) xs
     loop _ _ = Msg.nothing
 
 
 -- ----------------------  Clock
 
--- | Get clock from token.
+-- | Decode clock from token.
 --
---   >>> tokenClock $ head $ S.toks "|12:00|"
+--   >>> tokenClock (head $ S.toks "|12:00|" :: S.Token)
 --   Right |12:00|
 --
-tokenClock :: S.Token -> B.Ab T.Clock
-tokenClock (P.TBar ('|' : w)) = textClock w
+tokenClock :: (O.Textual t) => S.TToken t -> B.Ab T.Clock
+tokenClock (P.TBar (O.tCut -> O.Jp '|' w)) = textClock w
 tokenClock _ = Msg.nothing
 
-textClock :: String -> B.Ab T.Clock
+textClock :: (O.Textual t) => t -> B.Ab T.Clock
 textClock = sign where
-    sign ('-' : cs)  = T.clockNeg `fmap` dayOrHour cs
-    sign ('+' : cs)  = dayOrHour cs
-    sign cs          = dayOrHour cs
+    sign (O.tCut -> O.Jp '-' cs)  = T.clockNeg <$> dayOrHour cs
+    sign (O.tCut -> O.Jp '+' cs)  = dayOrHour cs
+    sign cs                       = dayOrHour cs
 
     dayOrHour cs     = case getInt cs of
-                         (h, ':'  : cs')  ->  minute 0 h cs'
-                         (d, "'|")        ->  Right $ T.ClockD $ toInteger d
-                         (h, "|")         ->  clock T.ClockDh 0 h 0 0
-                         (d, '\'' : cs')  ->  hour (toInteger d) cs'
-                         _                ->  Msg.nothing
+                         (d, "'|")       -> Right $ T.ClockD $ toInteger d
+                         (h, "|")        -> clock T.ClockDh 0 h 0 0
+                         (n, O.tCut -> O.Jp c cs')
+                             | c == ':'  -> minute 0 n cs'
+                             | c == '\'' -> hour (toInteger n) cs'
+                         _               -> Msg.nothing
 
     hour d cs        = case getInt cs of
-                         (h, ':' : cs')   ->  minute d h cs'
-                         (h, "|")         ->  clock T.ClockDh d h 0 0
-                         _                ->  Msg.nothing
+                         (h, "|")         -> clock T.ClockDh d h 0 0
+                         (h, O.tCut -> O.Jp ':' cs')
+                                          -> minute d h cs'
+                         _                -> Msg.nothing
 
     minute d h cs    = case getInt cs of
-                         (m, ':' : cs')   ->  second d h m cs'
-                         (m, "|")         ->  clock T.ClockDhm d h m 0
-                         _                ->  Msg.nothing
+                         (m, "|")         -> clock T.ClockDhm d h m 0
+                         (m, O.tCut -> O.Jp ':' cs')
+                                          -> second d h m cs'
+                         _                -> Msg.nothing
 
     second d h m cs  = case getInt cs of
-                         (s, "|")         ->  clock T.ClockDhms d h m s
-                         _                ->  Msg.nothing
+                         (s, "|")         -> clock T.ClockDhms d h m s
+                         _                -> Msg.nothing
 
     clock k d h m s
         | m >= 60    = Msg.nothing
@@ -84,12 +88,14 @@ textClock = sign where
         | otherwise  = let (d', h') = h `divMod` 24
                        in Right $ k (d + toInteger d') $ T.secFromHms (h', m, s)
 
-getInt :: String -> (Int, String)
+-- >>> getInt "12a"
+-- (12,"a")
+getInt :: (O.Textual t) => t -> (Int, t)
 getInt = loop 0 where
-    loop n ""     = (n, "")
-    loop n (c:cs) = case fromDigit c of
-                      Just x  -> loop (10 * n + x) cs
-                      Nothing -> (n, c:cs)
+    loop n (O.tCut -> O.Jp c cs) = case fromDigit c of
+                                     Just x  -> loop (10 * n + x) cs
+                                     Nothing -> (n, O.tAdd c cs)
+    loop n t = (n, t)
 
 fromDigit :: Char -> Maybe Int
 fromDigit '0'  =  Just 0
