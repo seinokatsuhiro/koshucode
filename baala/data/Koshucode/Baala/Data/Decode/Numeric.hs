@@ -8,7 +8,7 @@ module Koshucode.Baala.Data.Decode.Numeric
   ( -- * Numeric
     treesDigits,
     tokenClock,
-    treesTime, stringTime,
+    stringTime, treesTime,
   ) where
 
 import qualified Koshucode.Baala.Overture              as O
@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 
 -- ----------------------  Number
 
--- | Get digits from token trees.
+-- | Decode digits from token trees.
 --
 --   >>> S.withTrees treesDigits "-123 450.00"
 --   Right "-123450.00"
@@ -113,7 +113,18 @@ fromDigit _    =  Nothing
 
 -- ----------------------  Time
 
--- | Get time from token trees.
+-- | Decode time from string.
+--
+--   >>> stringTime "2013-04-18 12:00"
+--   Right 2013-04-18 12:00
+--
+--   >>> stringTime "2013-04-18 12:00 +9:00"
+--   Right 2013-04-18 12:00 +09:00
+--
+stringTime :: String -> B.Ab T.Time
+stringTime = treesTime O.#. (S.toTrees :: String -> B.Ab [S.Tree])
+
+-- | Decode time from token trees.
 --
 --   >>> S.toTrees "2013-04-18 12:00" >>= treesTime
 --   Right 2013-04-18 12:00
@@ -124,42 +135,34 @@ fromDigit _    =  Nothing
 --   >>> S.toTrees "2013-#16" >>= treesTime
 --   Right 2013-#16
 --
-treesTime :: [S.Tree] -> B.Ab T.Time
-treesTime = stringsTime O.#. D.treesTexts False
+treesTime :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab T.Time
+treesTime = textsTime O.#. D.treesTexts False
 
--- | Get time from string.
---
---   >>> stringTime "2013-04-18 12:00"
---   Right 2013-04-18 12:00
---
---   >>> stringTime "2013-04-18 12:00 +9:00" >>= (Right . T.timeCutZone)
---   Right 2013-04-18 03:00
---
-stringTime :: String -> B.Ab T.Time
-stringTime = treesTime O.#. S.toTrees
+textsTime :: (O.Textual t) => [t] -> B.Ab T.Time
+textsTime = year where
 
-stringsTime :: [String] -> B.Ab T.Time
-stringsTime = year where
+    -- ----------------------  year, month, week, day
 
     year []             = Msg.nothing
     year (cs : xs)      = case getInt cs of
-                            (y, '-'  : cs')  -> mwd (toInteger y) $ cs' : xs
-                            _                -> Msg.nothing
+                            (y, O.tCut -> O.Jp '-' cs')
+                                  -> mwd (toInteger y) $ cs' : xs
+                            _     -> Msg.nothing
 
-    mwd _ []                      = Msg.nothing
-    mwd y (('#' : '#': cs) : xs)  = day (T.dateFromYd y) $ cs : xs
-    mwd y (('#' : cs) : xs)       = week y $ cs : xs
-    mwd y xs                      = month y xs
+    mwd _ []                                    = Msg.nothing
+    mwd y ((O.tCut2 -> O.Jp2 '#' '#' cs) : xs)  = day (T.dateFromYd y) $ cs : xs
+    mwd y ((O.tCut  -> O.Jp '#' cs) : xs)       = week y $ cs : xs
+    mwd y xs                                    = month y xs
 
     month _ []          = Msg.nothing
     month y (cs : xs)   = case getInt cs of
-                            (m, '-'  : cs')  -> day (T.dateFromYmd y m) $ cs' : xs
+                            (m, O.tCut -> O.Jp '-' cs') -> day (T.dateFromYmd y m) $ cs' : xs
                             (m, "")          -> T.timeFromYmAb y m
                             _                -> Msg.nothing
 
     week _ []           = Msg.nothing
     week y (cs : xs)    = case getInt cs of
-                            (w, '-'  : cs')  -> day (T.dateFromYwd y w) $ cs' : xs
+                            (w, O.tCut -> O.Jp '-' cs') -> day (T.dateFromYwd y w) $ cs' : xs
                             (w, "")          -> T.timeFromYwAb y w
                             _                -> Msg.nothing
 
@@ -168,31 +171,35 @@ stringsTime = year where
                             (d, "") | null xs    -> do d' <- date d
                                                        Right $ T.TimeYmd d'
                                     | otherwise  -> do d' <- date d
-                                                       hour (T.timeFromDczAb d') $ concat xs
+                                                       hour (T.timeFromDczAb d') $ O.tJoinAll xs
                             _                    -> Msg.nothing
 
+    -- ----------------------  hour, minute, second
+
     hour k cs           = case getInt cs of
+                            (h, O.tCut -> O.Jp ':' cs') -> minute k h cs'
                             (h, "")          -> k (T.clockFromDh 0 h) Nothing
-                            (h, ':' : cs')   -> minute k h cs'
                             _                -> Msg.nothing
 
     minute k h cs       = case getInt cs of
+                            (m, O.tCut -> O.Jp ':' cs') -> second k h m cs'
                             (m, "")          -> k (T.clockFromDhm 0 h m) Nothing
-                            (m, ':' : cs')   -> second k h m cs'
                             (m, cs')         -> zone1 k (T.ClockPartsMin 0 h m) cs'
 
     second k h m cs     = case getInt cs of
                             (s, "")          -> k (T.clockFromDhms 0 h m s) Nothing
                             (s, cs')         -> zone1 k (T.ClockPartsSec 0 h m s) cs'
 
+    -- ----------------------  time zone
+
     zone1 k clock cs    = case cs of
-                            '+' : cs'        -> zone2 k clock   1  cs'
-                            '-' : cs'        -> zone2 k clock (-1) cs'
+                            (O.tCut -> O.Jp '+' cs') -> zone2 k clock   1  cs'
+                            (O.tCut -> O.Jp '-' cs') -> zone2 k clock (-1) cs'
                             "UTC"            -> zone4 k clock 0 0
                             _                -> Msg.nothing
 
     zone2 k clock pm cs = case getInt cs of
-                            (zh, ':' : cs')  -> zone3 k clock (pm * zh) cs'
+                            (zh, O.tCut -> O.Jp ':' cs')  -> zone3 k clock (pm * zh) cs'
                             _                -> Msg.nothing
 
     zone3 k clock zh cs = case getInt cs of
