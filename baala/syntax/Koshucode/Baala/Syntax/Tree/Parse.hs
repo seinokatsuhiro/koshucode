@@ -6,7 +6,7 @@
 
 module Koshucode.Baala.Syntax.Tree.Parse
   ( -- * Type
-    Tree, TTree, NamedTrees,
+    Tree, TTree,
 
     -- * Parser
     ToTrees (..),
@@ -29,9 +29,6 @@ type Tree = TTree String
 
 -- | Tree of tokens.
 type TTree t = B.CodeTree S.BracketType S.TToken t
-
--- | Pair of token trees and its name.
-type NamedTrees = B.Named [Tree]
 
 -- | Wrap trees in group.
 ttreeGroup :: [TTree t] -> TTree t

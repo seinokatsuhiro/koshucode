@@ -55,7 +55,7 @@ data Resource c = Resource
     , resJudge      :: [T.Judge c]         -- ^ __Input:__ Affirmative or denial judgements
     , resDataset    :: D.Dataset c         -- ^ __Input:__ Dataset
 
-    , resSlot       :: [S.NamedTrees]      -- ^ __Calc:__ Global slots
+    , resSlot       :: [S.GlobalSlot]      -- ^ __Calc:__ Global slots
     , resLexmap     :: [C.LexmapClause]    -- ^ __Calc:__ Source of relmaps
     , resAssert     :: [ShortAssert c]     -- ^ __Calc:__ Assertions of relmaps
 
