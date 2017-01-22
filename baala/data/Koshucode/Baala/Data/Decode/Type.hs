@@ -43,22 +43,22 @@ tokenString False (P.TRaw w)                 = Right w
 tokenString _ _  = Msg.nothing
 
 
--- ----------------------  Interp
+-- ----------------------  Interpretation
 
--- | Get interpretation from token trees.
+-- | Decode interpretation from token trees.
 --
 --   >>> S.toTrees "term /a" >>= treesInterp
 --   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
 --                   interpTerms = ["a"] })
 --
-treesInterp :: [S.Tree] -> B.Ab T.Interp
+treesInterp :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab T.Interp
 treesInterp = Right . T.interp O.#. mapM treeInterpWord
 
-treeInterpWord :: S.Tree -> B.Ab T.InterpWord
+treeInterpWord :: (O.Textual t, S.ToTermName t) => S.TTree t -> B.Ab T.InterpWord
 treeInterpWord (B.TreeB _ _ _) = Msg.nothing
 treeInterpWord (B.TreeL x) =
     case x of
-      S.TText _ _ w   -> Right $ T.InterpText w
+      S.TText _ _ w   -> Right $ T.InterpText $ O.tString w
       S.TTerm _ n     -> Right $ T.InterpTerm $ S.toTermName n
       _               -> Msg.nothing
 
