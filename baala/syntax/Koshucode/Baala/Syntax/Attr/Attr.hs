@@ -67,24 +67,24 @@ attrUsageString = Ls.intercalate " | " . attrUsages
 -- ----------------------  Attribute sorter
 
 -- | Attribute parameter.
-type AttrPara = S.Para S.AttrName S.Tree
+type AttrPara t = S.Para S.AttrName (S.TTree t)
 
 -- | Parameterizer for attribute of relmap operator.
-type AttrParaze = [S.Tree] -> B.Ab AttrPara
+type AttrParaze t = [S.TTree t] -> B.Ab (AttrPara t)
 
 -- | Parameterize named attributes.
-attrPara :: AttrParaze
+attrPara :: AttrParaze String
 attrPara trees =
     let p = S.para byHyphen trees
     in Right $ S.paraNameAdd S.attrNameTrunk (S.paraPos p) p
 
 -- | Parameterize attributes by its layout.
-attrParaBy :: AttrLayout -> AttrParaze
+attrParaBy :: AttrLayout -> AttrParaze String
 attrParaBy lay = attrMatch lay O.#. attrPara
 
 -- | Match parameter with its layout.
 --   See 'paraChoose' in ParaSpec module.
-attrMatch :: AttrLayout -> B.AbMap AttrPara
+attrMatch :: AttrLayout -> B.AbMap (AttrPara String)
 attrMatch (AttrLayout branches) p = loop [] branches where
     loop us [] = Msg.unexpAttrMulti $ reverse us
     loop us ((tag, b) : bs) =

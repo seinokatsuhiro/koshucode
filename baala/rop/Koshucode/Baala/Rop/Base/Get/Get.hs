@@ -82,7 +82,7 @@ getTree = getWith K.ttreeGroup
 -- ----------------------  Basic
 
 -- | Get relmap parameter.
-getPara :: C.Intmed c -> K.AttrPara
+getPara :: C.Intmed c -> K.AttrPara String
 getPara = C.lexAttr . C.medLexmap
 
 -- | Test usage tag.

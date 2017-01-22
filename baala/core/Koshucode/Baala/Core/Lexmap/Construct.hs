@@ -51,7 +51,7 @@ type LexmapClause = NNamed C.LexmapTrees
 -- ----------------------  Local type
 
 -- | Find parameterizer for relmap operator.
-type RopParaze = C.RopName -> Maybe S.AttrParaze
+type RopParaze t = C.RopName -> Maybe (S.AttrParaze t)
 
 -- | Construct lexmap from token trees.
 type ConsLexmapBody = [S.Tree] -> B.Ab (C.Lexmap, LexmapLinkTable)
@@ -65,7 +65,7 @@ type LexmapLinkTable = [(C.Lexmap, C.Lexmap)]
 -- | First step of constructing relmap,
 --   construct lexmap from token trees.
 --   The function returns lexmap and related lexmap links.
-consLexmap :: RopParaze -> ConsLexmap
+consLexmap :: RopParaze String -> ConsLexmap
 consLexmap paraze gslot findDeriv = lexmap 0 where
 
     lexmap :: Int -> SecNo -> ConsLexmapBody
@@ -133,7 +133,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
 
         -- -----------  construct lexmap except for its submaps
 
-        cons :: C.LexmapType -> S.Token -> S.AttrPara -> C.Lexmap
+        cons :: C.LexmapType -> S.Token -> S.AttrPara String -> C.Lexmap
         cons ty tok para = check $ B.def { C.lexType   = ty
                                          , C.lexToken  = tok
                                          , C.lexAttr   = para }

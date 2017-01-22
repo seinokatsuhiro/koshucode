@@ -28,7 +28,7 @@ type Lexmap = TLexmap String
 data TLexmap t = Lexmap
     { lexType      :: LexmapType            -- ^ Type of lexmap
     , lexToken     :: S.TToken t            -- ^ Token of operator
-    , lexAttr      :: S.AttrPara            -- ^ Attribute of relmap operation
+    , lexAttr      :: S.AttrPara t          -- ^ Attribute of relmap operation
     , lexSubmap    :: [(String, TLexmap t)] -- ^ Submaps in the attribute
     , lexMessage   :: [String]              -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord)
@@ -55,7 +55,7 @@ instance (O.Textual t) => B.Default (TLexmap t) where
 type RopName = String
 
 -- | Attribute of relmap operation.
-lexAttrTree :: TLexmap t -> [S.AttrTree String]
+lexAttrTree :: TLexmap t -> [S.AttrTree t]
 lexAttrTree = map (B.mapSnd head) . S.paraNameList . lexAttr
 
 -- | Name of relmap operator
