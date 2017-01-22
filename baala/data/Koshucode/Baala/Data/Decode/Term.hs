@@ -31,10 +31,10 @@ import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 -- ---------------------------------  Term name cache
 
 -- | Term name cache.
-type CacheT = O.CacheS S.TermName
+type CacheT t = O.Cache t S.TermName
 
 -- | Empty term name cache.
-cacheT :: CacheT
+cacheT :: (S.ToTermName t) => CacheT t
 cacheT = O.cache [] S.toTermName
 
 -- ---------------------------------  Term name
@@ -51,13 +51,13 @@ cacheT = O.cache [] S.toTermName
 --   >>> S.toTree "/a/x" >>= treeFlatName
 --   Left ...
 --
-treeFlatName :: S.Tree -> B.Ab S.TermName
+treeFlatName :: (Ord t, S.ToTermName t) => S.TTree t -> B.Ab S.TermName
 treeFlatName = fmap snd . treeFlatNameCached cacheT
 
 -- | Cached version of 'treeFlatName'.
-treeFlatNameCached :: CacheT -> S.Tree -> B.Ab (CacheT, S.TermName)
+treeFlatNameCached :: (Ord t) => CacheT t -> S.TTree t -> B.Ab (CacheT t, S.TermName)
 treeFlatNameCached cc (P.LTerm n) = Right $ O.cacheGet cc n
-treeFlatNameCached _  (P.L t)     = Msg.reqFlatName t
+treeFlatNameCached _  (P.L _)     = Msg.reqFlatName
 treeFlatNameCached _  _           = Msg.reqTermName
 
 -- | Read flat term names.
@@ -142,7 +142,7 @@ isTermLeaf (P.LTerm _)   = True
 isTermLeaf _             = False
 
 -- | Cached version of 'treesTerms'.
-treesTermsCached :: CacheT -> [S.Tree] -> B.Ab (CacheT, [S.Term [S.Tree]])
+treesTermsCached :: CacheT String -> [S.Tree] -> B.Ab (CacheT String, [S.Term [S.Tree]])
 treesTermsCached = name where
     name cc [] = Right (cc, [])
     name cc (x : xs) =

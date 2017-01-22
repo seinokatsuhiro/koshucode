@@ -22,7 +22,6 @@ module Koshucode.Baala.Data.Decode.Message
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Syntax          as S
 
 -- | Abortable scope for literal.
 abLiteral :: (B.GetCodePos cp) => B.Abortable cp b
@@ -47,9 +46,8 @@ quoteType :: String -> B.Ab a
 quoteType = B.leftLine "Quoted type name"
 
 -- | Require flat name
-reqFlatName :: S.Token -> B.Ab a
-reqFlatName tok = B.leftLine "Require flat name" n where
-    n = S.tokenContent tok
+reqFlatName :: B.Ab a
+reqFlatName = B.leftBecause "Require flat name"
 
 -- | Require tuple in list
 reqRelTuple :: B.Ab a

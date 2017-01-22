@@ -46,7 +46,7 @@ resInclude resAbout cd base xio code =
                  , C.resJudge     = js
                  , C.resDataset   = ds }
 
-createJudges :: (D.CContent c) => C.Resource c -> [C.Clause] -> B.Ab (D.CacheT, [T.Judge c], [C.Clause])
+createJudges :: (D.CContent c) => C.Resource c -> [C.Clause] -> B.Ab (D.CacheT String, [T.Judge c], [C.Clause])
 createJudges res = loop $ C.resCacheT res where
     loop cc ((C.Clause h (C.CJudge q cl toks)) : cs) =
         Msg.abClause [h] $ do

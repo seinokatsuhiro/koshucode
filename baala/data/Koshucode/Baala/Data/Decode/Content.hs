@@ -127,11 +127,11 @@ treesTerms cons = mapM p O.#. D.treesTerms1 where
 --   It can be only used in the top-level of resources.
 treesJudge ::
     (D.CContent c)
-    => D.CacheT           -- ^ Term name cache
+    => D.CacheT String    -- ^ Term name cache
     -> T.AssertType       -- ^ Assertion type
     -> S.JudgeClass       -- ^ Judgement class
     -> [S.Tree]           -- ^ Trees of terms
-    -> B.Ab (D.CacheT, T.Judge c)   -- ^ Error or decoded judgement
+    -> B.Ab (D.CacheT String, T.Judge c)   -- ^ Error or decoded judgement
 treesJudge cc q cl trees =
     do (cc', ts) <- D.treesTermsCached cc trees
        terms <- mapM term ts
