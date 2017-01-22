@@ -125,7 +125,7 @@ treesNamesByColon = loop [] [] where
 --   Right [ (TermName EQ "a", [TreeL ...]),
 --           (TermName EQ "b", [TreeL ...]) ]
 --
-treesTerms :: [S.Tree] -> B.Ab [S.Term [S.Tree]]
+treesTerms :: (Ord t, S.ToTermName t) => [S.TTree t] -> B.Ab [S.Term [S.TTree t]]
 treesTerms = name where
     name [] = Right []
     name (x : xs) = do let (c, xs2) = cont xs
@@ -133,18 +133,17 @@ treesTerms = name where
                        xs2' <- name xs2
                        Right $ (n, c) : xs2'
 
-    cont :: [S.Tree] -> ([S.Tree], [S.Tree])
     cont xs@(x : _) | isTermLeaf x  = ([], xs)
     cont []                         = ([], [])
     cont (x : xs)                   = B.consFst x $ cont xs
 
 -- | Test token tree is term leaf.
-isTermLeaf :: O.Test S.Tree
+isTermLeaf :: O.Test (S.TTree t)
 isTermLeaf (P.LTerm _)   = True
 isTermLeaf _             = False
 
 -- | Cached version of 'treesTerms'.
-treesTermsCached :: CacheT String -> [S.Tree] -> B.Ab (CacheT String, [S.Term [S.Tree]])
+treesTermsCached :: (Ord t, S.ToTermName t) => CacheT t -> [S.TTree t] -> B.Ab (CacheT t, [S.Term [S.TTree t]])
 treesTermsCached = name where
     name cc [] = Right (cc, [])
     name cc (x : xs) =
@@ -153,14 +152,13 @@ treesTermsCached = name where
            (cc2, xs2') <- name cc1 xs2
            Right (cc2, (n, c) : xs2')
 
-    cont :: [S.Tree] -> ([S.Tree], [S.Tree])
     cont xs@(x : _) | isTermLeaf x  = ([], xs)
     cont []                         = ([], [])
     cont (x : xs)                   = B.consFst x $ cont xs
 
 -- | Read list of named token trees from token trees.
 --   This function wraps long branches into group.
-treesTerms1 :: [S.Tree] -> B.Ab [S.Term S.Tree]
+treesTerms1 :: (Ord t, S.ToTermName t) => [S.TTree t] -> B.Ab [S.Term (S.TTree t)]
 treesTerms1 xs = do xs' <- treesTerms xs
                     Right (S.ttreeGroup O.<$$> xs')
 
