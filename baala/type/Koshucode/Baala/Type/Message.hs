@@ -57,8 +57,8 @@ tooLargeDigit :: String -> B.Ab a
 tooLargeDigit = B.leftLine "Too large digit"
 
 -- | Can't read as number
-notNumber :: String -> B.Ab a
-notNumber = B.leftLine "Can't read as number"
+notNumber :: (O.Textual t) => t -> B.Ab a
+notNumber = B.leftLine "Can't read as number" . O.tString
 
 -- | Abort reason with encodable values.
 abortEncodables :: (B.MixEncode c) => String -> [c] -> B.AbortReason

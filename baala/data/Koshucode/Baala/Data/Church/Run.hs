@@ -161,7 +161,7 @@ calcCox cops he cs cox = calcTuple (D.getCops cops) he cox cs
 
 -- | [Tree-to-Content]
 --     Calculate token tree as content expression.
-calcTree :: (D.GetCops cops, D.CContent c) => cops c -> D.CalcContent c
+calcTree :: (D.GetCops cops, D.CContent c) => cops c -> D.CalcContent String c
 calcTree cops tree =
     do let cops' = D.getCops cops
        cox <- D.treeCox cops' tree

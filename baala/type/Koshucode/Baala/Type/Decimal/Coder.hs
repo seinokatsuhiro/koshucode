@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
 -- | Decode and encode of decimals.
@@ -48,16 +50,16 @@ import qualified Koshucode.Baala.Type.Message               as Msg
 -- ----------------------  Decode
 
 -- | Decode to @a@.
-type DecodeAb a = String -> B.Ab a
+type DecodeAb t a = t -> B.Ab a
 
 type Sign = O.Map T.DecimalInteger
 
 -- | Decode base-2 digits to decimal.
-decodeBinary :: DecodeAb T.Decimal
+decodeBinary :: (O.Textual t) => DecodeAb t T.Decimal
 decodeBinary = decodeBase 2
 
 -- | Decode base-8 digits to decimal.
-decodeOctal :: DecodeAb T.Decimal
+decodeOctal :: (O.Textual t) => DecodeAb t T.Decimal
 decodeOctal = decodeBase 8
 
 -- | Decode decimals.
@@ -71,61 +73,61 @@ decodeOctal = decodeBase 8
 -- >>> decodeDecimal "11.250 +"
 -- Right Decimal (3) 11 + 1 % 4
 
-decodeDecimal :: DecodeAb T.Decimal
+decodeDecimal ::(O.Textual t) => DecodeAb t T.Decimal
 decodeDecimal = decodeBase 10
 
 -- | Decode base-16 digits to decimal.
-decodeHex :: DecodeAb T.Decimal
+decodeHex :: (O.Textual t) => DecodeAb t T.Decimal
 decodeHex = decodeBase 16
 
 -- | Decode digits to number.
-decodeBase :: Integer -> DecodeAb T.Decimal
+decodeBase :: forall t. (O.Textual t) => Integer -> DecodeAb t T.Decimal
 decodeBase base ccs = headPart id ccs where
     minus x = - x
 
-    headPart _ [] = Msg.notNumber []
-    headPart sign (c:cs) = case c of
+    headPart sign (O.tCut -> O.Jp c cs) = case c of
         ' '  -> headPart sign  cs
         '-'  -> headPart minus cs
         '+'  -> headPart sign  cs
-        _    -> intPart  sign  0 (c:cs)
+        _    -> intPart  sign  0 (O.tAdd c cs)
+    headPart _ _ = Msg.notNumber ccs
 
-    intPart :: Sign -> T.DecimalInteger -> DecodeAb T.Decimal
-    intPart sign n [] = decimal 0 (sign n)
-    intPart sign n (c:cs)
+    intPart :: Sign -> T.DecimalInteger -> DecodeAb t T.Decimal
+    intPart sign n (O.tCut -> O.Jp c cs)
         = case digitToInteger c of
             Just i           -> do n' <- up c i n
                                    intPart  sign n' cs
             Nothing | c == ' '  -> intPart  sign n cs
                     | c == 'o'  -> ooPart   sign (-1) n cs
                     | c == '.'  -> fracPart sign n 0 cs
-                    | otherwise -> tailPart sign (n, 0) (c:cs)
+                    | otherwise -> tailPart sign (n, 0) (O.tAdd c cs)
+    intPart sign n _ = decimal 0 (sign n)
 
-    ooPart :: Sign -> T.DecimalFracle -> T.DecimalInteger-> DecodeAb T.Decimal
-    ooPart sign l n [] = decimal l (sign n)
-    ooPart sign l n (c:cs)
+    ooPart :: Sign -> T.DecimalFracle -> T.DecimalInteger-> DecodeAb t T.Decimal
+    ooPart sign l n (O.tCut -> O.Jp c cs)
         | c == ' '   = ooPart   sign l n cs
         | c == 'o'   = ooPart   sign (l - 1) n cs
-        | otherwise  = tailPart sign (n, l) (c:cs)
+        | otherwise  = tailPart sign (n, l) (O.tAdd c cs)
+    ooPart sign l n _ = decimal l (sign n)
 
-    fracPart :: Sign -> T.DecimalInteger -> T.DecimalFracle -> DecodeAb T.Decimal
-    fracPart sign n f [] = decimal f (sign n)
-    fracPart sign n f (c:cs)
+    fracPart :: Sign -> T.DecimalInteger -> T.DecimalFracle -> DecodeAb t T.Decimal
+    fracPart sign n f (O.tCut -> O.Jp c cs)
         = case digitToInteger c of
             Just i           -> do n' <- up c i n
                                    fracPart sign n' (f + 1) cs
             Nothing | c == ' '  -> fracPart sign n f cs
-                    | otherwise -> tailPart sign (n, f) (c:cs)
+                    | otherwise -> tailPart sign (n, f) (O.tAdd c cs)
+    fracPart sign n f _ = decimal f (sign n)
 
-    tailPart :: Sign -> (T.DecimalInteger, T.DecimalFracle) -> DecodeAb T.Decimal
-    tailPart sign (n, f) [] = decimal f (sign n)
-    tailPart sign dec (c:cs) = case c of
+    tailPart :: Sign -> (T.DecimalInteger, T.DecimalFracle) -> DecodeAb t T.Decimal
+    tailPart sign dec (O.tCut -> O.Jp c cs) = case c of
         ' '  -> tailPart sign  dec cs
         '-'  -> tailPart minus dec cs
         '+'  -> tailPart id    dec cs
         'a'  -> tailPart sign  dec cs
         'A'  -> tailPart sign  dec cs
         _    -> Msg.notNumber ccs
+    tailPart sign (n, f) _ = decimal f (sign n)
 
     up c i n | i < base   = Right $ base * n + i
              | otherwise  = Msg.tooLargeDigit [c]

@@ -86,7 +86,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
       feat e f msg | f feature = e
                    | otherwise = msg
 
-      calc :: D.CalcContent c
+      calc :: D.CalcContent String c
       calc = calcContG $ C.resGlobal res
 
       f << y  = y : f res
@@ -135,7 +135,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
       license line =
           Right $ res { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
-calcContG :: (D.CContent c) => C.Global c -> D.CalcContent c
+calcContG :: (D.CContent c) => C.Global c -> D.CalcContent String c
 calcContG = D.calcTree . D.getCops
 
 paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab C.InputPoint
