@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Decode terms.
@@ -65,7 +66,7 @@ treeFlatNameCached _  _           = Msg.reqTermName
 --   >>> S.toTrees "/a +/b -/c" >>= treesFlatNames
 --   Right [TermName EQ "a",TermName GT "b",TermName LT "c"]
 --
-treesFlatNames :: [S.Tree] -> B.Ab [S.TermName]
+treesFlatNames :: (Ord t, S.ToTermName t) => [S.TTree t] -> B.Ab [S.TermName]
 treesFlatNames = mapM treeFlatName
 
 -- | Decode term names with optional complement symbol.
@@ -76,14 +77,14 @@ treesFlatNames = mapM treeFlatName
 --   >>> S.toTrees "/a /b" >>= treesFlatNamesCo
 --   Right (False, [TermName EQ "a",TermName EQ "b"])
 --
-treesFlatNamesCo :: [S.Tree] -> B.Ab (Bool, [S.TermName])
+treesFlatNamesCo :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab (Bool, [S.TermName])
 treesFlatNamesCo trees =
     do (co, trees2) <- treesTermCo trees
        ns <- mapM treeFlatName trees2
        Right (co, ns)
 
 -- | Term complement symbol.
-treesTermCo :: [S.Tree] -> B.Ab (Bool, [S.Tree])
+treesTermCo :: (O.Textual t) => [S.TTree t] -> B.Ab (Bool, [S.TTree t])
 treesTermCo (P.LRaw "~" : trees)  = Right (True,  trees)
 treesTermCo trees                 = Right (False, trees)
 
@@ -92,7 +93,7 @@ treesTermCo trees                 = Right (False, trees)
 --   >>> S.toTrees "/a /x /b /y" >>= treesFlatNamePairs
 --   Right [(TermName EQ "a", TermName EQ "x"), (TermName EQ "b", TermName EQ "y")]
 --
-treesFlatNamePairs :: [S.Tree] -> B.Ab [S.TermName2]
+treesFlatNamePairs :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab [S.TermName2]
 treesFlatNamePairs = loop where
     loop (a : b : xs) = do a'  <- treeFlatName a
                            b'  <- treeFlatName b
@@ -108,12 +109,13 @@ treesFlatNamePairs = loop where
 --         , [TermName EQ "p", TermName EQ "q"]
 --         , [TermName EQ "x", TermName EQ "y"] ]
 --
-treesNamesByColon :: [S.Tree] -> B.Ab [[S.TermName]]
+treesNamesByColon :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab [[S.TermName]]
 treesNamesByColon = loop [] [] where
     loop ret ns (P.LTerm n  : ts)  = loop ret (S.toTermName n : ns) ts
     loop ret ns (P.LRaw ":" : ts)  = loop (reverse ns : ret) [] ts
     loop ret ns []                 = Right $ reverse $ reverse ns : ret
     loop _ _ _                     = Msg.reqTermName
+
 
 -- ---------------------------------  Terms
 
