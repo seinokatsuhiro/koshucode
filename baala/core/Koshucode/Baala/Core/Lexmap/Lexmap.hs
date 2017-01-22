@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Core.Lexmap.Lexmap
   ( -- * Data types
-    Lexmap (..),
+    Lexmap, TLexmap (..),
     LexmapType (..),
     RopName,
 
@@ -19,15 +19,18 @@ import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Syntax       as S
 
+-- | String version of 'TLexmap'.
+type Lexmap = TLexmap String
+
 -- | Intermediate data that represents use of relmap operator.
 --   Lexmap is constructed from a list of 'B.TTree',
 --   and generic relmap is constructed from a lexmap.
-data Lexmap = Lexmap
-    { lexType      :: LexmapType    -- ^ Type of lexmap
-    , lexToken     :: S.Token       -- ^ Token of operator
-    , lexAttr      :: S.AttrPara    -- ^ Attribute of relmap operation
-    , lexSubmap    :: [(String, Lexmap)]   -- ^ Submaps in the attribute
-    , lexMessage   :: [String]      -- ^ Messages on lexmap
+data TLexmap t = Lexmap
+    { lexType      :: LexmapType            -- ^ Type of lexmap
+    , lexToken     :: S.TToken t            -- ^ Token of operator
+    , lexAttr      :: S.AttrPara            -- ^ Attribute of relmap operation
+    , lexSubmap    :: [(String, TLexmap t)] -- ^ Submaps in the attribute
+    , lexMessage   :: [String]              -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord)
 
 -- | Type of lexmap.
@@ -37,13 +40,13 @@ data LexmapType
     | LexmapLocal     -- ^ Local relation reference like @^/r@ or @^r@
       deriving (Show, Eq, Ord)
 
-instance B.GetCodePos Lexmap where
+instance (O.Textual t) => B.GetCodePos (TLexmap t) where
     getCPs = B.getCPs . lexToken
 
 -- | Empty base lexmap.
-instance B.Default Lexmap where
+instance (O.Textual t) => B.Default (TLexmap t) where
     def = Lexmap { lexType     = LexmapBase
-                 , lexToken    = S.rawTextToken ""
+                 , lexToken    = S.rawTextToken O.tEmpty
                  , lexAttr     = B.def
                  , lexSubmap   = []
                  , lexMessage  = [] }
@@ -52,25 +55,25 @@ instance B.Default Lexmap where
 type RopName = String
 
 -- | Attribute of relmap operation.
-lexAttrTree :: Lexmap -> [S.AttrTree]
+lexAttrTree :: TLexmap t -> [S.AttrTree String]
 lexAttrTree = map (B.mapSnd head) . S.paraNameList . lexAttr
 
 -- | Name of relmap operator
-lexName :: Lexmap -> RopName
+lexName :: (O.Textual t) => TLexmap t -> RopName
 lexName = S.tokenContent . lexToken
 
 -- | Lexmap local reference.
-lexLocalRef :: Lexmap -> Maybe S.LocalRef
+lexLocalRef :: TLexmap t -> Maybe S.LocalRef
 lexLocalRef lx = case lexToken lx of
                    S.TLocal _ ref _ _ -> Just ref
                    _                  -> Nothing
 
 -- | Add message to lexmap.
-lexAddMessage :: String -> O.Map Lexmap
+lexAddMessage :: String -> O.Map (TLexmap t)
 lexAddMessage msg lx = lx { lexMessage = msg : lexMessage lx }
 
 -- | Get message list from lexmap.
-lexMessageList :: Lexmap -> [String]
+lexMessageList :: (O.Textual t) => TLexmap t -> [String]
 lexMessageList Lexmap { lexToken = tok, lexMessage = msg }
     | null msg  = []
     | otherwise = msg ++ src
