@@ -1,4 +1,6 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Term-content calcutation.
@@ -75,13 +77,13 @@ convCox find = expand where
                       Right $ D.CoxFill cp f' xs'
     
 -- construct content expression from token tree
-construct :: forall c. (D.CContent c) => S.Tree -> D.AbCox c
+construct :: forall t c. (O.Textual t, S.ToTermName t, D.CContent c) => S.TTree t -> D.AbCox c
 construct = expr where
     expr tree = Msg.abCoxBuild tree $
          let cp = concatMap B.getCPs $ B.takeFirst $ B.untree tree
          in cons cp tree
 
-    cons :: [B.CodePos] -> S.Tree -> D.AbCox c
+    cons :: [B.CodePos] -> S.TTree t -> D.AbCox c
     cons cp tree@(P.BGroup subtrees)
          = case subtrees of
              f@(P.LText q w) : xs
@@ -113,7 +115,7 @@ construct = expr where
     cons cp tree@(P.L tok) = case tok of
         P.Term n             -> Right $ D.CoxTerm  cp [S.toTermName n] []
         S.TName _ op         -> Right $ D.CoxBlank cp op
-        P.TRaw n | isName n  -> Right $ D.CoxBlank cp $ S.BlankNormal n
+        P.TRaw n | isName n  -> Right $ D.CoxBlank cp $ S.BlankNormal $ O.tString n
         P.T _ _              -> lit cp tree
         _                    -> B.bug "core/leaf"
 
@@ -126,14 +128,14 @@ construct = expr where
 
     lit cp tree  = D.CoxLit cp <$> D.treeContent tree
 
-    untag :: S.Tree -> (D.CoxTag, S.Tree)
+    untag :: S.TTree t -> (D.CoxTag, S.TTree t)
     untag (B.TreeB l p (P.LQ tag : vars))
-                = (Just tag, B.TreeB l p $ vars)
+                = (Just $ O.tString tag, B.TreeB l p $ vars)
     untag vars  = (Nothing, vars)
 
-isName :: O.Test String
-isName (c:_)  = isNameFirst c
-isName _      = False
+isName :: (O.Textual t) => O.Test t
+isName (O.tCut -> O.Jp c _)  = isNameFirst c
+isName _                     = False
 
 isNameFirst :: O.Test Char
 isNameFirst c = case O.majorGeneralCategory c of
@@ -143,31 +145,31 @@ isNameFirst c = case O.majorGeneralCategory c of
                   _                -> False
 
 -- convert from infix operator to prefix
-prefix :: [B.Named B.InfixHeight] -> B.AbMap S.Tree
+prefix :: forall t. (O.Textual t) => [(t, B.InfixHeight)] -> B.AbMap (S.TTree t)
 prefix htab tree =
     Msg.abCoxPrefix tree $
      case B.infixToPrefix conv ht (B.TreeB S.BracketGroup Nothing) mapper tree of
        Right tree3 -> Right $ undoubleGroup tree3
-       Left  xs    -> Msg.ambInfixes $ map detail xs
+       Left  xs    -> Msg.ambInfixes (detail <$> xs)
     where
       conv = (c D.copPrefix, c D.copInfix, c D.copPostfix)
-      c :: (String -> S.BlankName) -> O.Map S.Token
+      c :: (t -> S.BlankName) -> O.Map (S.TToken t)
       c f (S.TText cp S.TextRaw s) = S.TName cp $ f s
       c _ x = x
 
-      ht :: S.Token -> B.InfixHeight
+      ht :: S.TToken t -> B.InfixHeight
       ht = B.infixHeight wordText htab
 
-      wordText :: S.Token -> Maybe String
       wordText (P.TRaw w)  = Just w
       wordText _           = Nothing
 
       detail (Right n, tok) = detailText tok "right" n
       detail (Left  n, tok) = detailText tok "left"  n
 
-      detailText tok dir n = S.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
+      detailText tok dir n =
+          S.tokenContent tok O.++ " : " O.++ dir O.++ " " O.++ show n
 
-mapper :: B.InfixMapper S.BracketType S.Token
+mapper :: B.InfixMapper S.BracketType (S.TToken t)
 mapper pre = loop where
     loop (B.TreeB S.BracketGroup p xs) =
         do preXs <- pre xs
@@ -182,13 +184,13 @@ undoubleGroup :: O.Map (B.RawTree S.BracketType y z)
 undoubleGroup = B.undouble (== S.BracketGroup)
 
 -- expand tree-level syntax
-convTree :: D.CopFind D.CopTree -> B.AbMap S.Tree
+convTree :: (O.Textual t) => D.CopFind (D.CopTree t) -> B.AbMap (S.TTree t)
 convTree find = expand where
     expand tree@(B.TreeB S.BracketGroup p subtrees) =
         case subtrees of
           op@(P.LRaw name) : args
               -> Msg.abCoxSyntax tree $
-                 case find $ S.BlankNormal name of
+                 case find $ S.BlankNormal $ O.tString name of
                    Just f -> expand O.# f args
                    _      -> do args2 <- mapM expand args
                                 Right $ B.TreeB S.BracketGroup p (op : args2)

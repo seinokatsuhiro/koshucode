@@ -26,15 +26,15 @@ import qualified Koshucode.Baala.Data.Church.Cox  as D
 
 -- | Term-content operator.
 data Cop c
-    = CopCalc S.BlankName (D.CopCalc c) -- ^ Convert @c@ (content)
-    | CopCox  S.BlankName (CopCox c)    -- ^ Convert 'D.Cox' c
-    | CopTree S.BlankName (CopTree)     -- ^ Convert 'B.TTree'
+    = CopCalc S.BlankName (D.CopCalc c)     -- ^ Convert @c@ (content)
+    | CopCox  S.BlankName (CopCox c)        -- ^ Convert 'D.Cox' c
+    | CopTree S.BlankName (CopTree String)  -- ^ Convert 'B.TTree'
 
 -- | Expression-level syntax.
 type CopCox c = [D.Cox c] -> D.AbCox c
 
 -- | Tree-level syntax.
-type CopTree  = [S.Tree] -> B.Ab S.Tree
+type CopTree t = [S.TTree t] -> B.Ab (S.TTree t)
 
 instance Show (Cop c) where
     show (CopCalc n _) = "(CopCalc " ++ show n ++ " _)"
@@ -54,24 +54,24 @@ copName (CopTree  n _) = n
 -- ----------------------  Operator name
 
 -- | Name for non-binary operator.
-copNormal :: String -> S.BlankName
-copNormal = S.BlankNormal
+copNormal :: (O.Textual t) => t -> S.BlankName
+copNormal = S.BlankNormal . O.tString
 
 -- | Name for program-generated operator.
-copInternal :: String -> S.BlankName
-copInternal = S.BlankInternal
+copInternal :: (O.Textual t) => t -> S.BlankName
+copInternal = S.BlankInternal . O.tString
 
 -- | Name for prefix operator.
-copPrefix :: String -> S.BlankName
-copPrefix = S.BlankPrefix
+copPrefix :: (O.Textual t) => t -> S.BlankName
+copPrefix = S.BlankPrefix . O.tString
 
 -- | Name for postfix operator.
-copPostfix :: String -> S.BlankName
-copPostfix = S.BlankPostfix
+copPostfix :: (O.Textual t) => t -> S.BlankName
+copPostfix = S.BlankPostfix . O.tString
 
 -- | Name for infix operator.
-copInfix :: String -> S.BlankName
-copInfix = S.BlankInfix
+copInfix :: (O.Textual t) => t -> S.BlankName
+copInfix = S.BlankInfix . O.tString
 
 
 -- ----------------------  Operator set
@@ -87,7 +87,7 @@ data CopSet c = CopSet
 
     , copsetFindCalc   :: CopFind (D.Cox c)   -- ^ This is created by 'copsetFill'.
     , copsetFindCox    :: CopFind (CopCox c)  -- ^ This is created by 'copsetFill'.
-    , copsetFindTree   :: CopFind CopTree     -- ^ This is created by 'copsetFill'.
+    , copsetFindTree   :: CopFind (CopTree String)  -- ^ This is created by 'copsetFill'.
 
     , copsetDerived    :: [D.NamedCox c]
     }

@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Token utilities.
@@ -32,20 +33,20 @@ import qualified Koshucode.Baala.Syntax.Token.Token  as S
 --   >>> tokenContent $ S.TOpen B.def "("
 --   "("
 --
-tokenContent :: S.Token -> String
+tokenContent :: (O.Textual t) => S.TToken t -> String
 tokenContent tok =
     case tok of
-      S.TText     _ _ s    -> s
-      S.TShort    _ a b    -> a O.++ "." O.++ b
-      S.TTerm     _ n      -> S.enslash n
+      S.TText     _ _ s    -> O.tString s
+      S.TShort    _ a b    -> O.tString $ a O.++ "." O.++ b
+      S.TTerm     _ n      -> O.tString $ S.enslash n
       S.TLocal    _ n _ _  -> B.name n
-      S.TSlot     _ _ s    -> s
-      S.TOpen     _ s      -> s
-      S.TClose    _ s      -> s
-      S.TSpace    _ n      -> O.charsT n ' '
-      S.TComment  _ s      -> s
+      S.TSlot     _ _ s    -> O.tString s
+      S.TOpen     _ s      -> O.tString s
+      S.TClose    _ s      -> O.tString s
+      S.TSpace    _ n      -> replicate n ' '
+      S.TComment  _ s      -> O.tString s
       S.TName     _ op     -> B.name op
-      S.TUnknown  _ s _    -> s
+      S.TUnknown  _ s _    -> O.tString s
 
 -- | Get detail type string of token.
 --

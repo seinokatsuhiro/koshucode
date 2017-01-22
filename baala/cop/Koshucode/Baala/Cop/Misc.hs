@@ -96,7 +96,7 @@ copFunIf cs = Msg.badArg cs
 --  if TEST -> CON | TEST -> CON | TEST -> CON
 --  if | TEST -> CON | TEST -> CON | TEST -> CON
 
-copTreeIf :: D.CopTree
+copTreeIf :: D.CopTree String
 copTreeIf trees = folding $ B.omit null $ S.divideTreesBy (`elem` ["|", ":"]) trees where
     folding :: [[S.Tree]] -> B.Ab S.Tree
     folding []        = Right $ B.TreeL $ S.rawTextToken "()"
