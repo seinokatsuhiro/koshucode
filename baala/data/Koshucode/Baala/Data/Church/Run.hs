@@ -175,7 +175,7 @@ coxRun
   -> B.Ab c        -- ^ Calculated literal content
 coxRun args = run 0 where
     run :: Int -> Beta c -> B.Ab c
-    run 1000 _ = B.bug "Too deep expression"
+    run 1000 _ = Msg.overLimit "Content calculation"
     run lv cox =
         let run' = run $ lv + 1
         in Msg.abCoxCalc cox $ case cox of

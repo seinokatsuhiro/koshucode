@@ -16,6 +16,7 @@ module Koshucode.Baala.Data.Church.Message
     -- * Message
     ambInfixes,
     lackArg,
+    overLimit,
     unkCop,
     unkCox,
     unkGlobalVar,
@@ -78,6 +79,10 @@ ambInfixes = B.leftLines "Ambiguous infix operators"
 -- | Lack of argument
 lackArg :: String -> B.Ab a
 lackArg = B.leftLine "Lack of argument"
+
+-- | [Over resource limit]
+overLimit :: String -> B.Ab a
+overLimit = B.leftLine "Over resource limit"
 
 -- | Unknown content operator
 unkCop :: String -> B.Ab a

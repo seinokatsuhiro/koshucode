@@ -69,6 +69,7 @@ consLexmap :: RopParaze -> ConsLexmap
 consLexmap paraze gslot findDeriv = lexmap 0 where
 
     lexmap :: Int -> SecNo -> ConsLexmapBody
+    lexmap eid _ _ | eid > 1000 = Msg.overLimit "Relmap expression"
     lexmap eid sec trees = result where
         result = Msg.abLexmap trees $ case S.splitTreesBy (== "|") trees of
                    Nothing -> single trees
