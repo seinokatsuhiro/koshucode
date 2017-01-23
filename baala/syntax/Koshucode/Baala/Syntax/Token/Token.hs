@@ -105,7 +105,7 @@ instance SubtypeName (TToken t) where
      subtypeName (TUnknown  _ _ _  ) = "unknown"
 
 instance (O.Textual t) => B.GetCodePos (TToken t) where
-    getCPs tok = [B.cpStringify $ tokenCp tok]
+    getCPs tok = [O.stringify $ tokenCp tok]
 
 -- | Code point of token.
 tokenCp :: TToken t -> B.TCodePos t

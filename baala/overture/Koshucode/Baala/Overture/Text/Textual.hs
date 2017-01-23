@@ -6,6 +6,7 @@
 
 module Koshucode.Baala.Overture.Text.Textual
   ( Textual (..),
+    stringify,
   ) where
 
 import qualified Data.Char                              as Ch
@@ -184,6 +185,24 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
 
     -- ----------------------  Divide and split
 
+    -- | Take subtext from /textual-value-#2/ while /tester-#1/ holds,
+    --   and pairing the subtext with after.
+    --
+    --   >>> tWhile (/= ' ') "foo bar baz"
+    --   ("foo", " bar baz")
+    --
+    tWhile :: (Char -> Bool) -> t -> (t, t)
+    tWhile f t0 = loop 0 t0 where
+        loop n (tCut -> Just (c, t)) | f c = loop (n + 1) t
+        loop n t = (tTake n t0, t)
+
+    -- | Take subtext from /textual-value-#2/ while /tester-#1/ do not holds.
+    --
+    --   > tWhileNot f t = tWhile (not . f) t
+    --
+    tWhileNot :: (Char -> Bool) -> t -> (t, t)
+    tWhileNot f = tWhile (not . f)
+
     -- | Divide /textual-value-#2/ to textual list by /delimiter-tester-#1/.
     --
     --   >>> tDivide (== '/') "foo/bar/baz"
@@ -216,17 +235,6 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
             | otherwise  = loop (n + 1) t
         loop 0 _ = []
         loop n _ = [tTake n t0]
-
-    -- | Take subtext from /textual-value-#2/ while /tester-#1/ holds,
-    --   and pairing the subtext with after.
-    --
-    --   >>> tWhile (/= ' ') "foo bar baz"
-    --   ("foo", " bar baz")
-    --
-    tWhile :: (Char -> Bool) -> t -> (t, t)
-    tWhile f t0 = loop 0 t0 where
-        loop n (tCut -> Just (c, t)) | f c = loop (n + 1) t
-        loop n t = (tTake n t0, t)
 
     -- ----------------------  Creation
 
@@ -340,4 +348,8 @@ instance Textual O.Tz where
     stringT      = Tz.pack
     bsT          = bzT . Bz.fromStrict
     bzT          = Tz.decodeUtf8With Err.lenientDecode
+
+-- | Convert textual something to string something.
+stringify :: (Functor f, Textual t) => f t -> f String
+stringify = (tString <$>)
 

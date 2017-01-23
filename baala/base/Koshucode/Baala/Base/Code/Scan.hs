@@ -37,7 +37,7 @@ data CodeScan k t = CodeScan
 -- | Return 'scanCp'.
 instance (O.Textual t) => B.GetCodePos (CodeScan k t) where
     getCPs scan = [B.getCP scan]
-    getCP  scan = B.cpStringify $ scanCp scan
+    getCP  scan = O.stringify $ scanCp scan
 
 -- | Update code scanner.
 type CodeScanMap k t = O.Map (CodeScan k t)
