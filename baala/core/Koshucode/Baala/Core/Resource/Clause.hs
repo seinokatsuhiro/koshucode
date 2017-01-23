@@ -27,8 +27,8 @@ import qualified Koshucode.Baala.Core.Resource.Message  as Msg
 -- ----------------------  Data type
 
 -- | Line-like structure of source code.
-data Clause = Clause
-    { clauseHead    :: ClauseHead String   -- ^ Common part of the clause.
+data Clause t = Clause
+    { clauseHead    :: ClauseHead t   -- ^ Common part of the clause.
     , clauseBody    :: ClauseBody   -- ^ Proper part of the clause.
     } deriving (Show)
 
@@ -67,14 +67,14 @@ instance B.Default (ClauseHead t) where
                      , clauseAbout  = []
                      , clauseSource = B.def }
 
-instance B.GetCodePos Clause where
+instance (O.Textual t) => B.GetCodePos (Clause t) where
     getCPs = B.getCPs . clauseHead
 
 instance (O.Textual t) => B.GetCodePos (ClauseHead t) where
     getCPs = B.getCPs . clauseSource
 
 -- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
-clauseTypeText :: Clause -> String
+clauseTypeText :: Clause t -> String
 clauseTypeText (Clause _ body) =
     case body of
       CInput    _       -> "input"
@@ -110,7 +110,7 @@ clauseTypeText (Clause _ body) =
 --                ]]
 
 -- | First step of constructing 'Resource'.
-consClause :: [S.Token] -> C.SecNo -> [S.TokenLine String] -> [Clause]
+consClause :: [S.Token] -> C.SecNo -> [S.TokenLine String] -> [Clause String]
 consClause resAbout sec = loop h0 . S.tokenClauses where
     h0 = B.def { clauseSecNo = sec }
 
@@ -120,7 +120,7 @@ consClause resAbout sec = loop h0 . S.tokenClauses where
                           (Clause h1 <$> bs) ++ loop h2 xs
                       (c, h2)  -> c : loop h2 xs
 
-consClauseEach :: [S.Token] -> ClauseHead String -> (Clause, ClauseHead String)
+consClauseEach :: [S.Token] -> ClauseHead String -> (Clause String, ClauseHead String)
 consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     rslt = case tokens of

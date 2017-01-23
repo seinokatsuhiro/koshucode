@@ -102,7 +102,7 @@ dumpDesc path = B.CommentDoc [desc, input, js] where
              , "   Type of the token is /token-type ."
              , "   Some tokens are classified into /token-subtype . |}" ]
 
-judgeClause :: Int -> C.Clause -> D.JudgeC
+judgeClause :: Int -> C.Clause String -> D.JudgeC
 judgeClause clseq c = T.affirm "CLAUSE" args where
     args = [ "clause"       // D.pInt clseq
            , "clause-type"  // D.pText $ C.clauseTypeText c ]
@@ -134,7 +134,7 @@ dumpCode omit path code =
                     dumpClause omit `mapM_` zip [1 ..] cs
                     putNewline
 
-dumpClause :: Bool -> (Int, C.Clause) -> IO ()
+dumpClause :: Bool -> (Int, C.Clause String) -> IO ()
 dumpClause _ (_, C.Clause _ (C.CUnknown (Left a))) =
     do putNewline
        B.abortPrint [] a
@@ -183,7 +183,7 @@ descDict = B.CommentDoc [desc, js] where
              , "{| /clause-type is one of cluase types."
              , "   /token-type is one of token types. |}" ]
 
-judgeClauseType :: C.Clause -> D.JudgeC
+judgeClauseType :: C.Clause String -> D.JudgeC
 judgeClauseType c = T.affirm "CLAUSE-TYPE" args where
     args = [ "clause-type" // D.pText $ C.clauseTypeText c ]
 

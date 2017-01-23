@@ -29,7 +29,7 @@ resInclude :: forall c. (D.CContent c)
     -> FilePath         -- ^ Context directory
     -> C.Resource c     -- ^ Base resource
     -> B.IxIOPoint      -- ^ Input point
-    -> O.Bz             -- ^ Source code
+    -> B.Bytes          -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
 resInclude resAbout cd base xio code =
     do let ls   = S.tokenLines xio code
@@ -46,7 +46,7 @@ resInclude resAbout cd base xio code =
                  , C.resJudge     = js
                  , C.resDataset   = ds }
 
-createJudges :: (D.CContent c) => C.Resource c -> [C.Clause] -> B.Ab (D.CacheT String, [T.Judge c], [C.Clause])
+createJudges :: (D.CContent c) => C.Resource c -> [C.Clause String] -> B.Ab (D.CacheT String, [T.Judge c], [C.Clause String])
 createJudges res = loop $ C.resCacheT res where
     loop cc ((C.Clause h (C.CJudge q cl toks)) : cs) =
         Msg.abClause [h] $ do
@@ -60,7 +60,7 @@ createJudges res = loop $ C.resCacheT res where
     loop cc []        = Right (cc, C.resJudge res, [])
 
 resIncludeBody :: forall c. (D.CContent c) =>
-    FilePath -> C.Resource c -> C.Clause -> C.AbResource c
+    FilePath -> C.Resource c -> C.Clause String -> C.AbResource c
 resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseShort = sh } b) =
     case b of
       C.CAssert  q cl toks  -> ab $ assert q cl toks

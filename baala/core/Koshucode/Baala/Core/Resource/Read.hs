@@ -56,7 +56,7 @@ nextSourceCount =
 -- --------------------------------------------  Read resource
 
 -- | Read data resource from lazy bytestring.
-resReadBz :: (D.CContent c) => C.Resource c -> O.Bz -> C.AbResource c
+resReadBz :: (D.CContent c) => C.Resource c -> B.Bytes -> C.AbResource c
 resReadBz base code = C.resInclude [] "" base (B.codeIxIO code) code
 
 -- | Read data resource from single input point.
