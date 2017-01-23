@@ -28,16 +28,16 @@ import qualified Koshucode.Baala.Core.Resource.Message  as Msg
 
 -- | Line-like structure of source code.
 data Clause = Clause
-    { clauseHead    :: ClauseHead   -- ^ Common part of the clause.
+    { clauseHead    :: ClauseHead String   -- ^ Common part of the clause.
     , clauseBody    :: ClauseBody   -- ^ Proper part of the clause.
     } deriving (Show)
 
 -- | Common part of clause.
-data ClauseHead = ClauseHead
+data ClauseHead t = ClauseHead
     { clauseSecNo   :: C.SecNo          -- ^ Section number of the clause.
     , clauseShort   :: [S.ShortDef]     -- ^ Short setting.
-    , clauseAbout   :: [S.Token]        -- ^ About setting.
-    , clauseSource  :: S.TokenClause String    -- ^ Source code of the clause.
+    , clauseAbout   :: [S.TToken t]     -- ^ About setting.
+    , clauseSource  :: S.TokenClause t  -- ^ Source code of the clause.
     } deriving (Show)
 
 -- | Proper part of clause.
@@ -61,7 +61,7 @@ data ClauseBody
       deriving (Show)
 
 -- | The empty clause heading.
-instance B.Default ClauseHead where
+instance B.Default (ClauseHead t) where
     def = ClauseHead { clauseSecNo  = 0
                      , clauseShort  = []
                      , clauseAbout  = []
@@ -70,7 +70,7 @@ instance B.Default ClauseHead where
 instance B.GetCodePos Clause where
     getCPs = B.getCPs . clauseHead
 
-instance B.GetCodePos ClauseHead where
+instance (O.Textual t) => B.GetCodePos (ClauseHead t) where
     getCPs = B.getCPs . clauseSource
 
 -- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
@@ -120,7 +120,7 @@ consClause resAbout sec = loop h0 . S.tokenClauses where
                           (Clause h1 <$> bs) ++ loop h2 xs
                       (c, h2)  -> c : loop h2 xs
 
-consClauseEach :: [S.Token] -> ClauseHead -> (Clause, ClauseHead)
+consClauseEach :: [S.Token] -> ClauseHead String -> (Clause, ClauseHead String)
 consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     rslt = case tokens of
