@@ -8,7 +8,6 @@ module Koshucode.Baala.Core.Resource.Read
     resRead,
     resReadSingle,
     resReadBz,
-    resReadString,
   ) where
 
 import qualified Control.Monad.State                     as M
@@ -59,10 +58,6 @@ nextSourceCount =
 -- | Read data resource from lazy bytestring.
 resReadBz :: (D.CContent c) => C.Resource c -> O.Bz -> C.AbResource c
 resReadBz base code = C.resInclude [] "" base (B.codeIxIO code) code
-
--- | Read data resource from text.
-resReadString :: (D.CContent c) => C.Resource c -> String -> C.AbResource c
-resReadString base code = resReadBz base $ B.stringBz code
 
 -- | Read data resource from single input point.
 resReadSingle :: (D.CContent c) => C.Global c -> B.IOPoint -> IO (C.AbResource c, C.Global c)

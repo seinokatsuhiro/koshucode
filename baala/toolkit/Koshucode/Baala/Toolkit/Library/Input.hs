@@ -36,7 +36,7 @@ readInputs = mapM readInput
 -- | Read input code and extract judges.
 readJudge :: String -> [D.JudgeC]
 readJudge code =
-    case C.resReadString B.def code of
+    case C.resReadBz B.def $ B.stringBz code of
       Right res  -> C.resJudge res
       Left _     -> []
 
