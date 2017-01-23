@@ -63,6 +63,19 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
     tJoinAll :: [t] -> t
     tJoinAll = mconcat
 
+    -- | Append multiple texts with separator.
+    --
+    --   >>> tJoinWith " " ["foo", "bar", "baz"]
+    --   "foo bar baz"
+    --
+    tJoinWith :: t -> [t] -> t
+    tJoinWith tw = first where
+        first (t : ts) = t `tJoin` loop ts
+        first [] = tEmpty
+
+        loop (t : ts) = tw `tJoin` t `tJoin` loop ts
+        loop [] = tEmpty
+
     -- ----------------------  Subtext
 
     -- | Preppend character to text.
