@@ -47,7 +47,7 @@ data TToken t
     | TTerm     (B.TCodePos t) t
                 -- ^ __3 Textual:__ Term name — @\/term@
 
-    | TLocal    (B.TCodePos t) LocalRef Int [Token]
+    | TLocal    (B.TCodePos t) LocalRef Int [TToken t]
                 -- ^ __4 Symbolic:__ Local name — @^r@, @^\/r@
     | TSlot     (B.TCodePos t) Int t
                 -- ^ __5 Symbolic:__ Slot name.
@@ -72,6 +72,23 @@ data TToken t
                 -- ^ __11 Other:__ Unknown token
 
       deriving (Show, Eq, Ord)
+
+instance Functor TToken where
+    fmap = tokenFmap    
+
+tokenFmap :: (t -> s) -> TToken t -> TToken s
+tokenFmap f = m where
+    m (TText    cp form t)    = TText    (fmap f cp) form (f t)
+    m (TShort   cp t1 t2)     = TShort   (fmap f cp) (f t1) (f t2)
+    m (TTerm    cp t)         = TTerm    (fmap f cp) (f t)
+    m (TLocal   cp ref n ts)  = TLocal   (fmap f cp) ref n (tokenFmap f <$> ts)
+    m (TSlot    cp n t)       = TSlot    (fmap f cp) n (f t)
+    m (TName    cp n)         = TName    (fmap f cp) n
+    m (TOpen    cp t)         = TOpen    (fmap f cp) (f t)
+    m (TClose   cp t)         = TClose   (fmap f cp) (f t)
+    m (TSpace   cp n)         = TSpace   (fmap f cp) n
+    m (TComment cp t)         = TComment (fmap f cp) (f t)
+    m (TUnknown cp t r)       = TUnknown (fmap f cp) (f t) r
 
 -- | @\"text\"@, @\"open\"@, ...
 instance SubtypeName (TToken t) where
