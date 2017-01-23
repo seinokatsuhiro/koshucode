@@ -94,7 +94,7 @@ hPutShortChunk output h result cnt (S.Short _ def chunks) =
     do hPutShort h def
        hPutChunks output h result (S.shortText def) chunks cnt
 
-hPutShort :: IO.Handle -> [S.ShortDef] -> IO ()
+hPutShort :: IO.Handle -> [S.ShortDef String] -> IO ()
 hPutShort _ [] = return ()
 hPutShort h def =
     do O.hPutLines h $ "short" : map shortLine def

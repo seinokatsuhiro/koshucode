@@ -76,7 +76,7 @@ optionType = S.paraSpec $ S.paraMin 0 . S.paraOpt
              ]
 
 optionProcess :: (Ord c, D.CRel c, B.MixEncode c)
-    => [S.ShortDef] -> (Bool -> T.JudgeOf c) -> S.JudgeClass
+    => [S.ShortDef String] -> (Bool -> T.JudgeOf c) -> S.JudgeClass
     -> C.Option c -> C.TTreePara
     -> T.Rel c -> B.Ab [C.ResultChunk c]
 optionProcess sh judgeOf pat option opt r1 =
@@ -109,7 +109,7 @@ optionRelmapAssert opt r1 =
                              Left _     -> Right r2
 
 optionComment :: (D.CRel c, B.MixEncode c) =>
-    [S.ShortDef] -> S.JudgeClass -> C.TTreePara -> T.Rel c -> B.Ab [String]
+    [S.ShortDef String] -> S.JudgeClass -> C.TTreePara -> T.Rel c -> B.Ab [String]
 optionComment sh p opt r =
     do optTable <- S.paraGetSwitch opt "table"
        case optTable of

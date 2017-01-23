@@ -28,12 +28,12 @@ import qualified Koshucode.Baala.Syntax.Symbol.Symbol     as S
 -- | Something with short definition.
 data Short a =
     Short { shortSource :: [B.CodePos]  -- ^ Source information
-          , shortHead   :: [ShortDef]   -- ^ Definition of short signs
+          , shortHead   :: [ShortDef String]   -- ^ Definition of short signs
           , shortBody   :: a            -- ^ Body with short signs
           } deriving (Show, Ord, Eq)
 
 -- | Short prefix and replacement.
-type ShortDef = B.Named String
+type ShortDef t = (t, t)
 
 instance Functor Short where
     fmap f (Short pt he bo) = Short pt he $ f bo
@@ -63,7 +63,7 @@ shortGroup (Short cp1 sh1 a : xs) =
 -- ----------------------  Shorten
 
 -- | String shortener.
-shortText :: [ShortDef] -> B.TransString
+shortText :: [ShortDef String] -> B.TransString
 shortText = loop . reverse . B.sortWith len where
     len = length . snd
 

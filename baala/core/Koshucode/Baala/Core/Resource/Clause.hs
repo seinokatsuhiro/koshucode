@@ -35,7 +35,7 @@ data Clause t = Clause
 -- | Common part of clause.
 data ClauseHead t = ClauseHead
     { clauseSecNo   :: C.SecNo          -- ^ Section number of the clause.
-    , clauseShort   :: [S.ShortDef]     -- ^ Short setting.
+    , clauseShort   :: [S.ShortDef t]   -- ^ Short setting.
     , clauseAbout   :: [S.TToken t]     -- ^ About setting.
     , clauseSource  :: S.TokenClause t  -- ^ Source code of the clause.
     } deriving (Show)
@@ -120,7 +120,7 @@ consClause resAbout sec = loop h0 . S.tokenClauses where
                           (Clause h1 <$> bs) ++ loop h2 xs
                       (c, h2)  -> c : loop h2 xs
 
-consClauseEach :: [S.Token] -> ClauseHead String -> (Clause String, ClauseHead String)
+consClauseEach :: [S.TToken String] -> ClauseHead String -> (Clause String, ClauseHead String)
 consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     rslt = case tokens of
@@ -137,7 +137,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     unshorten :: S.Token -> Either S.Token S.Token
     unshorten t@(S.TShort n pre b) =
         case lookup pre sh of
-          Just l  -> Right $ S.TText n S.TextQQ (l ++ b)
+          Just l  -> Right $ S.TText n S.TextQQ (l O.++ b)
           Nothing -> Left t
     unshorten t = Right t
 
@@ -235,7 +235,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
                   Just sh'  -> (sh', shortCheck sh')
                   Nothing   -> (sh, CUnknown $ unkAtStart [])
 
-    shortCheck :: [S.ShortDef] -> ClauseBody String
+    shortCheck :: [S.ShortDef String] -> ClauseBody String
     shortCheck sh'
         | O.some prefix    = abort $ Msg.dupPrefix prefix
         | O.some replace   = abort $ Msg.dupReplacement replace
@@ -263,12 +263,11 @@ pairs (a:b:cs)  = do cs' <- pairs cs
 pairs []        = Just []
 pairs _         = Nothing
 
-wordPairs :: [S.Token] -> Maybe [(String, String)]
+wordPairs :: [S.TToken t] -> Maybe [(t, t)]
 wordPairs toks =
-    do p <- pairs toks
-       mapM wordPair p
+    do ps <- pairs toks
+       mapM wordPair ps
     where
-      wordPair :: (S.Token, S.Token) -> Maybe (String, String)
       wordPair (P.T _ a, P.T _ b) = Just (a, b)
       wordPair _ = Nothing
 
