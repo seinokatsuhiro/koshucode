@@ -76,36 +76,42 @@ type BinAb a = a -> a -> Ab a
 
 -- --------------------------------------------  Creation
 
+tReason :: (O.Textual s, O.Textual t) => s -> [t] -> [t] -> [CodePosInfo] -> AbortReason
+tReason r ds ns = AbortReason r' ds' ns' where
+    r'  = O.tString r
+    ds' = O.tString <$> ds
+    ns' = O.tString <$> ns
+
 -- | Construct abort reason with reason text.
-abortBecause :: String -> AbortReason
-abortBecause r = AbortReason r [] [] []
+abortBecause :: (O.Textual s) => s -> AbortReason
+abortBecause r = tReason r ([] :: [String]) [] []
 
 -- | Construct abort reason with reason and detailed text.
-abortLine :: String -> String -> AbortReason
-abortLine r d = AbortReason r [d] [] []
+abortLine :: (O.Textual s, O.Textual t) => s -> t -> AbortReason
+abortLine r d = abortLines r [d]
 
 -- | Construct abort reason with reason and multilined detailed text.
-abortLines :: String -> [String] -> AbortReason
-abortLines r ds = AbortReason r ds [] []
+abortLines :: (O.Textual s, O.Textual t) => s -> [t] -> AbortReason
+abortLines r ds = tReason r ds [] []
 
 -- | Construct abort reason with reason and note.
-abortPage :: String -> [String] -> AbortReason
-abortPage r ns = AbortReason r [] ns []
+abortPage :: (O.Textual s, O.Textual t) => s -> [t] -> AbortReason
+abortPage r ns = tReason r [] ns []
 
 -- | 'Left' plus 'abortBecause'.
-leftBecause :: String -> Ab a
+leftBecause :: (O.Textual s) => s -> Ab a
 leftBecause r = Left $ abortBecause r
 
 -- | 'Left' plus 'abortLine'.
-leftLine :: String -> String -> Ab a
+leftLine :: (O.Textual s, O.Textual t) => s -> t -> Ab a
 leftLine r d = Left $ abortLine r d
 
 -- | 'Left' plus 'abortLines'.
-leftLines :: String -> [String] -> Ab a
+leftLines :: (O.Textual s, O.Textual t) => s -> [t] -> Ab a
 leftLines r ds = Left $ abortLines r ds
 
 -- | 'Left' plus 'abortPage'.
-leftPage :: String -> [String] -> Ab a
+leftPage :: (O.Textual s, O.Textual t) => s -> [t] -> Ab a
 leftPage r ns = Left $ abortPage r ns
 
 

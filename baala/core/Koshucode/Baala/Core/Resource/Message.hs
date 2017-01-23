@@ -16,6 +16,7 @@ module Koshucode.Baala.Core.Resource.Message
     unresPrefix,
   ) where
 
+import qualified Koshucode.Baala.Overture  as O
 import qualified Koshucode.Baala.Base      as B
 
 -- | Abortable scope for clause.
@@ -23,12 +24,12 @@ abClause :: (B.GetCodePos cp) => B.Abortable cp b
 abClause = B.abortable "clause"
 
 -- | Duplicate prefix
-dupPrefix :: [String] -> B.Ab a
-dupPrefix = B.leftLine "Duplicate prefix" . unwords
+dupPrefix :: (O.Textual t) => [t] -> B.Ab a
+dupPrefix = B.leftLine "Duplicate prefix" . O.tUnwords
 
 -- | Duplicate replacement
-dupReplacement :: [String] -> B.Ab a
-dupReplacement = B.leftLine "Duplicate replacement" . unwords
+dupReplacement :: (O.Textual t) => [t] -> B.Ab a
+dupReplacement = B.leftLine "Duplicate replacement" . O.tUnwords
 
 -- | HTTP Error
 httpError :: String -> Int -> String -> B.Ab a
@@ -37,8 +38,8 @@ httpError url code msg = B.leftLines "HTTP Error" detail where
            | otherwise  = [show code ++ " " ++ msg, url]
 
 -- | Invalid prefix character
-invalidPrefix :: [String] -> B.Ab a
-invalidPrefix = B.leftLine "Invalid prefix character" . unwords
+invalidPrefix :: (O.Textual t) => [t] -> B.Ab a
+invalidPrefix = B.leftLine "Invalid prefix character" . O.tUnwords
 
 -- | File not found
 noFile :: FilePath -> String -> B.Ab a
