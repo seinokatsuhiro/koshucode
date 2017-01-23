@@ -29,7 +29,7 @@ import qualified Koshucode.Baala.Core.Resource.Message  as Msg
 -- | Line-like structure of source code.
 data Clause t = Clause
     { clauseHead    :: ClauseHead t   -- ^ Common part of the clause.
-    , clauseBody    :: ClauseBody   -- ^ Proper part of the clause.
+    , clauseBody    :: ClauseBody t   -- ^ Proper part of the clause.
     } deriving (Show)
 
 -- | Common part of clause.
@@ -41,23 +41,23 @@ data ClauseHead t = ClauseHead
     } deriving (Show)
 
 -- | Proper part of clause.
-data ClauseBody
+data ClauseBody t
     = CJudge    T.AssertType S.JudgeClass
-                       [S.Token]    -- ^ __Relational:__ Judge
+                       [S.TToken t]    -- ^ __Relational:__ Judge
     | CAssert   T.AssertType S.JudgeClass
-                       [S.Token]    -- ^ __Relational:__ Assertion
-    | CRelmap   String [S.Token]    -- ^ __Relational:__ Source of relmap
-    | CSlot     String [S.Token]    -- ^ __Relational:__ Global slot
+                       [S.TToken t]    -- ^ __Relational:__ Assertion
+    | CRelmap   String [S.TToken t]    -- ^ __Relational:__ Source of relmap
+    | CSlot     String [S.TToken t]    -- ^ __Relational:__ Global slot
 
-    | CInput    [S.Token]           -- ^ __Resource:__ Input point
-    | COutput   [S.Token]           -- ^ __Resource:__ Output point
-    | COption   [S.Token]           -- ^ __Resource:__ Option settings
-    | CExport   String              -- ^ __Resource:__ Exporting name
+    | CInput    [S.TToken t]           -- ^ __Resource:__ Input point
+    | COutput   [S.TToken t]           -- ^ __Resource:__ Output point
+    | COption   [S.TToken t]           -- ^ __Resource:__ Option settings
+    | CExport   String                 -- ^ __Resource:__ Exporting name
 
-    | CEcho     (S.TokenClause String)     -- ^ __Other:__ Echo text
-    | CLicense  String              -- ^ __Other:__ License text
-    | CBodies   [ClauseBody]        -- ^ __Other:__ Multiple bodies
-    | CUnknown  (B.Ab ())           -- ^ __Other:__ Unknown clause
+    | CEcho     (S.TokenClause t)      -- ^ __Other:__ Echo text
+    | CLicense  String                 -- ^ __Other:__ License text
+    | CBodies   [ClauseBody t]         -- ^ __Other:__ Multiple bodies
+    | CUnknown  (B.Ab ())              -- ^ __Other:__ Unknown clause
       deriving (Show)
 
 -- | The empty clause heading.
@@ -235,7 +235,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
                   Just sh'  -> (sh', shortCheck sh')
                   Nothing   -> (sh, CUnknown $ unkAtStart [])
 
-    shortCheck :: [S.ShortDef] -> ClauseBody
+    shortCheck :: [S.ShortDef] -> ClauseBody String
     shortCheck sh'
         | O.some prefix    = abort $ Msg.dupPrefix prefix
         | O.some replace   = abort $ Msg.dupReplacement replace
@@ -254,8 +254,8 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     expt _             = CUnknown $ unkAtStart []
 
 -- | Test string is short prefix.
-isShortPrefix :: O.Test String
-isShortPrefix = all Ch.isAlpha
+isShortPrefix :: (O.Textual t) => O.Test t
+isShortPrefix = O.tAll Ch.isAlpha
 
 pairs :: [a] -> Maybe [(a, a)]
 pairs (a:b:cs)  = do cs' <- pairs cs
