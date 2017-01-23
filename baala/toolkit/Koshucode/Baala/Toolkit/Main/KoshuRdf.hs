@@ -126,7 +126,7 @@ readRdfGraph parser path =
     do rdf <- RDF.parseFile parser path
        return $ RDF.fromEither rdf
 
-writeJudges :: [S.ShortDef] -> [D.JudgeC] -> IO ()
+writeJudges :: [S.ShortDef String] -> [D.JudgeC] -> IO ()
 writeJudges sh js =
     do putStrLn B.emacsModeComment
        putStrLn ""
@@ -134,7 +134,7 @@ writeJudges sh js =
        let mixes = B.mixTransEncode (S.shortText sh) <$> js
        B.putMixLines T.judgeBreak mixes
 
-writeShort :: [S.ShortDef] -> IO ()
+writeShort :: [S.ShortDef String] -> IO ()
 writeShort [] = return ()
 writeShort sh =
     do putStrLn "short"

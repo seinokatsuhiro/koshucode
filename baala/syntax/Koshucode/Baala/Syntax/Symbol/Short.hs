@@ -26,32 +26,32 @@ import qualified Koshucode.Baala.Syntax.Symbol.Symbol     as S
 -- ----------------------  Data type
 
 -- | Something with short definition.
-data Short a =
-    Short { shortSource :: [B.CodePos]  -- ^ Source information
-          , shortHead   :: [ShortDef String]   -- ^ Definition of short signs
+data Short t a =
+    Short { shortSource :: [B.TCodePos t]  -- ^ Source information
+          , shortHead   :: [ShortDef t]   -- ^ Definition of short signs
           , shortBody   :: a            -- ^ Body with short signs
           } deriving (Show, Ord, Eq)
 
 -- | Short prefix and replacement.
 type ShortDef t = (t, t)
 
-instance Functor Short where
+instance Functor (Short t) where
     fmap f (Short pt he bo) = Short pt he $ f bo
 
 -- | Omit empty body.
-shortTrim :: O.Map [Short [a]]
+shortTrim :: O.Map [Short t [a]]
 shortTrim = B.omit $ null . shortBody
 
 -- | Evaluate body of short structure.
-shortM :: (Monad m) => Short (m a) -> m (Short a)
+shortM :: (Monad m) => Short t (m a) -> m (Short t a)
 shortM (Short pt he bo) = return . Short pt he O.# bo
 
 -- | Evaluate body of short structures.
-shortListM :: (Monad m) => [Short (m a)] -> m [Short a]
+shortListM :: (Monad m) => [Short t (m a)] -> m [Short t a]
 shortListM = mapM shortM
 
 -- | Group short structures.
-shortGroup :: [Short a] -> [Short [a]]
+shortGroup :: (Eq t) => [Short t a] -> [Short t [a]]
 shortGroup [] = []
 shortGroup (Short cp1 sh1 a : xs) =
     case shortGroup xs of

@@ -41,10 +41,10 @@ instance B.GetCodePos (Assert' h c) where
 -- ----------------------  Short assertion
 
 -- | Assertion with short signs.
-type ShortAssert' h c = S.Short (Assert' h c)
+type ShortAssert' h c = S.Short String (Assert' h c)
 
 -- | Assertion list with short signs.
-type ShortAsserts' h c = S.Short [Assert' h c]
+type ShortAsserts' h c = S.Short String [Assert' h c]
 
 -- | Select affirmative or denial assertions.
 assertNormal :: O.Map [ShortAssert' h c]

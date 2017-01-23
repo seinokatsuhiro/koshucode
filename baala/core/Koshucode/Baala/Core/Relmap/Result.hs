@@ -76,7 +76,7 @@ data ResultChunk c
       deriving (Show, Eq, Ord)
 
 -- | Short block in result.
-type ShortResultChunks c = S.Short [ResultChunk c]
+type ShortResultChunks c = S.Short String [ResultChunk c]
 
 -- | Extract judgement list from result.
 resultChunkJudges :: ResultChunk c -> [T.Judge c]
