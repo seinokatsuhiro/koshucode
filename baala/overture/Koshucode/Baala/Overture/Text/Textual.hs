@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -65,8 +66,8 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
 
     -- | Append multiple texts with separator.
     --
-    --   >>> tJoinWith " " ["foo", "bar", "baz"]
-    --   "foo bar baz"
+    --   >>> tJoinWith " | " ["foo", "bar", "baz"]
+    --   "foo | bar | baz"
     --
     tJoinWith :: t -> [t] -> t
     tJoinWith tw = first where
@@ -75,6 +76,14 @@ class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
 
         loop (t : ts) = tw `tJoin` t `tJoin` loop ts
         loop [] = tEmpty
+
+    -- | Append multiple texts with space.
+    --
+    --   >>> tUnwords ["foo", "bar", "baz"]
+    --   "foo bar baz"
+    --
+    tUnwords :: [t] -> t
+    tUnwords = tJoinWith " "
 
     -- ----------------------  Subtext
 
