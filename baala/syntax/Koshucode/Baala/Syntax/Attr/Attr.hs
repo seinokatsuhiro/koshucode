@@ -106,12 +106,12 @@ byHyphen :: S.Tree -> Maybe S.AttrName
 byHyphen = fmap S.AttrNormal . maybeSingleHyphen
 
 -- | Take out hyphened text (like @"-x"@) from token tree.
-maybeSingleHyphen :: S.Tree -> Maybe String
+maybeSingleHyphen :: (O.Textual t) => S.TTree t -> Maybe t
 maybeSingleHyphen (P.LAtt1 n) = Just n
 maybeSingleHyphen _           = Nothing
 
 -- | Take out double-hyphened text (like @"--xyz"@) from token tree.
-maybeDoubleHyphen :: S.Tree -> Maybe String
+maybeDoubleHyphen :: (O.Textual t) => S.TTree t -> Maybe t
 maybeDoubleHyphen (P.LAtt2 n) = Just n
 maybeDoubleHyphen _           = Nothing
 

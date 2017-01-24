@@ -1,4 +1,5 @@
 {-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Patterns for token tree.
@@ -21,6 +22,7 @@ module Koshucode.Baala.Syntax.Tree.Pattern
     pattern BForm,
   ) where
 
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
 import qualified Koshucode.Baala.Syntax.Tree.Bracket     as S
@@ -38,10 +40,10 @@ pattern LText f s <- L (P.T f s)
 pattern LRaw s <- L (P.TRaw s)
 
 -- | Single-hyphen attribute text leaf.
-pattern LAtt1 s <- LRaw ('-' : s)
+pattern LAtt1 s <- LRaw (O.tCut -> O.Jp '-' s)
 
 -- | Double-hyphen attribute text leaf.
-pattern LAtt2 s <- LRaw ('-' : '-' : s)
+pattern LAtt2 s <- LRaw (O.tCut2 -> O.Jp2 '-' '-' s)
 
 -- | Single-quoted text leaf.
 pattern LQ s <- L (P.TQ s)
