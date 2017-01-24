@@ -46,7 +46,7 @@ type ConsLexmap = [S.GlobalSlot] -> FindDeriv -> SecNo -> ConsLexmapBody
 type FindDeriv = SecNo -> C.RopName -> [LexmapClause]
 
 -- | Source of relmap: its name, replacement, and attribute editor.
-type LexmapClause = NNamed C.LexmapTrees
+type LexmapClause = NNamed (C.LexmapTrees String)
 
 -- ----------------------  Local type
 

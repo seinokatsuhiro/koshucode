@@ -20,17 +20,17 @@ import qualified Koshucode.Baala.Data.Message         as Msg
 -- ----------------------  Type and constructor
 
 -- | Tree representation of lexmap.
-data LexmapTrees = LexmapTrees
-    { lexmapTrees   :: [S.Tree]    -- ^ Positional attribute.
-    , lexmapPara    :: TTreePara String   -- ^ Parameter
-    , lexmapAttrEd  :: S.AttrEd    -- ^ Attribute editor
+data LexmapTrees t = LexmapTrees
+    { lexmapTrees   :: [S.TTree t]   -- ^ Positional attribute.
+    , lexmapPara    :: TTreePara t   -- ^ Parameter
+    , lexmapAttrEd  :: S.AttrEd      -- ^ Attribute editor
     } deriving (Show, Eq, Ord)
 
 clauseAttrType :: S.ParaSpec String
 clauseAttrType = S.paraSpec $ S.paraMin 0 . S.paraOpt ["attr"]
 
 -- | Construct lexmap tree.
-consLexmapTrees :: TTreePara String -> B.Ab LexmapTrees
+consLexmapTrees :: TTreePara String -> B.Ab (LexmapTrees String)
 consLexmapTrees para =
     do para' <- case S.paraMatch clauseAttrType para of
          Right p' -> Right p'
