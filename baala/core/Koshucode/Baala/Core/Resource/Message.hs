@@ -57,4 +57,4 @@ unkClause = B.leftLines "Unknown clause"
 -- | Unresolved prefix
 unresPrefix :: String -> B.Ab a
 unresPrefix pre = B.leftLine "Unresolved prefix"
-                       $ "Require short definition : short " ++ pre ++ " ..."
+                       $ "Require short definition : short " O.++ pre O.++ " ..."

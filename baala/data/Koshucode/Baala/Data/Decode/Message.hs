@@ -21,6 +21,7 @@ module Koshucode.Baala.Data.Decode.Message
     expect2Actual,
   ) where
 
+import qualified Koshucode.Baala.Overture        as O
 import qualified Koshucode.Baala.Base            as B
 
 -- | Abortable scope for literal.
@@ -70,13 +71,13 @@ unkType :: String -> B.Ab a
 unkType = B.leftLine "Unknown type name"
 
 -- | Expect and actual.
-expectActual :: String -> String -> [String]
-expectActual e a       = [ "Expect " ++ e
-                         , "Actual " ++ a ]
+expectActual :: (O.Textual t) => t -> t -> [t]
+expectActual e a       = [ O.stringT "Expect " O.++ e
+                         , O.stringT "Actual " O.++ a ]
 
 -- | Expect (2 lines) and actual.
-expect2Actual :: String -> String -> String -> [String]
-expect2Actual e1 e2 a  = [ "Expect " ++ e1
-                         , "       " ++ e2
-                         , "Actual " ++ a ]
+expect2Actual :: (O.Textual t) => t -> t -> t -> [t]
+expect2Actual e1 e2 a  = [ O.stringT "Expect " O.++ e1
+                         , O.stringT "       " O.++ e2
+                         , O.stringT "Actual " O.++ a ]
 

@@ -1,3 +1,6 @@
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Line-like token-level structure of source code.
@@ -110,7 +113,7 @@ clauseTypeText (Clause _ body) =
 --                ]]
 
 -- | First step of constructing 'Resource'.
-consClause :: [S.Token] -> C.SecNo -> [S.TokenLine String] -> [Clause String]
+consClause :: (O.Textual t) => [S.TToken t] -> C.SecNo -> [S.TokenLine t] -> [Clause t]
 consClause resAbout sec = loop h0 . S.tokenClauses where
     h0 = B.def { clauseSecNo = sec }
 
@@ -120,13 +123,13 @@ consClause resAbout sec = loop h0 . S.tokenClauses where
                           (Clause h1 <$> bs) ++ loop h2 xs
                       (c, h2)  -> c : loop h2 xs
 
-consClauseEach :: [S.TToken String] -> ClauseHead String -> (Clause String, ClauseHead String)
+consClauseEach :: forall t. (O.Textual t) => [S.TToken t] -> ClauseHead t -> (Clause t, ClauseHead t)
 consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     rslt = case tokens of
              Right ts                    -> dispatch ts
              Left tok@(S.TUnknown _ _ a) -> unkClause [tok] $ Left a
-             Left tok@(S.TShort _ pre _) -> unkClause [tok] $ Msg.unresPrefix pre
+             Left tok@(S.TShort _ pre _) -> unkClause [tok] $ Msg.unresPrefix $ O.tString pre
              Left tok                    -> unkClause [tok] $ Msg.bug "clause"
 
     tokens | O.some unks    = Left $ head unks     -- include unknown tokens
@@ -134,7 +137,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
            | O.some shorts  = Left $ head shorts   -- include short tokens
            | otherwise      = Right orig
 
-    unshorten :: S.Token -> Either S.Token S.Token
+    unshorten :: S.TToken t -> Either (S.TToken t) (S.TToken t)
     unshorten t@(S.TShort n pre b) =
         case lookup pre sh of
           Just l  -> Right $ S.TText n S.TextQQ (l O.++ b)
@@ -149,37 +152,40 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     shorts         = filter S.isShortToken checks
     checkToken t   = S.isUnknownToken t || S.isShortToken t
     isDelim        = ( `elem` ["=", ":", "|"] )
-    lower          = map Ch.toLower
+    lower          = O.tMap Ch.toLower
     empty          = CBodies []
     unkClause ts a = clause $ CUnknown $ unk ts a
 
     -- ----------------------  Clause dispatcher
 
-    dispatch (P.TBar ('|' : k) : xs)   -- Frege's judgement stroke
-                                    = clause    $ frege (lower k) xs
+    dispatch :: [S.TToken t] -> (Clause t, ClauseHead t)
+    dispatch (P.TBar (O.tCut -> O.Jp '|' k) : xs)   -- Frege's judgement stroke
+                                    = clause   $ frege (lower k) xs
     dispatch (P.TRaw name : P.TRaw is : body)
-        | isDelim is                = clause    $ CRelmap name body
-    dispatch (P.TSection : _)       = newSec
+        | isDelim is                = clause   $ CRelmap (O.tString name) body
+    dispatch (P.TRaw eq : _) | eq == "==="
+                                    = newSec
     dispatch (P.TRaw k : xs)
-        | k == "input"              = clause    $ CInput xs
-        | k == "include"            = clause    $ CInput xs
-        | k == "export"             = clause    $ expt xs
-        | k == "short"              = newShort  $ short xs
-        | k == "about"              = newAbout  xs
-        | k == "option"             = clause    $ COption xs
-        | k == "output"             = clause    $ COutput xs
-        | k == "echo"               = clause    $ CEcho src
-        | k == "****"               = clause    $ empty
-    dispatch (S.TSlot _ 2 n : xs)   = clause    $ CSlot n xs
-    dispatch []                     = clause    $ empty
-    dispatch [P.TLicense ln]        = clause    $ CLicense $ O.trimEnd ln
-    dispatch _                      = clause    $ CUnknown $ unkAtStart []
+        | k == "input"              = clause   $ CInput xs
+        | k == "include"            = clause   $ CInput xs
+        | k == "export"             = clause   $ expt xs
+        | k == "short"              = newShort $ short xs
+        | k == "about"              = newAbout xs
+        | k == "option"             = clause   $ COption xs
+        | k == "output"             = clause   $ COutput xs
+        | k == "echo"               = clause   $ CEcho src
+        | k == "****"               = clause   $ empty
+    dispatch (S.TSlot _ 2 n : xs)   = clause   $ CSlot (O.tString n) xs
+    dispatch []                     = clause   $ empty
+    dispatch [P.TLicense ln]        = clause   $ CLicense $ O.tString $ O.trimEnd ln
+    dispatch _                      = clause   $ CUnknown $ unkAtStart []
 
     -- Return form
-    clause b              = (Clause h b, h)
-    newSec                = (Clause h empty, h { clauseSecNo = sec + 1 })
-    newShort (sh', b)     = (Clause h b,     h { clauseShort = sh' })
-    newAbout about'       = (Clause h empty, h { clauseAbout = about' })
+    clause :: ClauseBody t -> (Clause t, ClauseHead t)
+    clause b           = (Clause h b, h)
+    newSec             = (Clause h empty, h { clauseSecNo = sec + 1 })
+    newShort (sh', b)  = (Clause h b,     h { clauseShort = sh' })
+    newAbout about'    = (Clause h empty, h { clauseAbout = about' })
 
     -- Error messages
     unk ts msg     = let cp = B.getCPs $ B.headNull (head orig) ts
@@ -191,6 +197,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     -- ----------------------  Judgement or assertion
 
     -- Frege's content lines, or logical qualities
+    frege :: t -> [S.TToken t] -> ClauseBody t
     frege "--"     = judge T.AssertAffirm
     frege "-x"     = judge T.AssertDeny
     frege "-xx"    = judge T.AssertMultiDeny
@@ -208,10 +215,10 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     frege s        = const $ CUnknown $ unkEEA
                              "|--, |-x, |-xx, |-c, |-cc, |-v,"
                              "  or |=x, |=xx, |=c, |=cc, |=v"
-                             ("|" ++ s)
+                             ("|" O.++ O.tString s)
 
     -- Judgement
-    judge q (P.T _ p : xs)  = CJudge q p $ addAbout xs
+    judge q (P.T _ p : xs)  = CJudge q (O.tString p) $ addAbout xs
     judge _ ts              = CUnknown $ judgeError ts
 
     judgeError []           = unkAtStart ["Give a judgement pattern"]
@@ -226,7 +233,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
         case S.splitTokensBy isDelim xs of
           Just (_, _, expr)      -> a expr
           Nothing                -> a xs
-        where a expr              = CAssert q p expr
+        where a expr              = CAssert q (O.tString p) expr
     assert _ ts                   = CUnknown $ judgeError ts
 
     -- ----------------------  Short signs
@@ -235,7 +242,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
                   Just sh'  -> (sh', shortCheck sh')
                   Nothing   -> (sh, CUnknown $ unkAtStart [])
 
-    shortCheck :: [S.ShortDef String] -> ClauseBody String
+    shortCheck :: [S.ShortDef t] -> ClauseBody t
     shortCheck sh'
         | O.some prefix    = abort $ Msg.dupPrefix prefix
         | O.some replace   = abort $ Msg.dupReplacement replace
@@ -249,8 +256,8 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     -- Others
     expt (P.T _ n : P.T _ ":" : xs)
-                       = CBodies [CExport n, CRelmap n xs]
-    expt [P.T _ n]     = CExport n
+                       = CBodies [CExport $ O.tString n, CRelmap (O.tString n) xs]
+    expt [P.T _ n]     = CExport $ O.tString n
     expt _             = CUnknown $ unkAtStart []
 
 -- | Test string is short prefix.
