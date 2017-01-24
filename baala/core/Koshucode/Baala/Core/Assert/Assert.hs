@@ -29,7 +29,7 @@ data Assert' h c = Assert
     , assType      :: T.AssertType           -- ^ Logical quality
     , assClass     :: S.JudgeClass           -- ^ Judgement class
     , assToken     :: [S.Token]              -- ^ Source token list
-    , assPara      :: C.TTreePara
+    , assPara      :: C.TTreePara String
     , assRelmap    :: Maybe (C.Relmap' h c)  -- ^ Relmap
     , assLinks     :: C.RelmapLinkTable' h c
     } deriving (Show)

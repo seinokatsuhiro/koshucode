@@ -138,7 +138,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
 calcContG :: (D.CContent c) => C.Global c -> D.CalcContent String c
 calcContG = D.calcTree . D.getCops
 
-paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab C.InputPoint
+paraToIOPoint :: FilePath -> C.TTreePara String -> B.Ab C.InputPoint
 paraToIOPoint cd = S.paraSelect unmatch ps where
     ps = [ (pJust1, just1)
          , (pStdin, stdin) ]
@@ -146,7 +146,7 @@ paraToIOPoint cd = S.paraSelect unmatch ps where
     pJust1 = S.paraSpec $ S.paraJust 1 . S.paraOpt ["about"]
     pStdin = S.paraSpec $ S.paraReq ["stdin"]
 
-    just1 :: C.TTreePara -> B.Ab C.InputPoint
+    just1 :: C.TTreePara String -> B.Ab C.InputPoint
     just1 p = do arg   <- S.paraGetFst p
                  about <- S.paraGetOpt [] p "about"
                  case arg of
@@ -154,7 +154,7 @@ paraToIOPoint cd = S.paraSelect unmatch ps where
                                      in Right $ C.InputPoint iop about
                    _ -> Msg.adlib "input not text"
 
-    stdin :: C.TTreePara -> B.Ab C.InputPoint
+    stdin :: C.TTreePara String -> B.Ab C.InputPoint
     stdin p = do args <- S.paraGet p "stdin"
                  case args of
                    [] -> Right $ C.InputPoint (B.IOPointStdin Nothing) []
