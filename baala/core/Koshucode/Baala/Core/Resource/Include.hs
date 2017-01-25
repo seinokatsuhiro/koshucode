@@ -122,7 +122,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
              checkIOPoint $ res { C.resOutput = C.inputPoint io }
 
       ioPoint :: [S.TToken String] -> B.Ab (C.InputPoint String)
-      ioPoint = paraToIOPoint cd O.#. C.ttreePara2
+      ioPoint = paraInputPoint cd O.#. C.ttreePara2
 
       checkIOPoint :: B.AbMap (C.Resource c)
       checkIOPoint res' = let ins = C.resInput  res'
@@ -140,9 +140,9 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
 calcContG :: (D.CContent c) => C.Global c -> D.CalcContent String c
 calcContG = D.calcTree . D.getCops
 
-paraToIOPoint :: forall t. (Show t, O.Textual t) =>
+paraInputPoint :: forall t. (O.Textual t) =>
     FilePath -> C.TTreePara t -> B.Ab (C.InputPoint t)
-paraToIOPoint cd = S.paraSelect unmatch ps where
+paraInputPoint cd = S.paraSelect unmatch ps where
     ps = [ (pJust1, just1)
          , (pStdin, stdin) ]
 

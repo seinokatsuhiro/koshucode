@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Overture.Misc          as O
 import qualified Koshucode.Baala.Overture.Shorthand     as O
 
 -- | Text-like value.
-class (Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
+class (Show t, Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
 
     -- ----------------------  Monoid
 
