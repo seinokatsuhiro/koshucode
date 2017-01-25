@@ -45,7 +45,7 @@ import qualified Koshucode.Baala.Core.Relmap          as C
 data Resource c = Resource
     { resGlobal     :: Global c            -- ^ __Global:__ Global parameter
     , resLastSecNo  :: C.SecNo             -- ^ __Global:__ Last section number
-    , resCacheT     :: D.CacheT String     -- ^ __Global:__ Term name cache
+    , resCacheT     :: D.CacheT D.Chars    -- ^ __Global:__ Term name cache
 
     , resOption     :: C.Option c          -- ^ __Setting:__ Options
     , resExport     :: [String]            -- ^ __Setting:__ Exporting names

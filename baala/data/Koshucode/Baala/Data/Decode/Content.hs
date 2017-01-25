@@ -127,12 +127,12 @@ treesTerms cons = mapM p O.#. D.treesTerms1 where
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
 treesJudge ::
-    (D.CContent c)
-    => D.CacheT String    -- ^ Term name cache
+    (O.Textual t, S.ToTermName t, D.CContent c)
+    => D.CacheT t        -- ^ Term name cache
     -> T.AssertType       -- ^ Assertion type
     -> S.JudgeClass       -- ^ Judgement class
-    -> [S.Tree]           -- ^ Trees of terms
-    -> B.Ab (D.CacheT String, T.Judge c)   -- ^ Error or decoded judgement
+    -> [S.TTree t]        -- ^ Trees of terms
+    -> B.Ab (D.CacheT t, T.Judge c)   -- ^ Error or decoded judgement
 treesJudge cc q cl trees =
     do (cc', ts) <- D.treesTermsCached cc trees
        terms <- mapM term ts

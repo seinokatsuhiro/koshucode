@@ -31,22 +31,23 @@ resInclude :: forall c. (D.CContent c)
     -> B.IxIOPoint      -- ^ Input point
     -> B.Bytes          -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
-resInclude resAbout cd base xio code =
+resInclude resAbout cd res xio code =
     do let ls   = S.tokenLines xio code
-           sec  = C.resLastSecNo base + 1
+           sec  = C.resLastSecNo res + 1
            cs   = C.consClause resAbout sec ls
-       (cc, js, cs2) <- createJudges base cs
+       (cc, js, cs2) <- createJudges res cs
        let ds   = D.dataset js
            cs2' = reverse cs2
            sec' | null cs   = sec
                 | otherwise = C.clauseSecNo $ C.clauseHead $ last cs
-       res <- B.foldM (resIncludeBody cd) base cs2'
-       Right res { C.resLastSecNo = sec'
-                 , C.resCacheT    = cc
-                 , C.resJudge     = js
-                 , C.resDataset   = ds }
+       res' <- B.foldM (resIncludeBody cd) res cs2'
+       Right res' { C.resLastSecNo = sec'
+                  , C.resCacheT    = cc
+                  , C.resJudge     = js
+                  , C.resDataset   = ds }
 
-createJudges :: (D.CContent c) => C.Resource c -> [C.Clause String] -> B.Ab (D.CacheT String, [T.Judge c], [C.Clause String])
+createJudges :: (O.Textual t, S.ToTrees D.Chars [S.TToken t], D.CContent c) =>
+    C.Resource c -> [C.Clause t] -> B.Ab (D.CacheT D.Chars, [T.Judge c], [C.Clause t])
 createJudges res = loop $ C.resCacheT res where
     loop cc ((C.Clause h (C.CJudge q cl toks)) : cs) =
         Msg.abClause [h] $ do
@@ -77,7 +78,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
 
       -- ----------------------  Utility
 
-      src :: [S.Token]
+      src :: [S.TToken String]
       src = B.takeFirst $ B.clauseTokens $ C.clauseSource h
 
       ab = Msg.abClause [h]
@@ -119,7 +120,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
           do io <- ioPoint toks
              checkIOPoint $ res { C.resOutput = C.inputPoint io }
 
-      ioPoint :: [S.Token] -> B.Ab C.InputPoint
+      ioPoint :: [S.TToken String] -> B.Ab C.InputPoint
       ioPoint = paraToIOPoint cd O.#. C.ttreePara2
 
       checkIOPoint :: B.AbMap (C.Resource c)
