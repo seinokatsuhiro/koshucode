@@ -115,7 +115,7 @@ resInput :: Resource c -> [B.IOPoint]
 resInput = map C.inputPoint . resInputPoint
 
 -- | All input points.
-resInputPoint :: Resource c -> [C.InputPoint]
+resInputPoint :: Resource c -> [C.InputPoint String]
 resInputPoint Resource { resInputQueue = (q, done) } = ps where
     ps = B.qTo q ++ map (ip . B.nioPoint) done
     ip p = C.InputPoint p []
@@ -136,14 +136,14 @@ resMessagesAdd msg res = res { resMessage = msg ++ resMessage res }
 -- ----------------------  Input queue
 
 -- | Queue for input code: /todo/, /ready/ and /done/.
-type InputQueue = (B.Queue C.InputPoint, [B.IxIOPoint])
+type InputQueue = (B.Queue (C.InputPoint String), [B.IxIOPoint])
 
 -- | Map to input queue.
 resQueueMap :: O.Map InputQueue -> O.Map (Resource c)
 resQueueMap f res@Resource {..} = res { resInputQueue = f resInputQueue }
 
 -- | Add input to todo-part of input queue.
-resQueueTodo :: C.InputPoint -> O.Map (Resource c)
+resQueueTodo :: C.InputPoint String -> O.Map (Resource c)
 resQueueTodo t = resQueueMap todo where
     todo (q, done) = (B.enq t q, done)
 

@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -120,7 +121,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
           do io <- ioPoint toks
              checkIOPoint $ res { C.resOutput = C.inputPoint io }
 
-      ioPoint :: [S.TToken String] -> B.Ab C.InputPoint
+      ioPoint :: [S.TToken String] -> B.Ab (C.InputPoint String)
       ioPoint = paraToIOPoint cd O.#. C.ttreePara2
 
       checkIOPoint :: B.AbMap (C.Resource c)
@@ -139,7 +140,8 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
 calcContG :: (D.CContent c) => C.Global c -> D.CalcContent String c
 calcContG = D.calcTree . D.getCops
 
-paraToIOPoint :: FilePath -> C.TTreePara String -> B.Ab C.InputPoint
+paraToIOPoint :: forall t. (Show t, O.Textual t) =>
+    FilePath -> C.TTreePara t -> B.Ab (C.InputPoint t)
 paraToIOPoint cd = S.paraSelect unmatch ps where
     ps = [ (pJust1, just1)
          , (pStdin, stdin) ]
@@ -147,15 +149,15 @@ paraToIOPoint cd = S.paraSelect unmatch ps where
     pJust1 = S.paraSpec $ S.paraJust 1 . S.paraOpt ["about"]
     pStdin = S.paraSpec $ S.paraReq ["stdin"]
 
-    just1 :: C.TTreePara String -> B.Ab C.InputPoint
+    just1 :: C.TTreePara t -> B.Ab (C.InputPoint t)
     just1 p = do arg   <- S.paraGetFst p
                  about <- S.paraGetOpt [] p "about"
                  case arg of
-                   P.LText _ path -> let iop = B.ioPointDir cd $ B.ioPoint path
+                   P.LText _ path -> let iop = B.ioPointDir cd $ B.ioPoint $ O.tString path
                                      in Right $ C.InputPoint iop about
                    _ -> Msg.adlib "input not text"
 
-    stdin :: C.TTreePara String -> B.Ab C.InputPoint
+    stdin :: C.TTreePara t -> B.Ab (C.InputPoint t)
     stdin p = do args <- S.paraGet p "stdin"
                  case args of
                    [] -> Right $ C.InputPoint (B.IOPointStdin Nothing) []

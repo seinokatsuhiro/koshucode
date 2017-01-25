@@ -38,7 +38,7 @@ data Result c = Result
     , resultPrintFoot  :: Bool
     , resultGutter     :: Int
     , resultMeasure    :: Int
-    , resultInput      :: [InputPoint]
+    , resultInput      :: [InputPoint String]
     , resultOutput     :: B.IOPoint
     , resultEcho       :: [[String]]
     , resultLicense    :: [[String]]
@@ -48,9 +48,9 @@ data Result c = Result
     } deriving (Show, Eq, Ord)
 
 -- | Input point of data resource.
-data InputPoint = InputPoint
+data InputPoint t = InputPoint
     { inputPoint      :: B.IOPoint    -- ^ Input point
-    , inputPointAbout :: [S.Tree]     -- ^ Common terms
+    , inputPointAbout :: [S.TTree t]  -- ^ Common terms
     } deriving (Show, Eq, Ord)
 
 -- | Empty result.
