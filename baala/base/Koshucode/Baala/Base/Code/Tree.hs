@@ -23,6 +23,7 @@ module Koshucode.Baala.Base.Code.Tree
     codeTree, codeTrees,
     codeTreeWrap,
     codeTreeFmap,
+    codeTreeFmap',
     untree, untrees,
   ) where
 
@@ -184,9 +185,13 @@ type CodeTree' b z = RawTree b (Maybe (z, z)) z
 instance (B.GetCodePos (k t)) => B.GetCodePos (CodeTree b k t) where
     getCPs t = B.getCP <$> untree t
 
+-- | Mapping function for textual code tree.
+codeTreeFmap :: (Functor k) => (t -> u) -> CodeTree b k t -> CodeTree b k u
+codeTreeFmap f = codeTreeFmap' (f <$>)
+
 -- | Mapping function for code tree.
-codeTreeFmap :: (x -> y) -> CodeTree' b x -> CodeTree' b y
-codeTreeFmap f = loop where
+codeTreeFmap' :: (x -> y) -> CodeTree' b x -> CodeTree' b y
+codeTreeFmap' f = loop where
     loop (TreeL x)                     = TreeL $ f x
     loop (TreeB b Nothing xs)          = TreeB b Nothing $ map loop xs
     loop (TreeB b (Just (x1, x2)) xs)  = TreeB b (Just (f x1, f x2)) $ map loop xs
