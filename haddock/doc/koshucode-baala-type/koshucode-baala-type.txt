@@ -6,7 +6,7 @@
 --   
 --   Additional data types for Koshucode
 @package koshucode-baala-type
-@version 0.206.0.0
+@version 0.209.0.0
 
 
 -- | Common properties of judgements and relations.
@@ -255,7 +255,7 @@ notYearlyDate :: Integer -> Int -> Ab a
 tooLargeDigit :: String -> Ab a
 
 -- | Can't read as number
-notNumber :: String -> Ab a
+notNumber :: (Textual t) => t -> Ab a
 
 -- | Abort reason with encodable values.
 abortEncodables :: (MixEncode c) => String -> [c] -> AbortReason
@@ -1240,13 +1240,13 @@ roundLastDigit :: (Integral n) => n -> n
 module Koshucode.Baala.Type.Decimal.Coder
 
 -- | Decode to <tt>a</tt>.
-type DecodeAb a = String -> Ab a
+type DecodeAb t a = t -> Ab a
 
 -- | Decode base-2 digits to decimal.
-decodeBinary :: DecodeAb Decimal
+decodeBinary :: (Textual t) => DecodeAb t Decimal
 
 -- | Decode base-8 digits to decimal.
-decodeOctal :: DecodeAb Decimal
+decodeOctal :: (Textual t) => DecodeAb t Decimal
 
 -- | Decode decimals.
 --   
@@ -1264,13 +1264,13 @@ decodeOctal :: DecodeAb Decimal
 --   &gt;&gt;&gt; decodeDecimal "11.250 +"
 --   Right Decimal (3) 11 + 1 % 4
 --   </pre>
-decodeDecimal :: DecodeAb Decimal
+decodeDecimal :: (Textual t) => DecodeAb t Decimal
 
 -- | Decode base-16 digits to decimal.
-decodeHex :: DecodeAb Decimal
+decodeHex :: (Textual t) => DecodeAb t Decimal
 
 -- | Decode digits to number.
-decodeBase :: Integer -> DecodeAb Decimal
+decodeBase :: (Textual t) => Integer -> DecodeAb t Decimal
 
 -- | Encode decimals.
 --   

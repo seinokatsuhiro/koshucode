@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.206.0.0
+@version 0.209.0.0
 
 
 -- | Exit process.
@@ -484,6 +484,12 @@ type Bs = ByteString
 -- | Lazy bytestring.
 type Bz = ByteString
 
+-- | Strict text.
+type Tx = Text
+
+-- | Lazy text.
+type Tz = Text
+
 -- | Just pair: <b>Jp <i>a b</i></b> is equal to <b>Just (<i>a</i>,
 --   <i>b</i>)</b>.
 
@@ -687,7 +693,7 @@ module Koshucode.Baala.Overture.Infix
 module Koshucode.Baala.Overture.Text.Textual
 
 -- | Text-like value.
-class (Eq t, Ord t, Monoid t, IsString t) => Textual t where tEmpty = mempty tIsEmpty = (== tEmpty) tJoin = mappend tJoinAll = mconcat tAdd2 c d = tAdd c . tAdd d tAdd3 c d e = tAdd c . tAdd2 d e tCut2 a = tCut <$$> tCut a tCut3 a = tCut2 <$$> tCut a tDropPrefix (tCut -> Just (c, cs)) (tCut -> Just (a, as)) | c == a = tDropPrefix cs as | otherwise = Nothing tDropPrefix cs as | tIsEmpty cs = Just as | otherwise = Nothing tMap f = loop where loop (tCut -> Just (c, cs)) = f c : loop cs loop _ = [] tDivide f t0 = loop (0 :: Int) t0 where loop n (tCut -> Just (c, t)) | f c = tTake n t0 : tDivide f t | otherwise = loop (n + 1) t loop n _ = [tTake n t0] tLength (tCut -> Just (_, t)) = 1 + tLength t tLength _ = 0 charT c = tAdd c tEmpty char2T c d = tAdd2 c d tEmpty char3T c d e = tAdd3 c d e tEmpty charsT n c | n > 0 = tAdd c $ charsT (n - 1) c | otherwise = tEmpty showT = stringT . show bsT = bzT . fromStrict bzT = bsT . toStrict
+class (Show t, Eq t, Ord t, Monoid t, IsString t) => Textual t where tEmpty = mempty tIsEmpty = (== tEmpty) tJoin = mappend tJoinAll = mconcat tJoinWith tw = first where first (t : ts) = t `tJoin` loop ts first [] = tEmpty loop (t : ts) = tw `tJoin` t `tJoin` loop ts loop [] = tEmpty tUnwords = tJoinWith " " tAdd2 c d = tAdd c . tAdd d tAdd3 c d e = tAdd c . tAdd2 d e tCut2 a = tCut <$$> tCut a tCut3 a = tCut2 <$$> tCut a tDropPrefix (tCut -> Just (c, cs)) (tCut -> Just (a, as)) | c == a = tDropPrefix cs as | otherwise = Nothing tDropPrefix cs as | tIsEmpty cs = Just as | otherwise = Nothing tMap f = loop where loop (tCut -> Just (c, cs)) = f c `tAdd` loop cs loop _ = tEmpty tList f = loop where loop (tCut -> Just (c, cs)) = f c : loop cs loop _ = [] tAll f = and . tList f tLength (tCut -> Just (_, t)) = 1 + tLength t tLength _ = 0 tWhile f t0 = loop 0 t0 where loop n (tCut -> Just (c, t)) | f c = loop (n + 1) t loop n t = (tTake n t0, t) tWhileNot f = tWhile (not . f) tDivide f t0 = loop (0 :: Int) t0 where loop n (tCut -> Just (c, t)) | f c = tTake n t0 : tDivide f t | otherwise = loop (n + 1) t loop n _ = [tTake n t0] tWords = tWordsBy isSpace tWordsBy f t0 = loop (0 :: Int) t0 where loop n (tCut -> Just (c, t)) | f c = tTake n t0 : (tWordsBy f $ snd $ tWhile f t) | otherwise = loop (n + 1) t loop 0 _ = [] loop n _ = [tTake n t0] charT c = tAdd c tEmpty char2T c d = tAdd2 c d tEmpty char3T c d e = tAdd3 c d e tEmpty charsT n c | n > 0 = tAdd c $ charsT (n - 1) c | otherwise = tEmpty showT = stringT . show bsT = bzT . fromStrict bzT = bsT . toStrict
 
 -- | Empty text.
 --   
@@ -725,6 +731,22 @@ tJoin :: Textual t => t -> t -> t
 --   "foobarbaz"
 --   </pre>
 tJoinAll :: Textual t => [t] -> t
+
+-- | Append multiple texts with separator.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tJoinWith " | " ["foo", "bar", "baz"]
+--   "foo | bar | baz"
+--   </pre>
+tJoinWith :: Textual t => t -> [t] -> t
+
+-- | Append multiple texts with space.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tUnwords ["foo", "bar", "baz"]
+--   "foo bar baz"
+--   </pre>
+tUnwords :: Textual t => [t] -> t
 
 -- | Preppend character to text.
 --   
@@ -784,7 +806,7 @@ tCut2 :: Textual t => t -> Maybe (Char, Maybe (Char, t))
 --   </pre>
 tCut3 :: Textual t => t -> Maybe (Char, Maybe (Char, Maybe (Char, t)))
 
--- | Take <i>N</i> characters.
+-- | Take <i>N-#1</i> characters from <i>text-#2</i>.
 --   
 --   <pre>
 --   &gt;&gt;&gt; tTake 3 "foobar"
@@ -792,7 +814,7 @@ tCut3 :: Textual t => t -> Maybe (Char, Maybe (Char, Maybe (Char, t)))
 --   </pre>
 tTake :: Textual t => Int -> t -> t
 
--- | Drop <i>N</i> characters.
+-- | Drop <i>N-#1</i> characters from <i>text-#2</i>.
 --   
 --   <pre>
 --   &gt;&gt;&gt; tDrop 3 "foobar"
@@ -800,7 +822,7 @@ tTake :: Textual t => Int -> t -> t
 --   </pre>
 tDrop :: Textual t => Int -> t -> t
 
--- | Drop prefix from text.
+-- | Drop <i>prefix-#1</i> from <i>text-#2</i>.
 --   
 --   <pre>
 --   &gt;&gt;&gt; tDropPrefix "foo" "foobar"
@@ -813,15 +835,57 @@ tDrop :: Textual t => Int -> t -> t
 --   </pre>
 tDropPrefix :: (Textual t, Textual a) => a -> t -> Maybe t
 
--- | Map function to characters of text value.
+-- | Map <i>function-#1</i> to characters of <i>text-value-#2</i>.
+tMap :: Textual t => (Char -> Char) -> t -> t
+
+-- | Map <i>function-#1</i> to characters of <i>text-value-#2</i>.
 --   
 --   <pre>
---   &gt;&gt;&gt; tMap fromEnum "bar"
+--   &gt;&gt;&gt; tList fromEnum "bar"
 --   [98,97,114]
 --   </pre>
-tMap :: Textual t => (Char -> a) -> t -> [a]
+tList :: Textual t => (Char -> a) -> t -> [a]
 
--- | Divide textual value by delimiter character.
+-- | Test all characters of text value.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tAll (`elem` "0123456789.") "120.5"
+--   True
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; tAll (`elem` "0123456789.") "120,000"
+--   False
+--   </pre>
+tAll :: Textual t => (Char -> Bool) -> t -> Bool
+
+-- | Length of <i>textual-value-#1</i>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tLength "foo" :: Int
+--   3
+--   </pre>
+tLength :: (Textual t, Integral n) => t -> n
+
+-- | Take subtext from <i>textual-value-#2</i> while <i>tester-#1</i>
+--   holds, and pairing the subtext with after.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tWhile (/= ' ') "foo bar baz"
+--   ("foo", " bar baz")
+--   </pre>
+tWhile :: Textual t => (Char -> Bool) -> t -> (t, t)
+
+-- | Take subtext from <i>textual-value-#2</i> while <i>tester-#1</i> do
+--   not holds.
+--   
+--   <pre>
+--   tWhileNot f t = tWhile (not . f) t
+--   </pre>
+tWhileNot :: Textual t => (Char -> Bool) -> t -> (t, t)
+
+-- | Divide <i>textual-value-#2</i> to textual list by
+--   <i>delimiter-tester-#1</i>.
 --   
 --   <pre>
 --   &gt;&gt;&gt; tDivide (== '/') "foo/bar/baz"
@@ -829,13 +893,21 @@ tMap :: Textual t => (Char -> a) -> t -> [a]
 --   </pre>
 tDivide :: Textual t => (Char -> Bool) -> t -> [t]
 
--- | Length of textual value.
+-- | Divide text into words.
 --   
 --   <pre>
---   &gt;&gt;&gt; tLength "foo" :: Int
---   3
+--   &gt;&gt;&gt; tWords "a bb  ccc "
+--   ["a", "bb", "ccc"]
 --   </pre>
-tLength :: (Textual t, Integral n) => t -> n
+tWords :: Textual t => t -> [t]
+
+-- | Divide text into words by character tester.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tWordsBy (== '|') "a|bb||ccc|"
+--   ["a", "bb", "ccc"]
+--   </pre>
+tWordsBy :: Textual t => (Char -> Bool) -> t -> [t]
 
 -- | Create text from single character.
 --   
@@ -898,9 +970,12 @@ bsT :: Textual t => Bs -> t
 
 -- | Convert lazy bytestring to textual value.
 bzT :: Textual t => Bz -> t
+
+-- | Convert textual something to string something.
+stringify :: (Functor f, Textual t) => f t -> f String
 instance Koshucode.Baala.Overture.Text.Textual.Textual GHC.Base.String
-instance Koshucode.Baala.Overture.Text.Textual.Textual Data.Text.Internal.Text
-instance Koshucode.Baala.Overture.Text.Textual.Textual Data.Text.Internal.Lazy.Text
+instance Koshucode.Baala.Overture.Text.Textual.Textual Koshucode.Baala.Overture.Shorthand.Tx
+instance Koshucode.Baala.Overture.Text.Textual.Textual Koshucode.Baala.Overture.Shorthand.Tz
 
 
 -- | Encode and decode integers.
@@ -976,7 +1051,7 @@ stringCountInteger :: String -> String -> Maybe Integer
 --   &gt;&gt;&gt; intHexString 15
 --   "f"
 --   </pre>
-intLowerHexString :: Int -> String
+intLowerHexString :: (Textual t) => Int -> t
 
 -- | Encode integer to hexadecimal string.
 --   
@@ -984,7 +1059,7 @@ intLowerHexString :: Int -> String
 --   &gt;&gt;&gt; intUpperHexString 15
 --   "F"
 --   </pre>
-intUpperHexString :: Int -> String
+intUpperHexString :: (Textual t) => Int -> t
 
 -- | Encode integer to custome-digit string.
 --   
@@ -1100,7 +1175,7 @@ stringWidth :: String -> Int
 --   &gt;&gt;&gt; addSpace ""
 --   ""
 --   </pre>
-addSpace :: StringMap
+addSpace :: (Textual t) => t -> t
 
 -- | Test ASCII code point (0 .. 127).
 isAsciiCode :: (Integral n) => n -> Bool

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.206.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.209.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -95,9 +95,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><a href="#v:tokenLinesBy"
 	    >tokenLinesBy</a
-	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
-	    >ToCode</a
-	    > code, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Line.html#t:ToLines"
+	    >ToLines</a
+	    > i, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
 	    >Textual</a
 	    > t, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
 	    >ToTermName</a
@@ -105,31 +105,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Scanner</a
 	    > t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
 	    >IxIOPoint</a
-	    > -&gt; code -&gt; [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenLine"
+	    > -&gt; i -&gt; [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenLine"
 	    >TokenLine</a
 	    > t]</li
 	  ><li class="src short"
 	  ><a href="#v:tokenLines"
 	    >tokenLines</a
-	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
-	    >ToCode</a
-	    > code, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Line.html#t:ToLines"
+	    >ToLines</a
+	    > i, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
 	    >Textual</a
 	    > t, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
 	    >ToTermName</a
 	    > t) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
 	    >IxIOPoint</a
-	    > -&gt; code -&gt; [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenLine"
+	    > -&gt; i -&gt; [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenLine"
 	    >TokenLine</a
 	    > t]</li
 	  ><li class="src short"
 	  ><a href="#v:tokenLinesTextAssert"
 	    >tokenLinesTextAssert</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
-	    >ToCode</a
-	    > code =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Line.html#t:ToLines"
+	    >ToLines</a
+	    > i =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
 	    >IxIOPoint</a
-	    > -&gt; code -&gt; [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenLine"
+	    > -&gt; i -&gt; [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenLine"
 	    >TokenLine</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
@@ -266,9 +266,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>:: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
-		  >ToCode</a
-		  > code, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		>:: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Line.html#t:ToLines"
+		  >ToLines</a
+		  > i, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
 		  >Textual</a
 		  > t, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
 		  >ToTermName</a
@@ -298,7 +298,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; code</td
+		>-&gt; i</td
 		><td class="doc"
 		><p
 		  >Input code</p
@@ -325,15 +325,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:tokenLines" class="def"
 	    >tokenLines</a
-	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
-	    >ToCode</a
-	    > code, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Line.html#t:ToLines"
+	    >ToLines</a
+	    > i, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
 	    >Textual</a
 	    > t, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
 	    >ToTermName</a
 	    > t) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
 	    >IxIOPoint</a
-	    > -&gt; code -&gt; [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenLine"
+	    > -&gt; i -&gt; [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenLine"
 	    >TokenLine</a
 	    > t] <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clause.html#tokenLines');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -347,11 +347,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:tokenLinesTextAssert" class="def"
 	    >tokenLinesTextAssert</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
-	    >ToCode</a
-	    > code =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Line.html#t:ToLines"
+	    >ToLines</a
+	    > i =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
 	    >IxIOPoint</a
-	    > -&gt; code -&gt; [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenLine"
+	    > -&gt; i -&gt; [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenLine"
 	    >TokenLine</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a

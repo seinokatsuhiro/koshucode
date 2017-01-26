@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-overture-0.206.0.0: Preliminary library for Koshucode</p
+      >koshucode-baala-overture-0.209.0.0: Preliminary library for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -67,7 +67,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+	    >Show</a
+	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
 	    >Eq</a
 	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
@@ -97,6 +99,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	      ><li
 	      ><a href="#v:tJoinAll"
 		>tJoinAll</a
+		> :: [t] -&gt; t</li
+	      ><li
+	      ><a href="#v:tJoinWith"
+		>tJoinWith</a
+		> :: t -&gt; [t] -&gt; t</li
+	      ><li
+	      ><a href="#v:tUnwords"
+		>tUnwords</a
 		> :: [t] -&gt; t</li
 	      ><li
 	      ><a href="#v:tAdd"
@@ -183,7 +193,47 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		>tMap</a
 		> :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 		>Char</a
+		> -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		>) -&gt; t -&gt; t</li
+	      ><li
+	      ><a href="#v:tList"
+		>tList</a
+		> :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
 		> -&gt; a) -&gt; t -&gt; [a]</li
+	      ><li
+	      ><a href="#v:tAll"
+		>tAll</a
+		> :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		>) -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:tLength"
+		>tLength</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+		>Integral</a
+		> n =&gt; t -&gt; n</li
+	      ><li
+	      ><a href="#v:tWhile"
+		>tWhile</a
+		> :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		>) -&gt; t -&gt; (t, t)</li
+	      ><li
+	      ><a href="#v:tWhileNot"
+		>tWhileNot</a
+		> :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		>) -&gt; t -&gt; (t, t)</li
 	      ><li
 	      ><a href="#v:tDivide"
 		>tDivide</a
@@ -193,11 +243,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		>Bool</a
 		>) -&gt; t -&gt; [t]</li
 	      ><li
-	      ><a href="#v:tLength"
-		>tLength</a
-		> :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
-		>Integral</a
-		> n =&gt; t -&gt; n</li
+	      ><a href="#v:tWords"
+		>tWords</a
+		> :: t -&gt; [t]</li
+	      ><li
+	      ><a href="#v:tWordsBy"
+		>tWordsBy</a
+		> :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		> -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		>) -&gt; t -&gt; [t]</li
 	      ><li
 	      ><a href="#v:charT"
 		>charT</a
@@ -262,6 +318,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		> -&gt; t</li
 	      ></ul
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:stringify"
+	    >stringify</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+	    >Functor</a
+	    > f, <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t) =&gt; f t -&gt; f <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -271,7 +337,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+	    >Show</a
+	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
 	    >Eq</a
 	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
@@ -401,6 +469,46 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 </code
 		  ></strong
 		>&quot;foobarbaz&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tJoinWith" class="def"
+	      >tJoinWith</a
+	      > :: t -&gt; [t] -&gt; t <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tJoinWith');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Append multiple texts with separator.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tJoinWith &quot; | &quot; [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]
+</code
+		  ></strong
+		>&quot;foo | bar | baz&quot;
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tUnwords" class="def"
+	      >tUnwords</a
+	      > :: [t] -&gt; t <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tUnwords');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Append multiple texts with space.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tUnwords [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]
+</code
+		  ></strong
+		>&quot;foo bar baz&quot;
 </pre
 	      ></div
 	    ><p class="src"
@@ -590,8 +698,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    ><div class="doc"
 	    ><p
 	      >Take <em
-		>N</em
-		> characters.</p
+		>N-#1</em
+		> characters from <em
+		>text-#2</em
+		>.</p
 	      ><pre class="screen"
 	      ><code class="prompt"
 		>&gt;&gt;&gt; </code
@@ -614,8 +724,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    ><div class="doc"
 	    ><p
 	      >Drop <em
-		>N</em
-		> characters.</p
+		>N-#1</em
+		> characters from <em
+		>text-#2</em
+		>.</p
 	      ><pre class="screen"
 	      ><code class="prompt"
 		>&gt;&gt;&gt; </code
@@ -639,7 +751,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	      ></p
 	    ><div class="doc"
 	    ><p
-	      >Drop prefix from text.</p
+	      >Drop <em
+		>prefix-#1</em
+		> from <em
+		>text-#2</em
+		>.</p
 	      ><pre class="screen"
 	      ><code class="prompt"
 		>&gt;&gt;&gt; </code
@@ -666,22 +782,153 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	      >tMap</a
 	      > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	      >Char</a
-	      > -&gt; a) -&gt; t -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tMap');" href="javascript:void(0);" class="link"
+	      > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      >) -&gt; t -&gt; t <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tMap');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><div class="doc"
 	    ><p
-	      >Map function to characters of text value.</p
+	      >Map <em
+		>function-#1</em
+		> to characters of <em
+		>text-value-#2</em
+		>.</p
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tList" class="def"
+	      >tList</a
+	      > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; a) -&gt; t -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tList');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Map <em
+		>function-#1</em
+		> to characters of <em
+		>text-value-#2</em
+		>.</p
 	      ><pre class="screen"
 	      ><code class="prompt"
 		>&gt;&gt;&gt; </code
 		><strong class="userinput"
 		><code
-		  >tMap fromEnum &quot;bar&quot;
+		  >tList fromEnum &quot;bar&quot;
 </code
 		  ></strong
 		>[98,97,114]
 </pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tAll" class="def"
+	      >tAll</a
+	      > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      >) -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tAll');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Test all characters of text value.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tAll (`elem` &quot;0123456789.&quot;) &quot;120.5&quot;
+</code
+		  ></strong
+		>True
+</pre
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tAll (`elem` &quot;0123456789.&quot;) &quot;120,000&quot;
+</code
+		  ></strong
+		>False
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tLength" class="def"
+	      >tLength</a
+	      > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	      >Integral</a
+	      > n =&gt; t -&gt; n <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tLength');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Length of <em
+		>textual-value-#1</em
+		>.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tLength &quot;foo&quot; :: Int
+</code
+		  ></strong
+		>3
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tWhile" class="def"
+	      >tWhile</a
+	      > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      >) -&gt; t -&gt; (t, t) <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tWhile');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Take subtext from <em
+		>textual-value-#2</em
+		> while <em
+		>tester-#1</em
+		> holds,
+   and pairing the subtext with after.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tWhile (/= ' ') &quot;foo bar baz&quot;
+</code
+		  ></strong
+		>(&quot;foo&quot;, &quot; bar baz&quot;)
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tWhileNot" class="def"
+	      >tWhileNot</a
+	      > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      >) -&gt; t -&gt; (t, t) <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tWhileNot');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Take subtext from <em
+		>textual-value-#2</em
+		> while <em
+		>tester-#1</em
+		> do not holds.</p
+	      ><pre
+	      >tWhileNot f t = tWhile (not . f) t</pre
 	      ></div
 	    ><p class="src"
 	    ><a name="v:tDivide" class="def"
@@ -695,7 +942,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	      ></p
 	    ><div class="doc"
 	    ><p
-	      >Divide textual value by delimiter character.</p
+	      >Divide <em
+		>textual-value-#2</em
+		> to textual list by <em
+		>delimiter-tester-#1</em
+		>.</p
 	      ><pre class="screen"
 	      ><code class="prompt"
 		>&gt;&gt;&gt; </code
@@ -708,25 +959,47 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 </pre
 	      ></div
 	    ><p class="src"
-	    ><a name="v:tLength" class="def"
-	      >tLength</a
-	      > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
-	      >Integral</a
-	      > n =&gt; t -&gt; n <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tLength');" href="javascript:void(0);" class="link"
+	    ><a name="v:tWords" class="def"
+	      >tWords</a
+	      > :: t -&gt; [t] <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tWords');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><div class="doc"
 	    ><p
-	      >Length of textual value.</p
+	      >Divide text into words.</p
 	      ><pre class="screen"
 	      ><code class="prompt"
 		>&gt;&gt;&gt; </code
 		><strong class="userinput"
 		><code
-		  >tLength &quot;foo&quot; :: Int
+		  >tWords &quot;a bb  ccc &quot;
 </code
 		  ></strong
-		>3
+		>[&quot;a&quot;, &quot;bb&quot;, &quot;ccc&quot;]
+</pre
+	      ></div
+	    ><p class="src"
+	    ><a name="v:tWordsBy" class="def"
+	      >tWordsBy</a
+	      > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	      >Char</a
+	      > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      >) -&gt; t -&gt; [t] <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#tWordsBy');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Divide text into words by character tester.</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >tWordsBy (== '|') &quot;a|bb||ccc|&quot;
+</code
+		  ></strong
+		>[&quot;a&quot;, &quot;bb&quot;, &quot;ccc&quot;]
 </pre
 	      ></div
 	    ><p class="src"
@@ -931,7 +1204,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 		      >String</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#line-246');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#line-328');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -942,22 +1215,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		  ><span class="inst-left"
 		    ><a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
 		      >Textual</a
-		      > Text</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#line-261');" href="javascript:void(0);" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc"
-		  ><p
-		    >Strict text.</p
-		    ></td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
-		      >Textual</a
-		      > Text</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#line-277');" href="javascript:void(0);" class="link"
+		      > <a href="Koshucode-Baala-Overture-Shorthand.html#t:Tz"
+		      >Tz</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#line-359');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -965,8 +1226,42 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		    >Lazy text.</p
 		    ></td
 		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > <a href="Koshucode-Baala-Overture-Shorthand.html#t:Tx"
+		      >Tx</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#line-343');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Strict text.</p
+		    ></td
+		  ></tr
 		></table
 	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringify" class="def"
+	    >stringify</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+	    >Functor</a
+	    > f, <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t) =&gt; f t -&gt; f <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Textual.html#stringify');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert textual something to string something.</p
 	    ></div
 	  ></div
 	></div

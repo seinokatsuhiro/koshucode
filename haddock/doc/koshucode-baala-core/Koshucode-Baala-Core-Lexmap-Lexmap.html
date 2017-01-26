@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.206.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.209.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -80,10 +80,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
-	    >data</span
+	    >type</span
 	    > <a href="#t:Lexmap"
 	    >Lexmap</a
-	    > = <a href="#v:Lexmap"
+	    > = <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:TLexmap"
+	    >TLexmap</a
+	    > t = <a href="#v:Lexmap"
 	    >Lexmap</a
 	    > {<ul class="subs"
 	    ><li
@@ -95,23 +105,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	      ><li
 	      ><a href="#v:lexToken"
 		>lexToken</a
-		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-		>Token</a
-		></li
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+		>TToken</a
+		> t</li
 	      ><li
 	      ><a href="#v:lexAttr"
 		>lexAttr</a
 		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrPara"
 		>AttrPara</a
-		></li
+		> t</li
 	      ><li
 	      ><a href="#v:lexSubmap"
 		>lexSubmap</a
 		> :: [(<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 		>String</a
-		>, <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-		>Lexmap</a
-		>)]</li
+		>, <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+		>TLexmap</a
+		> t)]</li
 	      ><li
 	      ><a href="#v:lexMessage"
 		>lexMessage</a
@@ -151,17 +161,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	  ><li class="src short"
 	  ><a href="#v:lexName"
 	    >lexName</a
-	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-	    >Lexmap</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > t -&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
 	    >RopName</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:lexLocalRef"
 	    >lexLocalRef</a
-	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-	    >Lexmap</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:LocalRef"
 	    >LocalRef</a
@@ -173,25 +185,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >String</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
-	    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-	    >Lexmap</a
-	    ></li
+	    > (<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > t)</li
 	  ><li class="src short"
 	  ><a href="#v:lexMessageList"
 	    >lexMessageList</a
-	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-	    >Lexmap</a
-	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > t -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:lexAttrTree"
 	    >lexAttrTree</a
-	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-	    >Lexmap</a
-	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Slot.html#t:AttrTree"
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > t -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Slot.html#t:AttrTree"
 	    >AttrTree</a
-	    >]</li
+	    > t]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -200,10 +214,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
-	    >data</span
+	    >type</span
 	    > <a name="t:Lexmap" class="def"
 	    >Lexmap</a
+	    > = <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#Lexmap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >String version of <code
+	      ><a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+		>TLexmap</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:TLexmap" class="def"
+	    >TLexmap</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#TLexmap');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -247,9 +283,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		      ><dt class="src"
 		      ><a name="v:lexToken" class="def"
 			>lexToken</a
-			> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-			>Token</a
-			></dt
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+			>TToken</a
+			> t</dt
 		      ><dd class="doc"
 		      ><p
 			>Token of operator</p
@@ -259,7 +295,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 			>lexAttr</a
 			> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrPara"
 			>AttrPara</a
-			></dt
+			> t</dt
 		      ><dd class="doc"
 		      ><p
 			>Attribute of relmap operation</p
@@ -269,9 +305,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 			>lexSubmap</a
 			> :: [(<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 			>String</a
-			>, <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-			>Lexmap</a
-			>)]</dt
+			>, <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+			>TLexmap</a
+			> t)]</dt
 		      ><dd class="doc"
 		      ><p
 			>Submaps in the attribute</p
@@ -295,19 +331,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	      ></table
 	    ></div
 	  ><div class="subs instances"
-	  ><p id="control.i:Lexmap" class="caption collapser" onclick="toggleSection('i:Lexmap')"
+	  ><p id="control.i:TLexmap" class="caption collapser" onclick="toggleSection('i:TLexmap')"
 	    >Instances</p
-	    ><div id="section.i:Lexmap" class="show"
+	    ><div id="section.i:TLexmap" class="show"
 	    ><table
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
 		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
 		      >Eq</a
-		      > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-		      >Lexmap</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-31');" href="javascript:void(0);" class="link"
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+		      >TLexmap</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-34');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -316,12 +354,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 		      >Ord</a
-		      > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-		      >Lexmap</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-31');" href="javascript:void(0);" class="link"
+		      > (<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+		      >TLexmap</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-34');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -330,12 +370,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
 		      >Show</a
-		      > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-		      >Lexmap</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-31');" href="javascript:void(0);" class="link"
+		      > (<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+		      >TLexmap</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-34');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -344,12 +386,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > t =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 		      >GetCodePos</a
-		      > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-		      >Lexmap</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-40');" href="javascript:void(0);" class="link"
+		      > (<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+		      >TLexmap</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-43');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -358,12 +402,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > t =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Import.html#t:Default"
 		      >Default</a
-		      > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-		      >Lexmap</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-44');" href="javascript:void(0);" class="link"
+		      > (<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+		      >TLexmap</a
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-47');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -441,7 +487,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		      > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:LexmapType"
 		      >LexmapType</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-38');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-41');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -455,7 +501,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		      > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:LexmapType"
 		      >LexmapType</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-38');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-41');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -469,7 +515,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		      > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:LexmapType"
 		      >LexmapType</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-38');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#line-41');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -501,9 +547,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	><p class="src"
 	  ><a name="v:lexName" class="def"
 	    >lexName</a
-	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-	    >Lexmap</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > t -&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
 	    >RopName</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#lexName');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -517,9 +565,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	><p class="src"
 	  ><a name="v:lexLocalRef" class="def"
 	    >lexLocalRef</a
-	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-	    >Lexmap</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:LocalRef"
 	    >LocalRef</a
@@ -539,9 +587,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >String</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
-	    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-	    >Lexmap</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#lexAddMessage');" href="javascript:void(0);" class="link"
+	    > (<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#lexAddMessage');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -553,9 +601,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	><p class="src"
 	  ><a name="v:lexMessageList" class="def"
 	    >lexMessageList</a
-	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-	    >Lexmap</a
-	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > t -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    >] <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#lexMessageList');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -569,11 +619,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	><p class="src"
 	  ><a name="v:lexAttrTree" class="def"
 	    >lexAttrTree</a
-	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-	    >Lexmap</a
-	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Slot.html#t:AttrTree"
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:TLexmap"
+	    >TLexmap</a
+	    > t -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Slot.html#t:AttrTree"
 	    >AttrTree</a
-	    >] <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#lexAttrTree');" href="javascript:void(0);" class="link"
+	    > t] <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#lexAttrTree');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

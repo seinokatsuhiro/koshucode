@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.206.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.209.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -52,16 +52,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="caption"
 	>Koshucode.Baala.Core.Resource.Read</p
 	></div
-      ><div id="table-of-contents"
-      ><p class="caption"
-	>Contents</p
-	><ul
-	><li
-	  ><a href="#g:1"
-	    >Read resource</a
-	    ></li
-	  ></ul
-	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
@@ -75,24 +65,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><a href="#v:resRead"
-	    >resRead</a
+	  ><a href="#v:resReadBytes"
+	    >resReadBytes</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
-	    >Global</a
-	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:IOPoint"
-	    >IOPoint</a
-	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
-	    >IO</a
-	    > (<a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
+	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
+	    >Resource</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:Bytes"
+	    >Bytes</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
 	    >AbResource</a
-	    > c, <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
-	    >Global</a
-	    > c)</li
+	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:resReadSingle"
-	    >resReadSingle</a
+	  ><a href="#v:resReadPoint"
+	    >resReadPoint</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
@@ -107,38 +93,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Global</a
 	    > c)</li
 	  ><li class="src short"
-	  ><a href="#v:resReadBz"
-	    >resReadBz</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
-	    >Resource</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Shorthand.html#t:Bz"
-	    >Bz</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
-	    >AbResource</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:resReadString"
-	    >resReadString</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
-	    >Resource</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
-	    >AbResource</a
-	    > c</li
-	  ></ul
-	></div
-      ><div id="interface"
-      ><h1 id="g:1"
-	>Read resource</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:resRead" class="def"
-	    >resRead</a
+	  ><a href="#v:resReadPoints"
+	    >resReadPoints</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
@@ -151,18 +107,72 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >AbResource</a
 	    > c, <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
-	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Read.html#resRead');" href="javascript:void(0);" class="link"
+	    > c)</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:resReadBytes" class="def"
+	    >resReadBytes</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Read.html#resReadBytes');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+		  >CContent</a
+		  > c</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
+		  >Resource</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Base resource</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:Bytes"
+		  >Bytes</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Input bytes</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
+		  >AbResource</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Result resource</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
 	  ><div class="doc"
 	  ><p
-	    >Read data resource from multiple input points.</p
+	    >Read data resource from input bytes.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:resReadSingle" class="def"
-	    >resReadSingle</a
+	  ><a name="v:resReadPoint" class="def"
+	    >resReadPoint</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
@@ -175,52 +185,80 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >AbResource</a
 	    > c, <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
-	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Read.html#resReadSingle');" href="javascript:void(0);" class="link"
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Read.html#resReadPoint');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Core-Resource-Read.html#v:resReadPoints"
+		  >resReadPoints</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Read data resource from single input point.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:resReadBz" class="def"
-	    >resReadBz</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
-	    >Resource</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Shorthand.html#t:Bz"
-	    >Bz</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
-	    >AbResource</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Read.html#resReadBz');" href="javascript:void(0);" class="link"
+	  ><a name="v:resReadPoints" class="def"
+	    >resReadPoints</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Read.html#resReadPoints');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Read data resource from lazy bytestring.</p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+		  >CContent</a
+		  > c</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+		  >Global</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Global parameter</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:IOPoint"
+		  >IOPoint</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Input points</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+		  >IO</a
+		  > (<a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
+		  >AbResource</a
+		  > c, <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+		  >Global</a
+		  > c)</td
+		><td class="doc"
+		><p
+		  >Result resource with updated global parameter</p
+		  ></td
+		></tr
+	      ></table
 	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:resReadString" class="def"
-	    >resReadString</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
-	    >Resource</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
-	    >AbResource</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Read.html#resReadString');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Read data resource from text.</p
+	    >Read data resource from multiple input points.</p
 	    ></div
 	  ></div
 	></div

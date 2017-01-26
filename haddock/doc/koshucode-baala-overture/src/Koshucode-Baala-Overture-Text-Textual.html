@@ -8,295 +8,381 @@
 </head>
 <body>
 <pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# LANGUAGE FlexibleInstances #-}</span>
-<a class="number" name="line-2">2</a><span class='hs-comment'>{-# LANGUAGE ViewPatterns #-}</span>
-<a class="number" name="line-3">3</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
-<a class="number" name="line-4">4</a>
-<a class="number" name="line-5">5</a><span class='hs-comment'>-- | Textual class.</span>
-<a class="number" name="line-6">6</a>
-<a class="number" name="line-7">7</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>Textual</span>
-<a class="number" name="line-8">8</a>  <span class='hs-layout'>(</span> <span class='hs-conid'>Textual</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a class="number" name="line-9">9</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-10">10</a>
-<a class="number" name="line-11">11</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>String</span>                         <span class='hs-keyword'>as</span> <span class='hs-conid'>Str</span>
-<a class="number" name="line-12">12</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span>                           <span class='hs-keyword'>as</span> <span class='hs-conid'>Tx</span>
-<a class="number" name="line-13">13</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>Encoding</span>                  <span class='hs-keyword'>as</span> <span class='hs-conid'>Tx</span>
-<a class="number" name="line-14">14</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>Encoding</span><span class='hs-varop'>.</span><span class='hs-conid'>Error</span>            <span class='hs-keyword'>as</span> <span class='hs-conid'>Err</span>
-<a class="number" name="line-15">15</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span>                      <span class='hs-keyword'>as</span> <span class='hs-conid'>Tz</span>
-<a class="number" name="line-16">16</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span><span class='hs-varop'>.</span><span class='hs-conid'>Encoding</span>             <span class='hs-keyword'>as</span> <span class='hs-conid'>Tz</span>
-<a class="number" name="line-17">17</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>UTF8</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>Bs</span>
-<a class="number" name="line-18">18</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>Bz</span>
-<a class="number" name="line-19">19</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span><span class='hs-varop'>.</span><span class='hs-conid'>UTF8</span>           <span class='hs-keyword'>as</span> <span class='hs-conid'>Bz</span>
-<a class="number" name="line-20">20</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span><span class='hs-varop'>.</span><span class='hs-conid'>Infix</span>      <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
-<a class="number" name="line-21">21</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span><span class='hs-varop'>.</span><span class='hs-conid'>Misc</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
-<a class="number" name="line-22">22</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span><span class='hs-varop'>.</span><span class='hs-conid'>Shorthand</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
-<a class="number" name="line-23">23</a>
-<a class="number" name="line-24">24</a><a name="Textual"></a><span class='hs-comment'>-- | Text-like value.</span>
-<a class="number" name="line-25">25</a><a name="Textual"></a><span class='hs-keyword'>class</span> <span class='hs-layout'>(</span><span class='hs-conid'>Eq</span> <span class='hs-varid'>t</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span> <span class='hs-varid'>t</span><span class='hs-layout'>,</span> <span class='hs-conid'>Monoid</span> <span class='hs-varid'>t</span><span class='hs-layout'>,</span> <span class='hs-conid'>Str</span><span class='hs-varop'>.</span><span class='hs-conid'>IsString</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Textual</span> <span class='hs-varid'>t</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-2">2</a><span class='hs-comment'>{-# LANGUAGE OverloadedStrings #-}</span>
+<a class="number" name="line-3">3</a><span class='hs-comment'>{-# LANGUAGE ViewPatterns #-}</span>
+<a class="number" name="line-4">4</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
+<a class="number" name="line-5">5</a>
+<a class="number" name="line-6">6</a><span class='hs-comment'>-- | Textual class.</span>
+<a class="number" name="line-7">7</a>
+<a class="number" name="line-8">8</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>Textual</span>
+<a class="number" name="line-9">9</a>  <span class='hs-layout'>(</span> <span class='hs-conid'>Textual</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a class="number" name="line-10">10</a>    <span class='hs-varid'>stringify</span><span class='hs-layout'>,</span>
+<a class="number" name="line-11">11</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-12">12</a>
+<a class="number" name="line-13">13</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Char</span>                              <span class='hs-keyword'>as</span> <span class='hs-conid'>Ch</span>
+<a class="number" name="line-14">14</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>String</span>                            <span class='hs-keyword'>as</span> <span class='hs-conid'>Str</span>
+<a class="number" name="line-15">15</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span>                              <span class='hs-keyword'>as</span> <span class='hs-conid'>Tx</span>
+<a class="number" name="line-16">16</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>Encoding</span>                     <span class='hs-keyword'>as</span> <span class='hs-conid'>Tx</span>
+<a class="number" name="line-17">17</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>Encoding</span><span class='hs-varop'>.</span><span class='hs-conid'>Error</span>               <span class='hs-keyword'>as</span> <span class='hs-conid'>Err</span>
+<a class="number" name="line-18">18</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span>                         <span class='hs-keyword'>as</span> <span class='hs-conid'>Tz</span>
+<a class="number" name="line-19">19</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span><span class='hs-varop'>.</span><span class='hs-conid'>Encoding</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>Tz</span>
+<a class="number" name="line-20">20</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>UTF8</span>                   <span class='hs-keyword'>as</span> <span class='hs-conid'>Bs</span>
+<a class="number" name="line-21">21</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span>                   <span class='hs-keyword'>as</span> <span class='hs-conid'>Bz</span>
+<a class="number" name="line-22">22</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span><span class='hs-varop'>.</span><span class='hs-conid'>UTF8</span>              <span class='hs-keyword'>as</span> <span class='hs-conid'>Bz</span>
+<a class="number" name="line-23">23</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span><span class='hs-varop'>.</span><span class='hs-conid'>Infix</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
+<a class="number" name="line-24">24</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span><span class='hs-varop'>.</span><span class='hs-conid'>Misc</span>          <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
+<a class="number" name="line-25">25</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span><span class='hs-varop'>.</span><span class='hs-conid'>Shorthand</span>     <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
 <a class="number" name="line-26">26</a>
-<a class="number" name="line-27">27</a>    <span class='hs-comment'>-- ----------------------  Monoid</span>
-<a class="number" name="line-28">28</a>
-<a class="number" name="line-29">29</a>    <span class='hs-comment'>-- | Empty text.</span>
-<a class="number" name="line-30">30</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-31">31</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tEmpty :: String</span>
-<a class="number" name="line-32">32</a>    <span class='hs-comment'>--   ""</span>
+<a class="number" name="line-27">27</a><a name="Textual"></a><span class='hs-comment'>-- | Text-like value.</span>
+<a class="number" name="line-28">28</a><a name="Textual"></a><span class='hs-keyword'>class</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span> <span class='hs-varid'>t</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span> <span class='hs-varid'>t</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span> <span class='hs-varid'>t</span><span class='hs-layout'>,</span> <span class='hs-conid'>Monoid</span> <span class='hs-varid'>t</span><span class='hs-layout'>,</span> <span class='hs-conid'>Str</span><span class='hs-varop'>.</span><span class='hs-conid'>IsString</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Textual</span> <span class='hs-varid'>t</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-29">29</a>
+<a class="number" name="line-30">30</a>    <span class='hs-comment'>-- ----------------------  Monoid</span>
+<a class="number" name="line-31">31</a>
+<a class="number" name="line-32">32</a>    <span class='hs-comment'>-- | Empty text.</span>
 <a class="number" name="line-33">33</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-34">34</a>    <span class='hs-varid'>tEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-35">35</a>    <span class='hs-varid'>tEmpty</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mempty</span>
-<a class="number" name="line-36">36</a>
-<a class="number" name="line-37">37</a>    <span class='hs-comment'>-- | Test text is empty.</span>
-<a class="number" name="line-38">38</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-39">39</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tIsEmpty ""</span>
-<a class="number" name="line-40">40</a>    <span class='hs-comment'>--   True</span>
+<a class="number" name="line-34">34</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tEmpty :: String</span>
+<a class="number" name="line-35">35</a>    <span class='hs-comment'>--   ""</span>
+<a class="number" name="line-36">36</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-37">37</a>    <span class='hs-varid'>tEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-38">38</a>    <span class='hs-varid'>tEmpty</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mempty</span>
+<a class="number" name="line-39">39</a>
+<a class="number" name="line-40">40</a>    <span class='hs-comment'>-- | Test text is empty.</span>
 <a class="number" name="line-41">41</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-42">42</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tIsEmpty "foo"</span>
-<a class="number" name="line-43">43</a>    <span class='hs-comment'>--   False</span>
+<a class="number" name="line-42">42</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tIsEmpty ""</span>
+<a class="number" name="line-43">43</a>    <span class='hs-comment'>--   True</span>
 <a class="number" name="line-44">44</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-45">45</a>    <span class='hs-varid'>tIsEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a class="number" name="line-46">46</a>    <span class='hs-varid'>tIsEmpty</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>==</span> <span class='hs-varid'>tEmpty</span><span class='hs-layout'>)</span>
-<a class="number" name="line-47">47</a>
-<a class="number" name="line-48">48</a>    <span class='hs-comment'>-- | Append two texts.</span>
-<a class="number" name="line-49">49</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-50">50</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tJoin "foo" "bar"</span>
-<a class="number" name="line-51">51</a>    <span class='hs-comment'>--   "foobar"</span>
+<a class="number" name="line-45">45</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tIsEmpty "foo"</span>
+<a class="number" name="line-46">46</a>    <span class='hs-comment'>--   False</span>
+<a class="number" name="line-47">47</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-48">48</a>    <span class='hs-varid'>tIsEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a class="number" name="line-49">49</a>    <span class='hs-varid'>tIsEmpty</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>==</span> <span class='hs-varid'>tEmpty</span><span class='hs-layout'>)</span>
+<a class="number" name="line-50">50</a>
+<a class="number" name="line-51">51</a>    <span class='hs-comment'>-- | Append two texts.</span>
 <a class="number" name="line-52">52</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-53">53</a>    <span class='hs-varid'>tJoin</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-54">54</a>    <span class='hs-varid'>tJoin</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mappend</span>
-<a class="number" name="line-55">55</a>
-<a class="number" name="line-56">56</a>    <span class='hs-comment'>-- | Append multiple texts.</span>
-<a class="number" name="line-57">57</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-58">58</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tJoinAll ["foo", "bar", "baz"]</span>
-<a class="number" name="line-59">59</a>    <span class='hs-comment'>--   "foobarbaz"</span>
+<a class="number" name="line-53">53</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tJoin "foo" "bar"</span>
+<a class="number" name="line-54">54</a>    <span class='hs-comment'>--   "foobar"</span>
+<a class="number" name="line-55">55</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-56">56</a>    <span class='hs-varid'>tJoin</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-57">57</a>    <span class='hs-varid'>tJoin</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mappend</span>
+<a class="number" name="line-58">58</a>
+<a class="number" name="line-59">59</a>    <span class='hs-comment'>-- | Append multiple texts.</span>
 <a class="number" name="line-60">60</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-61">61</a>    <span class='hs-varid'>tJoinAll</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>t</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-62">62</a>    <span class='hs-varid'>tJoinAll</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mconcat</span>
-<a class="number" name="line-63">63</a>
-<a class="number" name="line-64">64</a>    <span class='hs-comment'>-- ----------------------  Subtext</span>
-<a class="number" name="line-65">65</a>
-<a class="number" name="line-66">66</a>    <span class='hs-comment'>-- | Preppend character to text.</span>
-<a class="number" name="line-67">67</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-68">68</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tAdd 'g' "foo"</span>
-<a class="number" name="line-69">69</a>    <span class='hs-comment'>--   "gfoo"</span>
-<a class="number" name="line-70">70</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-71">71</a>    <span class='hs-varid'>tAdd</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-72">72</a>
-<a class="number" name="line-73">73</a>    <span class='hs-comment'>-- | Preppend two characters to text.</span>
-<a class="number" name="line-74">74</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-75">75</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tAdd2 'b' 'a' "foo"</span>
-<a class="number" name="line-76">76</a>    <span class='hs-comment'>--   "bafoo"</span>
-<a class="number" name="line-77">77</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-78">78</a>    <span class='hs-varid'>tAdd2</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-79">79</a>    <span class='hs-varid'>tAdd2</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd</span> <span class='hs-varid'>c</span> <span class='hs-varop'>.</span> <span class='hs-varid'>tAdd</span> <span class='hs-varid'>d</span>
-<a class="number" name="line-80">80</a>
-<a class="number" name="line-81">81</a>    <span class='hs-comment'>-- | Preppend two characters to text.</span>
-<a class="number" name="line-82">82</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-83">83</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tAdd3 'b' 'a' 'r' "foo"</span>
-<a class="number" name="line-84">84</a>    <span class='hs-comment'>--   "barfoo"</span>
-<a class="number" name="line-85">85</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-86">86</a>    <span class='hs-varid'>tAdd3</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-87">87</a>    <span class='hs-varid'>tAdd3</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-varid'>e</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd</span> <span class='hs-varid'>c</span> <span class='hs-varop'>.</span> <span class='hs-varid'>tAdd2</span> <span class='hs-varid'>d</span> <span class='hs-varid'>e</span>
-<a class="number" name="line-88">88</a>
-<a class="number" name="line-89">89</a>    <span class='hs-comment'>-- | Split text into first character and rest of text.</span>
-<a class="number" name="line-90">90</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-91">91</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tCut "foo"</span>
-<a class="number" name="line-92">92</a>    <span class='hs-comment'>--   Just ('f',"oo")</span>
-<a class="number" name="line-93">93</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-94">94</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tCut ""</span>
-<a class="number" name="line-95">95</a>    <span class='hs-comment'>--   Nothing</span>
-<a class="number" name="line-96">96</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-97">97</a>    <span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span>
-<a class="number" name="line-98">98</a>
-<a class="number" name="line-99">99</a>    <span class='hs-comment'>-- | Split one or two characters.</span>
-<a class="number" name="line-100">100</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-101">101</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tCut2 "bar"</span>
-<a class="number" name="line-102">102</a>    <span class='hs-comment'>--   Just ('b', Just ('a', "r"))</span>
-<a class="number" name="line-103">103</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-104">104</a>    <span class='hs-varid'>tCut2</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
-<a class="number" name="line-105">105</a>    <span class='hs-varid'>tCut2</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tCut</span> <span class='hs-conid'>O</span><span class='hs-varop'>.&lt;$$&gt;</span> <span class='hs-varid'>tCut</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-106">106</a>
-<a class="number" name="line-107">107</a>    <span class='hs-comment'>-- | Split one, two, or three characters.</span>
-<a class="number" name="line-108">108</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-109">109</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tCut3 "bar"</span>
-<a class="number" name="line-110">110</a>    <span class='hs-comment'>--   Just ('b', Just ('a', Just ('r', "")))</span>
-<a class="number" name="line-111">111</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-112">112</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tCut3 "b"</span>
-<a class="number" name="line-113">113</a>    <span class='hs-comment'>--   Just ('b', Nothing)</span>
+<a class="number" name="line-61">61</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tJoinAll ["foo", "bar", "baz"]</span>
+<a class="number" name="line-62">62</a>    <span class='hs-comment'>--   "foobarbaz"</span>
+<a class="number" name="line-63">63</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-64">64</a>    <span class='hs-varid'>tJoinAll</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>t</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-65">65</a>    <span class='hs-varid'>tJoinAll</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mconcat</span>
+<a class="number" name="line-66">66</a>
+<a class="number" name="line-67">67</a>    <span class='hs-comment'>-- | Append multiple texts with separator.</span>
+<a class="number" name="line-68">68</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-69">69</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tJoinWith " | " ["foo", "bar", "baz"]</span>
+<a class="number" name="line-70">70</a>    <span class='hs-comment'>--   "foo | bar | baz"</span>
+<a class="number" name="line-71">71</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-72">72</a>    <span class='hs-varid'>tJoinWith</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>t</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-73">73</a>    <span class='hs-varid'>tJoinWith</span> <span class='hs-varid'>tw</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>first</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-74">74</a>        <span class='hs-varid'>first</span> <span class='hs-layout'>(</span><span class='hs-varid'>t</span> <span class='hs-conop'>:</span> <span class='hs-varid'>ts</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>t</span> <span class='hs-varop'>`tJoin`</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>ts</span>
+<a class="number" name="line-75">75</a>        <span class='hs-varid'>first</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tEmpty</span>
+<a class="number" name="line-76">76</a>
+<a class="number" name="line-77">77</a>        <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>t</span> <span class='hs-conop'>:</span> <span class='hs-varid'>ts</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tw</span> <span class='hs-varop'>`tJoin`</span> <span class='hs-varid'>t</span> <span class='hs-varop'>`tJoin`</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>ts</span>
+<a class="number" name="line-78">78</a>        <span class='hs-varid'>loop</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tEmpty</span>
+<a class="number" name="line-79">79</a>
+<a class="number" name="line-80">80</a>    <span class='hs-comment'>-- | Append multiple texts with space.</span>
+<a class="number" name="line-81">81</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-82">82</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tUnwords ["foo", "bar", "baz"]</span>
+<a class="number" name="line-83">83</a>    <span class='hs-comment'>--   "foo bar baz"</span>
+<a class="number" name="line-84">84</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-85">85</a>    <span class='hs-varid'>tUnwords</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>t</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-86">86</a>    <span class='hs-varid'>tUnwords</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tJoinWith</span> <span class='hs-str'>" "</span>
+<a class="number" name="line-87">87</a>
+<a class="number" name="line-88">88</a>    <span class='hs-comment'>-- ----------------------  Subtext</span>
+<a class="number" name="line-89">89</a>
+<a class="number" name="line-90">90</a>    <span class='hs-comment'>-- | Preppend character to text.</span>
+<a class="number" name="line-91">91</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-92">92</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tAdd 'g' "foo"</span>
+<a class="number" name="line-93">93</a>    <span class='hs-comment'>--   "gfoo"</span>
+<a class="number" name="line-94">94</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-95">95</a>    <span class='hs-varid'>tAdd</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-96">96</a>
+<a class="number" name="line-97">97</a>    <span class='hs-comment'>-- | Preppend two characters to text.</span>
+<a class="number" name="line-98">98</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-99">99</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tAdd2 'b' 'a' "foo"</span>
+<a class="number" name="line-100">100</a>    <span class='hs-comment'>--   "bafoo"</span>
+<a class="number" name="line-101">101</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-102">102</a>    <span class='hs-varid'>tAdd2</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-103">103</a>    <span class='hs-varid'>tAdd2</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd</span> <span class='hs-varid'>c</span> <span class='hs-varop'>.</span> <span class='hs-varid'>tAdd</span> <span class='hs-varid'>d</span>
+<a class="number" name="line-104">104</a>
+<a class="number" name="line-105">105</a>    <span class='hs-comment'>-- | Preppend two characters to text.</span>
+<a class="number" name="line-106">106</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-107">107</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tAdd3 'b' 'a' 'r' "foo"</span>
+<a class="number" name="line-108">108</a>    <span class='hs-comment'>--   "barfoo"</span>
+<a class="number" name="line-109">109</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-110">110</a>    <span class='hs-varid'>tAdd3</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-111">111</a>    <span class='hs-varid'>tAdd3</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-varid'>e</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd</span> <span class='hs-varid'>c</span> <span class='hs-varop'>.</span> <span class='hs-varid'>tAdd2</span> <span class='hs-varid'>d</span> <span class='hs-varid'>e</span>
+<a class="number" name="line-112">112</a>
+<a class="number" name="line-113">113</a>    <span class='hs-comment'>-- | Split text into first character and rest of text.</span>
 <a class="number" name="line-114">114</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-115">115</a>    <span class='hs-varid'>tCut3</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
-<a class="number" name="line-116">116</a>    <span class='hs-varid'>tCut3</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tCut2</span> <span class='hs-conid'>O</span><span class='hs-varop'>.&lt;$$&gt;</span> <span class='hs-varid'>tCut</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-117">117</a>
-<a class="number" name="line-118">118</a>    <span class='hs-comment'>-- | Take /N/ characters.</span>
-<a class="number" name="line-119">119</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-120">120</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tTake 3 "foobar"</span>
-<a class="number" name="line-121">121</a>    <span class='hs-comment'>--   "foo"</span>
-<a class="number" name="line-122">122</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-123">123</a>    <span class='hs-varid'>tTake</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-124">124</a>
-<a class="number" name="line-125">125</a>    <span class='hs-comment'>-- | Drop /N/ characters.</span>
-<a class="number" name="line-126">126</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-127">127</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tDrop 3 "foobar"</span>
-<a class="number" name="line-128">128</a>    <span class='hs-comment'>--   "bar"</span>
-<a class="number" name="line-129">129</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-130">130</a>    <span class='hs-varid'>tDrop</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-131">131</a>
-<a class="number" name="line-132">132</a>    <span class='hs-comment'>-- | Drop prefix from text.</span>
-<a class="number" name="line-133">133</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-134">134</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tDropPrefix "foo" "foobar"</span>
-<a class="number" name="line-135">135</a>    <span class='hs-comment'>--   Just "bar"</span>
-<a class="number" name="line-136">136</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-137">137</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tDropPrefix "bar" "foobar"</span>
-<a class="number" name="line-138">138</a>    <span class='hs-comment'>--   Nothing</span>
-<a class="number" name="line-139">139</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-140">140</a>    <span class='hs-varid'>tDropPrefix</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Textual</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-141">141</a>    <span class='hs-varid'>tDropPrefix</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>cs</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span><span class='hs-layout'>,</span> <span class='hs-keyword'>as</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
-<a class="number" name="line-142">142</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>c</span> <span class='hs-varop'>==</span> <span class='hs-varid'>a</span>       <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tDropPrefix</span> <span class='hs-varid'>cs</span> <span class='hs-keyword'>as</span>
-<a class="number" name="line-143">143</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Nothing</span>
-<a class="number" name="line-144">144</a>    <span class='hs-varid'>tDropPrefix</span> <span class='hs-varid'>cs</span> <span class='hs-keyword'>as</span>
-<a class="number" name="line-145">145</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>tIsEmpty</span> <span class='hs-varid'>cs</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Just</span> <span class='hs-keyword'>as</span>
-<a class="number" name="line-146">146</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Nothing</span>
-<a class="number" name="line-147">147</a>
-<a class="number" name="line-148">148</a>    <span class='hs-comment'>-- | Map function to characters of text value.</span>
-<a class="number" name="line-149">149</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-150">150</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tMap fromEnum "bar"</span>
-<a class="number" name="line-151">151</a>    <span class='hs-comment'>--   [98,97,114]</span>
-<a class="number" name="line-152">152</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-153">153</a>    <span class='hs-varid'>tMap</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span>
-<a class="number" name="line-154">154</a>    <span class='hs-varid'>tMap</span> <span class='hs-varid'>f</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-155">155</a>        <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>cs</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>f</span> <span class='hs-varid'>c</span> <span class='hs-conop'>:</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-156">156</a>        <span class='hs-varid'>loop</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
-<a class="number" name="line-157">157</a>
-<a class="number" name="line-158">158</a>    <span class='hs-comment'>-- | Divide textual value by delimiter character.</span>
-<a class="number" name="line-159">159</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-160">160</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tDivide (== '/') "foo/bar/baz"</span>
-<a class="number" name="line-161">161</a>    <span class='hs-comment'>--   ["foo","bar","baz"]</span>
-<a class="number" name="line-162">162</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-163">163</a>    <span class='hs-varid'>tDivide</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>t</span><span class='hs-keyglyph'>]</span>
-<a class="number" name="line-164">164</a>    <span class='hs-varid'>tDivide</span> <span class='hs-varid'>f</span> <span class='hs-varid'>t0</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-num'>0</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span><span class='hs-layout'>)</span> <span class='hs-varid'>t0</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-165">165</a>        <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
-<a class="number" name="line-166">166</a>            <span class='hs-keyglyph'>|</span> <span class='hs-varid'>f</span> <span class='hs-varid'>c</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tTake</span> <span class='hs-varid'>n</span> <span class='hs-varid'>t0</span> <span class='hs-conop'>:</span> <span class='hs-varid'>tDivide</span> <span class='hs-varid'>f</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-167">167</a>            <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>+</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-168">168</a>        <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>tTake</span> <span class='hs-varid'>n</span> <span class='hs-varid'>t0</span><span class='hs-keyglyph'>]</span>
-<a class="number" name="line-169">169</a>
-<a class="number" name="line-170">170</a>    <span class='hs-comment'>-- | Length of textual value.</span>
-<a class="number" name="line-171">171</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-172">172</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tLength "foo" :: Int</span>
-<a class="number" name="line-173">173</a>    <span class='hs-comment'>--   3</span>
-<a class="number" name="line-174">174</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-175">175</a>    <span class='hs-varid'>tLength</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-176">176</a>    <span class='hs-varid'>tLength</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-keyword'>_</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>1</span> <span class='hs-varop'>+</span> <span class='hs-varid'>tLength</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-177">177</a>    <span class='hs-varid'>tLength</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>0</span>
-<a class="number" name="line-178">178</a>
-<a class="number" name="line-179">179</a>    <span class='hs-comment'>-- ----------------------  Creation</span>
-<a class="number" name="line-180">180</a>
-<a class="number" name="line-181">181</a>    <span class='hs-comment'>-- | Create text from single character.</span>
+<a class="number" name="line-115">115</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tCut "foo"</span>
+<a class="number" name="line-116">116</a>    <span class='hs-comment'>--   Just ('f',"oo")</span>
+<a class="number" name="line-117">117</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-118">118</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tCut ""</span>
+<a class="number" name="line-119">119</a>    <span class='hs-comment'>--   Nothing</span>
+<a class="number" name="line-120">120</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-121">121</a>    <span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span>
+<a class="number" name="line-122">122</a>
+<a class="number" name="line-123">123</a>    <span class='hs-comment'>-- | Split one or two characters.</span>
+<a class="number" name="line-124">124</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-125">125</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tCut2 "bar"</span>
+<a class="number" name="line-126">126</a>    <span class='hs-comment'>--   Just ('b', Just ('a', "r"))</span>
+<a class="number" name="line-127">127</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-128">128</a>    <span class='hs-varid'>tCut2</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a class="number" name="line-129">129</a>    <span class='hs-varid'>tCut2</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tCut</span> <span class='hs-conid'>O</span><span class='hs-varop'>.&lt;$$&gt;</span> <span class='hs-varid'>tCut</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-130">130</a>
+<a class="number" name="line-131">131</a>    <span class='hs-comment'>-- | Split one, two, or three characters.</span>
+<a class="number" name="line-132">132</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-133">133</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tCut3 "bar"</span>
+<a class="number" name="line-134">134</a>    <span class='hs-comment'>--   Just ('b', Just ('a', Just ('r', "")))</span>
+<a class="number" name="line-135">135</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-136">136</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tCut3 "b"</span>
+<a class="number" name="line-137">137</a>    <span class='hs-comment'>--   Just ('b', Nothing)</span>
+<a class="number" name="line-138">138</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-139">139</a>    <span class='hs-varid'>tCut3</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-conid'>Maybe</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a class="number" name="line-140">140</a>    <span class='hs-varid'>tCut3</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tCut2</span> <span class='hs-conid'>O</span><span class='hs-varop'>.&lt;$$&gt;</span> <span class='hs-varid'>tCut</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-141">141</a>
+<a class="number" name="line-142">142</a>    <span class='hs-comment'>-- | Take /N-#1/ characters from /text-#2/.</span>
+<a class="number" name="line-143">143</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-144">144</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tTake 3 "foobar"</span>
+<a class="number" name="line-145">145</a>    <span class='hs-comment'>--   "foo"</span>
+<a class="number" name="line-146">146</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-147">147</a>    <span class='hs-varid'>tTake</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-148">148</a>
+<a class="number" name="line-149">149</a>    <span class='hs-comment'>-- | Drop /N-#1/ characters from /text-#2/.</span>
+<a class="number" name="line-150">150</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-151">151</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tDrop 3 "foobar"</span>
+<a class="number" name="line-152">152</a>    <span class='hs-comment'>--   "bar"</span>
+<a class="number" name="line-153">153</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-154">154</a>    <span class='hs-varid'>tDrop</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-155">155</a>
+<a class="number" name="line-156">156</a>    <span class='hs-comment'>-- | Drop /prefix-#1/ from /text-#2/.</span>
+<a class="number" name="line-157">157</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-158">158</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tDropPrefix "foo" "foobar"</span>
+<a class="number" name="line-159">159</a>    <span class='hs-comment'>--   Just "bar"</span>
+<a class="number" name="line-160">160</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-161">161</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tDropPrefix "bar" "foobar"</span>
+<a class="number" name="line-162">162</a>    <span class='hs-comment'>--   Nothing</span>
+<a class="number" name="line-163">163</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-164">164</a>    <span class='hs-varid'>tDropPrefix</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Textual</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-165">165</a>    <span class='hs-varid'>tDropPrefix</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>cs</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span><span class='hs-layout'>,</span> <span class='hs-keyword'>as</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a class="number" name="line-166">166</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>c</span> <span class='hs-varop'>==</span> <span class='hs-varid'>a</span>       <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tDropPrefix</span> <span class='hs-varid'>cs</span> <span class='hs-keyword'>as</span>
+<a class="number" name="line-167">167</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Nothing</span>
+<a class="number" name="line-168">168</a>    <span class='hs-varid'>tDropPrefix</span> <span class='hs-varid'>cs</span> <span class='hs-keyword'>as</span>
+<a class="number" name="line-169">169</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>tIsEmpty</span> <span class='hs-varid'>cs</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Just</span> <span class='hs-keyword'>as</span>
+<a class="number" name="line-170">170</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Nothing</span>
+<a class="number" name="line-171">171</a>
+<a class="number" name="line-172">172</a>    <span class='hs-comment'>-- | Map /function-#1/ to characters of /text-value-#2/.</span>
+<a class="number" name="line-173">173</a>    <span class='hs-varid'>tMap</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-174">174</a>    <span class='hs-varid'>tMap</span> <span class='hs-varid'>f</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-175">175</a>        <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>cs</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>f</span> <span class='hs-varid'>c</span> <span class='hs-varop'>`tAdd`</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>cs</span>
+<a class="number" name="line-176">176</a>        <span class='hs-varid'>loop</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tEmpty</span>
+<a class="number" name="line-177">177</a>
+<a class="number" name="line-178">178</a>    <span class='hs-comment'>-- | Map /function-#1/ to characters of /text-value-#2/.</span>
+<a class="number" name="line-179">179</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-180">180</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tList fromEnum "bar"</span>
+<a class="number" name="line-181">181</a>    <span class='hs-comment'>--   [98,97,114]</span>
 <a class="number" name="line-182">182</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-183">183</a>    <span class='hs-comment'>--   &gt;&gt;&gt; charT 'b' :: String</span>
-<a class="number" name="line-184">184</a>    <span class='hs-comment'>--   "b"</span>
-<a class="number" name="line-185">185</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-186">186</a>    <span class='hs-varid'>charT</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-187">187</a>    <span class='hs-varid'>charT</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd</span> <span class='hs-varid'>c</span> <span class='hs-varid'>tEmpty</span>
-<a class="number" name="line-188">188</a>
-<a class="number" name="line-189">189</a>    <span class='hs-comment'>-- | Create text from two characters.</span>
-<a class="number" name="line-190">190</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-191">191</a>    <span class='hs-comment'>--   &gt;&gt;&gt; char2T 'b' 'a' :: String</span>
-<a class="number" name="line-192">192</a>    <span class='hs-comment'>--   "ba"</span>
-<a class="number" name="line-193">193</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-194">194</a>    <span class='hs-varid'>char2T</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-195">195</a>    <span class='hs-varid'>char2T</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd2</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-varid'>tEmpty</span>
-<a class="number" name="line-196">196</a>
-<a class="number" name="line-197">197</a>    <span class='hs-comment'>-- | Create text from three characters.</span>
-<a class="number" name="line-198">198</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-199">199</a>    <span class='hs-comment'>--   &gt;&gt;&gt; char3T 'b' 'a' 'r' :: String</span>
-<a class="number" name="line-200">200</a>    <span class='hs-comment'>--   "bar"</span>
-<a class="number" name="line-201">201</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-202">202</a>    <span class='hs-varid'>char3T</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-203">203</a>    <span class='hs-varid'>char3T</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-varid'>e</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd3</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-varid'>e</span> <span class='hs-varid'>tEmpty</span>
-<a class="number" name="line-204">204</a>
-<a class="number" name="line-205">205</a>    <span class='hs-comment'>-- | /N/-length textual value.</span>
-<a class="number" name="line-206">206</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-207">207</a>    <span class='hs-comment'>--   &gt;&gt;&gt; charsT 4 '+' :: String</span>
-<a class="number" name="line-208">208</a>    <span class='hs-comment'>--   "++++"</span>
-<a class="number" name="line-209">209</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-210">210</a>    <span class='hs-varid'>charsT</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-211">211</a>    <span class='hs-varid'>charsT</span> <span class='hs-varid'>n</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>n</span> <span class='hs-varop'>&gt;</span> <span class='hs-num'>0</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd</span> <span class='hs-varid'>c</span> <span class='hs-varop'>$</span> <span class='hs-varid'>charsT</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-comment'>-</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-212">212</a>               <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tEmpty</span>
-<a class="number" name="line-213">213</a>
-<a class="number" name="line-214">214</a>    <span class='hs-comment'>-- ----------------------  Conversion</span>
-<a class="number" name="line-215">215</a>
-<a class="number" name="line-216">216</a>    <span class='hs-comment'>-- | Convert textual value to string.</span>
-<a class="number" name="line-217">217</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-218">218</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tString "foo"</span>
-<a class="number" name="line-219">219</a>    <span class='hs-comment'>--   "foo"</span>
-<a class="number" name="line-220">220</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-221">221</a>    <span class='hs-varid'>tString</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-222">222</a>
-<a class="number" name="line-223">223</a>    <span class='hs-comment'>-- | Convert string to textual value.</span>
+<a class="number" name="line-183">183</a>    <span class='hs-varid'>tList</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-184">184</a>    <span class='hs-varid'>tList</span> <span class='hs-varid'>f</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-185">185</a>        <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>cs</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>f</span> <span class='hs-varid'>c</span> <span class='hs-conop'>:</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>cs</span>
+<a class="number" name="line-186">186</a>        <span class='hs-varid'>loop</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
+<a class="number" name="line-187">187</a>
+<a class="number" name="line-188">188</a>    <span class='hs-comment'>-- | Test all characters of text value.</span>
+<a class="number" name="line-189">189</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-190">190</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tAll (`elem` "0123456789.") "120.5"</span>
+<a class="number" name="line-191">191</a>    <span class='hs-comment'>--   True</span>
+<a class="number" name="line-192">192</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-193">193</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tAll (`elem` "0123456789.") "120,000"</span>
+<a class="number" name="line-194">194</a>    <span class='hs-comment'>--   False</span>
+<a class="number" name="line-195">195</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-196">196</a>    <span class='hs-varid'>tAll</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a class="number" name="line-197">197</a>    <span class='hs-varid'>tAll</span> <span class='hs-varid'>f</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>and</span> <span class='hs-varop'>.</span> <span class='hs-varid'>tList</span> <span class='hs-varid'>f</span>
+<a class="number" name="line-198">198</a>
+<a class="number" name="line-199">199</a>    <span class='hs-comment'>-- | Length of /textual-value-#1/.</span>
+<a class="number" name="line-200">200</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-201">201</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tLength "foo" :: Int</span>
+<a class="number" name="line-202">202</a>    <span class='hs-comment'>--   3</span>
+<a class="number" name="line-203">203</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-204">204</a>    <span class='hs-varid'>tLength</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-205">205</a>    <span class='hs-varid'>tLength</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-keyword'>_</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>1</span> <span class='hs-varop'>+</span> <span class='hs-varid'>tLength</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-206">206</a>    <span class='hs-varid'>tLength</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>0</span>
+<a class="number" name="line-207">207</a>
+<a class="number" name="line-208">208</a>    <span class='hs-comment'>-- ----------------------  Divide and split</span>
+<a class="number" name="line-209">209</a>
+<a class="number" name="line-210">210</a>    <span class='hs-comment'>-- | Take subtext from /textual-value-#2/ while /tester-#1/ holds,</span>
+<a class="number" name="line-211">211</a>    <span class='hs-comment'>--   and pairing the subtext with after.</span>
+<a class="number" name="line-212">212</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-213">213</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tWhile (/= ' ') "foo bar baz"</span>
+<a class="number" name="line-214">214</a>    <span class='hs-comment'>--   ("foo", " bar baz")</span>
+<a class="number" name="line-215">215</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-216">216</a>    <span class='hs-varid'>tWhile</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>t</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span>
+<a class="number" name="line-217">217</a>    <span class='hs-varid'>tWhile</span> <span class='hs-varid'>f</span> <span class='hs-varid'>t0</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-num'>0</span> <span class='hs-varid'>t0</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-218">218</a>        <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>f</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>+</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-219">219</a>        <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>tTake</span> <span class='hs-varid'>n</span> <span class='hs-varid'>t0</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span>
+<a class="number" name="line-220">220</a>
+<a class="number" name="line-221">221</a>    <span class='hs-comment'>-- | Take subtext from /textual-value-#2/ while /tester-#1/ do not holds.</span>
+<a class="number" name="line-222">222</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-223">223</a>    <span class='hs-comment'>--   &gt; tWhileNot f t = tWhile (not . f) t</span>
 <a class="number" name="line-224">224</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-225">225</a>    <span class='hs-comment'>--   &gt;&gt;&gt; stringT "foo" :: String</span>
-<a class="number" name="line-226">226</a>    <span class='hs-comment'>--   "foo"</span>
-<a class="number" name="line-227">227</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-228">228</a>    <span class='hs-varid'>stringT</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-229">229</a>
-<a class="number" name="line-230">230</a>    <span class='hs-comment'>-- | Convert show instance to textual value.</span>
-<a class="number" name="line-231">231</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-232">232</a>    <span class='hs-comment'>--   &gt;&gt;&gt; showT (120 :: Int) :: String</span>
-<a class="number" name="line-233">233</a>    <span class='hs-comment'>--   "120"</span>
-<a class="number" name="line-234">234</a>    <span class='hs-comment'>--</span>
-<a class="number" name="line-235">235</a>    <span class='hs-varid'>showT</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-236">236</a>    <span class='hs-varid'>showT</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>stringT</span> <span class='hs-varop'>.</span> <span class='hs-varid'>show</span>
-<a class="number" name="line-237">237</a>
-<a class="number" name="line-238">238</a>    <span class='hs-comment'>-- | Convert strict bytestring to textual value.</span>
-<a class="number" name="line-239">239</a>    <span class='hs-varid'>bsT</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Bs</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-240">240</a>    <span class='hs-varid'>bsT</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>bzT</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Bz</span><span class='hs-varop'>.</span><span class='hs-varid'>fromStrict</span>
-<a class="number" name="line-241">241</a>
-<a class="number" name="line-242">242</a>    <span class='hs-comment'>-- | Convert lazy bytestring to textual value.</span>
-<a class="number" name="line-243">243</a>    <span class='hs-varid'>bzT</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Bz</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
-<a class="number" name="line-244">244</a>    <span class='hs-varid'>bzT</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>bsT</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Bz</span><span class='hs-varop'>.</span><span class='hs-varid'>toStrict</span>
-<a class="number" name="line-245">245</a>
-<a class="number" name="line-246">246</a><a name="instance%20Textual%20String"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Textual</span> <span class='hs-conid'>String</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-247">247</a>    <span class='hs-varid'>tEmpty</span>       <span class='hs-keyglyph'>=</span> <span class='hs-str'>""</span>
-<a class="number" name="line-248">248</a>    <span class='hs-varid'>tIsEmpty</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>null</span>
-<a class="number" name="line-249">249</a>    <span class='hs-varid'>tJoin</span>        <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>++</span><span class='hs-layout'>)</span>
-<a class="number" name="line-250">250</a>    <span class='hs-varid'>tAdd</span>         <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conop'>:</span><span class='hs-layout'>)</span>
-<a class="number" name="line-251">251</a>    <span class='hs-varid'>tCut</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>uncons</span>
-<a class="number" name="line-252">252</a>    <span class='hs-varid'>tTake</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>take</span>
-<a class="number" name="line-253">253</a>    <span class='hs-varid'>tDrop</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>drop</span>
-<a class="number" name="line-254">254</a>
-<a class="number" name="line-255">255</a>    <span class='hs-varid'>tString</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>id</span>
-<a class="number" name="line-256">256</a>    <span class='hs-varid'>stringT</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>id</span>
-<a class="number" name="line-257">257</a>    <span class='hs-varid'>bsT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Bs</span><span class='hs-varop'>.</span><span class='hs-varid'>toString</span>
-<a class="number" name="line-258">258</a>    <span class='hs-varid'>bzT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Bz</span><span class='hs-varop'>.</span><span class='hs-varid'>toString</span>
-<a class="number" name="line-259">259</a>
-<a class="number" name="line-260">260</a><a name="instance%20Textual%20Tx.Text"></a><span class='hs-comment'>-- | Strict text.</span>
-<a class="number" name="line-261">261</a><a name="instance%20Textual%20Tx.Text"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Textual</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-262">262</a>    <span class='hs-varid'>tEmpty</span>       <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>empty</span>
-<a class="number" name="line-263">263</a>    <span class='hs-varid'>tIsEmpty</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>null</span>
-<a class="number" name="line-264">264</a>    <span class='hs-varid'>tJoin</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>append</span>
-<a class="number" name="line-265">265</a>
-<a class="number" name="line-266">266</a>    <span class='hs-varid'>tAdd</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>cons</span>
-<a class="number" name="line-267">267</a>    <span class='hs-varid'>tCut</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>uncons</span>
-<a class="number" name="line-268">268</a>    <span class='hs-varid'>tTake</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>take</span>
-<a class="number" name="line-269">269</a>    <span class='hs-varid'>tDrop</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>drop</span>
+<a class="number" name="line-225">225</a>    <span class='hs-varid'>tWhileNot</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>t</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span>
+<a class="number" name="line-226">226</a>    <span class='hs-varid'>tWhileNot</span> <span class='hs-varid'>f</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tWhile</span> <span class='hs-layout'>(</span><span class='hs-varid'>not</span> <span class='hs-varop'>.</span> <span class='hs-varid'>f</span><span class='hs-layout'>)</span>
+<a class="number" name="line-227">227</a>
+<a class="number" name="line-228">228</a>    <span class='hs-comment'>-- | Divide /textual-value-#2/ to textual list by /delimiter-tester-#1/.</span>
+<a class="number" name="line-229">229</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-230">230</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tDivide (== '/') "foo/bar/baz"</span>
+<a class="number" name="line-231">231</a>    <span class='hs-comment'>--   ["foo","bar","baz"]</span>
+<a class="number" name="line-232">232</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-233">233</a>    <span class='hs-varid'>tDivide</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>t</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-234">234</a>    <span class='hs-varid'>tDivide</span> <span class='hs-varid'>f</span> <span class='hs-varid'>t0</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-num'>0</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span><span class='hs-layout'>)</span> <span class='hs-varid'>t0</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-235">235</a>        <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a class="number" name="line-236">236</a>            <span class='hs-keyglyph'>|</span> <span class='hs-varid'>f</span> <span class='hs-varid'>c</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tTake</span> <span class='hs-varid'>n</span> <span class='hs-varid'>t0</span> <span class='hs-conop'>:</span> <span class='hs-varid'>tDivide</span> <span class='hs-varid'>f</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-237">237</a>            <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>+</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-238">238</a>        <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>tTake</span> <span class='hs-varid'>n</span> <span class='hs-varid'>t0</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-239">239</a>
+<a class="number" name="line-240">240</a>    <span class='hs-comment'>-- | Divide text into words.</span>
+<a class="number" name="line-241">241</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-242">242</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tWords "a bb  ccc "</span>
+<a class="number" name="line-243">243</a>    <span class='hs-comment'>--   ["a", "bb", "ccc"]</span>
+<a class="number" name="line-244">244</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-245">245</a>    <span class='hs-varid'>tWords</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>t</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-246">246</a>    <span class='hs-varid'>tWords</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tWordsBy</span> <span class='hs-conid'>Ch</span><span class='hs-varop'>.</span><span class='hs-varid'>isSpace</span>
+<a class="number" name="line-247">247</a>
+<a class="number" name="line-248">248</a>    <span class='hs-comment'>-- | Divide text into words by character tester.</span>
+<a class="number" name="line-249">249</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-250">250</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tWordsBy (== '|') "a|bb||ccc|"</span>
+<a class="number" name="line-251">251</a>    <span class='hs-comment'>--   ["a", "bb", "ccc"]</span>
+<a class="number" name="line-252">252</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-253">253</a>    <span class='hs-varid'>tWordsBy</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>t</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-254">254</a>    <span class='hs-varid'>tWordsBy</span> <span class='hs-varid'>f</span> <span class='hs-varid'>t0</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-num'>0</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span><span class='hs-layout'>)</span> <span class='hs-varid'>t0</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-255">255</a>        <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-layout'>(</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a class="number" name="line-256">256</a>            <span class='hs-keyglyph'>|</span> <span class='hs-varid'>f</span> <span class='hs-varid'>c</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tTake</span> <span class='hs-varid'>n</span> <span class='hs-varid'>t0</span> <span class='hs-conop'>:</span> <span class='hs-layout'>(</span><span class='hs-varid'>tWordsBy</span> <span class='hs-varid'>f</span> <span class='hs-varop'>$</span> <span class='hs-varid'>snd</span> <span class='hs-varop'>$</span> <span class='hs-varid'>tWhile</span> <span class='hs-varid'>f</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span>
+<a class="number" name="line-257">257</a>            <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>+</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-258">258</a>        <span class='hs-varid'>loop</span> <span class='hs-num'>0</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
+<a class="number" name="line-259">259</a>        <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>tTake</span> <span class='hs-varid'>n</span> <span class='hs-varid'>t0</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-260">260</a>
+<a class="number" name="line-261">261</a>    <span class='hs-comment'>-- ----------------------  Creation</span>
+<a class="number" name="line-262">262</a>
+<a class="number" name="line-263">263</a>    <span class='hs-comment'>-- | Create text from single character.</span>
+<a class="number" name="line-264">264</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-265">265</a>    <span class='hs-comment'>--   &gt;&gt;&gt; charT 'b' :: String</span>
+<a class="number" name="line-266">266</a>    <span class='hs-comment'>--   "b"</span>
+<a class="number" name="line-267">267</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-268">268</a>    <span class='hs-varid'>charT</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-269">269</a>    <span class='hs-varid'>charT</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd</span> <span class='hs-varid'>c</span> <span class='hs-varid'>tEmpty</span>
 <a class="number" name="line-270">270</a>
-<a class="number" name="line-271">271</a>    <span class='hs-varid'>tString</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>unpack</span>
-<a class="number" name="line-272">272</a>    <span class='hs-varid'>stringT</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>pack</span>
-<a class="number" name="line-273">273</a>    <span class='hs-varid'>bsT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>decodeUtf8With</span> <span class='hs-conid'>Err</span><span class='hs-varop'>.</span><span class='hs-varid'>lenientDecode</span>
-<a class="number" name="line-274">274</a>    <span class='hs-varid'>bzT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-varid'>bsT</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Bz</span><span class='hs-varop'>.</span><span class='hs-varid'>toStrict</span>
-<a class="number" name="line-275">275</a>
-<a class="number" name="line-276">276</a><a name="instance%20Textual%20Tz.Text"></a><span class='hs-comment'>-- | Lazy text.</span>
-<a class="number" name="line-277">277</a><a name="instance%20Textual%20Tz.Text"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Textual</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-278">278</a>    <span class='hs-varid'>tEmpty</span>       <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>empty</span>
-<a class="number" name="line-279">279</a>    <span class='hs-varid'>tIsEmpty</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>null</span>
-<a class="number" name="line-280">280</a>    <span class='hs-varid'>tJoin</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>append</span>
-<a class="number" name="line-281">281</a>
-<a class="number" name="line-282">282</a>    <span class='hs-varid'>tAdd</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>cons</span>
-<a class="number" name="line-283">283</a>    <span class='hs-varid'>tCut</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>uncons</span>
-<a class="number" name="line-284">284</a>    <span class='hs-varid'>tTake</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>take</span> <span class='hs-varop'>.</span> <span class='hs-varid'>fromIntegral</span>
-<a class="number" name="line-285">285</a>    <span class='hs-varid'>tDrop</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>drop</span> <span class='hs-varop'>.</span> <span class='hs-varid'>fromIntegral</span>
+<a class="number" name="line-271">271</a>    <span class='hs-comment'>-- | Create text from two characters.</span>
+<a class="number" name="line-272">272</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-273">273</a>    <span class='hs-comment'>--   &gt;&gt;&gt; char2T 'b' 'a' :: String</span>
+<a class="number" name="line-274">274</a>    <span class='hs-comment'>--   "ba"</span>
+<a class="number" name="line-275">275</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-276">276</a>    <span class='hs-varid'>char2T</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-277">277</a>    <span class='hs-varid'>char2T</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd2</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-varid'>tEmpty</span>
+<a class="number" name="line-278">278</a>
+<a class="number" name="line-279">279</a>    <span class='hs-comment'>-- | Create text from three characters.</span>
+<a class="number" name="line-280">280</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-281">281</a>    <span class='hs-comment'>--   &gt;&gt;&gt; char3T 'b' 'a' 'r' :: String</span>
+<a class="number" name="line-282">282</a>    <span class='hs-comment'>--   "bar"</span>
+<a class="number" name="line-283">283</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-284">284</a>    <span class='hs-varid'>char3T</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-285">285</a>    <span class='hs-varid'>char3T</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-varid'>e</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd3</span> <span class='hs-varid'>c</span> <span class='hs-varid'>d</span> <span class='hs-varid'>e</span> <span class='hs-varid'>tEmpty</span>
 <a class="number" name="line-286">286</a>
-<a class="number" name="line-287">287</a>    <span class='hs-varid'>tString</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>unpack</span>
-<a class="number" name="line-288">288</a>    <span class='hs-varid'>stringT</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>pack</span>
-<a class="number" name="line-289">289</a>    <span class='hs-varid'>bsT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-varid'>bzT</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Bz</span><span class='hs-varop'>.</span><span class='hs-varid'>fromStrict</span>
-<a class="number" name="line-290">290</a>    <span class='hs-varid'>bzT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>decodeUtf8With</span> <span class='hs-conid'>Err</span><span class='hs-varop'>.</span><span class='hs-varid'>lenientDecode</span>
-<a class="number" name="line-291">291</a>
+<a class="number" name="line-287">287</a>    <span class='hs-comment'>-- | /N/-length textual value.</span>
+<a class="number" name="line-288">288</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-289">289</a>    <span class='hs-comment'>--   &gt;&gt;&gt; charsT 4 '+' :: String</span>
+<a class="number" name="line-290">290</a>    <span class='hs-comment'>--   "++++"</span>
+<a class="number" name="line-291">291</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-292">292</a>    <span class='hs-varid'>charsT</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Char</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-293">293</a>    <span class='hs-varid'>charsT</span> <span class='hs-varid'>n</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>n</span> <span class='hs-varop'>&gt;</span> <span class='hs-num'>0</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tAdd</span> <span class='hs-varid'>c</span> <span class='hs-varop'>$</span> <span class='hs-varid'>charsT</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-comment'>-</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-294">294</a>               <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tEmpty</span>
+<a class="number" name="line-295">295</a>
+<a class="number" name="line-296">296</a>    <span class='hs-comment'>-- ----------------------  Conversion</span>
+<a class="number" name="line-297">297</a>
+<a class="number" name="line-298">298</a>    <span class='hs-comment'>-- | Convert textual value to string.</span>
+<a class="number" name="line-299">299</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-300">300</a>    <span class='hs-comment'>--   &gt;&gt;&gt; tString "foo"</span>
+<a class="number" name="line-301">301</a>    <span class='hs-comment'>--   "foo"</span>
+<a class="number" name="line-302">302</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-303">303</a>    <span class='hs-varid'>tString</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-304">304</a>
+<a class="number" name="line-305">305</a>    <span class='hs-comment'>-- | Convert string to textual value.</span>
+<a class="number" name="line-306">306</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-307">307</a>    <span class='hs-comment'>--   &gt;&gt;&gt; stringT "foo" :: String</span>
+<a class="number" name="line-308">308</a>    <span class='hs-comment'>--   "foo"</span>
+<a class="number" name="line-309">309</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-310">310</a>    <span class='hs-varid'>stringT</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-311">311</a>
+<a class="number" name="line-312">312</a>    <span class='hs-comment'>-- | Convert show instance to textual value.</span>
+<a class="number" name="line-313">313</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-314">314</a>    <span class='hs-comment'>--   &gt;&gt;&gt; showT (120 :: Int) :: String</span>
+<a class="number" name="line-315">315</a>    <span class='hs-comment'>--   "120"</span>
+<a class="number" name="line-316">316</a>    <span class='hs-comment'>--</span>
+<a class="number" name="line-317">317</a>    <span class='hs-varid'>showT</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-318">318</a>    <span class='hs-varid'>showT</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>stringT</span> <span class='hs-varop'>.</span> <span class='hs-varid'>show</span>
+<a class="number" name="line-319">319</a>
+<a class="number" name="line-320">320</a>    <span class='hs-comment'>-- | Convert strict bytestring to textual value.</span>
+<a class="number" name="line-321">321</a>    <span class='hs-varid'>bsT</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Bs</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-322">322</a>    <span class='hs-varid'>bsT</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>bzT</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Bz</span><span class='hs-varop'>.</span><span class='hs-varid'>fromStrict</span>
+<a class="number" name="line-323">323</a>
+<a class="number" name="line-324">324</a>    <span class='hs-comment'>-- | Convert lazy bytestring to textual value.</span>
+<a class="number" name="line-325">325</a>    <span class='hs-varid'>bzT</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Bz</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-326">326</a>    <span class='hs-varid'>bzT</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>bsT</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Bz</span><span class='hs-varop'>.</span><span class='hs-varid'>toStrict</span>
+<a class="number" name="line-327">327</a>
+<a class="number" name="line-328">328</a><a name="instance%20Textual%20String"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Textual</span> <span class='hs-conid'>String</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-329">329</a>    <span class='hs-varid'>tEmpty</span>       <span class='hs-keyglyph'>=</span> <span class='hs-str'>""</span>
+<a class="number" name="line-330">330</a>    <span class='hs-varid'>tIsEmpty</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>null</span>
+<a class="number" name="line-331">331</a>    <span class='hs-varid'>tJoin</span>        <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>++</span><span class='hs-layout'>)</span>
+<a class="number" name="line-332">332</a>    <span class='hs-varid'>tAdd</span>         <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conop'>:</span><span class='hs-layout'>)</span>
+<a class="number" name="line-333">333</a>    <span class='hs-varid'>tCut</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>uncons</span>
+<a class="number" name="line-334">334</a>    <span class='hs-varid'>tTake</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>take</span>
+<a class="number" name="line-335">335</a>    <span class='hs-varid'>tDrop</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>drop</span>
+<a class="number" name="line-336">336</a>
+<a class="number" name="line-337">337</a>    <span class='hs-varid'>tString</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>id</span>
+<a class="number" name="line-338">338</a>    <span class='hs-varid'>stringT</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>id</span>
+<a class="number" name="line-339">339</a>    <span class='hs-varid'>bsT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Bs</span><span class='hs-varop'>.</span><span class='hs-varid'>toString</span>
+<a class="number" name="line-340">340</a>    <span class='hs-varid'>bzT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Bz</span><span class='hs-varop'>.</span><span class='hs-varid'>toString</span>
+<a class="number" name="line-341">341</a>
+<a class="number" name="line-342">342</a><a name="instance%20Textual%20O.Tx"></a><span class='hs-comment'>-- | Strict text.</span>
+<a class="number" name="line-343">343</a><a name="instance%20Textual%20O.Tx"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Textual</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Tx</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-344">344</a>    <span class='hs-varid'>tEmpty</span>       <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>empty</span>
+<a class="number" name="line-345">345</a>    <span class='hs-varid'>tIsEmpty</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>null</span>
+<a class="number" name="line-346">346</a>    <span class='hs-varid'>tJoin</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>append</span>
+<a class="number" name="line-347">347</a>
+<a class="number" name="line-348">348</a>    <span class='hs-varid'>tAdd</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>cons</span>
+<a class="number" name="line-349">349</a>    <span class='hs-varid'>tCut</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>uncons</span>
+<a class="number" name="line-350">350</a>    <span class='hs-varid'>tTake</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>take</span>
+<a class="number" name="line-351">351</a>    <span class='hs-varid'>tDrop</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>drop</span>
+<a class="number" name="line-352">352</a>
+<a class="number" name="line-353">353</a>    <span class='hs-varid'>tString</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>unpack</span>
+<a class="number" name="line-354">354</a>    <span class='hs-varid'>stringT</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>pack</span>
+<a class="number" name="line-355">355</a>    <span class='hs-varid'>bsT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tx</span><span class='hs-varop'>.</span><span class='hs-varid'>decodeUtf8With</span> <span class='hs-conid'>Err</span><span class='hs-varop'>.</span><span class='hs-varid'>lenientDecode</span>
+<a class="number" name="line-356">356</a>    <span class='hs-varid'>bzT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-varid'>bsT</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Bz</span><span class='hs-varop'>.</span><span class='hs-varid'>toStrict</span>
+<a class="number" name="line-357">357</a>
+<a class="number" name="line-358">358</a><a name="instance%20Textual%20O.Tz"></a><span class='hs-comment'>-- | Lazy text.</span>
+<a class="number" name="line-359">359</a><a name="instance%20Textual%20O.Tz"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Textual</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Tz</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-360">360</a>    <span class='hs-varid'>tEmpty</span>       <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>empty</span>
+<a class="number" name="line-361">361</a>    <span class='hs-varid'>tIsEmpty</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>null</span>
+<a class="number" name="line-362">362</a>    <span class='hs-varid'>tJoin</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>append</span>
+<a class="number" name="line-363">363</a>
+<a class="number" name="line-364">364</a>    <span class='hs-varid'>tAdd</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>cons</span>
+<a class="number" name="line-365">365</a>    <span class='hs-varid'>tCut</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>uncons</span>
+<a class="number" name="line-366">366</a>    <span class='hs-varid'>tTake</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>take</span> <span class='hs-varop'>.</span> <span class='hs-varid'>fromIntegral</span>
+<a class="number" name="line-367">367</a>    <span class='hs-varid'>tDrop</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>drop</span> <span class='hs-varop'>.</span> <span class='hs-varid'>fromIntegral</span>
+<a class="number" name="line-368">368</a>
+<a class="number" name="line-369">369</a>    <span class='hs-varid'>tString</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>unpack</span>
+<a class="number" name="line-370">370</a>    <span class='hs-varid'>stringT</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>pack</span>
+<a class="number" name="line-371">371</a>    <span class='hs-varid'>bsT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-varid'>bzT</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Bz</span><span class='hs-varop'>.</span><span class='hs-varid'>fromStrict</span>
+<a class="number" name="line-372">372</a>    <span class='hs-varid'>bzT</span>          <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>decodeUtf8With</span> <span class='hs-conid'>Err</span><span class='hs-varop'>.</span><span class='hs-varid'>lenientDecode</span>
+<a class="number" name="line-373">373</a>
+<a class="number" name="line-374">374</a><a name="stringify"></a><span class='hs-comment'>-- | Convert textual something to string something.</span>
+<a class="number" name="line-375">375</a><span class='hs-definition'>stringify</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Functor</span> <span class='hs-varid'>f</span><span class='hs-layout'>,</span> <span class='hs-conid'>Textual</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>f</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>f</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-376">376</a><span class='hs-definition'>stringify</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>tString</span> <span class='hs-varop'>&lt;$&gt;</span><span class='hs-layout'>)</span>
+<a class="number" name="line-377">377</a>
 </pre></body>
 </html>

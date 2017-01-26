@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.206.0.0
+@version 0.209.0.0
 
 
 -- | Relmap operators for dec type.

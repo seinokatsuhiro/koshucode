@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.206.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.209.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -80,20 +80,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:LineNumber"
-	    >LineNumber</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
+	    >class</span
+	    > <a href="#t:ToLines"
+	    >ToLines</a
+	    > i <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:toLines"
+		>toLines</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		>Textual</a
+		> t =&gt; i -&gt; [t]</li
+	      ></ul
 	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:NumberedLine"
-	    >NumberedLine</a
-	    > t = (<a href="Koshucode-Baala-Base-Code-Line.html#t:LineNumber"
-	    >LineNumber</a
-	    >, t)</li
 	  ><li class="src short"
 	  ><a href="#v:dropBom"
 	    >dropBom</a
@@ -111,15 +111,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >Bz</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:numberedLines"
-	    >numberedLines</a
-	    > :: (<a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
-	    >ToCode</a
-	    > code, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	  ><a href="#v:textualLines"
+	    >textualLines</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
 	    >Textual</a
-	    > t) =&gt; code -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:NumberedLine"
-	    >NumberedLine</a
-	    > t]</li
+	    > t =&gt; t -&gt; [t]</li
 	  ><li class="src short"
 	  ><a href="#v:linesCrlf"
 	    >linesCrlf</a
@@ -131,8 +127,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ><li class="src short"
 	  ><a href="#v:linesCrlfBz"
 	    >linesCrlfBz</a
-	    > :: <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
-	    >ToCode</a
+	    > :: <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToBytes"
+	    >ToBytes</a
 	    > code =&gt; code -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Shorthand.html#t:Bz"
 	    >Bz</a
 	    >]</li
@@ -141,11 +137,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >linesCrlfNumbered</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:NumberedLine"
-	    >NumberedLine</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > -&gt; [(<a href="Koshucode-Baala-Base-Code-Line.html#t:LineNumber"
+	    >LineNumber</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    >]</li
+	    >)]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:LineNumber"
+	    >LineNumber</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
@@ -198,33 +202,75 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:LineNumber" class="def"
-	    >LineNumber</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#LineNumber');" href="javascript:void(0);" class="link"
+	    >class</span
+	    > <a name="t:ToLines" class="def"
+	    >ToLines</a
+	    > i <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#ToLines');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Line number.</p
+	    >Split input into textual lines.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>toLines &quot;aaa\nbbb\r\nccc\n\nddd\n&quot; :: [String]
+</code
+		></strong
+	      >[&quot;aaa&quot;, &quot;bbb&quot;, &quot;ccc&quot;, &quot;&quot;, &quot;ddd&quot;]
+</pre
 	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:NumberedLine" class="def"
-	    >NumberedLine</a
-	    > t = (<a href="Koshucode-Baala-Base-Code-Line.html#t:LineNumber"
-	    >LineNumber</a
-	    >, t) <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#NumberedLine');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Line with number.</p
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:toLines" class="def"
+	      >toLines</a
+	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	      >Textual</a
+	      > t =&gt; i -&gt; [t] <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#toLines');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ToLines" class="caption collapser" onclick="toggleSection('i:ToLines')"
+	    >Instances</p
+	    ><div id="section.i:ToLines" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Code-Line.html#t:ToLines"
+		      >ToLines</a
+		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#line-43');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Code-Line.html#t:ToLines"
+		      >ToLines</a
+		      > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Shorthand.html#t:Bz"
+		      >Bz</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#line-40');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
 	    ></div
 	  ></div
 	><div class="top"
@@ -282,20 +328,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:numberedLines" class="def"
-	    >numberedLines</a
-	    > :: (<a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
-	    >ToCode</a
-	    > code, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	  ><a name="v:textualLines" class="def"
+	    >textualLines</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
 	    >Textual</a
-	    > t) =&gt; code -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:NumberedLine"
-	    >NumberedLine</a
-	    > t] <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#numberedLines');" href="javascript:void(0);" class="link"
+	    > t =&gt; t -&gt; [t] <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#textualLines');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Create numbered lines from lazy bytestring.</p
+	    >Split <em
+	      >textual-value-#1</em
+	      > into lines.
+   The result texts do not contain
+   carriage returns (<code
+	      >\r</code
+	      >)
+   and line feeds (<code
+	      >\n</code
+	      >).</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>textualLines &quot;aaa\nbbb\r\nccc\n\nddd\n&quot;
+</code
+		></strong
+	      >[&quot;aaa&quot;, &quot;bbb&quot;, &quot;ccc&quot;, &quot;&quot;, &quot;ddd&quot;]
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -319,32 +380,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		>.</p
 	      ></div
 	    ><p
-	    >Split string into lines.
-   The result strings do not contain
-   carriage returns (<code
-	      >\r</code
-	      >)
-   and line feeds (<code
-	      >\n</code
-	      >).</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>linesCrlf &quot;aaa\nbbb\r\nccc\n\nddd\n&quot;
-</code
-		></strong
-	      >[&quot;aaa&quot;,&quot;bbb&quot;,&quot;ccc&quot;,&quot;&quot;,&quot;ddd&quot;]
-</pre
+	    >Split string into lines.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:linesCrlfBz" class="def"
 	    >linesCrlfBz</a
-	    > :: <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
-	    >ToCode</a
+	    > :: <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToBytes"
+	    >ToBytes</a
 	    > code =&gt; code -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Shorthand.html#t:Bz"
 	    >Bz</a
 	    >] <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#linesCrlfBz');" href="javascript:void(0);" class="link"
@@ -370,11 +414,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >linesCrlfNumbered</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:NumberedLine"
-	    >NumberedLine</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > -&gt; [(<a href="Koshucode-Baala-Base-Code-Line.html#t:LineNumber"
+	    >LineNumber</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    >] <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#linesCrlfNumbered');" href="javascript:void(0);" class="link"
+	    >)] <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#linesCrlfNumbered');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -392,6 +436,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ></div
 	><h1 id="g:2"
 	>CodeLine</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:LineNumber" class="def"
+	    >LineNumber</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#LineNumber');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Line number.</p
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -465,6 +525,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+		      >Functor</a
+		      > k =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+		      >Functor</a
+		      > (<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
+		      >CodeLine</a
+		      > k)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#line-129');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
 		    >(<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
 		      >Eq</a
 		      > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
@@ -474,7 +550,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		      > (<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
 		      >CodeLine</a
 		      > k t)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#line-114');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#line-127');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -492,7 +568,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		      > (<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
 		      >CodeLine</a
 		      > k t)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#line-114');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#line-127');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -510,7 +586,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		      > (<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
 		      >CodeLine</a
 		      > k t)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#line-114');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#line-127');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -526,7 +602,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		      > (<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
 		      >CodeLine</a
 		      > k t)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#line-116');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Line.html#line-133');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"

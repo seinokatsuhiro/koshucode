@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.206.0.0
+@version 0.209.0.0
 
 
 -- | Suffix and prefix.
@@ -506,17 +506,11 @@ fromMaybe :: a -> Maybe a -> a
 --   extension (-XOverloadedStrings in GHC).
 class IsString a
 
--- | Strict text.
-type Tx = Text
-
 -- | Convert string to strict text. This is same as <a>pack</a>.
 stringTx :: String -> Tx
 
 -- | Convert strict text to string. This is same as <a>unpack</a>.
 txString :: Tx -> String
-
--- | Lazy text.
-type Tz = Text
 
 -- | Convert string to lazy text. This is same as <a>pack</a>.
 stringTz :: String -> Tz
@@ -2100,9 +2094,6 @@ CodePos :: Ix -> IOPath -> Int -> t -> t -> TCodePos t
 --   </pre>
 cpCharNo :: (Textual t) => TCodePos t -> Int
 
--- | Convert textual position to string position.
-cpStringify :: (Textual t) => TCodePos t -> CodePos
-
 -- | Before and after text of code position.
 --   
 --   <pre>
@@ -2377,28 +2368,28 @@ type IOAb a = IO (Ab a)
 type BinAb a = a -> a -> Ab a
 
 -- | Construct abort reason with reason text.
-abortBecause :: String -> AbortReason
+abortBecause :: (Textual s) => s -> AbortReason
 
 -- | Construct abort reason with reason and detailed text.
-abortLine :: String -> String -> AbortReason
+abortLine :: (Textual s, Textual t) => s -> t -> AbortReason
 
 -- | Construct abort reason with reason and multilined detailed text.
-abortLines :: String -> [String] -> AbortReason
+abortLines :: (Textual s, Textual t) => s -> [t] -> AbortReason
 
 -- | Construct abort reason with reason and note.
-abortPage :: String -> [String] -> AbortReason
+abortPage :: (Textual s, Textual t) => s -> [t] -> AbortReason
 
 -- | <a>Left</a> plus <a>abortBecause</a>.
-leftBecause :: String -> Ab a
+leftBecause :: (Textual s) => s -> Ab a
 
 -- | <a>Left</a> plus <a>abortLine</a>.
-leftLine :: String -> String -> Ab a
+leftLine :: (Textual s, Textual t) => s -> t -> Ab a
 
 -- | <a>Left</a> plus <a>abortLines</a>.
-leftLines :: String -> [String] -> Ab a
+leftLines :: (Textual s, Textual t) => s -> [t] -> Ab a
 
 -- | <a>Left</a> plus <a>abortPage</a>.
-leftPage :: String -> [String] -> Ab a
+leftPage :: (Textual s, Textual t) => s -> [t] -> Ab a
 
 -- | Abortable process.
 type Abortable cp b = cp -> MapAb b
@@ -2415,6 +2406,13 @@ instance GHC.Show.Show Koshucode.Baala.Base.Abort.Reason.AbortReason
 
 -- | I/O point: file, standard input, direct text, etc.
 module Koshucode.Baala.Base.IO.IOPoint
+
+-- | This implementation uses lazy bytestring as input code.
+type Bytes = Bz
+
+-- | Convert to bytes.
+class ToBytes a
+toBytes :: ToBytes a => a -> Bytes
 
 -- | Named I/O handle.
 data NamedHandle
@@ -2435,8 +2433,8 @@ IOPointFile :: FilePath -> FilePath -> IOPoint
 -- | <b>2 Input:</b> Universal resource identifier.
 IOPointUri :: IOPath -> IOPoint
 
--- | <b>3 Input:</b> Code and its name.
-IOPointText :: (Maybe String) -> Code -> IOPoint
+-- | <b>3 Input:</b> Input bytes and its name.
+IOPointText :: (Maybe String) -> Bytes -> IOPoint
 
 -- | <b>4 Input:</b> Custom I/O.
 IOPointCustom :: String -> Bz -> IOPoint
@@ -2464,7 +2462,7 @@ ioPoint :: IOPath -> IOPoint
 ioPointDir :: FilePath -> Map IOPoint
 
 -- | Create I/O points from using stdin, texts itself, filenames, and URIs.
-ioPointTogether :: Bool -> [Code] -> [FilePath] -> [IOPoint]
+ioPointTogether :: Bool -> [Bytes] -> [FilePath] -> [IOPoint]
 
 -- | Indexed I/O point.
 data IxIOPoint
@@ -2482,21 +2480,16 @@ IxIOPoint :: Ix -> IOPoint -> IxIOPoint
 --   &gt;&gt;&gt; codeIxIO "abc"
 --   IxIOPoint {nioNumber = 0, nioPoint = IOPointText Nothing "abc"}
 --   </pre>
-codeIxIO :: (ToCode code) => code -> IxIOPoint
+codeIxIO :: (ToBytes code) => code -> IxIOPoint
 
 -- | Create input point from file path.
 pathIxIO :: FilePath -> IxIOPoint
-
--- | This implementation uses lazy bytestring as code string.
-type Code = Bz
-
--- | Convert to code string.
-class ToCode a
-toCode :: ToCode a => a -> Code
 instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
 instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.IOPoint
 instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.IOPoint
 instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.IOPoint
+instance Koshucode.Baala.Base.IO.IOPoint.ToBytes Koshucode.Baala.Overture.Shorthand.Bz
+instance Koshucode.Baala.Base.IO.IOPoint.ToBytes GHC.Base.String
 instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.NamedHandle
 instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.NamedHandle
 instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.NamedHandle
@@ -2506,8 +2499,6 @@ instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
 instance Data.Default.Class.Default Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
 instance Koshucode.Baala.Overture.Index.GetIx Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
 instance Koshucode.Baala.Overture.Misc.GetIOPath Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
-instance Koshucode.Baala.Base.IO.IOPoint.ToCode Koshucode.Baala.Overture.Shorthand.Bz
-instance Koshucode.Baala.Base.IO.IOPoint.ToCode GHC.Base.String
 
 
 -- | Dots pattern.
@@ -2894,8 +2885,11 @@ codeTrees :: (Ord b, GetCodePos (k t)) => GetBracket b (k t) -> Bracket b -> [k 
 -- | Wrap trees into single tree.
 codeTreeWrap :: b -> [CodeTree b k t] -> CodeTree b k t
 
+-- | Mapping function for textual code tree.
+codeTreeFmap :: (Functor k) => (t -> u) -> CodeTree b k t -> CodeTree b k u
+
 -- | Mapping function for code tree.
-codeTreeFmap :: (x -> y) -> CodeTree' b x -> CodeTree' b y
+codeTreeFmap' :: (x -> y) -> CodeTree' b x -> CodeTree' b y
 
 -- | Convert tree to list of tokens.
 untree :: CodeTree b k t -> [k t]
@@ -3000,11 +2994,14 @@ module Koshucode.Baala.Base.IO
 -- | Text lines delimited by carriage returns or line feeds.
 module Koshucode.Baala.Base.Code.Line
 
--- | Line number.
-type LineNumber = Int
-
--- | Line with number.
-type NumberedLine t = (LineNumber, t)
+-- | Split input into textual lines.
+--   
+--   <pre>
+--   &gt;&gt;&gt; toLines "aaa\nbbb\r\nccc\n\nddd\n" :: [String]
+--   ["aaa", "bbb", "ccc", "", "ddd"]
+--   </pre>
+class ToLines i
+toLines :: (ToLines i, Textual t) => i -> [t]
 
 -- | Remove UTF-8 BOM (EF BB BF in hexadecimal) from lazy bytestring.
 --   
@@ -3023,16 +3020,16 @@ dropBom :: Bz -> Bz
 --   begins with the UTF-8 BOM, this function drops it.
 bzLines :: Bz -> [Bz]
 
--- | Create numbered lines from lazy bytestring.
-numberedLines :: (ToCode code, Textual t) => code -> [NumberedLine t]
-
--- | Split string into lines. The result strings do not contain carriage
---   returns (<tt>\r</tt>) and line feeds (<tt>\n</tt>).
+-- | Split <i>textual-value-#1</i> into lines. The result texts do not
+--   contain carriage returns (<tt>\r</tt>) and line feeds (<tt>\n</tt>).
 --   
 --   <pre>
---   &gt;&gt;&gt; linesCrlf "aaa\nbbb\r\nccc\n\nddd\n"
---   ["aaa","bbb","ccc","","ddd"]
+--   &gt;&gt;&gt; textualLines "aaa\nbbb\r\nccc\n\nddd\n"
+--   ["aaa", "bbb", "ccc", "", "ddd"]
 --   </pre>
+textualLines :: (Textual t) => t -> [t]
+
+-- | Split string into lines.
 
 -- | <i>Deprecated: Consider <a>bzLines</a>.</i>
 linesCrlf :: String -> [String]
@@ -3041,12 +3038,15 @@ linesCrlf :: String -> [String]
 --   drops the BOM sequence.
 
 -- | <i>Deprecated: Consider <a>bzLines</a>.</i>
-linesCrlfBz :: (ToCode code) => code -> [Bz]
+linesCrlfBz :: (ToBytes code) => code -> [Bz]
 
 -- | Line number and its content.
 
 -- | <i>Deprecated: Consider <a>bzLines</a>.</i>
-linesCrlfNumbered :: String -> [NumberedLine String]
+linesCrlfNumbered :: String -> [(LineNumber, String)]
+
+-- | Line number.
+type LineNumber = Int
 
 -- | Tokens in line.
 data CodeLine k t
@@ -3069,6 +3069,9 @@ lineIndentPair :: (k t -> IndentSize) -> CodeLine k t -> (IndentSize, CodeLine k
 instance (GHC.Classes.Ord t, GHC.Classes.Ord (k t)) => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Line.CodeLine k t)
 instance (GHC.Classes.Eq t, GHC.Classes.Eq (k t)) => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Line.CodeLine k t)
 instance (GHC.Show.Show t, GHC.Show.Show (k t)) => GHC.Show.Show (Koshucode.Baala.Base.Code.Line.CodeLine k t)
+instance Koshucode.Baala.Base.Code.Line.ToLines Koshucode.Baala.Overture.Shorthand.Bz
+instance Koshucode.Baala.Base.Code.Line.ToLines GHC.Base.String
+instance GHC.Base.Functor k => GHC.Base.Functor (Koshucode.Baala.Base.Code.Line.CodeLine k)
 instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (k t) => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Line.CodeLine k t)
 
 
@@ -3154,7 +3157,7 @@ codeScanRestore :: CodeScanMap k t
 --   <li>Tokenize each lines, and put tokens together in
 --   <a>CodeLine</a>.</li>
 --   </ol>
-codeScanUp :: (ToCode code, Textual t) => CodeScanMap k t -> IxIOPoint -> code -> [CodeLine k t]
+codeScanUp :: (ToLines i, Textual t) => CodeScanMap k t -> IxIOPoint -> i -> [CodeLine k t]
 
 -- | Update <a>scanInput</a> and push result element to <a>scanOutput</a>.
 codeUpdate :: t -> k t -> CodeScanMap k t

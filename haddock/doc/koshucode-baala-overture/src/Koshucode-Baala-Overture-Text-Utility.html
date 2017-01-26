@@ -141,95 +141,96 @@
 <a class="number" name="line-132">132</a><span class='hs-comment'>--   &gt;&gt;&gt; addSpace ""</span>
 <a class="number" name="line-133">133</a><span class='hs-comment'>--   ""</span>
 <a class="number" name="line-134">134</a><span class='hs-comment'>--</span>
-<a class="number" name="line-135">135</a><span class='hs-definition'>addSpace</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>StringMap</span>
-<a class="number" name="line-136">136</a><span class='hs-definition'>addSpace</span> <span class='hs-varid'>cs</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-varid'>c</span> <span class='hs-conop'>:</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>|</span> <span class='hs-conid'>Ch</span><span class='hs-varop'>.</span><span class='hs-varid'>isSpace</span> <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-137">137</a>                    <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>     <span class='hs-keyglyph'>=</span> <span class='hs-chr'>' '</span> <span class='hs-conop'>:</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-138">138</a><span class='hs-definition'>addSpace</span> <span class='hs-str'>""</span>                         <span class='hs-keyglyph'>=</span> <span class='hs-str'>""</span>
-<a class="number" name="line-139">139</a>
+<a class="number" name="line-135">135</a><span class='hs-definition'>addSpace</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Textual</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-136">136</a><span class='hs-definition'>addSpace</span> <span class='hs-varid'>cs</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>tCut</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a class="number" name="line-137">137</a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>Ch</span><span class='hs-varop'>.</span><span class='hs-varid'>isSpace</span> <span class='hs-varid'>c</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>cs</span>
+<a class="number" name="line-138">138</a>    <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>tAdd</span> <span class='hs-chr'>' '</span> <span class='hs-varid'>cs</span>
+<a class="number" name="line-139">139</a><span class='hs-definition'>addSpace</span> <span class='hs-keyword'>_</span>           <span class='hs-keyglyph'>=</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>tEmpty</span>
 <a class="number" name="line-140">140</a>
-<a class="number" name="line-141">141</a><span class='hs-comment'>-- ============================================  Code point</span>
-<a class="number" name="line-142">142</a>
-<a class="number" name="line-143">143</a><a name="isAsciiCode"></a><span class='hs-comment'>-- | Test ASCII code point (0 .. 127).</span>
-<a class="number" name="line-144">144</a><span class='hs-definition'>isAsciiCode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a class="number" name="line-145">145</a><span class='hs-definition'>isAsciiCode</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>&lt;=</span> <span class='hs-num'>127</span><span class='hs-layout'>)</span>
-<a class="number" name="line-146">146</a>
-<a class="number" name="line-147">147</a><a name="isControlCode"></a><span class='hs-comment'>-- | Test ASCII control code point (0 .. 31, 127).</span>
-<a class="number" name="line-148">148</a><span class='hs-definition'>isControlCode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a class="number" name="line-149">149</a><span class='hs-definition'>isControlCode</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span> <span class='hs-varop'>&lt;=</span> <span class='hs-num'>31</span> <span class='hs-varop'>||</span> <span class='hs-varid'>n</span> <span class='hs-varop'>==</span> <span class='hs-num'>127</span>
-<a class="number" name="line-150">150</a>
-<a class="number" name="line-151">151</a><a name="isFormatCode"></a><span class='hs-comment'>-- | Test format code point (9 .. 13).</span>
-<a class="number" name="line-152">152</a><span class='hs-definition'>isFormatCode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a class="number" name="line-153">153</a><span class='hs-definition'>isFormatCode</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span> <span class='hs-varop'>&gt;=</span> <span class='hs-varid'>integralHT</span> <span class='hs-varop'>&amp;&amp;</span> <span class='hs-varid'>n</span> <span class='hs-varop'>&lt;=</span> <span class='hs-varid'>integralCR</span>
-<a class="number" name="line-154">154</a>
-<a class="number" name="line-155">155</a><a name="isNewlineCode"></a><span class='hs-comment'>-- | Test newline code point (10, 13).</span>
-<a class="number" name="line-156">156</a><span class='hs-definition'>isNewlineCode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a class="number" name="line-157">157</a><span class='hs-definition'>isNewlineCode</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>==</span> <span class='hs-varid'>integralLF</span><span class='hs-layout'>)</span> <span class='hs-varop'>||</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>==</span> <span class='hs-varid'>integralCR</span><span class='hs-layout'>)</span>
-<a class="number" name="line-158">158</a>
-<a class="number" name="line-159">159</a><a name="integralHT"></a><span class='hs-comment'>-- | Generic code point (9) of horizontal tab character (@'\t'@).</span>
-<a class="number" name="line-160">160</a><span class='hs-definition'>integralHT</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-161">161</a><span class='hs-definition'>integralHT</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>9</span>
-<a class="number" name="line-162">162</a>
-<a class="number" name="line-163">163</a><a name="integralLF"></a><span class='hs-comment'>-- | Generic code point (10) of line feed character (@'\n'@).</span>
-<a class="number" name="line-164">164</a><span class='hs-definition'>integralLF</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-165">165</a><span class='hs-definition'>integralLF</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>10</span>
-<a class="number" name="line-166">166</a>
-<a class="number" name="line-167">167</a><a name="integralVT"></a><span class='hs-comment'>-- | Generic code point (11) of vertical tab character (@'\v'@).</span>
-<a class="number" name="line-168">168</a><span class='hs-definition'>integralVT</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-169">169</a><span class='hs-definition'>integralVT</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>11</span>
-<a class="number" name="line-170">170</a>
-<a class="number" name="line-171">171</a><a name="integralFF"></a><span class='hs-comment'>-- | Generic code point (12) of form feed character (@'\f'@).</span>
-<a class="number" name="line-172">172</a><span class='hs-definition'>integralFF</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-173">173</a><span class='hs-definition'>integralFF</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>12</span>
-<a class="number" name="line-174">174</a>
-<a class="number" name="line-175">175</a><a name="integralCR"></a><span class='hs-comment'>-- | Generic code point (13) of carriage return character (@'\r'@).</span>
-<a class="number" name="line-176">176</a><span class='hs-definition'>integralCR</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-177">177</a><span class='hs-definition'>integralCR</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>13</span>
-<a class="number" name="line-178">178</a>
-<a class="number" name="line-179">179</a><a name="integralSpace"></a><span class='hs-comment'>-- | Generic code point (32) of space character (@' '@).</span>
-<a class="number" name="line-180">180</a><span class='hs-definition'>integralSpace</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-181">181</a><span class='hs-definition'>integralSpace</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>32</span>
-<a class="number" name="line-182">182</a>
+<a class="number" name="line-141">141</a>
+<a class="number" name="line-142">142</a><span class='hs-comment'>-- ============================================  Code point</span>
+<a class="number" name="line-143">143</a>
+<a class="number" name="line-144">144</a><a name="isAsciiCode"></a><span class='hs-comment'>-- | Test ASCII code point (0 .. 127).</span>
+<a class="number" name="line-145">145</a><span class='hs-definition'>isAsciiCode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a class="number" name="line-146">146</a><span class='hs-definition'>isAsciiCode</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>&lt;=</span> <span class='hs-num'>127</span><span class='hs-layout'>)</span>
+<a class="number" name="line-147">147</a>
+<a class="number" name="line-148">148</a><a name="isControlCode"></a><span class='hs-comment'>-- | Test ASCII control code point (0 .. 31, 127).</span>
+<a class="number" name="line-149">149</a><span class='hs-definition'>isControlCode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a class="number" name="line-150">150</a><span class='hs-definition'>isControlCode</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span> <span class='hs-varop'>&lt;=</span> <span class='hs-num'>31</span> <span class='hs-varop'>||</span> <span class='hs-varid'>n</span> <span class='hs-varop'>==</span> <span class='hs-num'>127</span>
+<a class="number" name="line-151">151</a>
+<a class="number" name="line-152">152</a><a name="isFormatCode"></a><span class='hs-comment'>-- | Test format code point (9 .. 13).</span>
+<a class="number" name="line-153">153</a><span class='hs-definition'>isFormatCode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a class="number" name="line-154">154</a><span class='hs-definition'>isFormatCode</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span> <span class='hs-varop'>&gt;=</span> <span class='hs-varid'>integralHT</span> <span class='hs-varop'>&amp;&amp;</span> <span class='hs-varid'>n</span> <span class='hs-varop'>&lt;=</span> <span class='hs-varid'>integralCR</span>
+<a class="number" name="line-155">155</a>
+<a class="number" name="line-156">156</a><a name="isNewlineCode"></a><span class='hs-comment'>-- | Test newline code point (10, 13).</span>
+<a class="number" name="line-157">157</a><span class='hs-definition'>isNewlineCode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a class="number" name="line-158">158</a><span class='hs-definition'>isNewlineCode</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>==</span> <span class='hs-varid'>integralLF</span><span class='hs-layout'>)</span> <span class='hs-varop'>||</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>==</span> <span class='hs-varid'>integralCR</span><span class='hs-layout'>)</span>
+<a class="number" name="line-159">159</a>
+<a class="number" name="line-160">160</a><a name="integralHT"></a><span class='hs-comment'>-- | Generic code point (9) of horizontal tab character (@'\t'@).</span>
+<a class="number" name="line-161">161</a><span class='hs-definition'>integralHT</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-162">162</a><span class='hs-definition'>integralHT</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>9</span>
+<a class="number" name="line-163">163</a>
+<a class="number" name="line-164">164</a><a name="integralLF"></a><span class='hs-comment'>-- | Generic code point (10) of line feed character (@'\n'@).</span>
+<a class="number" name="line-165">165</a><span class='hs-definition'>integralLF</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-166">166</a><span class='hs-definition'>integralLF</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>10</span>
+<a class="number" name="line-167">167</a>
+<a class="number" name="line-168">168</a><a name="integralVT"></a><span class='hs-comment'>-- | Generic code point (11) of vertical tab character (@'\v'@).</span>
+<a class="number" name="line-169">169</a><span class='hs-definition'>integralVT</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-170">170</a><span class='hs-definition'>integralVT</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>11</span>
+<a class="number" name="line-171">171</a>
+<a class="number" name="line-172">172</a><a name="integralFF"></a><span class='hs-comment'>-- | Generic code point (12) of form feed character (@'\f'@).</span>
+<a class="number" name="line-173">173</a><span class='hs-definition'>integralFF</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-174">174</a><span class='hs-definition'>integralFF</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>12</span>
+<a class="number" name="line-175">175</a>
+<a class="number" name="line-176">176</a><a name="integralCR"></a><span class='hs-comment'>-- | Generic code point (13) of carriage return character (@'\r'@).</span>
+<a class="number" name="line-177">177</a><span class='hs-definition'>integralCR</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-178">178</a><span class='hs-definition'>integralCR</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>13</span>
+<a class="number" name="line-179">179</a>
+<a class="number" name="line-180">180</a><a name="integralSpace"></a><span class='hs-comment'>-- | Generic code point (32) of space character (@' '@).</span>
+<a class="number" name="line-181">181</a><span class='hs-definition'>integralSpace</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-182">182</a><span class='hs-definition'>integralSpace</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>32</span>
 <a class="number" name="line-183">183</a>
-<a class="number" name="line-184">184</a><span class='hs-comment'>-- ============================================  Put</span>
-<a class="number" name="line-185">185</a>
-<a class="number" name="line-186">186</a><a name="putLn"></a><span class='hs-comment'>-- | Print newline.</span>
-<a class="number" name="line-187">187</a><span class='hs-definition'>putLn</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a class="number" name="line-188">188</a><span class='hs-definition'>putLn</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>putStrLn</span> <span class='hs-str'>""</span>
-<a class="number" name="line-189">189</a>
-<a class="number" name="line-190">190</a><a name="hPutLn"></a><span class='hs-comment'>-- | Print newline.</span>
-<a class="number" name="line-191">191</a><span class='hs-definition'>hPutLn</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-conid'>Handle</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a class="number" name="line-192">192</a><span class='hs-definition'>hPutLn</span> <span class='hs-varid'>h</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStrLn</span> <span class='hs-varid'>h</span> <span class='hs-str'>""</span>
-<a class="number" name="line-193">193</a>
-<a class="number" name="line-194">194</a><a name="putShow"></a><span class='hs-comment'>-- | Print showing value.</span>
-<a class="number" name="line-195">195</a><span class='hs-definition'>putShow</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a class="number" name="line-196">196</a><span class='hs-definition'>putShow</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>putStr</span> <span class='hs-varop'>.</span> <span class='hs-varid'>show</span>
-<a class="number" name="line-197">197</a>
-<a class="number" name="line-198">198</a><a name="putShowLn"></a><span class='hs-comment'>-- | Print showing value with newline.</span>
-<a class="number" name="line-199">199</a><span class='hs-definition'>putShowLn</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a class="number" name="line-200">200</a><span class='hs-definition'>putShowLn</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>putStrLn</span> <span class='hs-varop'>.</span> <span class='hs-varid'>show</span>
-<a class="number" name="line-201">201</a>
-<a class="number" name="line-202">202</a><a name="putLines"></a><span class='hs-comment'>-- | Print multiple lines.</span>
-<a class="number" name="line-203">203</a><span class='hs-definition'>putLines</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a class="number" name="line-204">204</a><span class='hs-definition'>putLines</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>putStr</span> <span class='hs-varop'>.</span> <span class='hs-varid'>unlines</span>
-<a class="number" name="line-205">205</a>
-<a class="number" name="line-206">206</a><a name="hPutLines"></a><span class='hs-comment'>-- | Print multiple lines.</span>
-<a class="number" name="line-207">207</a><span class='hs-definition'>hPutLines</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-conid'>Handle</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a class="number" name="line-208">208</a><span class='hs-definition'>hPutLines</span> <span class='hs-varid'>h</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStrLn</span> <span class='hs-varid'>h</span> <span class='hs-varop'>`mapM_`</span><span class='hs-layout'>)</span>
-<a class="number" name="line-209">209</a>
-<a class="number" name="line-210">210</a><a name="prompt"></a><span class='hs-comment'>-- | Print prompt (@&gt;&gt;@) and read user input.</span>
-<a class="number" name="line-211">211</a><span class='hs-comment'>--   It returns trimmed input string.</span>
-<a class="number" name="line-212">212</a><span class='hs-comment'>--   Reread when input is empty.</span>
-<a class="number" name="line-213">213</a><span class='hs-definition'>prompt</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-214">214</a><span class='hs-definition'>prompt</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>promptWith</span> <span class='hs-str'>"&gt;&gt; "</span>
-<a class="number" name="line-215">215</a>
-<a class="number" name="line-216">216</a><a name="promptWith"></a><span class='hs-comment'>-- | Print prompt with give string and read user input.</span>
-<a class="number" name="line-217">217</a><span class='hs-definition'>promptWith</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-218">218</a><span class='hs-definition'>promptWith</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-219">219</a>    <span class='hs-keyword'>do</span> <span class='hs-varid'>putStr</span> <span class='hs-varid'>p</span>
-<a class="number" name="line-220">220</a>       <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hFlush</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>stdout</span>
-<a class="number" name="line-221">221</a>       <span class='hs-varid'>s</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>getLine</span>
-<a class="number" name="line-222">222</a>       <span class='hs-keyword'>case</span> <span class='hs-varid'>trimBoth</span> <span class='hs-varid'>s</span> <span class='hs-keyword'>of</span>
-<a class="number" name="line-223">223</a>         <span class='hs-str'>""</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>promptWith</span> <span class='hs-varid'>p</span>
-<a class="number" name="line-224">224</a>         <span class='hs-varid'>s'</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varid'>s'</span>
+<a class="number" name="line-184">184</a>
+<a class="number" name="line-185">185</a><span class='hs-comment'>-- ============================================  Put</span>
+<a class="number" name="line-186">186</a>
+<a class="number" name="line-187">187</a><a name="putLn"></a><span class='hs-comment'>-- | Print newline.</span>
+<a class="number" name="line-188">188</a><span class='hs-definition'>putLn</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a class="number" name="line-189">189</a><span class='hs-definition'>putLn</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>putStrLn</span> <span class='hs-str'>""</span>
+<a class="number" name="line-190">190</a>
+<a class="number" name="line-191">191</a><a name="hPutLn"></a><span class='hs-comment'>-- | Print newline.</span>
+<a class="number" name="line-192">192</a><span class='hs-definition'>hPutLn</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-conid'>Handle</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a class="number" name="line-193">193</a><span class='hs-definition'>hPutLn</span> <span class='hs-varid'>h</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStrLn</span> <span class='hs-varid'>h</span> <span class='hs-str'>""</span>
+<a class="number" name="line-194">194</a>
+<a class="number" name="line-195">195</a><a name="putShow"></a><span class='hs-comment'>-- | Print showing value.</span>
+<a class="number" name="line-196">196</a><span class='hs-definition'>putShow</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a class="number" name="line-197">197</a><span class='hs-definition'>putShow</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>putStr</span> <span class='hs-varop'>.</span> <span class='hs-varid'>show</span>
+<a class="number" name="line-198">198</a>
+<a class="number" name="line-199">199</a><a name="putShowLn"></a><span class='hs-comment'>-- | Print showing value with newline.</span>
+<a class="number" name="line-200">200</a><span class='hs-definition'>putShowLn</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a class="number" name="line-201">201</a><span class='hs-definition'>putShowLn</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>putStrLn</span> <span class='hs-varop'>.</span> <span class='hs-varid'>show</span>
+<a class="number" name="line-202">202</a>
+<a class="number" name="line-203">203</a><a name="putLines"></a><span class='hs-comment'>-- | Print multiple lines.</span>
+<a class="number" name="line-204">204</a><span class='hs-definition'>putLines</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a class="number" name="line-205">205</a><span class='hs-definition'>putLines</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>putStr</span> <span class='hs-varop'>.</span> <span class='hs-varid'>unlines</span>
+<a class="number" name="line-206">206</a>
+<a class="number" name="line-207">207</a><a name="hPutLines"></a><span class='hs-comment'>-- | Print multiple lines.</span>
+<a class="number" name="line-208">208</a><span class='hs-definition'>hPutLines</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-conid'>Handle</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a class="number" name="line-209">209</a><span class='hs-definition'>hPutLines</span> <span class='hs-varid'>h</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStrLn</span> <span class='hs-varid'>h</span> <span class='hs-varop'>`mapM_`</span><span class='hs-layout'>)</span>
+<a class="number" name="line-210">210</a>
+<a class="number" name="line-211">211</a><a name="prompt"></a><span class='hs-comment'>-- | Print prompt (@&gt;&gt;@) and read user input.</span>
+<a class="number" name="line-212">212</a><span class='hs-comment'>--   It returns trimmed input string.</span>
+<a class="number" name="line-213">213</a><span class='hs-comment'>--   Reread when input is empty.</span>
+<a class="number" name="line-214">214</a><span class='hs-definition'>prompt</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-215">215</a><span class='hs-definition'>prompt</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>promptWith</span> <span class='hs-str'>"&gt;&gt; "</span>
+<a class="number" name="line-216">216</a>
+<a class="number" name="line-217">217</a><a name="promptWith"></a><span class='hs-comment'>-- | Print prompt with give string and read user input.</span>
+<a class="number" name="line-218">218</a><span class='hs-definition'>promptWith</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-219">219</a><span class='hs-definition'>promptWith</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-220">220</a>    <span class='hs-keyword'>do</span> <span class='hs-varid'>putStr</span> <span class='hs-varid'>p</span>
+<a class="number" name="line-221">221</a>       <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hFlush</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>stdout</span>
+<a class="number" name="line-222">222</a>       <span class='hs-varid'>s</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>getLine</span>
+<a class="number" name="line-223">223</a>       <span class='hs-keyword'>case</span> <span class='hs-varid'>trimBoth</span> <span class='hs-varid'>s</span> <span class='hs-keyword'>of</span>
+<a class="number" name="line-224">224</a>         <span class='hs-str'>""</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>promptWith</span> <span class='hs-varid'>p</span>
+<a class="number" name="line-225">225</a>         <span class='hs-varid'>s'</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varid'>s'</span>
 </pre></body>
 </html>

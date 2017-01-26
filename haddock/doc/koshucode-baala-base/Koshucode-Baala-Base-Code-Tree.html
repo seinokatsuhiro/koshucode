@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.206.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.209.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -301,6 +301,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ><li class="src short"
 	  ><a href="#v:codeTreeFmap"
 	    >codeTreeFmap</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+	    >Functor</a
+	    > k =&gt; (t -&gt; u) -&gt; <a href="Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > b k t -&gt; <a href="Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > b k u</li
+	  ><li class="src short"
+	  ><a href="#v:codeTreeFmap-39-"
+	    >codeTreeFmap'</a
 	    > :: (x -&gt; y) -&gt; <a href="Koshucode-Baala-Base-Code-Tree.html#t:CodeTree-39-"
 	    >CodeTree'</a
 	    > b x -&gt; <a href="Koshucode-Baala-Base-Code-Tree.html#t:CodeTree-39-"
@@ -387,7 +397,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		      > (<a href="Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 		      >RawTree</a
 		      > p k)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#line-46');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#line-47');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -407,7 +417,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		      > (<a href="Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 		      >RawTree</a
 		      > b y z)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#line-44');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#line-45');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -427,7 +437,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		      > (<a href="Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 		      >RawTree</a
 		      > b y z)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#line-44');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#line-45');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -447,7 +457,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		      > (<a href="Koshucode-Baala-Base-Code-Tree.html#t:RawTree"
 		      >RawTree</a
 		      > b y z)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#line-44');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#line-45');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -463,7 +473,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		      > (<a href="Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
 		      >CodeTree</a
 		      > b k t)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#line-184');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#line-185');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -958,11 +968,29 @@ Number of leaves    = 3
 	><p class="src"
 	  ><a name="v:codeTreeFmap" class="def"
 	    >codeTreeFmap</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+	    >Functor</a
+	    > k =&gt; (t -&gt; u) -&gt; <a href="Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > b k t -&gt; <a href="Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > b k u <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#codeTreeFmap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Mapping function for textual code tree.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeTreeFmap-39-" class="def"
+	    >codeTreeFmap'</a
 	    > :: (x -&gt; y) -&gt; <a href="Koshucode-Baala-Base-Code-Tree.html#t:CodeTree-39-"
 	    >CodeTree'</a
 	    > b x -&gt; <a href="Koshucode-Baala-Base-Code-Tree.html#t:CodeTree-39-"
 	    >CodeTree'</a
-	    > b y <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#codeTreeFmap');" href="javascript:void(0);" class="link"
+	    > b y <a onclick="showSource('src/Koshucode-Baala-Base-Code-Tree.html#codeTreeFmap%27');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

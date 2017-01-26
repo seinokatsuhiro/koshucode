@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.206.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.209.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -109,9 +109,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		>CopTree</a
 		> <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 		>BlankName</a
-		> <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
+		> (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
 		>CopTree</a
-		></li
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
+		>)</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -129,13 +131,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >type</span
 	    > <a href="#t:CopTree"
 	    >CopTree</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-	    >Tree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    > t = [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+	    >TTree</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-	    >Tree</a
-	    ></li
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+	    >TTree</a
+	    > t)</li
 	  ><li class="src short"
 	  ><a href="#v:copName"
 	    >copName</a
@@ -147,41 +149,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><a href="#v:copNormal"
 	    >copNormal</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 	    >BlankName</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:copInternal"
 	    >copInternal</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 	    >BlankName</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:copPrefix"
 	    >copPrefix</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 	    >BlankName</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:copInfix"
 	    >copInfix</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 	    >BlankName</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:copPostfix"
 	    >copPostfix</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 	    >BlankName</a
 	    ></li
 	  ><li class="src short"
@@ -251,9 +253,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		>copsetFindTree</a
 		> :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopFind"
 		>CopFind</a
-		> <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
+		> (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
 		>CopTree</a
-		></li
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
+		>)</li
 	      ><li
 	      ><a href="#v:copsetDerived"
 		>copsetDerived</a
@@ -358,9 +362,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		  >CopTree</a
 		  > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 		  >BlankName</a
-		  > <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
+		  > (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
 		  >CopTree</a
-		  ></td
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		  >String</a
+		  >)</td
 		><td class="doc"
 		><p
 		  >Convert <code
@@ -433,13 +439,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >type</span
 	    > <a name="t:CopTree" class="def"
 	    >CopTree</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-	    >Tree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    > t = [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+	    >TTree</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-	    >Tree</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#CopTree');" href="javascript:void(0);" class="link"
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+	    >TTree</a
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#CopTree');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -469,9 +475,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><a name="v:copNormal" class="def"
 	    >copNormal</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 	    >BlankName</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copNormal');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -485,9 +491,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><a name="v:copInternal" class="def"
 	    >copInternal</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 	    >BlankName</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copInternal');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -501,9 +507,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><a name="v:copPrefix" class="def"
 	    >copPrefix</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 	    >BlankName</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copPrefix');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -517,9 +523,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><a name="v:copInfix" class="def"
 	    >copInfix</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 	    >BlankName</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copInfix');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -533,9 +539,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><a name="v:copPostfix" class="def"
 	    >copPostfix</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 	    >BlankName</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copPostfix');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -669,9 +675,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 			>copsetFindTree</a
 			> :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopFind"
 			>CopFind</a
-			> <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
+			> (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
 			>CopTree</a
-			></dt
+			> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+			>String</a
+			>)</dt
 		      ><dd class="doc"
 		      ><p
 			>This is created by <code
