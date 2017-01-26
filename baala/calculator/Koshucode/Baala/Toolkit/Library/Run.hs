@@ -17,7 +17,7 @@ import qualified Koshucode.Baala.Writer as W
 -- | Read and union sections from files, and run the section.
 runFiles :: (D.CContent c, W.ToJSON c) => C.Global c -> [B.IOPoint] -> IO B.ExitCode
 runFiles g ns =
-    do (abRes, _) <- C.resRead g ns
+    do (abRes, _) <- C.resReadPoints g ns
        case abRes of
          Left a    -> C.globalAbort g a
          Right res -> case C.resRun res of

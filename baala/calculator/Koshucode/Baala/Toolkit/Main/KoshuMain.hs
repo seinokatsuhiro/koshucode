@@ -197,7 +197,7 @@ altMaybe f (Just a)  b  = f a b
 
 putElems :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO B.ExitCode
 putElems g ns =
-    do (abres, _) <- C.resRead g ns
+    do (abres, _) <- C.resReadPoints g ns
        res2 <- B.abortLeft abres
        res3 <- B.abortLeft $ C.assembleRelmap res2
        putStrLn "-*- koshu -*-"

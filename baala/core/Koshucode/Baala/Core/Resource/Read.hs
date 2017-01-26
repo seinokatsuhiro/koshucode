@@ -1,13 +1,13 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Read data resource.
 
 module Koshucode.Baala.Core.Resource.Read
-  ( -- * Read resource
-    resRead,
-    resReadSingle,
-    resReadBz,
+  ( resReadBytes,
+    resReadPoint,
+    resReadPoints,
   ) where
 
 import qualified Control.Monad.State                     as M
@@ -55,19 +55,26 @@ nextSourceCount =
 
 -- --------------------------------------------  Read resource
 
--- | Read data resource from lazy bytestring.
-resReadBz :: (D.CContent c) => C.Resource c -> B.Bytes -> C.AbResource c
-resReadBz base code = C.resInclude about "" base (B.codeIxIO code) code where
+-- | Read data resource from input bytes.
+resReadBytes :: (D.CContent c)
+    => C.Resource c     -- ^ Base resource
+    -> B.Bytes          -- ^ Input bytes
+    -> C.AbResource c   -- ^ Result resource
+resReadBytes base bs = C.resInclude about "" base (B.codeIxIO bs) bs where
     about = [] :: [S.Token]
 
 -- | Read data resource from single input point.
-resReadSingle :: (D.CContent c) => C.Global c -> B.IOPoint -> IO (C.AbResource c, C.Global c)
-resReadSingle g src = globalIO single g where
+{-# DEPRECATED resReadPoint "Use 'resReadPoints' instead." #-}
+resReadPoint :: (D.CContent c) => C.Global c -> B.IOPoint -> IO (C.AbResource c, C.Global c)
+resReadPoint g src = globalIO single g where
     single root = resReadLimit 1 root [src]
 
 -- | Read data resource from multiple input points.
-resRead :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO (C.AbResource c, C.Global c)
-resRead g src = globalIO proc g where
+resReadPoints :: (D.CContent c)
+    => C.Global c       -- ^ Global parameter
+    -> [B.IOPoint]      -- ^ Input points
+    -> IO (C.AbResource c, C.Global c) -- ^ Result resource with updated global parameter
+resReadPoints g src = globalIO proc g where
     proc root = do let limit = C.globalSourceLimit g
                    resReadLimit limit root src
 
@@ -100,8 +107,8 @@ readQueue limit res@C.Resource { C.resInputQueue = (q, done) }
                             left       -> return left
 
 -- | Read resource from certain source.
-readCode :: forall c. (D.CContent c) =>
-    C.Resource c -> B.IxIOPoint -> [S.Tree] -> ResourceIO c
+readCode :: forall t c. (O.Textual t, S.ToTermName t, S.ToTrees D.Chars [S.TToken t], D.CContent c) =>
+    C.Resource c -> B.IxIOPoint -> [S.TTree t] -> ResourceIO c
 readCode res src add = dispatch $ B.nioPoint src where
     dispatch (B.IOPointFile cd path) = M.liftIO $ do
          let path' = putDir cd path

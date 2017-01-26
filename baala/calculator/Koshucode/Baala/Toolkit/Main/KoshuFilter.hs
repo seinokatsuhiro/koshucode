@@ -78,7 +78,7 @@ hRunFiles
     -> [B.IOPoint]               -- ^ Names of source codes
     -> IO Int
 hRunFiles h g withRes ns =
-    do (abRes, _) <- C.resRead g ns
+    do (abRes, _) <- C.resReadPoints g ns
        B.hSetKoshuOutput h
        case abRes of
          Left  a   -> C.globalAbort g a
