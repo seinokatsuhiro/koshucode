@@ -87,7 +87,7 @@
 
 |-- DIR-RANK  /dir-rank 34  /dir "Koshucode.Baala.Syntax.Tree"  /base-rank {= /rank /base /import-dir [ 32 | "Bracket" |
     [ "Base" | "Overture" | "Token" ] ] [ 33 | "Parse" | [ "Base" | "Overture" | "Symbol" | "Token" ] ] [ 33 | "Pattern"
-    | [ "Base" | "Token" ] ] [ 34 | "Split" | [ "Base" | "Overture" | "Token" ] ] =}
+    | [ "Base" | "Overture" | "Token" ] ] [ 34 | "Split" | [ "Base" | "Overture" | "Token" ] ] =}
 |-- DIR-RANK  /dir-rank 36  /dir "Koshucode.Baala.Syntax.Subtree"  /base-rank {= /rank /base /import-dir [ 26 |
     "Subtree" | [ "Base" | "Overture" | "Subtext" | "Symbol" ] ] [ 27 | "DirTree" | [ "Base" | "Overture" ] ] [ 27 |
     "Xml" | [ "Base" | "Overture" | "Subtext" | "Symbol" ] ] [ 36 | "Decode" | [ "Base" | "Overture" | "Subtext" |
@@ -112,16 +112,17 @@
     "Base" | "Overture" ] ] [ 25 | "Decimal" | [ ] ] [ 28 | "Time" | [ ] ] [ 43 | "Judge" | [ ] ] [ 44 | "Type" | [
     "Base" | "Judge" | "Overture" | "Syntax" ] ] [ 48 | "Rel" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 53  /dir "Koshucode.Baala.Core.Lexmap"  /base-rank {= /rank /base /import-dir [ 21 | "Message" |
-    [ "Base" ] ] [ 40 | "Lexmap" | [ "Base" | "Overture" | "Syntax" ] ] [ 52 | "LexmapTrees" | [ "Base" | "Syntax" ] ] [
-    53 | "Construct" | [ "Base" | "Overture" | "Syntax" ] ] =}
+    [ "Base" ] ] [ 40 | "Lexmap" | [ "Base" | "Overture" | "Syntax" ] ] [ 52 | "LexmapTrees" | [ "Base" | "Overture" |
+    "Syntax" ] ] [ 53 | "Construct" | [ "Base" | "Overture" | "Syntax" ] ] =}
 |-- DIR-RANK  /dir-rank 54  /dir "Koshucode.Baala.Data.Class"  /base-rank {= /rank /base /import-dir [ 22 | "Message" |
     [ "Base" ] ] [ 50 | "Edge" | [ "Base" | "Overture" | "Syntax" | "Type" ] ] [ 51 | "Simple" | [ "Base" | "Overture" |
     "Syntax" | "Type" ] ] [ 52 | "Complex" | [ "Base" | "Syntax" | "Type" ] ] [ 53 | "Content" | [ "Base" | "Overture" |
     "Type" ] ] [ 53 | "Map" | [ "Overture" ] ] [ 54 | "Encode" | [ "Base" | "Syntax" | "Type" ] ] =}
 |-- DIR-RANK  /dir-rank 57  /dir "Koshucode.Baala.Data.Decode"  /base-rank {= /rank /base /import-dir [ 21 | "Message" |
-    [ "Base" ] ] [ 40 | "Term" | [ "Base" | "Overture" | "Syntax" ] ] [ 50 | "Type" | [ "Base" | "Overture" | "Syntax" |
-    "Type" ] ] [ 51 | "Numeric" | [ "Base" | "Overture" | "Syntax" | "Type" ] ] [ 56 | "Content" | [ "Base" | "Class" |
-    "Overture" | "Syntax" | "Type" ] ] [ 57 | "Dataset" | [ "Base" | "Class" | "Overture" | "Syntax" | "Type" ] ] =}
+    [ "Base" | "Overture" ] ] [ 40 | "Term" | [ "Base" | "Overture" | "Syntax" ] ] [ 50 | "Type" | [ "Base" | "Overture"
+    | "Syntax" | "Type" ] ] [ 51 | "Numeric" | [ "Base" | "Overture" | "Syntax" | "Type" ] ] [ 56 | "Content" | [ "Base"
+    | "Class" | "Overture" | "Syntax" | "Type" ] ] [ 57 | "Dataset" | [ "Base" | "Class" | "Overture" | "Syntax" |
+    "Type" ] ] =}
 
 |-- DIR-RANK  /dir-rank 60  /dir "Koshucode.Baala.Data.Church"  /base-rank {= /rank /base /import-dir [ 50 | "Message" |
     [ "Base" | "Syntax" | "Type" ] ] [ 51 | "Cox" | [ "Base" | "Overture" | "Syntax" ] ] [ 52 | "Cop" | [ "Base" |
@@ -148,11 +149,12 @@
     [ "Base" | "Lexmap" | "Overture" | "Relmap" | "Syntax" | "Type" ] ] [ 70 | "Run" | [ "Base" | "Data" | "Lexmap" |
     "Overture" | "Relkit" | "Relmap" | "Syntax" | "Type" ] ] =}
 |-- DIR-RANK  /dir-rank 74  /dir "Koshucode.Baala.Core.Resource"  /base-rank {= /rank /base /import-dir [ 21 | "Message"
-    | [ "Base" ] ] [ 55 | "Clause" | [ "Base" | "Lexmap" | "Overture" | "Syntax" | "Type" ] ] [ 72 | "Resource" | [
-    "Assert" | "Base" | "Data" | "Lexmap" | "Overture" | "Relkit" | "Relmap" | "Syntax" | "Type" ] ] [ 73 | "Concrete" |
-    [ "Base" | "Data" | "Relmap" | "Syntax" | "Type" ] ] [ 73 | "Include" | [ "Assert" | "Base" | "Data" | "Lexmap" |
-    "Overture" | "Relmap" | "Syntax" | "Type" ] ] [ 73 | "Run" | [ "Assert" | "Base" | "Data" | "Lexmap" | "Overture" |
-    "Relmap" | "Syntax" | "Type" ] ] [ 74 | "Read" | [ "Base" | "Data" | "Overture" | "Relmap" | "Syntax" ] ] =}
+    | [ "Base" | "Overture" ] ] [ 55 | "Clause" | [ "Base" | "Lexmap" | "Overture" | "Syntax" | "Type" ] ] [ 72 |
+    "Resource" | [ "Assert" | "Base" | "Data" | "Lexmap" | "Overture" | "Relkit" | "Relmap" | "Syntax" | "Type" ] ] [ 73
+    | "Concrete" | [ "Base" | "Data" | "Relmap" | "Syntax" | "Type" ] ] [ 73 | "Include" | [ "Assert" | "Base" | "Data"
+    | "Lexmap" | "Overture" | "Relmap" | "Syntax" | "Type" ] ] [ 73 | "Run" | [ "Assert" | "Base" | "Data" | "Lexmap" |
+    "Overture" | "Relmap" | "Syntax" | "Type" ] ] [ 74 | "Read" | [ "Base" | "Data" | "Overture" | "Relmap" | "Syntax" ]
+    ] =}
 |-- DIR-RANK  /dir-rank 75  /dir "Koshucode.Baala.Core"  /base-rank {= /rank /base /import-dir [ 52 | "Message" | [ ] ]
     [ 54 | "Lexmap" | [ ] ] [ 64 | "Relkit" | [ ] ] [ 68 | "Relmap" | [ ] ] [ 71 | "Assert" | [ ] ] [ 75 | "Resource" |
     [ ] ] =}
@@ -391,7 +393,7 @@ TABLE : DIR-RANK
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
                                                  32    "Bracket"            [ "Base" | "Overture" | "Token" ]
                                                  33    "Parse"              [ "Base" | "Overture" | "Symbol" | "Token" ]
-                                                 33    "Pattern"            [ "Base" | "Token" ]
+                                                 33    "Pattern"            [ "Base" | "Overture" | "Token" ]
                                                  34    "Split"              [ "Base" | "Overture" | "Token" ]
                                                  
   36        "Koshucode.Baala.Syntax.Subtree"     /rank /base                /import-dir
@@ -447,7 +449,7 @@ TABLE : DIR-RANK
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
                                                  21    "Message"            [ "Base" ]
                                                  40    "Lexmap"             [ "Base" | "Overture" | "Syntax" ]
-                                                 52    "LexmapTrees"        [ "Base" | "Syntax" ]
+                                                 52    "LexmapTrees"        [ "Base" | "Overture" | "Syntax" ]
                                                  53    "Construct"          [ "Base" | "Overture" | "Syntax" ]
                                                  
   54        "Koshucode.Baala.Data.Class"         /rank /base                /import-dir
@@ -462,7 +464,7 @@ TABLE : DIR-RANK
                                                  
   57        "Koshucode.Baala.Data.Decode"        /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
-                                                 21    "Message"            [ "Base" ]
+                                                 21    "Message"            [ "Base" | "Overture" ]
                                                  40    "Term"               [ "Base" | "Overture" | "Syntax" ]
                                                  50    "Type"               [ "Base" | "Overture" | "Syntax" | "Type" ]
                                                  51    "Numeric"            [ "Base" | "Overture" | "Syntax" | "Type" ]
@@ -517,7 +519,7 @@ TABLE : DIR-RANK
                                                  
   74        "Koshucode.Baala.Core.Resource"      /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
-                                                 21    "Message"            [ "Base" ]
+                                                 21    "Message"            [ "Base" | "Overture" ]
                                                  55    "Clause"             [ "Base" | "Lexmap" | "Overture" | "Syntax" | "Type" ]
                                                  72    "Resource"           [ "Assert" | "Base" | "Data" | "Lexmap" | "Overture" | "Relkit" | "Relmap" | "Syntax" | "Type" ]
                                                  73    "Concrete"           [ "Base" | "Data" | "Relmap" | "Syntax" | "Type" ]
