@@ -126,6 +126,10 @@ data CodeLine k t = CodeLine
     , lineTokens  :: [k t]         -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord)
 
+instance (Functor k) => Functor (CodeLine k) where
+    fmap f ln@CodeLine { lineContent = c, lineTokens = ts } =
+        ln { lineContent = f c, lineTokens = f O.<$$> ts }
+
 instance (B.GetCodePos (k t)) => B.GetCodePos (CodeLine k t) where
     getCPs (CodeLine _ _ toks) = B.getCPs toks
 

@@ -25,8 +25,8 @@ import qualified Koshucode.Baala.Core.Relmap.Message     as Msg
 import qualified Koshucode.Baala.Core.Resource.Message   as Msg
 
 -- | Include source code into resource.
-resInclude :: forall c. (D.CContent c)
-    => [S.Token]        -- ^ Additional terms
+resInclude :: (O.Textual t, S.ToTermName t, S.ToTrees D.Chars [S.TToken t], D.CContent c)
+    => [S.TToken t]     -- ^ Additional terms
     -> FilePath         -- ^ Context directory
     -> C.Resource c     -- ^ Base resource
     -> B.IxIOPoint      -- ^ Input point
@@ -36,22 +36,22 @@ resInclude resAbout cd res xio code =
     do let ls   = S.tokenLines xio code
            sec  = C.resLastSecNo res + 1
            cs   = C.consClause resAbout sec ls
-       (cc, js, cs2) <- createJudges res cs
+       (cache, js, cs2) <- createJudges res cs
        let ds   = D.dataset js
            cs2' = reverse cs2
            sec' | null cs   = sec
                 | otherwise = C.clauseSecNo $ C.clauseHead $ last cs
-       res' <- B.foldM (resIncludeBody cd) res cs2'
+       res' <- B.foldM (resIncludeNonJudge cd) res cs2'
        Right res' { C.resLastSecNo = sec'
-                  , C.resCacheT    = cc
+                  , C.resCacheT    = cache
                   , C.resJudge     = js
                   , C.resDataset   = ds }
 
-createJudges :: (O.Textual t, S.ToTrees D.Chars [S.TToken t], D.CContent c) =>
-    C.Resource c -> [C.Clause t] -> B.Ab (D.CacheT D.Chars, [T.Judge c], [C.Clause t])
+createJudges :: (O.Textual t, S.ToTrees D.Chars [S.TToken t], D.CContent c)
+    => C.Resource c -> [C.Clause t] -> B.Ab (D.CacheT D.Chars, [T.Judge c], [C.Clause t])
 createJudges res = loop $ C.resCacheT res where
     loop cc ((C.Clause h (C.CJudge q cl toks)) : cs) =
-        Msg.abClause [h] $ do
+        Msg.abClause h $ do
            trees          <- S.toTrees toks
            (cc1, judge)   <- D.treesJudge cc q cl trees
            (cc2, js, cs') <- loop cc1 cs
@@ -61,26 +61,30 @@ createJudges res = loop $ C.resCacheT res where
                            Right (cc', js, c : cs')
     loop cc []        = Right (cc, C.resJudge res, [])
 
-resIncludeBody :: forall c. (D.CContent c) =>
-    FilePath -> C.Resource c -> C.Clause String -> C.AbResource c
-resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseShort = sh } b) =
+resIncludeNonJudge :: forall t c. (O.Textual t, D.CContent c) =>
+    FilePath -> C.Resource c -> C.Clause t -> C.AbResource c
+resIncludeNonJudge cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseShort = sh } b) =
     case b of
-      C.CAssert  q cl toks  -> ab $ assert q cl toks
-      C.CRelmap  n toks     -> ab $ relmap n toks
-      C.CSlot    n toks     -> ab $ slot n toks
-      C.CInput   toks       -> feat (ab $ input toks)  C.featInputClause  Msg.disabledInputClause  
-      C.COutput  toks       -> feat (ab $ output toks) C.featOutputClause Msg.disabledOutputClause
-      C.COption  toks       -> ab $ option toks
+      C.CAssert  q cl toks  -> ab $ assert q cl $ str toks
+      C.CRelmap  n toks     -> ab $ relmap n $ str toks
+      C.CSlot    n toks     -> ab $ slot n $ str toks
+      C.CInput   toks       -> feat (ab $ input $ str toks)  C.featInputClause  Msg.disabledInputClause
+      C.COutput  toks       -> feat (ab $ output $ str toks) C.featOutputClause Msg.disabledOutputClause
+      C.COption  toks       -> ab $ option $ str toks
       C.CEcho    clause     -> ab $ echo clause
       C.CLicense line       -> ab $ license line
       C.CUnknown (Left a)   -> Left a
-      _                     -> B.bug "resIncludeBody"
+      _                     -> B.bug "resIncludeNonJudge"
     where
 
       -- ----------------------  Utility
 
+      str = (O.tString O.<$$>)
+
+      short (t1, t2) = (O.tString t1, O.tString t2)
+
       src :: [S.TToken String]
-      src = B.takeFirst $ B.clauseTokens $ C.clauseSource h
+      src = B.takeFirst $ str $ B.clauseTokens $ C.clauseSource h
 
       ab = Msg.abClause [h]
 
@@ -98,7 +102,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
       assert typ cl toks =
           do optPara <- C.ttreePara2 toks
              let ass   = C.Assert sec typ cl src optPara Nothing []
-                 ass'  = S.Short (B.getCPs $ head src) sh ass
+                 ass'  = S.Short (B.getCPs src) (short <$> sh) ass
              Right $ res { C.resAssert = C.resAssert << ass' }
 
       relmap n toks =
@@ -132,7 +136,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
                             else Right res'
 
       echo clause =
-          Right $ res { C.resEcho = C.resEcho << B.clauseLines clause }
+          Right $ res { C.resEcho = C.resEcho << (O.tString O.<$$> B.clauseLines clause) }
 
       license line =
           Right $ res { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }

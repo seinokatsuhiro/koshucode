@@ -136,7 +136,7 @@ resMessagesAdd msg res = res { resMessage = msg ++ resMessage res }
 -- ----------------------  Input queue
 
 -- | Queue for input code: /todo/, /ready/ and /done/.
-type InputQueue = (B.Queue (C.InputPoint String), [B.IxIOPoint])
+type InputQueue = (B.Queue (C.InputPoint D.Chars), [B.IxIOPoint])
 
 -- | Map to input queue.
 resQueueMap :: O.Map InputQueue -> O.Map (Resource c)
