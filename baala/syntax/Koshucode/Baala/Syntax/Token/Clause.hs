@@ -40,7 +40,7 @@ type TokenLine t = B.CodeLine S.TToken t
 
 -- | Tokenize with given scanner.
 tokenLinesBy
-    :: (B.ToLines i, O.Textual t, S.ToTermName t)
+    :: (B.ToLines i, S.TextualTermName t)
     => S.Scanner t       -- ^ Section scanner
     -> B.IxIOPoint       -- ^ I/O point of input code
     -> i                 -- ^ Input code
@@ -48,18 +48,18 @@ tokenLinesBy
 tokenLinesBy scan = B.codeScanUp $ scan changeSection
 
 -- | Tokenize relational section.
-tokenLines :: (B.ToLines i, O.Textual t, S.ToTermName t) => B.IxIOPoint -> i -> [TokenLine t]
+tokenLines :: (B.ToLines i, S.TextualTermName t) => B.IxIOPoint -> i -> [TokenLine t]
 tokenLines = tokenLinesBy S.scanRel
 
 -- | Tokenize text.
-tokenLinesString :: (B.ToLines i, O.Textual t, S.ToTermName t) => B.IxIOPoint -> i -> [TokenLine t]
+tokenLinesString :: (B.ToLines i, S.TextualTermName t) => B.IxIOPoint -> i -> [TokenLine t]
 tokenLinesString = B.codeScanUp $ S.scanRel changeSection
 
 -- | Tokenize lazy bytestring.
 tokenLinesTextAssert :: (B.ToLines i) => B.IxIOPoint -> i -> [TokenLine String]
 tokenLinesTextAssert = tokenLinesBy S.scanTextAssert
 
-changeSection :: (O.Textual t, S.ToTermName t) => S.ChangeSection t
+changeSection :: (S.TextualTermName t) => S.ChangeSection t
 changeSection name =
     case O.tString name of
       "rel"      -> just S.scanRel
@@ -82,7 +82,7 @@ sectionUnsupported msg r@B.CodeScan { B.scanInput = cs } = B.codeUpdate O.tEmpty
     cp   = B.scanCp r
 
 -- | Read token lines from file.
-readTokenLines :: (O.Textual t, S.ToTermName t) => FilePath -> B.IOAb [TokenLine t]
+readTokenLines :: (S.TextualTermName t) => FilePath -> B.IOAb [TokenLine t]
 readTokenLines path =
     do file <- B.readBzFile path
        bz   <- B.abortLeft $ B.bzFileContent file
@@ -140,13 +140,13 @@ tokenIndent             _  = 0
 --                                                  TText /0.3.1/ TextRaw "cc"]}
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.6.0/ TextRaw "ee"]}
 --
-readClauses :: (O.Textual t, S.ToTermName t) => FilePath -> B.IOAb [TokenClause t]
+readClauses :: (S.TextualTermName t) => FilePath -> B.IOAb [TokenClause t]
 readClauses path =
     do ls <- readTokenLines path
        return (tokenClauses <$> ls)
 
 -- | Read clauses and extract tokens.
-readClauseTokens :: (O.Textual t, S.ToTermName t) => FilePath -> B.IOAb [[S.TToken t]]
+readClauseTokens :: (S.TextualTermName t) => FilePath -> B.IOAb [[S.TToken t]]
 readClauseTokens path =
     do ls <- readClauses path
        return (B.clauseTokens O.<$$> ls)
@@ -155,7 +155,7 @@ readClauseTokens path =
 -- --------------------------------------------  Abbreviation
 
 -- | Abbreviated tokenizer.
-toks :: (O.Textual t, S.ToTermName t) => String -> [S.TToken t]
+toks :: (S.TextualTermName t) => String -> [S.TToken t]
 toks s = concatMap B.lineTokens $ tokenLinesString (B.codeIxIO s) s
 
 -- | Print token list.

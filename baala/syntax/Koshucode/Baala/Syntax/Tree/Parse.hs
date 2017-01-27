@@ -40,18 +40,18 @@ ttreeGroup = B.codeTreeWrap S.BracketGroup
 -- | Convert to token trees.
 class ToTrees t a where
     -- | Convert to list of token trees.
-    toTrees :: (O.Textual t, S.ToTermName t) => a -> B.Ab [TTree t]
+    toTrees :: (S.TextualTermName t) => a -> B.Ab [TTree t]
 
     -- | Convert to token tree.
-    toTree :: (O.Textual t, S.ToTermName t) => a -> B.Ab (TTree t)
+    toTree :: (S.TextualTermName t) => a -> B.Ab (TTree t)
     toTree a = ttreeGroup <$> toTrees a
 
     -- | List of token trees or error.
-    toTrees' :: (O.Textual t, S.ToTermName t) => a -> [TTree t]
+    toTrees' :: (S.TextualTermName t) => a -> [TTree t]
     toTrees' = B.unabort . toTrees
 
     -- | Token tree or error.
-    toTree' :: (O.Textual t, S.ToTermName t) => a -> TTree t
+    toTree' :: (S.TextualTermName t) => a -> TTree t
     toTree' = B.unabort . toTree
 
 instance ToTrees t String where
@@ -88,7 +88,7 @@ tokenTrees = B.codeTrees S.getBracketType B.BracketNone . S.prepareTokens
 --   >>> withTrees Right "a"
 --   Right [TreeL (TText /0.1.0/ TextRaw "a")]
 --
-withTrees :: (O.Textual t, S.ToTermName t, ToTrees t a) => ([TTree t] -> B.Ab b) -> a -> B.Ab b
+withTrees :: (S.TextualTermName t, ToTrees t a) => ([TTree t] -> B.Ab b) -> a -> B.Ab b
 withTrees f a = f O.# toTrees a
 
 -- | Read clauses and convert to token trees.

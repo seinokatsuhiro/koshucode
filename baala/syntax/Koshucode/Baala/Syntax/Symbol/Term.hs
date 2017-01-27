@@ -14,6 +14,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
     -- * Term name
     TermName, TermPath,
     ToTermName (..),
+    TextualTermName,
     enslash,
     textualTermName, stringTermNames,
     termNameString, termPathString,
@@ -101,6 +102,13 @@ instance ToTermName O.Tz where
 -- | Integer term name.
 instance ToTermName Int where
     toTermName = toTermName . show
+
+-- | 'Textual' and 'ToTermName' values.
+class (O.Textual t, ToTermName t) => TextualTermName t
+
+instance TextualTermName String
+instance TextualTermName O.Tx
+instance TextualTermName O.Tz
 
 -- | Add necessary slash character indicating term name.
 --

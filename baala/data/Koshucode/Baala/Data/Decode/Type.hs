@@ -52,10 +52,10 @@ tokenString _ _  = Msg.nothing
 --   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
 --                   interpTerms = ["a"] })
 --
-treesInterp :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab T.Interp
+treesInterp :: (S.TextualTermName t) => [S.TTree t] -> B.Ab T.Interp
 treesInterp = Right . T.interp O.#. mapM treeInterpWord
 
-treeInterpWord :: (O.Textual t, S.ToTermName t) => S.TTree t -> B.Ab T.InterpWord
+treeInterpWord :: (S.TextualTermName t) => S.TTree t -> B.Ab T.InterpWord
 treeInterpWord (B.TreeB _ _ _) = Msg.nothing
 treeInterpWord (B.TreeL x) =
     case x of
@@ -67,7 +67,7 @@ treeInterpWord (B.TreeL x) =
 -- ----------------------  Type
 
 -- | Decode type content.
-treesType :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab T.Type
+treesType :: (S.TextualTermName t) => [S.TTree t] -> B.Ab T.Type
 treesType = gen where
     gen xs = case S.divideTreesByBar xs of
                [x] ->  single x

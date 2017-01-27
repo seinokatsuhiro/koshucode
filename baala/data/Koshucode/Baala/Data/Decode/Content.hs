@@ -40,7 +40,7 @@ stringContent :: (D.CContent c) => String -> B.Ab c
 stringContent = treeContent O.#. (S.toTree :: String -> B.Ab S.Tree)
 
 -- | Decode content from token tree.
-treeContent :: forall t c. (O.Textual t, S.ToTermName t, D.CContent c) => DecodeContent t c
+treeContent :: forall t c. (S.TextualTermName t, D.CContent c) => DecodeContent t c
 treeContent tree = Msg.abLiteral tree $ cons tree where
     cons :: DecodeContent t c
     cons x@(P.L tok)
@@ -67,7 +67,7 @@ treeContent tree = Msg.abLiteral tree $ cons tree where
 
     putDecimal = D.putDec O.#. T.decodeDecimal
 
-tokenContent :: (O.Textual t, S.ToTermName t, D.CContent c) => S.TToken t -> B.Ab c
+tokenContent :: (S.TextualTermName t, D.CContent c) => S.TToken t -> B.Ab c
 tokenContent (P.T f w)
     | f <= S.TextRaw     = keyword w
     | f == S.TextQ       = D.putCode w
@@ -106,7 +106,7 @@ treesContents cons cs = lt `mapM` S.divideTreesByBar cs where
 --      :                        :
 --      treesTie                 treesTie
 --
-treesTie :: (O.Textual t, S.ToTermName t, D.CContent c) => DecodeContent t c -> [S.TTree t] -> B.Ab c
+treesTie :: (S.TextualTermName t, D.CContent c) => DecodeContent t c -> [S.TTree t] -> B.Ab c
 treesTie cons xs@(P.LTerm _ : _) = D.putTie O.# treesTerms cons xs
 treesTie _ [] = D.putTie []
 treesTie _ [P.LRaw "words", P.LQq ws] = D.putList (D.pText <$> O.tWords ws)
@@ -127,7 +127,7 @@ treesTerms cons = mapM p O.#. D.treesTerms1 where
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
 treesJudge ::
-    (O.Textual t, S.ToTermName t, D.CContent c)
+    (S.TextualTermName t, D.CContent c)
     => D.CacheT t        -- ^ Term name cache
     -> T.AssertType       -- ^ Assertion type
     -> S.JudgeClass       -- ^ Judgement class
@@ -153,7 +153,7 @@ treesJudge cc q cl trees =
 --        treesTermNames
 --
 --
-treesRel :: (O.Textual t, S.ToTermName t, D.CContent c) => DecodeContent t c -> [S.TTree t] -> B.Ab (T.Rel c)
+treesRel :: (S.TextualTermName t, D.CContent c) => DecodeContent t c -> [S.TTree t] -> B.Ab (T.Rel c)
 treesRel cons xs =
     do bo <- treeTuple cons n `mapM` xs'
        Right $ T.Rel he $ B.unique bo

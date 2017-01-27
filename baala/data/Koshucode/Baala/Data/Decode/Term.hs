@@ -77,7 +77,7 @@ treesFlatNames = mapM treeFlatName
 --   >>> S.toTrees "/a /b" >>= treesFlatNamesCo
 --   Right (False, [TermName EQ "a",TermName EQ "b"])
 --
-treesFlatNamesCo :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab (Bool, [S.TermName])
+treesFlatNamesCo :: (S.TextualTermName t) => [S.TTree t] -> B.Ab (Bool, [S.TermName])
 treesFlatNamesCo trees =
     do (co, trees2) <- treesTermCo trees
        ns <- mapM treeFlatName trees2
@@ -93,7 +93,7 @@ treesTermCo trees                 = Right (False, trees)
 --   >>> S.toTrees "/a /x /b /y" >>= treesFlatNamePairs
 --   Right [(TermName EQ "a", TermName EQ "x"), (TermName EQ "b", TermName EQ "y")]
 --
-treesFlatNamePairs :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab [S.TermName2]
+treesFlatNamePairs :: (S.TextualTermName t) => [S.TTree t] -> B.Ab [S.TermName2]
 treesFlatNamePairs = loop where
     loop (a : b : xs) = do a'  <- treeFlatName a
                            b'  <- treeFlatName b
@@ -109,7 +109,7 @@ treesFlatNamePairs = loop where
 --         , [TermName EQ "p", TermName EQ "q"]
 --         , [TermName EQ "x", TermName EQ "y"] ]
 --
-treesNamesByColon :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab [[S.TermName]]
+treesNamesByColon :: (S.TextualTermName t) => [S.TTree t] -> B.Ab [[S.TermName]]
 treesNamesByColon = loop [] [] where
     loop ret ns (P.LTerm n  : ts)  = loop ret (S.toTermName n : ns) ts
     loop ret ns (P.LRaw ":" : ts)  = loop (reverse ns : ret) [] ts

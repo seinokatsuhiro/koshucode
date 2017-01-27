@@ -77,7 +77,7 @@ convCox find = expand where
                       Right $ D.CoxFill cp f' xs'
     
 -- construct content expression from token tree
-construct :: forall t c. (O.Textual t, S.ToTermName t, D.CContent c) => S.TTree t -> D.AbCox c
+construct :: forall t c. (S.TextualTermName t, D.CContent c) => S.TTree t -> D.AbCox c
 construct = expr where
     expr tree = Msg.abCoxBuild tree $
          let cp = concatMap B.getCPs $ B.takeFirst $ B.untree tree

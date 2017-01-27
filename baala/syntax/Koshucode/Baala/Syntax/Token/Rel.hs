@@ -55,7 +55,7 @@ isPM a     = (a == '+' || a == '-')
 -- ----------------------  Relational section
 
 -- | Scan a next token in relational section.
-scanRel :: (O.Textual t, S.ToTermName t) => S.Scanner t
+scanRel :: (S.TextualTermName t) => S.Scanner t
 scanRel change sc@B.CodeScan { B.scanCp = cp, B.scanCache = wtab } = sc' where
 
     clip         = S.clipUpdate   sc
@@ -168,7 +168,7 @@ clipAt cp = at where
     at cs n            = S.clipSlot n cp cs
 
 -- | Clip local reference token, like @^/g@.
-clipHat :: (O.Textual t, S.ToTermName t) => B.TCodePos t -> t -> S.ClipResult t
+clipHat :: (S.TextualTermName t) => B.TCodePos t -> t -> S.ClipResult t
 clipHat cp = hat where
     hat (O.tCut -> O.Jp '/' cs) = localToken cs (S.LocalNest . S.toTermName)
     hat cs@(O.tCut -> O.Jp c _)

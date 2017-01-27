@@ -107,7 +107,7 @@ readQueue limit res@C.Resource { C.resInputQueue = (q, done) }
                             left       -> return left
 
 -- | Read resource from certain source.
-readCode :: forall t c. (O.Textual t, S.ToTermName t, S.ToTrees D.Chars [S.TToken t], D.CContent c) =>
+readCode :: forall t c. (S.TextualTermName t, S.ToTrees D.Chars [S.TToken t], D.CContent c) =>
     C.Resource c -> B.IxIOPoint -> [S.TTree t] -> ResourceIO c
 readCode res src add = dispatch $ B.nioPoint src where
     dispatch (B.IOPointFile cd path) = M.liftIO $ do

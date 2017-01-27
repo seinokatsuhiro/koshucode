@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Core.Relmap.Message     as Msg
 import qualified Koshucode.Baala.Core.Resource.Message   as Msg
 
 -- | Include source code into resource.
-resInclude :: (O.Textual t, S.ToTermName t, S.ToTrees D.Chars [S.TToken t], D.CContent c)
+resInclude :: (S.TextualTermName t, S.ToTrees D.Chars [S.TToken t], D.CContent c)
     => [S.TToken t]     -- ^ Additional terms
     -> FilePath         -- ^ Context directory
     -> C.Resource c     -- ^ Base resource

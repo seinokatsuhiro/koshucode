@@ -135,7 +135,7 @@ stringTime = treesTime O.#. (S.toTrees :: String -> B.Ab [S.Tree])
 --   >>> S.toTrees "2013-#16" >>= treesTime
 --   Right 2013-#16
 --
-treesTime :: (O.Textual t, S.ToTermName t) => [S.TTree t] -> B.Ab T.Time
+treesTime :: (S.TextualTermName t) => [S.TTree t] -> B.Ab T.Time
 treesTime = textsTime O.#. D.treesTexts False
 
 textsTime :: (O.Textual t) => [t] -> B.Ab T.Time
