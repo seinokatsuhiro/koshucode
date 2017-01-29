@@ -94,7 +94,7 @@ getInt :: (O.Textual t) => t -> (Int, t)
 getInt = loop 0 where
     loop n (O.tCut -> O.Jp c cs) = case fromDigit c of
                                      Just x  -> loop (10 * n + x) cs
-                                     Nothing -> (n, O.tAdd c cs)
+                                     Nothing -> (n, c O.<:> cs)
     loop n t = (n, t)
 
 fromDigit :: Char -> Maybe Int

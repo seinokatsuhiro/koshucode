@@ -63,7 +63,7 @@ tDropWhile f = loop where
 --
 trimEnd :: (O.Textual t) => t -> t
 trimEnd (O.tCut -> Just (x, xs)) =
-    let ys = x `O.tAdd` trimEnd xs
+    let ys = x O.<:> trimEnd xs
     in case O.tCut2 ys of
          Just (y, Nothing) | Ch.isSpace y -> O.tEmpty
          _ -> ys
@@ -135,7 +135,7 @@ charWidth c
 addSpace :: (O.Textual t) => t -> t
 addSpace cs@(O.tCut -> Just (c, _))
     | Ch.isSpace c   = cs
-    | otherwise      = O.tAdd ' ' cs
+    | otherwise      = ' ' O.<:> cs
 addSpace _           = O.tEmpty
 
 

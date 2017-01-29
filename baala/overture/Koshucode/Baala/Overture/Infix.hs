@@ -18,8 +18,8 @@ module Koshucode.Baala.Overture.Infix
 
 import Prelude hiding ((++))
 import qualified Control.Monad
-import qualified Data.Maybe                    as May
-import qualified Koshucode.Baala.Overture.Type as O
+import qualified Data.Maybe                     as May
+import qualified Koshucode.Baala.Overture.Type  as O
 
 infixr 0 &
 
@@ -46,6 +46,7 @@ infixr 6 ++
 {-# INLINE (++) #-}
 (++) :: (Monoid a) => a -> a -> a
 (++) = mappend
+
 
 -- ----------------------  Map
 

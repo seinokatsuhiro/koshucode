@@ -7,6 +7,7 @@
 
 module Koshucode.Baala.Overture.Text.Textual
   ( Textual (..),
+    (<:>),
     stringify,
   ) where
 
@@ -371,7 +372,17 @@ instance Textual O.Tz where
     bsT          = bzT . Bz.fromStrict
     bzT          = Tz.decodeUtf8With Err.lenientDecode
 
+infixr 5 <:>
+
+-- | Add charactor to the top of textual value, same as 'tAdd'.
+--
+--   >>> 'b' <:> "ar" :: String
+--   "bar"
+--
+{-# INLINE (<:>) #-}
+(<:>) :: (Textual t) => Char -> t -> t
+(<:>) = tAdd
+
 -- | Convert textual something to string something.
 stringify :: (Functor f, Textual t) => f t -> f String
 stringify = (tString <$>)
-

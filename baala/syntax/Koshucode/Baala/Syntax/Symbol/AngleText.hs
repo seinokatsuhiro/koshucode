@@ -31,12 +31,12 @@ angleQuote = openLoop where
 
     loop (O.tCut -> O.Jp c cs) =
         case angleSplit c cs of
-          Nothing       -> c `O.tAdd` loop cs
+          Nothing       -> c O.<:> loop cs
           Just (w, cs2) -> "\" " O.++ w O.++ O.addSpace (openLoop cs2)
     loop _ = "\""
 
     open (O.tCut -> O.Jp '"' cs)  = O.trimBegin cs   -- omit closing double quote
-    open cs                       = O.tAdd '"' cs    -- append opening double quote
+    open cs                       = '"' O.<:> cs    -- append opening double quote
 
 -- | Split angle keyword.
 --

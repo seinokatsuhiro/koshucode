@@ -97,14 +97,14 @@ scanRel change sc@B.CodeScan { B.scanCp = cp, B.scanCache = wtab } = sc' where
                                  = updEnd  $ S.TComment cp bs
 
         | isSingle a             = upd bs  $ raw (O.charT a)
-        | S.isSymbol a           = clipw   $ S.clipSymbol cp wtab $ O.tAdd a bs
+        | S.isSymbol a           = clipw   $ S.clipSymbol cp wtab (a O.<:> bs)
         | n == 0                 = sc
         | otherwise              = upd O.tEmpty $ S.unknownToken cp cs
                                                 $ Msg.forbiddenInput $ S.angleQuote [a]
 
     aster (O.tCut -> O.Jp c cs) w
-        | w == O.stringT "****"  = upd (O.tAdd c cs) $ raw w
-        | c == '*'               = aster cs (O.tAdd c w)
+        | w == O.stringT "****"  = upd (c O.<:> cs) $ raw w
+        | c == '*'               = aster cs (c O.<:> w)
     aster cs w
         | w == O.stringT "**"    = updEnd  $ S.TComment cp cs
         | w == O.stringT "***"   = updEnd  $ S.TComment cp cs
@@ -131,14 +131,14 @@ clipAngle cp cs0 = angle (0 :: Int) cs0 where
 
     -- <...
     angle n (O.tCut -> O.Jp c cs)
-        | S.isSymbol c  = sym n (O.tAdd c cs)
-    angle n cs          = (cs, raw $ O.tAdd '<' $ text n)
+        | S.isSymbol c  = sym n (c O.<:> cs)
+    angle n cs          = (cs, raw ('<' O.<:> text n))
 
     -- <symbol ...
     sym n (O.tCut -> O.Jp c cs)
         | c == '>'      = close n cs
         | S.isSymbol c  = sym (n + 1) cs
-    sym n cs            = (cs, raw $ O.tAdd '<' $ text n) -- '<<'
+    sym n cs            = (cs, raw ('<' O.<:> text n)) -- '<<'
 
     -- <symbol> ...
     close n (O.tCut -> O.Jp c cs)
@@ -194,7 +194,7 @@ scanInterp change sc@B.CodeScan { B.scanCp = cp
     int (O.tCut -> O.Jp c cs)
         | S.isSpace c   = clip   $ S.clipSpace    cp cs
         | S.isTerm c    = clipcl $ S.clipTermName cp wtab cs
-        | otherwise     = word (O.tAdd c cs)
+        | otherwise     = word (c O.<:> cs)
     int _               = sc
 
     word cs0 = loop O.zero cs0 where
@@ -202,8 +202,8 @@ scanInterp change sc@B.CodeScan { B.scanCp = cp
         loop n cs@(O.tCut2 -> O.Jp2 '|' '}' _)
                             = gen  cs            $ raw n
         loop n (O.tCut -> O.Jp c cs)
-            | S.isSpace c   = upd  (O.tAdd c cs) $ raw n
-            | S.isTerm c    = upd  (O.tAdd c cs) $ raw n
+            | S.isSpace c   = upd  (c O.<:> cs) $ raw n
+            | S.isTerm c    = upd  (c O.<:> cs) $ raw n
             | otherwise     = loop (n + 1) cs
         loop n cs           = upd  cs            $ raw n
 

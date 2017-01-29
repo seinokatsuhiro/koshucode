@@ -241,7 +241,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
                           Right (cs', w) -> f w cs'
                           Left a         -> (wtab, O.tEmpty, [S.TUnknown cp cs0 a])
 
-    nterm ns w cs'    = let w' = (O.showT $ O.getIx cp) O.++ (O.tAdd '=' w)
+    nterm ns w cs'    = let w' = (O.showT $ O.getIx cp) O.++ ('=' O.<:> w)
                         in term (w' : ns) cs'
 
     term ns (O.tCut -> O.Jp c cs)
@@ -273,7 +273,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
 --
 clipBar :: (O.Textual t) => B.TCodePos t -> t -> ClipResult t
 clipBar cp cs0 = bar (0 :: Int) cs0 where
-    text n = O.tAdd '|' $ O.tTake n cs0
+    text n = '|' O.<:>  O.tTake n cs0
     barToken n = S.TText cp S.TextBar $ text n
     rawToken n = S.TText cp S.TextRaw $ text n
 
@@ -286,7 +286,7 @@ clipBar cp cs0 = bar (0 :: Int) cs0 where
     -- judgement sign, like |--, |-x
     judge n (O.tCut -> O.Jp c cs)
         | isJudge c || Ch.isAlpha c  = judge (n + 1) cs
-        | isSymbol c                 = clock n (O.tAdd c cs)
+        | isSymbol c                 = clock n (c O.<:> cs)
     judge n cs                       = (cs, barToken n)
 
     -- clock, like |03:30|

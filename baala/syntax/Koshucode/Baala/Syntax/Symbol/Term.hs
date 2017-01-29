@@ -119,7 +119,7 @@ enslash :: (O.Textual t) => O.Map t
 enslash n@(O.tCut  -> O.Jp '/' _)        = n
 enslash n@(O.tCut2 -> O.Jp2 '+' '/' _)   = n
 enslash n@(O.tCut2 -> O.Jp2 '-' '/' _)   = n
-enslash n                                = O.tAdd '/' n
+enslash n                                = '/' O.<:> n
 
 -- | Decode term name from string.
 {-# DEPRECATED textualTermName "Use 'toTermName' instead." #-}
@@ -144,8 +144,8 @@ stringTermNames = fmap toTermName . words
 --
 termNameString :: TermName -> String
 termNameString (TermName EQ n) = enslash n
-termNameString (TermName GT n) = O.tAdd '+' $ enslash n
-termNameString (TermName LT n) = O.tAdd '-' $ enslash n
+termNameString (TermName GT n) = '+' O.<:> enslash n
+termNameString (TermName LT n) = '-' O.<:> enslash n
 
 -- | Extract internal name.
 --

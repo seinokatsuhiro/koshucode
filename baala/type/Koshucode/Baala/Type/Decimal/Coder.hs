@@ -89,7 +89,7 @@ decodeBase base ccs = headPart id ccs where
         ' '  -> headPart sign  cs
         '-'  -> headPart minus cs
         '+'  -> headPart sign  cs
-        _    -> intPart  sign  0 (O.tAdd c cs)
+        _    -> intPart  sign  0 (c O.<:> cs)
     headPart _ _ = Msg.notNumber ccs
 
     intPart :: Sign -> T.DecimalInteger -> DecodeAb t T.Decimal
@@ -100,14 +100,14 @@ decodeBase base ccs = headPart id ccs where
             Nothing | c == ' '  -> intPart  sign n cs
                     | c == 'o'  -> ooPart   sign (-1) n cs
                     | c == '.'  -> fracPart sign n 0 cs
-                    | otherwise -> tailPart sign (n, 0) (O.tAdd c cs)
+                    | otherwise -> tailPart sign (n, 0) (c O.<:> cs)
     intPart sign n _ = decimal 0 (sign n)
 
     ooPart :: Sign -> T.DecimalFracle -> T.DecimalInteger-> DecodeAb t T.Decimal
     ooPart sign l n (O.tCut -> O.Jp c cs)
         | c == ' '   = ooPart   sign l n cs
         | c == 'o'   = ooPart   sign (l - 1) n cs
-        | otherwise  = tailPart sign (n, l) (O.tAdd c cs)
+        | otherwise  = tailPart sign (n, l) (c O.<:> cs)
     ooPart sign l n _ = decimal l (sign n)
 
     fracPart :: Sign -> T.DecimalInteger -> T.DecimalFracle -> DecodeAb t T.Decimal
@@ -116,7 +116,7 @@ decodeBase base ccs = headPart id ccs where
             Just i           -> do n' <- up c i n
                                    fracPart sign n' (f + 1) cs
             Nothing | c == ' '  -> fracPart sign n f cs
-                    | otherwise -> tailPart sign (n, f) (O.tAdd c cs)
+                    | otherwise -> tailPart sign (n, f) (c O.<:> cs)
     fracPart sign n f _ = decimal f (sign n)
 
     tailPart :: Sign -> (T.DecimalInteger, T.DecimalFracle) -> DecodeAb t T.Decimal
@@ -168,7 +168,7 @@ separator :: (O.Textual t) => O.Map t
 separator t@(O.tCut2 -> Just (_, Nothing))  = t
 separator t@(O.tCut  -> O.Jp ' ' _)         = t
 separator t | O.tIsEmpty t                  = t
-            | otherwise                     = ' ' `O.tAdd` t
+            | otherwise                     = ' ' O.<:> t
 
 -- | Encode decimals.
 --
@@ -192,11 +192,11 @@ encodeDecimalWith :: (O.Textual t) => O.Map t -> T.Decimal -> t
 encodeDecimalWith sep = encode . T.decimalRoundOut where
     encode T.Decimal { T.decimalFracle = l, T.decimalRatio = r } =
         decimalSign r $ case ratioDigits sep l $ abs r of
-                          (int, frac) | l > 0      -> int O.++ ('.' `O.tAdd` frac)
+                          (int, frac) | l > 0      -> int O.++ ('.' O.<:> frac)
                                       | otherwise  -> int
 
 decimalSign :: (O.Textual t) => T.DecimalRatio -> O.Map t
-decimalSign r cs | r < 0      = '-' `O.tAdd` cs
+decimalSign r cs | r < 0      = '-' O.<:> cs
                  | otherwise  = cs
 
 ratioDigits :: (O.Textual t, Integral n) => O.Map t -> T.DecimalFracle -> R.Ratio n -> (t, t)
@@ -210,7 +210,7 @@ integerDigits sep = loop 0 O.tEmpty where
         | i == 0  = if O.tIsEmpty cs then O.charT '0' else cs
         | n == 3  = loop 0 (sep cs) l i
         | i > 0   = case i `quotRem` 10 of
-                      (q, r) -> loop (n + 1) (up l r `O.tAdd` cs) (l + 1) q
+                      (q, r) -> loop (n + 1) (up l r O.<:> cs) (l + 1) q
         | otherwise = cs
 
     up l r | l < 0      = 'o'
@@ -222,9 +222,9 @@ fracDigits sep = loop (0 :: Int) where
     loop _ 0 _ = O.tEmpty
     loop 3 l r = sep $ loop 0 l r
     loop n l r = case properFraction $ 10 * r of
-                   (i, r') -> Ch.intToDigit i `O.tAdd` loop (n + 1) (l - 1) r'
+                   (i, r') -> Ch.intToDigit i O.<:> loop (n + 1) (l - 1) r'
 
     fill 3 l              = sep $ fill 0 l
-    fill n l | l > 0      = '0' `O.tAdd` fill (n + 1) (l - 1)
+    fill n l | l > 0      = '0' O.<:> fill (n + 1) (l - 1)
              | otherwise  = O.tEmpty
 
