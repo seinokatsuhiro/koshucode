@@ -156,67 +156,75 @@ ord = fromIntegral. Ch.ord
 instance B.MixEncode T.Decimal where
     mixTransEncode _ dec = B.mixString $ encodeDecimal dec
 
-separator :: O.StringMap
-separator ""            = ""
-separator [c]           = [c]
-separator cs@(' ' : _)  = cs
-separator cs            = ' ' : cs
+-- | Digit separator.
+--
+--   >>> separator "1" :: String
+--   "1"
+--
+--   >>> separator "1234" :: String
+--   " 1234"
+--
+separator :: (O.Textual t) => O.Map t
+separator t@(O.tCut2 -> Just (_, Nothing))  = t
+separator t@(O.tCut  -> O.Jp ' ' _)         = t
+separator t | O.tIsEmpty t                  = t
+            | otherwise                     = ' ' `O.tAdd` t
 
 -- | Encode decimals.
 --
--- >>> encodeDecimal $ T.realDecimal 0 (12345 T.%% 10)
--- "1 234"
+-- >>> encodeDecimal $ T.realDecimal 0 (12345 T.%% 10) :: String
+-- "1 235"
 --
--- >>> encodeDecimal $ T.realDecimal 2 (12345 T.%% 10)
+-- >>> encodeDecimal $ T.realDecimal 2 (12345 T.%% 10) :: String
 -- "1 234.50"
 --
--- >>> encodeDecimal $ T.realDecimal (-2) (12345 T.%% 10)
--- "1 2oo"
-
-encodeDecimal :: T.Decimal -> String
+-- >>> encodeDecimal $ T.realDecimal (-2) (12345 T.%% 10) :: String
+-- "1 3oo" :: String
+--
+encodeDecimal :: (O.Textual t) => T.Decimal -> t
 encodeDecimal = encodeDecimalWith separator
 
 -- | Encode decimals without spaces.
-encodeDecimalCompact :: T.Decimal -> String
+encodeDecimalCompact :: (O.Textual t) => T.Decimal -> t
 encodeDecimalCompact = encodeDecimalWith id
 
-encodeDecimalWith :: O.StringMap -> T.Decimal -> String
+encodeDecimalWith :: (O.Textual t) => O.Map t -> T.Decimal -> t
 encodeDecimalWith sep = encode . T.decimalRoundOut where
     encode T.Decimal { T.decimalFracle = l, T.decimalRatio = r } =
         decimalSign r $ case ratioDigits sep l $ abs r of
-                          (int, frac) | l > 0      -> int ++ "." ++ frac
+                          (int, frac) | l > 0      -> int O.++ ('.' `O.tAdd` frac)
                                       | otherwise  -> int
 
-decimalSign :: T.DecimalRatio -> O.StringMap
-decimalSign r cs | r < 0      = '-' : cs
+decimalSign :: (O.Textual t) => T.DecimalRatio -> O.Map t
+decimalSign r cs | r < 0      = '-' `O.tAdd` cs
                  | otherwise  = cs
 
-ratioDigits :: (Integral n) => O.StringMap -> T.DecimalFracle -> R.Ratio n -> (String, String)
+ratioDigits :: (O.Textual t, Integral n) => O.Map t -> T.DecimalFracle -> R.Ratio n -> (t, t)
 ratioDigits sep l r = case properFraction r of
                         (i, r') -> (integerDigits sep l i, fracDigits sep l r')
 
-integerDigits :: O.StringMap -> T.DecimalFracle -> Integer -> String
-integerDigits sep = loop 0 "" where
-    loop :: Int -> String -> T.DecimalFracle -> Integer -> String
+integerDigits :: forall t. (O.Textual t) => O.Map t -> T.DecimalFracle -> Integer -> t
+integerDigits sep = loop 0 O.tEmpty where
+    loop :: Int -> t -> T.DecimalFracle -> Integer -> t
     loop n cs l i
-        | i == 0  = if null cs then "0" else cs
+        | i == 0  = if O.tIsEmpty cs then O.charT '0' else cs
         | n == 3  = loop 0 (sep cs) l i
         | i > 0   = case i `quotRem` 10 of
-                      (q, r) -> loop (n + 1) (up l r : cs) (l + 1) q
+                      (q, r) -> loop (n + 1) (up l r `O.tAdd` cs) (l + 1) q
         | otherwise = cs
 
     up l r | l < 0      = 'o'
            | otherwise  = Ch.intToDigit (fromInteger r)
 
-fracDigits :: (Integral n) => O.StringMap -> T.DecimalFracle -> R.Ratio n -> String
+fracDigits :: (O.Textual t, Integral n) => O.Map t -> T.DecimalFracle -> R.Ratio n -> t
 fracDigits sep = loop (0 :: Int) where
     loop n l 0 = fill n l
-    loop _ 0 _ = ""
+    loop _ 0 _ = O.tEmpty
     loop 3 l r = sep $ loop 0 l r
     loop n l r = case properFraction $ 10 * r of
-                   (i, r') -> Ch.intToDigit i : loop (n + 1) (l - 1) r'
+                   (i, r') -> Ch.intToDigit i `O.tAdd` loop (n + 1) (l - 1) r'
 
     fill 3 l              = sep $ fill 0 l
-    fill n l | l > 0      = '0' : fill (n + 1) (l - 1)
-             | otherwise  = ""
+    fill n l | l > 0      = '0' `O.tAdd` fill (n + 1) (l - 1)
+             | otherwise  = O.tEmpty
 
