@@ -4,7 +4,6 @@
 
 module Koshucode.Baala.Data.Content
   ( -- * Type
-    Chars, CharsMap,
     Content (..),
 
     -- * Dispatcher
@@ -32,12 +31,6 @@ import qualified Koshucode.Baala.Data.Decode             as D
 
 -- ----------------------  Content type
 
--- | Character sequence.
-type Chars = String
-
--- | Mapping from chars to chars.
-type CharsMap = O.Map Chars
-
 {-# WARNING ContentEmpty   "Use 'empty' instead." #-}
 {-# WARNING ContentBool    "Use 'pBool' instead." #-}
 {-# WARNING ContentDec     "Use 'pDec' instead." #-}
@@ -61,9 +54,9 @@ data Content
     | ContentDec    T.Decimal   -- ^ __3.  Numeric:__                Decimal number type
     | ContentClock  T.Clock     -- ^ __4.  Numeric:__                Clock type
     | ContentTime   T.Time      -- ^ __5.  Numeric:__                Time type
-    | ContentCode   Chars       -- ^ __6.  Textual:__                Code type
+    | ContentCode   S.Chars     -- ^ __6.  Textual:__                Code type
     | ContentTerm   S.TermName  -- ^ __7.  Textual:__                Term name type
-    | ContentText   Chars       -- ^ __8.  Textual:__                Text type
+    | ContentText   S.Chars     -- ^ __8.  Textual:__                Text type
     | ContentList   [Content]   -- ^ __9.  Recursive, Collective:__  List type
     | ContentSet    [Content]   -- ^ __10. Recursive, Collective:__  Set type
     | ContentTie    [TermC]     -- ^ __11. Recursive, Relational:__  Tie type (set of terms)
@@ -152,11 +145,11 @@ instance B.MixEncode Content where
         where
           mixBar cs   = B.mixJoinBar $ map (B.mixTransEncode sh) cs
 
-quote :: Maybe Chars -> CharsMap
+quote :: Maybe S.Chars -> S.CharsMap
 quote (Nothing) t   = "'" O.++ t
 quote (Just t)  _   = t
 
-qquote :: Maybe Chars -> CharsMap
+qquote :: Maybe S.Chars -> S.CharsMap
 qquote (Nothing) t | O.tIsEmpty t  = "\"\""
                    | otherwise     = S.angleQuote t
 qquote (Just t)  _                 = t
@@ -281,9 +274,9 @@ type DispatchSimple a =
     , T.Decimal   -> a
     , T.Clock     -> a
     , T.Time      -> a
-    , Chars       -> a
+    , S.Chars     -> a
     , S.TermName  -> a
-    , Chars       -> a
+    , S.Chars     -> a
     )
 
 -- | Functions for complex content, i.e.,

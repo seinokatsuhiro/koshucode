@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Core.Relmap.Message     as Msg
 import qualified Koshucode.Baala.Core.Resource.Message   as Msg
 
 -- | Include source code into resource.
-resInclude :: (S.TextualTermName t, S.ToTrees D.Chars [S.TToken t], D.CContent c)
+resInclude :: (S.TextualTermName t, S.ToTrees S.Chars [S.TToken t], D.CContent c)
     => [S.TToken t]     -- ^ Additional terms
     -> FilePath         -- ^ Context directory
     -> C.Resource c     -- ^ Base resource
@@ -47,8 +47,8 @@ resInclude resAbout cd res xio code =
                   , C.resJudge     = js
                   , C.resDataset   = ds }
 
-createJudges :: (O.Textual t, S.ToTrees D.Chars [S.TToken t], D.CContent c)
-    => C.Resource c -> [C.Clause t] -> B.Ab (D.CacheT D.Chars, [T.Judge c], [C.Clause t])
+createJudges :: (O.Textual t, S.ToTrees S.Chars [S.TToken t], D.CContent c)
+    => C.Resource c -> [C.Clause t] -> B.Ab (D.CacheT S.Chars, [T.Judge c], [C.Clause t])
 createJudges res = loop $ C.resCacheT res where
     loop cc ((C.Clause h (C.CJudge q cl toks)) : cs) =
         Msg.abClause h $ do

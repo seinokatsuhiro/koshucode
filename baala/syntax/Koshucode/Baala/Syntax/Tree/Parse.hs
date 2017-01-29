@@ -1,11 +1,13 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Parser for token tree.
 
 module Koshucode.Baala.Syntax.Tree.Parse
   ( -- * Type
+    Chars, CharsMap,
     Tree, TTree,
 
     -- * Parser
@@ -24,8 +26,14 @@ import qualified Koshucode.Baala.Syntax.Tree.Bracket     as S
 
 -- --------------------------------------------  Type
 
+-- | Character sequence.
+type Chars = String
+
+-- | Mapping from chars to chars.
+type CharsMap = O.Map Chars
+
 -- | Tree of tokens.
-type Tree = TTree String
+type Tree = TTree Chars
 
 -- | Tree of tokens.
 type TTree t = B.CodeTree S.BracketType S.TToken t
@@ -92,10 +100,10 @@ withTrees :: (S.TextualTermName t, ToTrees t a) => ([TTree t] -> B.Ab b) -> a ->
 withTrees f a = f O.# toTrees a
 
 -- | Read clauses and convert to token trees.
-readClauseTrees :: FilePath -> B.IOAb [[TTree String]]
+readClauseTrees :: forall t. (S.TextualTermName t) => FilePath -> B.IOAb [[TTree t]]
 readClauseTrees path =
     do ls' <- S.readClauses path
-       return $ case ls' :: B.Ab [S.TokenClause String] of
+       return $ case ls' :: B.Ab [S.TokenClause t] of
          Right ls   -> toTrees O.<#> ls
          Left a     -> Left a
 

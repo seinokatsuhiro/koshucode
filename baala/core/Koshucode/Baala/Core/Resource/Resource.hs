@@ -45,7 +45,7 @@ import qualified Koshucode.Baala.Core.Relmap          as C
 data Resource c = Resource
     { resGlobal     :: Global c            -- ^ __Global:__ Global parameter
     , resLastSecNo  :: C.SecNo             -- ^ __Global:__ Last section number
-    , resCacheT     :: D.CacheT D.Chars    -- ^ __Global:__ Term name cache
+    , resCacheT     :: D.CacheT S.Chars    -- ^ __Global:__ Term name cache
 
     , resOption     :: C.Option c          -- ^ __Setting:__ Options
     , resExport     :: [String]            -- ^ __Setting:__ Exporting names
@@ -136,7 +136,7 @@ resMessagesAdd msg res = res { resMessage = msg ++ resMessage res }
 -- ----------------------  Input queue
 
 -- | Queue for input code: /todo/, /ready/ and /done/.
-type InputQueue = (B.Queue (C.InputPoint D.Chars), [B.IxIOPoint])
+type InputQueue = (B.Queue (C.InputPoint S.Chars), [B.IxIOPoint])
 
 -- | Map to input queue.
 resQueueMap :: O.Map InputQueue -> O.Map (Resource c)
