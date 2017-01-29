@@ -119,7 +119,7 @@ treesTie _ _ = Msg.adlib "unknown tie"
 --   :
 --   treesTerms
 --
-treesTerms :: (Ord t, S.ToTermName t, D.CContent c) => DecodeContent t c -> [S.TTree t] -> B.Ab [S.Term c]
+treesTerms :: (S.ToTermName t, D.CContent c) => DecodeContent t c -> [S.TTree t] -> B.Ab [S.Term c]
 treesTerms cons = mapM p O.#. D.treesTerms1 where
     p (name, tree) = Right . (name,) O.# cons tree
 

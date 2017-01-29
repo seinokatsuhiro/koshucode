@@ -81,7 +81,7 @@ type TermPath = [TermName]
 --   >>> toTermName "+/a"
 --   TermName GT "a"
 -- 
-class ToTermName a where
+class (Ord a) => ToTermName a where
     toTermName :: a -> TermName
 
 instance ToTermName TermName where

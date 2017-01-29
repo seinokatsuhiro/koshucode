@@ -52,7 +52,7 @@ cacheT = O.cache [] S.toTermName
 --   >>> S.toTree "/a/x" >>= treeFlatName
 --   Left ...
 --
-treeFlatName :: (Ord t, S.ToTermName t) => S.TTree t -> B.Ab S.TermName
+treeFlatName :: (S.ToTermName t) => S.TTree t -> B.Ab S.TermName
 treeFlatName = fmap snd . treeFlatNameCached cacheT
 
 -- | Cached version of 'treeFlatName'.
@@ -66,7 +66,7 @@ treeFlatNameCached _  _           = Msg.reqTermName
 --   >>> S.toTrees "/a +/b -/c" >>= treesFlatNames
 --   Right [TermName EQ "a",TermName GT "b",TermName LT "c"]
 --
-treesFlatNames :: (Ord t, S.ToTermName t) => [S.TTree t] -> B.Ab [S.TermName]
+treesFlatNames :: (S.ToTermName t) => [S.TTree t] -> B.Ab [S.TermName]
 treesFlatNames = mapM treeFlatName
 
 -- | Decode term names with optional complement symbol.
@@ -125,7 +125,7 @@ treesNamesByColon = loop [] [] where
 --   Right [ (TermName EQ "a", [TreeL ...]),
 --           (TermName EQ "b", [TreeL ...]) ]
 --
-treesTerms :: (Ord t, S.ToTermName t) => [S.TTree t] -> B.Ab [S.Term [S.TTree t]]
+treesTerms :: (S.ToTermName t) => [S.TTree t] -> B.Ab [S.Term [S.TTree t]]
 treesTerms = name where
     name [] = Right []
     name (x : xs) = do let (c, xs2) = cont xs
@@ -143,7 +143,7 @@ isTermLeaf (P.LTerm _)   = True
 isTermLeaf _             = False
 
 -- | Cached version of 'treesTerms'.
-treesTermsCached :: (Ord t, S.ToTermName t) => CacheT t -> [S.TTree t] -> B.Ab (CacheT t, [S.Term [S.TTree t]])
+treesTermsCached :: (S.ToTermName t) => CacheT t -> [S.TTree t] -> B.Ab (CacheT t, [S.Term [S.TTree t]])
 treesTermsCached = name where
     name cc [] = Right (cc, [])
     name cc (x : xs) =
@@ -158,7 +158,7 @@ treesTermsCached = name where
 
 -- | Read list of named token trees from token trees.
 --   This function wraps long branches into group.
-treesTerms1 :: (Ord t, S.ToTermName t) => [S.TTree t] -> B.Ab [S.Term (S.TTree t)]
+treesTerms1 :: (S.ToTermName t) => [S.TTree t] -> B.Ab [S.Term (S.TTree t)]
 treesTerms1 xs = do xs' <- treesTerms xs
                     Right (S.ttreeGroup O.<$$> xs')
 
