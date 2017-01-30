@@ -81,7 +81,7 @@ requestFromURI proxies uriText =
           Just $ H.addProxy host' port req
 
 uriPortNumber :: String -> Int
-uriPortNumber (':' : n) = B.fromMaybe defaultPortNumber $ O.stringInt n
+uriPortNumber (':' : n) = B.fromMaybe defaultPortNumber $ O.tInt n
 uriPortNumber _         = defaultPortNumber
 
 defaultPortNumber :: Int

@@ -40,7 +40,7 @@ tCut3 z f = first where
 --   Just [32,33]
 --
 textHexInts :: (O.Textual t) => t -> Maybe [Int]
-textHexInts = mapM O.stringHexInt . B.omit O.tIsEmpty . O.tDivide (== '+')
+textHexInts = mapM O.tHexInt . B.omit O.tIsEmpty . O.tDivide (== '+')
 
 -- Punctuations
 isOpen, isClose, isGrip, isSingle, isQ, isPM :: O.Test Char

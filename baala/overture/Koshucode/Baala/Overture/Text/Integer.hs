@@ -5,6 +5,9 @@
 
 module Koshucode.Baala.Overture.Text.Integer
   ( -- * Decoder
+    tDec, tInt, tInteger,
+    tHex, tHexInt, tHexInteger,
+    tCustomInteger, tCountInteger,
     stringDec, stringInt, stringInteger,
     stringHex, stringHexInt, stringHexInteger,
     stringCustomInteger, stringCountInteger,
@@ -30,69 +33,109 @@ textMaybe f s = case f s of
                   _  -> Nothing
 
 -- | Decode decimal integer.
+tDec :: (O.Textual t, Eq n, Num n) => t -> Maybe n
+tDec = textMaybe Num.readDec . O.tString
+
+-- | Decode decimal integer.
+{-# DEPRECATED stringDec "Use 'tDec' instead." #-}
 stringDec :: (O.Textual t, Eq n, Num n) => t -> Maybe n
-stringDec = textMaybe Num.readDec . O.tString
+stringDec = tDec
 
 -- | Decode decimal integer as 'Int'.
 --
---   >>> stringInt "12"
+--   >>> tInt "12"
 --   Just 12
 --
---   >>> stringInt "12.3"
+--   >>> tInt "12.3"
 --   Nothing
 --
---   >>> stringInt "12345678901234567890"
+--   >>> tInt "12345678901234567890"
 --   Just (-6101065172474983726)
 --
-stringInt :: (O.Textual t) => t -> Maybe Int
-stringInt = stringDec
+tInt :: (O.Textual t) => t -> Maybe Int
+tInt = stringDec
+
+-- | Decode decimal integer as 'Int'.
+{-# DEPRECATED stringInt "Use 'tInt' instead." #-}
+stringInt :: (O.Textual t, Eq n, Num n) => t -> Maybe n
+stringInt = tDec
 
 -- | Decode decimal integer as 'Integer'.
 --
---   >>> stringInteger "12345678901234567890"
+--   >>> tInteger "12345678901234567890"
 --   Just 12345678901234567890
 --
+tInteger :: (O.Textual t) => t -> Maybe Integer
+tInteger = tDec
+
+-- | Decode decimal integer as 'Integer'.
+{-# DEPRECATED stringInteger "Use 'tInteger' instead." #-}
 stringInteger :: (O.Textual t) => t -> Maybe Integer
-stringInteger = stringDec
+stringInteger = tDec
 
 -- | Decode hexadecimal digits.
+tHex :: (O.Textual t, Eq n, Num n) => t -> Maybe n
+tHex = textMaybe Num.readHex . O.tString
+
+-- | Decode hexadecimal digits.
+{-# DEPRECATED stringHex "Use 'tHex' instead." #-}
 stringHex :: (O.Textual t, Eq n, Num n) => t -> Maybe n
-stringHex = textMaybe Num.readHex . O.tString
+stringHex = tHex
 
 -- | Decode hexadecimal digits as 'Int'.
 --
---   >>> stringHexInt "0F"
+--   >>> tHexInt "0F"
 --   Just 15
 --
+tHexInt :: (O.Textual t) => t -> Maybe Int
+tHexInt = stringHex
+
+-- | Decode hexadecimal digits as 'Int'.
+{-# DEPRECATED stringHexInt "Use 'tHexInt' instead." #-}
 stringHexInt :: (O.Textual t) => t -> Maybe Int
 stringHexInt = stringHex
 
 -- | Decode hexadecimal digits as 'Integer'.
 --
---   >>> stringHexInteger "0F"
+--   >>> tHexInteger "0F"
 --   Just 15
 --
+tHexInteger :: (O.Textual t) => t -> Maybe Integer
+tHexInteger = tHex
+
+-- | Decode hexadecimal digits as 'Integer'.
+{-# DEPRECATED stringHexInteger "Use 'tHexInteger' instead." #-}
 stringHexInteger :: (O.Textual t) => t -> Maybe Integer
-stringHexInteger = stringHex
+stringHexInteger = tHex
 
 -- | Decode custom digits to integer.
 --
---   >>> stringCustomInteger "01234567" "144"
+--   >>> tCustomInteger "01234567" "144"
 --   Just 100
 --
+tCustomInteger :: (O.Textual t) => String -> t -> Maybe Integer
+tCustomInteger = tIntegerFrom 0
+
+-- | Decode custom digits to integer.
+{-# DEPRECATED stringCustomInteger "Use 'tCustomInteger' instead." #-}
 stringCustomInteger :: (O.Textual t) => String -> t -> Maybe Integer
-stringCustomInteger = stringIntegerFrom 0
+stringCustomInteger = tIntegerFrom 0
 
 -- | Decode counting digits to integer.
 --
---   >>> stringCountInteger ['A'..'Z'] <$> ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
+--   >>> tCountInteger ['A'..'Z'] <$> ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
 --   [Just 0, Just 1, Just 2, Just 25, Just 26, Just 27, Just 52, Just 53, Just 100, Just 1000, Just 5303449]
 --
-stringCountInteger :: (O.Textual t) => String -> t -> Maybe Integer
-stringCountInteger = stringIntegerFrom 1
+tCountInteger :: (O.Textual t) => String -> t -> Maybe Integer
+tCountInteger = tIntegerFrom 1
 
-stringIntegerFrom :: (O.Textual t) => Integer -> String -> t -> Maybe Integer
-stringIntegerFrom from digits = loop 0 where
+-- | Decode counting digits to integer.
+{-# DEPRECATED stringCountInteger "Use 'tCountInteger' instead." #-}
+stringCountInteger :: (O.Textual t) => String -> t -> Maybe Integer
+stringCountInteger = tIntegerFrom 1
+
+tIntegerFrom :: (O.Textual t) => Integer -> String -> t -> Maybe Integer
+tIntegerFrom from digits = loop 0 where
     m = Ms.fromList $ zip digits [from ..]
     b = toInteger $ length digits
 

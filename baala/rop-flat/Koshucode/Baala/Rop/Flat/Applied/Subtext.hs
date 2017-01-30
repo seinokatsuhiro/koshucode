@@ -186,7 +186,7 @@ parseSubtext ns = trees False where
     times [ P.LRaw a                ] = bracket (T.minMax (int a) (int a))
     times xs = const $ unknownSyntax $ show xs
 
-    int s = case K.stringInt s of
+    int s = case K.tInt s of
               Just n   -> n
               Nothing  -> error "require integer"
 
