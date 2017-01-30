@@ -24,6 +24,14 @@ data Sivmap t
     | SivmapChain (Sivmap t) (Sivmap t)  -- ^ Sivmap chain
       deriving (Show, Eq)
 
+instance Functor Sivmap where
+    fmap _ (SivmapId)           = SivmapId
+    fmap f (SivmapEq t)         = SivmapEq (f t)
+    fmap f (SivmapKeep t e)     = SivmapKeep (f t) e
+    fmap f (SivmapOmit t e)     = SivmapOmit (f t) e
+    fmap f (SivmapAssoc tk tv)  = SivmapAssoc (f tk) (f tv)
+    fmap f (SivmapChain m1 m2)  = SivmapChain (fmap f m1) (fmap f m2)
+
 instance Monoid (Sivmap t) where
     mempty  = SivmapId
     mappend = sivmapChain
