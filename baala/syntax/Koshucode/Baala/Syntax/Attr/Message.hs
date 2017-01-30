@@ -18,6 +18,7 @@ module Koshucode.Baala.Syntax.Attr.Message
     unexpAttrMulti,
   ) where
 
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Para             as S
 import qualified Koshucode.Baala.Syntax.Symbol           as S
@@ -43,12 +44,12 @@ extraAttr :: B.Ab a
 extraAttr = B.leftBecause "Extra attribute"
 
 -- | No slot content
-noSlotName :: Int -> String -> B.Ab a
+noSlotName :: (O.Textual t) => Int -> t -> B.Ab a
 noSlotName n name = B.leftLine "No slot content" $ detail n where
-    detail 0 = "Positional attribute @'" ++ name
-    detail 1 = "Named attribute -"       ++ name
-    detail 2 = "Global slot @@"          ++ name
-    detail a = "Unknown slot level "     ++ show a
+    detail 0 = "Positional attribute @'" O.++ O.tString name
+    detail 1 = "Named attribute -"       O.++ O.tString name
+    detail 2 = "Global slot @@"          O.++ O.tString name
+    detail a = "Unknown slot level "     O.++ show a
 
 -- | No slot content
 noSlotIndex :: [String] -> Int -> B.Ab a

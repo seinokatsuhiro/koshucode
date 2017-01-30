@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Slot substitution.
@@ -23,17 +25,18 @@ type AttrTree t = (S.AttrName, [S.TTree t])
 type GlobalSlot t = (String, [S.TTree t])
 
 -- | Substitute slots by global and attribute slots.
-substSlot :: [GlobalSlot S.Chars] -> [AttrTree S.Chars] -> B.AbMap [S.TTree S.Chars]
+substSlot :: (O.Textual t) => [GlobalSlot t] -> [AttrTree t] -> B.AbMap [S.TTree t]
 substSlot gslot attr = Right . concat O.#. mapM (substTree gslot attr)
 
-substTree :: [GlobalSlot S.Chars] -> [AttrTree S.Chars] -> S.Tree -> B.Ab [S.TTree S.Chars]
+substTree :: forall t. (O.Textual t) =>
+    [GlobalSlot t] -> [AttrTree t] -> S.TTree t -> B.Ab [S.TTree t]
 substTree gslot attr tree = Msg.abSlot [tree] $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
     loop (P.LSlot n name)
         | n == 0    = replace n name S.attrNameTrunk attr (`pos` name)
-        | n == 1    = replace n name (S.AttrNormal name) attr Right
-        | n == 2    = replace n name name gslot Right
+        | n == 1    = replace n name (S.AttrNormal $ O.tString name) attr Right
+        | n == 2    = replace n name (O.tString name) gslot Right
         | otherwise = Msg.noSlotName n name
     loop tk = Right [tk]
 
@@ -42,7 +45,7 @@ substTree gslot attr tree = Msg.abSlot [tree] $ loop tree where
           Just od -> f od
           Nothing -> Msg.noSlotName n name
 
-    pos :: [S.TTree S.Chars] -> S.Chars -> B.Ab [S.TTree S.Chars]
+    pos :: [S.TTree t] -> t -> B.Ab [S.TTree t]
     pos od "all" = Right od
     pos od n     = case O.tInt n of
                      Just i  -> Right . B.list1 O.# od `at` i
