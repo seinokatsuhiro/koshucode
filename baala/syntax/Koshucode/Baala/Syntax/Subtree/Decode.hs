@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Decode subtree.
@@ -37,7 +38,7 @@ import qualified Koshucode.Baala.Base.Message            as Msg
 --   TText /0.12.4/ TextQQ "cc"
 --   TClose /0.0.0/ ")"
 --
-readSubtreeClauses :: FilePath -> B.IOAb [S.TokenClause String]
+readSubtreeClauses :: (S.TextualTermName t) => FilePath -> B.IOAb [S.TokenClause t]
 readSubtreeClauses path =
     do ls' <- S.readClauses path
        return $ case ls' of
@@ -45,7 +46,7 @@ readSubtreeClauses path =
          Right ls -> subtreeClause O.<#> ls
 
 -- | Insert open\/sep\/close to subtree clause.
-subtreeClause :: S.TokenClause String -> B.Ab (S.TokenClause String)
+subtreeClause :: (O.Textual t) => S.TokenClause t -> B.Ab (S.TokenClause t)
 subtreeClause cl = cl' where
     cl' = case clauseFirstElem cl of
             Just (P.TRaw s) | s `elem` [">", ">>"] ->
@@ -92,39 +93,40 @@ clauseFirstElem cl =
 --   >>> S.withTrees decodeSubtreePattern ">> \"Y1\" ( - A B /z \"Z1\" )"
 --   Right [SubtreeR (SivmapEq "Y1") [SubtreeL (SubtreeText ["A","B"] (TermName EQ "z")) (SivmapEq "Z1")]]
 --
-decodeSubtreePattern :: [S.Tree] -> B.Ab [S.SubtreePattern]
+decodeSubtreePattern :: (S.TextualTermName t, U.ToSivExpr t)
+   => [S.TTree t] -> B.Ab [S.SubtreePattern]
 decodeSubtreePattern = pats where
     pats ts = pat O.<#> S.divideTreesByBar2 ts
 
     pat (P.LRaw "-" : ts) = do (ts', term) <- splitClassTerm ts
                                (f, _) <- filtPat ts'
-                               Right $ S.SubtreeL term f
+                               Right $ S.SubtreeL term (O.tString <$> f)
     pat (P.LRaw ">" : ts) = do (ts', term) <- splitClassTerm ts
                                S.SubtreeB term </> ts'
     pat (P.LRaw ">>" : ts) = S.SubtreeR </> ts
     pat ts = abSubtree ts $ Msg.adlib "Unknown subtree pattern"
 
     k </> ts = do (f, ps) <- filtPat ts
-                  Right $ k f ps
+                  Right $ k (O.tString <$> f) ps
 
     filtPat ts = abSubtree ts $ case splitFilter ts of
         (fs, [P.BGroup ts2])
-                 -> do fs' <- filt O.<#> fs
+                 -> do fs' <- treesSivmap O.<#> fs
                        ps <- pats ts2
                        Right (mconcat fs', ps)
-        (fs, []) -> do fs' <- filt O.<#> fs
+        (fs, []) -> do fs' <- treesSivmap O.<#> fs
                        Right (mconcat fs', [])
         (_, ts2) -> abSubtree ts2 $ Msg.adlib "Malformed subtree pattern"
 
-    filt :: [S.Tree] -> B.Ab (U.Sivmap String)
-    filt []                      = Right $ U.sivmapId
-    filt [P.LQq s]               = Right $ U.sivmapEq s
-    filt [P.LRaw "?", P.LQq s]   = Right $ U.sivmapKeep s
-    filt [P.LRaw "!", P.LQq s]   = Right $ U.sivmapOmit s
-    filt [P.LQq n, P.LRaw "=", P.LQq v]  = Right $ U.sivmapAssoc n v
-    filt ts = abSubtree ts $ Msg.adlib "Unknown subtree filter"
+treesSivmap :: (O.Textual t, U.ToSivExpr t) => [S.TTree t] -> B.Ab (U.Sivmap t)
+treesSivmap []                      = Right $ U.sivmapId
+treesSivmap [P.LQq s]               = Right $ U.sivmapEq s
+treesSivmap [P.LRaw "?", P.LQq s]   = Right $ U.sivmapKeep s
+treesSivmap [P.LRaw "!", P.LQq s]   = Right $ U.sivmapOmit s
+treesSivmap [P.LQq n, P.LRaw "=", P.LQq v]  = Right $ U.sivmapAssoc n v
+treesSivmap ts = abSubtree ts $ Msg.adlib "Unknown subtree filter"
 
-splitFilter :: [S.Tree] -> ([[S.Tree]], [S.Tree])
+splitFilter :: (O.Textual t) => [S.TTree t] -> ([[S.TTree t]], [S.TTree t])
 splitFilter ts = (filt', pat) where
     (filt, pat) = break isGroup ts
     filt' = S.divideTreesByBar filt
@@ -132,13 +134,13 @@ splitFilter ts = (filt', pat) where
     isGroup (P.BGroup _) = True
     isGroup _            = False
 
-splitClassTerm :: [S.Tree] -> B.Ab ([S.Tree], S.SubtreeTerm)
+splitClassTerm :: (S.TextualTermName t) => [S.TTree t] -> B.Ab ([S.TTree t], S.SubtreeTerm)
 splitClassTerm ts0 = abSubtree ts0 $ loop [] ts0 where
     loop cs (P.LRaw c : ts)  = loop (c : cs) ts
     loop cs (P.LTerm n : P.LRaw "seq" : ts)
-        = right cs (ts, S.SubtreeSeq (reverse cs) (S.toTermName n))
+        = right cs (ts, S.SubtreeSeq (O.tString <$> reverse cs) (S.toTermName n))
     loop cs (P.LTerm n : ts)
-        = right cs (ts, S.subtreeTexts (reverse cs) (S.toTermName n))
+        = right cs (ts, S.subtreeTexts (O.tString <$> reverse cs) (S.toTermName n))
     loop _ _ = Right (ts0, S.SubtreeNone)
 
     right cs result
