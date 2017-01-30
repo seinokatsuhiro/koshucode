@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Encode and decode integers.
@@ -29,8 +30,8 @@ textMaybe f s = case f s of
                   _  -> Nothing
 
 -- | Decode decimal integer.
-stringDec :: (Eq n, Num n) => String -> Maybe n
-stringDec = textMaybe Num.readDec
+stringDec :: (O.Textual t, Eq n, Num n) => t -> Maybe n
+stringDec = textMaybe Num.readDec . O.tString
 
 -- | Decode decimal integer as 'Int'.
 --
@@ -43,7 +44,7 @@ stringDec = textMaybe Num.readDec
 --   >>> stringInt "12345678901234567890"
 --   Just (-6101065172474983726)
 --
-stringInt :: String -> Maybe Int
+stringInt :: (O.Textual t) => t -> Maybe Int
 stringInt = stringDec
 
 -- | Decode decimal integer as 'Integer'.
@@ -51,7 +52,7 @@ stringInt = stringDec
 --   >>> stringInteger "12345678901234567890"
 --   Just 12345678901234567890
 --
-stringInteger :: String -> Maybe Integer
+stringInteger :: (O.Textual t) => t -> Maybe Integer
 stringInteger = stringDec
 
 -- | Decode hexadecimal digits.
@@ -79,7 +80,7 @@ stringHexInteger = stringHex
 --   >>> stringCustomInteger "01234567" "144"
 --   Just 100
 --
-stringCustomInteger :: String -> String -> Maybe Integer
+stringCustomInteger :: (O.Textual t) => String -> t -> Maybe Integer
 stringCustomInteger = stringIntegerFrom 0
 
 -- | Decode counting digits to integer.
@@ -87,18 +88,19 @@ stringCustomInteger = stringIntegerFrom 0
 --   >>> stringCountInteger ['A'..'Z'] <$> ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
 --   [Just 0, Just 1, Just 2, Just 25, Just 26, Just 27, Just 52, Just 53, Just 100, Just 1000, Just 5303449]
 --
-stringCountInteger :: String -> String -> Maybe Integer
+stringCountInteger :: (O.Textual t) => String -> t -> Maybe Integer
 stringCountInteger = stringIntegerFrom 1
 
-stringIntegerFrom :: Integer -> String -> String -> Maybe Integer
+stringIntegerFrom :: (O.Textual t) => Integer -> String -> t -> Maybe Integer
 stringIntegerFrom from digits = loop 0 where
     m = Ms.fromList $ zip digits [from ..]
     b = toInteger $ length digits
 
-    loop n "" = Just n
-    loop n (d:ds) = case Ms.lookup d m of
-                      Nothing -> Nothing
-                      Just i  -> loop (b * n + i) ds
+    loop n (O.tCut -> Just (d, ds)) =
+        case Ms.lookup d m of
+          Nothing -> Nothing
+          Just i  -> loop (b * n + i) ds
+    loop n _ = Just n
 
 
 -- ----------------------  Encoder
