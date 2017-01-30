@@ -40,7 +40,7 @@ type NNamed a = (NName, a)
 -- ----------------------  Constructor type
 
 -- | Construct lexmap.
-type ConsLexmap = [S.GlobalSlot] -> FindDeriv -> SecNo -> ConsLexmapBody
+type ConsLexmap = [S.GlobalSlot S.Chars] -> FindDeriv -> SecNo -> ConsLexmapBody
 
 -- | Find derived relmap operator.
 type FindDeriv = SecNo -> C.RopName -> [LexmapClause]

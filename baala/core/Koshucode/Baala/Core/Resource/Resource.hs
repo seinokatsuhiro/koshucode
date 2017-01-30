@@ -55,14 +55,14 @@ data Resource c = Resource
     , resJudge      :: [T.Judge c]         -- ^ __Input:__ Affirmative or denial judgements
     , resDataset    :: D.Dataset c         -- ^ __Input:__ Dataset
 
-    , resSlot       :: [S.GlobalSlot]      -- ^ __Calc:__ Global slots
-    , resLexmap     :: [C.LexmapClause]    -- ^ __Calc:__ Source of relmaps
-    , resAssert     :: [ShortAssert c]     -- ^ __Calc:__ Assertions of relmaps
+    , resSlot       :: [S.GlobalSlot S.Chars]  -- ^ __Calc:__ Global slots
+    , resLexmap     :: [C.LexmapClause]        -- ^ __Calc:__ Source of relmaps
+    , resAssert     :: [ShortAssert c]         -- ^ __Calc:__ Assertions of relmaps
 
-    , resOutput     :: B.IOPoint           -- ^ __Output:__ Output point
-    , resEcho       :: [[S.TokenLine String]]  -- ^ __Output:__ Echo text
-    , resLicense    :: [(C.SecNo, String)] -- ^ __Output:__ License text
-    , resMessage    :: [String]            -- ^ __Output:__ Collection of messages
+    , resOutput     :: B.IOPoint               -- ^ __Output:__ Output point
+    , resEcho       :: [[S.TokenLine S.Chars]] -- ^ __Output:__ Echo text
+    , resLicense    :: [(C.SecNo, String)]     -- ^ __Output:__ License text
+    , resMessage    :: [String]                -- ^ __Output:__ Collection of messages
     }
 
 instance Show (Resource c) where

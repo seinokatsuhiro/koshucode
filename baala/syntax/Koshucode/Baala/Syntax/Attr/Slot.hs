@@ -20,13 +20,13 @@ import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 type AttrTree t = (S.AttrName, [S.TTree t])
 
 -- | Global slot name and its content.
-type GlobalSlot = (String, [S.TTree String])
+type GlobalSlot t = (String, [S.TTree t])
 
 -- | Substitute slots by global and attribute slots.
-substSlot :: [GlobalSlot] -> [AttrTree String] -> B.AbMap [S.Tree]
+substSlot :: [GlobalSlot S.Chars] -> [AttrTree S.Chars] -> B.AbMap [S.TTree S.Chars]
 substSlot gslot attr = Right . concat O.#. mapM (substTree gslot attr)
 
-substTree :: [GlobalSlot] -> [AttrTree String] -> S.Tree -> B.Ab [S.Tree]
+substTree :: [GlobalSlot S.Chars] -> [AttrTree S.Chars] -> S.Tree -> B.Ab [S.TTree S.Chars]
 substTree gslot attr tree = Msg.abSlot [tree] $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
@@ -42,7 +42,7 @@ substTree gslot attr tree = Msg.abSlot [tree] $ loop tree where
           Just od -> f od
           Nothing -> Msg.noSlotName n name
 
-    pos :: [S.Tree] -> String -> B.Ab [S.Tree]
+    pos :: [S.TTree S.Chars] -> S.Chars -> B.Ab [S.TTree S.Chars]
     pos od "all" = Right od
     pos od n     = case O.stringInt n of
                      Just i  -> Right . B.list1 O.# od `at` i
