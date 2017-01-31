@@ -1,3 +1,6 @@
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Attribute editor.
@@ -22,32 +25,32 @@ import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 -- ----------------------  Data type
 
 -- | Attribute editor with source code information.
-type AttrEd = B.Codic AttrEdBody
+type AttrEd t = B.Codic (AttrEdBody t)
 
 -- | Operators for attribute editors.
-data AttrEdBody
-    = AttrEdId                            -- ^ __id:__ Identity editor
-    | AttrEdAdd     Bool String [S.Tree]  -- ^ __add:__ Add attribute
-    | AttrEdRename  (String, String)      -- ^ __rename:__ Rename attribute keyword
-    | AttrEdFill    [Maybe S.Tree]        -- ^ __fill:__ Fill positional attributes
-    | AttrEdNest    String [S.Tree]       -- ^ __nest:__ Nested relation reference
-    | AttrEdAppend  [AttrEd]              -- ^ Append editors
+data AttrEdBody t
+    = AttrEdId                          -- ^ __id:__ Identity editor
+    | AttrEdAdd     Bool t [S.TTree t]  -- ^ __add:__ Add attribute
+    | AttrEdRename  (t, t)              -- ^ __rename:__ Rename attribute keyword
+    | AttrEdFill    [Maybe (S.TTree t)] -- ^ __fill:__ Fill positional attributes
+    | AttrEdNest    t [S.TTree t]       -- ^ __nest:__ Nested relation reference
+    | AttrEdAppend  [AttrEd t]          -- ^ Append editors
       deriving (Show, Eq, Ord)
 
 
 -- ----------------------  Cons and run
 
 -- | Construct attribute editor.
-consAttrEd :: [S.Tree] -> B.Ab AttrEd
+consAttrEd :: forall t. (O.Textual t) => [S.TTree t] -> B.Ab (AttrEd t)
 consAttrEd = loop where
-    notKeyword ('-' : _)  = False
-    notKeyword _          = True
+    notKeyword (O.tCut -> O.Jp '-' _) = False
+    notKeyword _ = True
 
     fill (P.LRaw "*" : xs) = Nothing : fill xs
     fill (x : xs)          = Just x  : fill xs
     fill []                = []
 
-    right :: [S.Tree] -> AttrEdBody -> B.Ab AttrEd
+    right :: [S.TTree t] -> AttrEdBody t -> B.Ab (AttrEd t)
     right trees = Right . B.codic trees
 
     loop trees =
@@ -56,7 +59,7 @@ consAttrEd = loop where
             | op == "id"      -> right trees $ AttrEdId
             | op == "fill"    -> right trees $ AttrEdFill $ fill xs
 
-          [P.LRaw op : P.LRaw ('-' : k) : xs]
+          [P.LRaw op : P.LRaw (O.tCut -> O.Jp '-' k) : xs]
             | op == "add"     -> right trees $ AttrEdAdd False k xs
             | op == "opt"     -> right trees $ AttrEdAdd True  k xs
             | op == "nest"    -> right trees $ AttrEdNest k xs
@@ -74,7 +77,7 @@ consAttrEd = loop where
                                     right trees $ AttrEdAppend subs
 
 -- | Edit relmap attributes.
-runAttrEd :: AttrEd -> B.AbMap [S.AttrTree String]
+runAttrEd :: AttrEd S.Chars -> B.AbMap [S.AttrTree String]
 runAttrEd (B.Codic cp edit) attr = run where
     run = Msg.abAttr cp $ case edit of
             AttrEdId                -> Right attr
@@ -109,9 +112,9 @@ runAttrEd (B.Codic cp edit) attr = run where
     fill []       (Nothing : _ )   = Msg.reqAttr "*"
     fill ps       []               = Right $ ps
 
-nestName :: B.AbMap [S.Tree]
+nestName :: (S.TextualTermName t) => B.AbMap [S.TTree t]
 nestName [P.LTerm n] = Right $ localNest $ S.toTermName n
 nestName _ = Msg.adlib "require term name"
 
-localNest :: S.TermName -> [S.Tree]
+localNest :: (O.Textual t) => S.TermName -> [S.TTree t]
 localNest n = [B.TreeL $ S.TLocal B.def (S.LocalNest n) (-1) []]

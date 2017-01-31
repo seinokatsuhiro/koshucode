@@ -61,7 +61,7 @@ reqAttr :: String -> B.Ab a
 reqAttr = B.leftLine "Require attribute"
 
 -- | Require attribute
-reqAttrName :: String -> B.Ab a
+reqAttrName :: (O.Textual t) => t -> B.Ab a
 reqAttrName = B.leftLine "Require attribute name, e.g., -xxx"
 
 -- | Unexpected attribute

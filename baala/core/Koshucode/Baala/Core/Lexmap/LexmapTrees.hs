@@ -20,9 +20,9 @@ import qualified Koshucode.Baala.Data.Message         as Msg
 
 -- | Tree representation of lexmap.
 data LexmapTrees t = LexmapTrees
-    { lexmapTrees   :: [S.TTree t]   -- ^ Positional attribute.
-    , lexmapPara    :: TTreePara t   -- ^ Parameter
-    , lexmapAttrEd  :: S.AttrEd      -- ^ Attribute editor
+    { lexmapTrees   :: [S.TTree t]       -- ^ Positional attribute.
+    , lexmapPara    :: TTreePara t       -- ^ Parameter
+    , lexmapAttrEd  :: S.AttrEd S.Chars  -- ^ Attribute editor
     } deriving (Show, Eq, Ord)
 
 clauseAttrType :: S.ParaSpec String
