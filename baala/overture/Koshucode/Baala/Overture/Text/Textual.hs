@@ -310,6 +310,12 @@ class (Show t, Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
     --
     stringT :: String -> t
 
+    -- | Convert textual value to strict text.
+    tTx :: t -> O.Tx
+
+    -- | Convert strict text to textual value.
+    txT :: O.Tx -> t
+
     -- | Convert show instance to textual value.
     --
     --   >>> showT (120 :: Int) :: String
@@ -337,6 +343,8 @@ instance Textual String where
 
     tString      = id
     stringT      = id
+    tTx          = Tx.pack
+    txT          = Tx.unpack
     bsT          = Bs.toString
     bzT          = Bz.toString
 
@@ -353,6 +361,8 @@ instance Textual O.Tx where
 
     tString      = Tx.unpack
     stringT      = Tx.pack
+    tTx          = id
+    txT          = id
     bsT          = Tx.decodeUtf8With Err.lenientDecode
     bzT          = bsT . Bz.toStrict
 
@@ -369,6 +379,8 @@ instance Textual O.Tz where
 
     tString      = Tz.unpack
     stringT      = Tz.pack
+    tTx          = Tz.toStrict
+    txT          = Tz.fromStrict
     bsT          = bzT . Bz.fromStrict
     bzT          = Tz.decodeUtf8With Err.lenientDecode
 
