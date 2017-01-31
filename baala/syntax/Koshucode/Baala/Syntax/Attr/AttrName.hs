@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Attribute name.
@@ -9,11 +10,14 @@ module Koshucode.Baala.Syntax.Attr.AttrName
     attrNameTrunk,
   ) where
 
+import qualified Koshucode.Baala.Overture          as O
+import qualified Koshucode.Baala.Syntax.Tree       as S
+
 -- | Attribute name of relmap.
 data AttrName
-    = AttrNormal       String  -- ^ Normal attribute
-    | AttrRelmapNormal String  -- ^ Attribute for submap
-    | AttrRelmapLocal  String  -- ^ Attribute for submap with local relation references
+    = AttrNormal       S.Chars  -- ^ Normal attribute
+    | AttrRelmapNormal S.Chars  -- ^ Attribute for submap
+    | AttrRelmapLocal  S.Chars  -- ^ Attribute for submap with local relation references
       deriving (Show, Eq, Ord)
 
 -- | Test attribute name is for subrelmap.
@@ -23,14 +27,14 @@ isAttrNameRelmap (AttrRelmapLocal  _)  = True
 isAttrNameRelmap _                     = False
 
 -- | String part of attribute names.
-attrNameText :: AttrName -> String
+attrNameText :: AttrName -> S.Chars
 attrNameText (AttrNormal       n)  = n
 attrNameText (AttrRelmapNormal n)  = n
 attrNameText (AttrRelmapLocal  n)  = n
 
 -- | Attribute string with hyphen.
-attrNameCode :: AttrName -> String
-attrNameCode = ('-':) . attrNameText
+attrNameCode :: AttrName -> S.Chars
+attrNameCode = ('-' O.<:>) . attrNameText
 
 -- | Constant for attribute name @\@trunk@.
 attrNameTrunk :: AttrName
