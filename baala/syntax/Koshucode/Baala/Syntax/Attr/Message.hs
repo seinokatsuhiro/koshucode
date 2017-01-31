@@ -57,7 +57,7 @@ noSlotIndex xs n = B.leftLines "No slot content" $
                    ("No index @'" ++ show n ++ " in") : xs
 
 -- | Require attribute
-reqAttr :: String -> B.Ab a
+reqAttr :: (O.Textual t) => t -> B.Ab a
 reqAttr = B.leftLine "Require attribute"
 
 -- | Require attribute
@@ -73,12 +73,12 @@ unexpAttrMulti :: [(String, S.ParaUnmatch String)] -> B.Ab a
 unexpAttrMulti [u] = B.leftLines "Unexpected attribute" $ attrDetail u
 unexpAttrMulti us  = B.leftLines "Unmatch any patterns" $ concatMap attrDetail us
 
-attrDetail :: (String, S.ParaUnmatch String) -> [String]
+attrDetail :: (O.Textual t) => (String, S.ParaUnmatch t) -> [String]
 attrDetail (usage, unmatch) =
     case unmatch of
       S.ParaPos n _      -> expect ["Unmatch " ++ show n ++ " positional attributes"]
-      S.ParaUnknown  ns  -> expect ["Unknown "  ++ unwords ns]
-      S.ParaMissing  ns  -> expect ["Missing "  ++ unwords ns]
-      S.ParaMultiple ns  -> expect ["Repeated " ++ unwords ns]
+      S.ParaUnknown  ns  -> expect ["Unknown "  ++ unwords (O.tString <$> ns)]
+      S.ParaMissing  ns  -> expect ["Missing "  ++ unwords (O.tString <$> ns)]
+      S.ParaMultiple ns  -> expect ["Repeated " ++ unwords (O.tString <$> ns)]
     where
       expect reason = reason ++ ["  against '" ++ usage ++ "'"]

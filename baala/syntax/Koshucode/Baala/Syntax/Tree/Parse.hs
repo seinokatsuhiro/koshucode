@@ -8,6 +8,7 @@
 module Koshucode.Baala.Syntax.Tree.Parse
   ( -- * Type
     Chars, CharsMap,
+    tChars, stringChars,
     Tree, TTree,
 
     -- * Parser
@@ -28,9 +29,19 @@ import qualified Koshucode.Baala.Syntax.Tree.Bracket     as S
 
 -- | Character sequence.
 type Chars = String
+--type Chars = O.Tx
 
 -- | Mapping from chars to chars.
 type CharsMap = O.Map Chars
+
+-- | Convert textual value to character sequence.
+tChars :: (O.Textual t) => t -> Chars
+tChars = O.tString
+--tChars = O.tTx
+
+-- | Convert string to character sequence.
+stringChars :: String -> Chars
+stringChars = O.stringT
 
 -- | Tree of tokens.
 type Tree = TTree Chars
@@ -41,7 +52,6 @@ type TTree t = B.CodeTree S.BracketType S.TToken t
 -- | Wrap trees in group.
 ttreeGroup :: [TTree t] -> TTree t
 ttreeGroup = B.codeTreeWrap S.BracketGroup
-
 
 -- --------------------------------------------  Parser
 

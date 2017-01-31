@@ -77,7 +77,7 @@ consAttrEd = loop where
                                     right trees $ AttrEdAppend subs
 
 -- | Edit relmap attributes.
-runAttrEd :: AttrEd S.Chars -> B.AbMap [S.AttrTree String]
+runAttrEd :: AttrEd S.Chars -> B.AbMap [S.AttrTree S.Chars]
 runAttrEd (B.Codic cp edit) attr = run where
     run = Msg.abAttr cp $ case edit of
             AttrEdId                -> Right attr
@@ -100,7 +100,7 @@ runAttrEd (B.Codic cp edit) attr = run where
                    n   <- nestName xs'
                    Right $ (k, n) : attr
 
-    rename :: S.AttrName -> S.AttrName -> B.Ab [S.AttrTree String]
+    rename :: S.AttrName -> S.AttrName -> B.Ab [S.AttrTree S.Chars]
     rename k' k = case lookup k attr of
           Just _   -> Right $ B.assocRename1 k' k attr
           Nothing  -> Msg.reqAttr $ S.attrNameText k
@@ -109,7 +109,7 @@ runAttrEd (B.Codic cp edit) attr = run where
     fill (p : ps) (Nothing : xs)   = Right . (p:) O.# fill ps xs
     fill (p : ps) (_       : xs)   = Right . (p:) O.# fill ps xs
     fill []       (Just x  : xs)   = Right . (x:) O.# fill [] xs
-    fill []       (Nothing : _ )   = Msg.reqAttr "*"
+    fill []       (Nothing : _ )   = Msg.reqAttr ("*" :: S.Chars)
     fill ps       []               = Right $ ps
 
 nestName :: (S.TextualTermName t) => B.AbMap [S.TTree t]

@@ -35,7 +35,7 @@ substTree gslot attr tree = Msg.abSlot [tree] $ loop tree where
                                 Right [B.TreeB p q $ concat sub']
     loop (P.LSlot n name)
         | n == 0    = replace n name S.attrNameTrunk attr (`pos` name)
-        | n == 1    = replace n name (S.AttrNormal $ O.tString name) attr Right
+        | n == 1    = replace n name (S.AttrNormal $ S.tChars name) attr Right
         | n == 2    = replace n name (O.tString name) gslot Right
         | otherwise = Msg.noSlotName n name
     loop tk = Right [tk]

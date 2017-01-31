@@ -89,7 +89,7 @@ attrMatch (AttrLayout branches) p = loop [] branches where
     loop us [] = Msg.unexpAttrMulti $ reverse us
     loop us ((tag, b) : bs) =
         case branch b of
-          (usage, Left unmatch) -> loop ((usage, S.attrNameCode <$> unmatch) : us) bs
+          (usage, Left unmatch) -> loop ((usage, (O.tString . S.attrNameCode) <$> unmatch) : us) bs
           (_, Right p') -> case tag of
                              Nothing -> Right p'
                              Just t  -> Right $ p' { S.paraTags = t : S.paraTags p' }
@@ -167,15 +167,17 @@ attrClassify spec n = n' where
            Just k  -> k
            Nothing -> n
 
-    pairs   :: [(String, S.AttrName)]
+    pairs   :: [(S.Chars, S.AttrName)]
     pairs   = map pair $ S.paraSpecNames spec
     pair k  = (S.attrNameText k, k)
 
-attrName :: String -> S.AttrName
-attrName = name . reverse . unhyphen where
-    name (O.tCut2 -> O.Jp2 '^' '/' n) = S.AttrRelmapLocal  $ reverse n
-    name (O.tCut  -> O.Jp '/' n)      = S.AttrRelmapNormal $ reverse n
-    name n                            = S.AttrNormal       $ reverse n
+attrName :: (O.Textual t) => t -> S.AttrName
+attrName = name . reverse . unhyphen . O.tString where
+    name (O.tCut2 -> O.Jp2 '^' '/' n) = S.AttrRelmapLocal  $ rev n
+    name (O.tCut  -> O.Jp '/' n)      = S.AttrRelmapNormal $ rev n
+    name n                            = S.AttrNormal       $ rev n
+
+    rev = S.stringChars . reverse
 
 unhyphen :: (O.Textual t) => t -> t
 unhyphen (O.tCut -> O.Jp '-' n) = n
