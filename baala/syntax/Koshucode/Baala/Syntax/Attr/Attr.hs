@@ -1,5 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Attributes of relmap operator.
@@ -21,7 +22,6 @@ module Koshucode.Baala.Syntax.Attr.Attr
 
     -- * Parse
     ToAttrLayout (..),
-    parseAttrLayout,
   ) where
 
 import qualified Data.List                              as Ls
@@ -73,18 +73,18 @@ type AttrPara t = S.Para S.AttrName (S.TTree t)
 type AttrParaze t = [S.TTree t] -> B.Ab (AttrPara t)
 
 -- | Parameterize named attributes.
-attrPara :: AttrParaze String
+attrPara :: AttrParaze S.Chars
 attrPara trees =
     let p = S.para byHyphen trees
     in Right $ S.paraNameAdd S.attrNameTrunk (S.paraPos p) p
 
 -- | Parameterize attributes by its layout.
-attrParaBy :: AttrLayout -> AttrParaze String
+attrParaBy :: AttrLayout -> AttrParaze S.Chars
 attrParaBy lay = attrMatch lay O.#. attrPara
 
 -- | Match parameter with its layout.
 --   See 'paraChoose' in ParaSpec module.
-attrMatch :: AttrLayout -> B.AbMap (AttrPara String)
+attrMatch :: AttrLayout -> B.AbMap (AttrPara t)
 attrMatch (AttrLayout branches) p = loop [] branches where
     loop us [] = Msg.unexpAttrMulti $ reverse us
     loop us ((tag, b) : bs) =
@@ -150,12 +150,12 @@ instance ToAttrLayout [(AttrUsage, String)] where
     toAttrLayout us =
         AttrLayout $ map toBranch (S.parseParaSingle O.<$$> us)
 
-toBranch :: (String, (Maybe S.ParaTag, S.ParaSpec String)) -> (Maybe S.ParaTag, AttrBranch)
+toBranch :: (AttrUsage, (Maybe S.ParaTag, S.ParaSpec String)) -> (Maybe S.ParaTag, AttrBranch)
 toBranch (usage, (tag, spec)) = (tag, attrBranch usage $ trunk $ fmap attrName spec) where
     trunk spec' = spec' { S.paraSpecOptN = S.attrNameTrunk : S.paraSpecOptN spec' }
 
 -- | Construct attribute branch.
-attrBranch :: String -> AttrParaSpec -> AttrBranch
+attrBranch :: AttrUsage -> AttrParaSpec -> AttrBranch
 attrBranch usage spec = AttrBranch { attrUsage      = usage
                                    , attrParaSpec   = spec
                                    , attrClassifier = attrClassify spec }
@@ -173,16 +173,11 @@ attrClassify spec n = n' where
 
 attrName :: String -> S.AttrName
 attrName = name . reverse . unhyphen where
-    name ('^' : '/' : n) = S.AttrRelmapLocal  $ reverse n
-    name ('/' : n)       = S.AttrRelmapNormal $ reverse n
-    name n               = S.AttrNormal       $ reverse n
+    name (O.tCut2 -> O.Jp2 '^' '/' n) = S.AttrRelmapLocal  $ reverse n
+    name (O.tCut  -> O.Jp '/' n)      = S.AttrRelmapNormal $ reverse n
+    name n                            = S.AttrNormal       $ reverse n
 
-unhyphen :: O.StringMap
-unhyphen ('-' : n) = n
-unhyphen n         = S.paraBug "no hyphen" n
-
--- | Parse relmap attribute layout.
-{-# DEPRECATED parseAttrLayout "Use 'toAttrLayout' instead." #-}
-parseAttrLayout :: String -> AttrLayout
-parseAttrLayout = toAttrLayout
+unhyphen :: (O.Textual t) => t -> t
+unhyphen (O.tCut -> O.Jp '-' n) = n
+unhyphen n = S.paraBug "no hyphen" $ O.tString n
 
