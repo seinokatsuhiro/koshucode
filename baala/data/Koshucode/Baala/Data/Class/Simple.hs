@@ -143,10 +143,10 @@ class (D.Basis c) => CTime c where
 -- | Code.
 class (D.Basis c) => CCode c where
     isCode       ::           c -> Bool
-    gCode        ::           c -> String
+    gCode        ::           c -> S.Chars
     pCode        ::      (O.Textual t) => t -> c
 
-    getCode      ::      D.GetContent String c
+    getCode      ::      D.GetContent S.Chars c
     getCode      =       D.getContent isCode gCode
 
     putCode      ::      (O.Textual t) => t -> B.Ab c
@@ -172,10 +172,10 @@ class (D.Basis c) => CTerm c where
 -- | Double-quoted text content.
 class (D.Basis c) => CText c where
     isText      :: c -> Bool
-    gText       :: c -> String
+    gText       :: c -> S.Chars
     pText       :: (O.Textual t) => t -> c
 
-    getText     :: D.GetContent String c
+    getText     :: D.GetContent S.Chars c
     getText      = D.getContent isText gText
 
     putText     :: (O.Textual t) => t -> B.Ab c

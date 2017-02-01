@@ -146,7 +146,7 @@ instance B.MixEncode Content where
           mixBar cs   = B.mixJoinBar $ map (B.mixTransEncode sh) cs
 
 quote :: Maybe S.Chars -> S.CharsMap
-quote (Nothing) t   = "'" O.++ t
+quote (Nothing) t   = '\'' O.<:> t
 quote (Just t)  _   = t
 
 qquote :: Maybe S.Chars -> S.CharsMap

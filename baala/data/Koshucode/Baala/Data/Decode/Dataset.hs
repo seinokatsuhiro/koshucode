@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Dataset as a set of judges.
@@ -88,15 +89,15 @@ readDataset path =
     do ts' <- S.readClauseTrees path
        case ts' of
          Left a   -> return $ Left a
-         Right ts -> case clauseJudges ts of
+         Right ts -> case clauseJudges (ts :: [[S.TTree S.Chars]]) of
                        Left a   -> return $ Left a
                        Right js -> return $ Right $ dataset js
 
-clauseJudges :: (D.CContent c) => [[S.Tree]] -> B.Ab [T.Judge c]
+clauseJudges :: (S.TextualTermName t, D.CContent c) => [[S.TTree t]] -> B.Ab [T.Judge c]
 clauseJudges = loop D.cacheT [] where
     loop cc js ((P.L (P.TBar "|--") : P.LRaw cl : ts) : ls) =
-        do (cc', j) <- D.treesJudge cc T.AssertAffirm cl ts
+        do (cc', j) <- D.treesJudge cc T.AssertAffirm (O.tString cl) ts
            loop cc' (j : js) ls
     loop _ js [] = Right js
-    loop _ _ ls  = B.abortable "clause" ls $ Left $ B.abortBecause "Except judgement"
+    loop _ _ ls  = B.abortable "clause" ls $ Left $ B.abortBecause ("Except judgement" :: String)
 
