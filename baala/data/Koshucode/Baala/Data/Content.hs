@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | The Baala content type.
@@ -126,9 +127,9 @@ instance D.CContent Content where
 instance B.MixEncode Content where
     mixTransEncode sh c =
         case c of
-          ContentCode  s   -> B.mixString $ quote  (sh s) s
-          ContentText  s   -> B.mixString $ qquote (sh s) s
-          ContentTerm  s   -> B.mixString $ "'" ++ S.termNameString s
+          ContentCode  s   -> B.mix $ quote  (sh s) s
+          ContentText  s   -> B.mix $ qquote (sh s) s
+          ContentTerm  s   -> B.mixString $ "'" O.++ S.termNameString s
           ContentDec   n   -> B.mixString $ T.encodeDecimal n
           ContentClock t   -> B.mixEncode t
           ContentTime  t   -> B.mixEncode t
@@ -198,7 +199,7 @@ instance D.CTime Content where
     isTime _                    = False
 
 instance D.CCode Content where
-    pCode                       = ContentCode . O.tString
+    pCode                       = ContentCode . S.tChars
     gCode  (ContentCode s)      = s
     gCode  _                    = B.bug "gCode"
     isCode (ContentCode _)      = True
@@ -212,7 +213,7 @@ instance D.CTerm Content where
     isTerm _                    = False
 
 instance D.CText Content where
-    pText                       = ContentText . O.tString
+    pText                       = ContentText . S.tChars
     gText  (ContentText s)      = s
     gText  _                    = B.bug "gText"
     isText (ContentText _)      = True

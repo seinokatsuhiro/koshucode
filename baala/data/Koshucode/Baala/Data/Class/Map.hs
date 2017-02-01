@@ -14,6 +14,7 @@ module Koshucode.Baala.Data.Class.Map
   ) where
 
 import qualified Koshucode.Baala.Overture                 as O
+import qualified Koshucode.Baala.Syntax                   as S
 import qualified Koshucode.Baala.Data.Class.Simple        as D
 import qualified Koshucode.Baala.Data.Class.Complex       as D
 
@@ -24,7 +25,7 @@ import qualified Koshucode.Baala.Data.Class.Complex       as D
 type CGetPut a c = (c -> a, a -> c)
 
 -- | 'gText' and 'pText'.
-gpText :: (D.CText c) => CGetPut String c
+gpText :: (D.CText c) => CGetPut S.Chars c
 gpText = (D.gText, D.pText)
 
 -- | 'gList' and 'pList'.
@@ -59,7 +60,7 @@ contentMap get put f = contentAp get put $ fmap f
 --   >>> contentApText reverse (the $ pText "abc")
 --   VText "cba"
 --
-contentApText :: (D.CText c) => O.StringMap -> O.Map c
+contentApText :: (D.CText c) => S.CharsMap -> O.Map c
 contentApText = contentAp D.gText D.pText
 
 -- | Map function to characters of internal string of text content.
@@ -68,5 +69,5 @@ contentApText = contentAp D.gText D.pText
 --   VList [VText "a",VText "b",VText "c"]
 --
 contentMapTextList :: (D.CList c, D.CText c) => (Char -> c) -> O.Map c
-contentMapTextList = contentMap D.gText D.pList
+contentMapTextList f = contentAp D.gText D.pList $ O.tList f
 

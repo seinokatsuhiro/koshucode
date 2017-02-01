@@ -30,8 +30,8 @@ contentString = B.mixToFlatString. contentStringMix
 -- | Convert content to pretty print doc.
 contentStringMix :: (D.CContent c) => c -> B.MixText
 contentStringMix c
-    | D.isCode   c  = B.mixString $ D.gCode c
-    | D.isText   c  = B.mixString $ D.gText c
+    | D.isCode   c  = B.mix $ D.gCode c
+    | D.isText   c  = B.mix $ D.gText c
     | D.isTerm   c  = B.mixString $ S.termNameString $ D.gTerm c
     | D.isDec    c  = B.mixString $ T.encodeDecimalCompact $ D.gDec c
     | D.isClock  c  = B.mixEncode $ D.gClock c
