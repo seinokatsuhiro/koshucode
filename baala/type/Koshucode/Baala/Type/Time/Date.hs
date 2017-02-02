@@ -7,16 +7,14 @@ module Koshucode.Baala.Type.Time.Date
     Date (..), Ymd,
 
     -- * Creation
-    dateFromMjd,
-    dateFromYmd,
-    dateFromYwd,
-    dateFromYd, 
+    mjdDate,
+    monthlyDate,
+    weeklyDate,
+    yearlyDate, 
 
     -- * Conversion
     monthly, weekly, yearly,
-
-    -- * Utility
-    dateAltMjd, dateAdd,
+    dateAltMjd, dateAddDay,
     mix02,
   ) where
 
@@ -94,22 +92,22 @@ mix02 = B.mixDecZero 2
 
 -- | Create date from the Modified Julian Day.
 --
---   >>> dateFromMjd (55555 :: Int)
+--   >>> mjdDate (55555 :: Int)
 --   Date 2010-12-25
 --
-dateFromMjd :: (T.ToMjd n) => n -> Date
-dateFromMjd = Monthly . T.toMjd
+mjdDate :: (T.ToMjd n) => n -> Date
+mjdDate = Monthly . T.toMjd
 
 -- | Create date from year, month, and day.
 --
---   >>> dateFromYmd 2013 4 18
+--   >>> monthlyDate 2013 4 18
 --   Right Date 2013-04-18
 --
---   >>> dateFromYmd 2013 4 31
+--   >>> monthlyDate 2013 4 31
 --   Left ...
 --
-dateFromYmd :: T.Year -> T.Month -> T.Day -> B.Ab Date
-dateFromYmd y m d =
+monthlyDate :: T.Year -> T.Month -> T.Day -> B.Ab Date
+monthlyDate y m d =
     case Tim.fromGregorianValid y m d of
       Just day -> Right $ Monthly day
       Nothing  -> Msg.notDate y m d
@@ -117,32 +115,32 @@ dateFromYmd y m d =
 -- | Create date from year, week, and day.
 --   Day 1 for Monday, 2 for Tuesday, ..., and 7 for Sunday.
 --
---   >>> dateFromYwd 2013 16 4
+--   >>> weeklyDate 2013 16 4
 --   Right Date 2013-#16-4 (2013-04-18)
 --
-dateFromYwd :: T.Year -> T.Week -> T.Day -> B.Ab Date
-dateFromYwd y w d =
+weeklyDate :: T.Year -> T.Week -> T.Day -> B.Ab Date
+weeklyDate y w d =
     case Tim.fromWeekDateValid y w d of
       Just day -> Right $ Weekly day
       Nothing  -> Msg.notDate y w d
 
 -- | Create date from year and day.
 --
---   >>> dateFromYd 2013 108
+--   >>> yearlyDate 2013 108
 --   Right Date 2013-##108 (2013-04-18)
 --
-dateFromYd :: T.Year -> T.Day -> B.Ab Date
-dateFromYd y d =
+yearlyDate :: T.Year -> T.Day -> B.Ab Date
+yearlyDate y d =
     case Tim.fromOrdinalDateValid y d of
       Just day -> Right $ Yearly day
       Nothing  -> Msg.notDate y 0 d
 
 
--- ----------------------  Form conversion
+-- ----------------------  Conversion
 
 -- | Convert date into monthly date.
 --
---   >>> monthly $ dateFromMjd 55555
+--   >>> monthly $ mjdDate 55555
 --   Date 2010-12-25
 --
 monthly :: (T.ToMjd day) => day -> Date
@@ -150,7 +148,7 @@ monthly = Monthly . T.toMjd
 
 -- | Convert date into weekly date.
 --
---   >>> weekly $ dateFromMjd 55555
+--   >>> weekly $ mjdDate 55555
 --   Date 2010-#51-6 (2010-12-25)
 --
 weekly :: (T.ToMjd day) => day -> Date
@@ -158,14 +156,11 @@ weekly  = Weekly . T.toMjd
 
 -- | Convert date into yearly date.
 --
---   >>> yearly $ dateFromMjd 55555
+--   >>> yearly $ mjdDate 55555
 --   Date 2010-##359 (2010-12-25)
 --
 yearly :: (T.ToMjd day) => day -> Date
 yearly  = Yearly . T.toMjd
-
-
--- ----------------------  Utility
 
 -- | Alter the Modified Julian Day of date.
 dateAltMjd :: O.Map T.Mjd -> O.Map Date
@@ -175,8 +170,8 @@ dateAltMjd f (Yearly  day)  = Yearly  $ f day
 
 -- | Add days.
 --
---   >>> dateAdd 7 $ dateFromMjd 55555
+--   >>> dateAddDay 7 $ mjdDate 55555
 --   Date 2011-01-01
 --
-dateAdd :: (Integral n) => n -> O.Map Date
-dateAdd = dateAltMjd . Tim.addDays . fromIntegral
+dateAddDay :: (Integral n) => n -> O.Map Date
+dateAddDay = dateAltMjd . Tim.addDays . fromIntegral

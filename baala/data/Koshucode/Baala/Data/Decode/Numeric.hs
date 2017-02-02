@@ -150,19 +150,19 @@ textsTime = year where
                             _     -> Msg.nothing
 
     mwd _ []                                    = Msg.nothing
-    mwd y ((O.tCut2 -> O.Jp2 '#' '#' cs) : xs)  = day (T.dateFromYd y) $ cs : xs
+    mwd y ((O.tCut2 -> O.Jp2 '#' '#' cs) : xs)  = day (T.yearlyDate y) $ cs : xs
     mwd y ((O.tCut  -> O.Jp '#' cs) : xs)       = week y $ cs : xs
     mwd y xs                                    = month y xs
 
     month _ []          = Msg.nothing
     month y (cs : xs)   = case getInt cs of
-                            (m, O.tCut -> O.Jp '-' cs') -> day (T.dateFromYmd y m) $ cs' : xs
+                            (m, O.tCut -> O.Jp '-' cs') -> day (T.monthlyDate y m) $ cs' : xs
                             (m, "")          -> T.timeFromYmAb y m
                             _                -> Msg.nothing
 
     week _ []           = Msg.nothing
     week y (cs : xs)    = case getInt cs of
-                            (w, O.tCut -> O.Jp '-' cs') -> day (T.dateFromYwd y w) $ cs' : xs
+                            (w, O.tCut -> O.Jp '-' cs') -> day (T.weeklyDate y w) $ cs' : xs
                             (w, "")          -> T.timeFromYwAb y w
                             _                -> Msg.nothing
 

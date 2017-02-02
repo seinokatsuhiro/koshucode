@@ -16,9 +16,6 @@ module Koshucode.Baala.Type.Time.Time
     timeFromDczAb,
     timeFromYmd, timeFromYmdTuple,
 
-    -- * Construction with I/O
-    nowUtc, nowZoned, now, today,
-
     -- * Conversion
     timeCutClock, timeSetClock,
     timeAltZone, timeCutZone,
@@ -26,6 +23,9 @@ module Koshucode.Baala.Type.Time.Time
     timeAltDate, timeAltDays,
     timeFromZonedTime,
     timeDaysSec,
+
+    -- * Creation with I/O
+    nowUtc, nowZoned, now, today,
   ) where
 
 import qualified Data.Time.Calendar                      as Tim
@@ -104,7 +104,7 @@ timeToMix time =
       dcz               :: T.Date -> T.Clock -> Zone -> B.MixText
       dcz d c z         = let c'       = T.clockAddSec z c
                               (day, _) = T.clockDaysSec c'
-                          in dc (day `T.dateAdd` d) (T.clockCutDay c')
+                          in dc (T.dateAddDay day d) (T.clockCutDay c')
 
       dc                :: T.Date -> T.Clock -> B.MixText
       dc d c            = B.mixEncode d `B.mixSep` T.clockBodyToMix c
@@ -190,11 +190,11 @@ timeFromDczAb d c (Just z) = Right $ timeFromDcz d c z
 
 timeFromDc :: T.Date -> T.Clock -> Time
 timeFromDc d c = let (d', c') = T.clockDaysClock c
-                 in TimeYmdc (T.dateAdd d' d) c'
+                 in TimeYmdc (T.dateAddDay d' d) c'
 
 timeFromDcz :: T.Date -> T.Clock -> Zone -> Time
 timeFromDcz d c z = let (d', c') = T.clockDaysClock c
-                    in TimeYmdcz (T.dateAdd d' d) c' z
+                    in TimeYmdcz (T.dateAddDay d' d) c' z
 
 -- | Create time from year, month, and day.
 --
@@ -264,44 +264,32 @@ today = do time <- now
 
 -- | Cut timezone.
 timeCutZone :: O.Map Time
-timeCutZone (TimeYmdcz d c _)  = timeFromDc d c
-timeCutZone (TimeYmdc  d c)    = TimeYmdc d c
-timeCutZone (TimeYmd   d)      = TimeYmd d
-timeCutZone (TimeYw    d)      = TimeYw  d
-timeCutZone (TimeYm    d)      = TimeYm  d
+timeCutZone (TimeYmdcz d c _)    = timeFromDc d c
+timeCutZone time                 = time
 
 -- | Cut timezone and convert to local time,
 --   i.e., addition of UTC and time zone.
 timeLocalize :: O.Map Time
-timeLocalize (TimeYmdcz d c z)  = timeFromDc d $ T.clockAddSec z c
-timeLocalize (TimeYmdc  d c)    = TimeYmdc d c
-timeLocalize (TimeYmd   d)      = TimeYmd d
-timeLocalize (TimeYw    d)      = TimeYw  d
-timeLocalize (TimeYm    d)      = TimeYm  d
+timeLocalize (TimeYmdcz d c z)   = timeFromDc d $ T.clockAddSec z c
+timeLocalize time                = time
 
 -- | Alter time zone part.
 timeAltZone :: O.Map Zone -> O.Map Time
-timeAltZone f (TimeYmdcz d c z)  = timeFromDcz d c $ f z
-timeAltZone _ t@(TimeYmdc  _ _)  = t
-timeAltZone _ t@(TimeYmd   _)    = t
-timeAltZone _ t@(TimeYw    _)    = t
-timeAltZone _ t@(TimeYm    _)    = t
+timeAltZone f (TimeYmdcz d c z)   = timeFromDcz d c $ f z
+timeAltZone _ time                = time
 
 -- | Cut clock part.
 timeCutClock :: O.Map Time
-timeCutClock (TimeYmdcz d _ _)  = TimeYmd d
-timeCutClock (TimeYmdc  d _)    = TimeYmd d
-timeCutClock (TimeYmd   d)      = TimeYmd d
-timeCutClock (TimeYw    d)      = TimeYw  d
-timeCutClock (TimeYm    d)      = TimeYm  d
+timeCutClock (TimeYmdcz d _ _)    = TimeYmd d
+timeCutClock (TimeYmdc  d _)      = TimeYmd d
+timeCutClock time                 = time
 
 -- | Set or add clock to time.
 timeSetClock :: T.Clock -> O.Map Time
 timeSetClock c (TimeYmdcz d _ z)  = TimeYmdcz d c z
 timeSetClock c (TimeYmdc  d _)    = TimeYmdc  d c
 timeSetClock c (TimeYmd   d)      = TimeYmdc  d c
-timeSetClock _ (TimeYw    d)      = TimeYw    d
-timeSetClock _ (TimeYm    d)      = TimeYm    d
+timeSetClock _ time               = time
 
 -- | Alter day part.
 timeAltDate :: O.Map T.Date -> O.Map Time
@@ -328,7 +316,7 @@ timeAltDays f time = timeAltMjd g time where
 timeFromZonedTime :: Tim.ZonedTime -> Time
 timeFromZonedTime zt = time where
     Tim.UTCTime mjd s = Tim.zonedTimeToUTC zt
-    d    = T.dateFromMjd $ Tim.toModifiedJulianDay mjd
+    d    = T.mjdDate $ Tim.toModifiedJulianDay mjd
     c    = T.clockFromDhms 0 0 0 $ floor s
     time = TimeYmdcz d c (60 * Tim.timeZoneMinutes (Tim.zonedTimeZone zt))
 
