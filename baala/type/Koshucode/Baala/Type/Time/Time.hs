@@ -20,7 +20,8 @@ module Koshucode.Baala.Type.Time.Time
     nowUtc, nowZoned, now, today,
 
     -- * Conversion
-    timeCutClock, timeAltZone, timeCutZone,
+    timeCutClock, timeSetClock,
+    timeAltZone, timeCutZone,
     timeLocalize,
     timeAltDate, timeAltDays,
     timeFromZonedTime,
@@ -293,6 +294,14 @@ timeCutClock (TimeYmdc  d _)    = TimeYmd d
 timeCutClock (TimeYmd   d)      = TimeYmd d
 timeCutClock (TimeYw    d)      = TimeYw  d
 timeCutClock (TimeYm    d)      = TimeYm  d
+
+-- | Set or add clock to time.
+timeSetClock :: T.Clock -> O.Map Time
+timeSetClock c (TimeYmdcz d _ z)  = TimeYmdcz d c z
+timeSetClock c (TimeYmdc  d _)    = TimeYmdc  d c
+timeSetClock c (TimeYmd   d)      = TimeYmdc  d c
+timeSetClock _ (TimeYw    d)      = TimeYw    d
+timeSetClock _ (TimeYm    d)      = TimeYm    d
 
 -- | Alter day part.
 timeAltDate :: O.Map T.Date -> O.Map Time
