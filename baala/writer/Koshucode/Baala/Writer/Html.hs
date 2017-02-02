@@ -97,7 +97,7 @@ hPutRel h render sh = put O.<#!> chunks where
                   contToHtml O.nothing $ D.pRel r
 
 -- | Encode term content in HTML.
-contToHtml :: (D.CContent c) => B.TransString -> c -> H.Html
+contToHtml :: (D.CContent c) => B.TransText String -> c -> H.Html
 contToHtml sh = content where
     content c
         | D.isRel c = rel $ D.gRel c

@@ -63,14 +63,15 @@ shortGroup (Short cp1 sh1 a : xs) =
 -- ----------------------  Shorten
 
 -- | String shortener.
-shortText :: [ShortDef String] -> B.TransString
+shortText :: [ShortDef String] -> B.TransText String
 shortText = loop . reverse . B.sortWith len where
     len = length . snd
 
+    loop :: [ShortDef String] -> B.TransText String
     loop [] _ = Nothing
     loop ((prefix, replace) : sh) s =
         case L.stripPrefix replace s of
-          Just s2             -> Just $ prefix O.++ "." O.++ text2 s2
+          Just s2             -> Just $ prefix O.++ ('.' O.<:> text2 s2)
           _                   -> loop sh s
 
     text2 s   | isGeneralText s   = s

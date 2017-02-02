@@ -109,7 +109,7 @@ hPutShort h def =
 -- | Output result chunk.
 hPutChunks
     :: (B.MixEncode c)
-    => (B.LineBreak, T.EncodeJudge c) -> IO.Handle -> C.Result c -> B.TransString 
+    => (B.LineBreak, T.EncodeJudge c) -> IO.Handle -> C.Result c -> B.TransText String 
     -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
 hPutChunks (lb, encode) h result sh = loop where
     loop [] cnt                            = return cnt

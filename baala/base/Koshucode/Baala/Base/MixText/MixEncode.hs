@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Base.MixText.MixEncode
   ( MixEncode (..),
-    TransString,
+    TransText,
     encode,
     plainEncode,
   ) where
@@ -17,7 +17,7 @@ class MixEncode a where
     mixEncode :: a -> B.MixText
     mixEncode = mixTransEncode O.nothing
 
-    mixTransEncode :: TransString -> a -> B.MixText
+    mixTransEncode :: TransText String -> a -> B.MixText
     mixTransEncode _ = mixEncode
 
 -- | @(+)@ or @(-)@.
@@ -26,7 +26,7 @@ instance MixEncode Bool where
     mixEncode False = B.mixString "(-)"
 
 -- | Transform string to another form.
-type TransString = String -> Maybe String
+type TransText t = t -> Maybe t
 
 -- | Encode to string.
 encode :: (MixEncode a) => a -> String

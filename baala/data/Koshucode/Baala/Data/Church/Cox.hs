@@ -89,7 +89,7 @@ instance B.GetCodePos (Cox c) where
 instance (B.MixEncode c) => Show (Cox c) where
     show = show . coxToDoc O.nothing
 
-coxToDoc :: (B.MixEncode c) => B.TransString -> Cox c -> B.Doc
+coxToDoc :: (B.MixEncode c) => B.TransText String -> Cox c -> B.Doc
 coxToDoc sh = d (0 :: Int) . coxFold where
     encode = B.pprint . B.mixToFlatString . B.mixTransEncode sh
 
