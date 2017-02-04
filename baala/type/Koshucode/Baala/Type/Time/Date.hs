@@ -8,12 +8,12 @@ module Koshucode.Baala.Type.Time.Date
 
     -- * Creation
     mjdDate,
-    monthlyDate,
-    weeklyDate,
-    yearlyDate, 
+    monthlyDate, weeklyDate, yearlyDate, 
+    byWeekDate, byMonthDate,
 
     -- * Conversion
     monthly, weekly, yearly,
+    byWeek, byMonth,
     dateAltMjd, dateAddDay,
     mix02,
   ) where
@@ -29,11 +29,13 @@ import qualified Koshucode.Baala.Type.Message          as Msg
 
 -- ----------------------  Type
 
--- | Date.
+-- | Date with format.
 data Date
     = Monthly T.Mjd    -- ^ Date in /YYYY-MM-DD/
     | Weekly  T.Mjd    -- ^ Date in /YYYY-#WW-D/
     | Yearly  T.Mjd    -- ^ Date in /YYYY-##D/
+    | ByWeek  T.Mjd    -- ^ Date in /YYYY-#WW/
+    | ByMonth T.Mjd    -- ^ Date in /YYYY-MM/
 
 instance Eq Date where
     (==) = O.ordEq
@@ -50,9 +52,11 @@ instance T.ToMjd Date where
     
 -- | Get the internal Modified Julian Day.
 dateMjd :: Date -> T.Mjd
-dateMjd (Monthly day)  = day
-dateMjd (Weekly  day)  = day
-dateMjd (Yearly  day)  = day
+dateMjd (Monthly mjd)  = mjd
+dateMjd (Weekly  mjd)  = mjd
+dateMjd (Yearly  mjd)  = mjd
+dateMjd (ByWeek  mjd)  = mjd
+dateMjd (ByMonth mjd)  = mjd
 
 -- | Type for year, month, and day.
 type Ymd = (T.Year, T.Month, T.Day)
@@ -67,17 +71,21 @@ instance B.MixEncode Date where
 dateToMix :: Date -> B.MixText
 dateToMix date =
     case date of
-      Monthly d   -> dateMonth $ Tim.toGregorian    d
-      Weekly  d   -> dateWeek  $ Tim.toWeekDate     d
-      Yearly  d   -> dateYear  $ Tim.toOrdinalDate  d
+      Monthly mjd  -> formatMonthly $ Tim.toGregorian    mjd
+      Weekly  mjd  -> formatWeekly  $ Tim.toWeekDate     mjd
+      Yearly  mjd  -> formatYearly  $ Tim.toOrdinalDate  mjd
+      ByWeek  mjd  -> formatByWeek  $ Tim.toWeekDate     mjd
+      ByMonth mjd  -> formatByMonth $ Tim.toGregorian    mjd
     where
-      dateMonth (y, m, d)  = B.mixDec y `hy`    mix02 m    `hy` mix02 d
-      dateWeek  (y, w, d)  = B.mixDec y `hyw`   B.mixDec w `hy` B.mixDec d
-      dateYear  (y, d)     = B.mixDec y `hyord` B.mixDec d
+      formatMonthly (y, m, d)  = B.mixDec y &-   mix02 m    &- mix02 d
+      formatWeekly  (y, w, d)  = B.mixDec y &-#  B.mixDec w &- B.mixDec d
+      formatYearly  (y, d)     = B.mixDec y &-## B.mixDec d
+      formatByWeek  (y, w, _)  = B.mixDec y &-#  B.mixDec w
+      formatByMonth (y, m, _)  = B.mixDec y &-   mix02 m
 
-      hy    = B.mixInfix "-"
-      hyw   = B.mixInfix "-#"
-      hyord = B.mixInfix "-##"
+      (&-)   = B.mixInfix "-"
+      (&-#)  = B.mixInfix "-#"
+      (&-##) = B.mixInfix "-##"
 
 -- | Create mix text with two-width zeros.
 --
@@ -109,7 +117,7 @@ mjdDate = Monthly . T.toMjd
 monthlyDate :: T.Year -> T.Month -> T.Day -> B.Ab Date
 monthlyDate y m d =
     case Tim.fromGregorianValid y m d of
-      Just day -> Right $ Monthly day
+      Just mjd -> Right $ Monthly mjd
       Nothing  -> Msg.notDate y m d
 
 -- | Create date from year, week, and day.
@@ -121,7 +129,7 @@ monthlyDate y m d =
 weeklyDate :: T.Year -> T.Week -> T.Day -> B.Ab Date
 weeklyDate y w d =
     case Tim.fromWeekDateValid y w d of
-      Just day -> Right $ Weekly day
+      Just mjd -> Right $ Weekly mjd
       Nothing  -> Msg.notDate y w d
 
 -- | Create date from year and day.
@@ -132,15 +140,43 @@ weeklyDate y w d =
 yearlyDate :: T.Year -> T.Day -> B.Ab Date
 yearlyDate y d =
     case Tim.fromOrdinalDateValid y d of
-      Just day -> Right $ Yearly day
+      Just mjd -> Right $ Yearly mjd
       Nothing  -> Msg.notDate y 0 d
+
+-- | Create date from year and week.
+--
+--   >>> byWeekDate 2013 16
+--   Right Date 2013-#16 (2013-04-15)
+--
+byWeekDate :: T.Year -> T.Week -> B.Ab Date
+byWeekDate y w =
+    case Tim.fromWeekDateValid y w 1 of
+      Just mjd -> Right $ ByWeek mjd
+      Nothing  -> Msg.notDate y w 1
+
+byWeekDateClip :: T.Year -> T.Week -> Date
+byWeekDateClip y w = ByWeek $ Tim.fromWeekDate y w 1
+
+-- | Create date from year and month.
+--
+--   >>> byMonthDate 2013 4
+--   Right Date 2013-04 (2013-04-01)
+--
+byMonthDate :: T.Year -> T.Month -> B.Ab Date
+byMonthDate y m =
+    case Tim.fromGregorianValid y m 1 of
+      Just mjd -> Right $ ByMonth mjd
+      Nothing  -> Msg.notDate y m 1
+
+byMonthDateClip :: T.Year -> T.Month -> Date
+byMonthDateClip y m = ByMonth $ Tim.fromGregorian y m 1
 
 
 -- ----------------------  Conversion
 
 -- | Convert date into monthly date.
 --
---   >>> monthly $ mjdDate 55555
+--   >>> monthly $ mjdDate (55555 :: Int)
 --   Date 2010-12-25
 --
 monthly :: (T.ToMjd day) => day -> Date
@@ -148,7 +184,7 @@ monthly = Monthly . T.toMjd
 
 -- | Convert date into weekly date.
 --
---   >>> weekly $ mjdDate 55555
+--   >>> weekly $ mjdDate (55555 :: Int)
 --   Date 2010-#51-6 (2010-12-25)
 --
 weekly :: (T.ToMjd day) => day -> Date
@@ -156,21 +192,41 @@ weekly  = Weekly . T.toMjd
 
 -- | Convert date into yearly date.
 --
---   >>> yearly $ mjdDate 55555
+--   >>> yearly $ mjdDate (55555 :: Int)
 --   Date 2010-##359 (2010-12-25)
 --
 yearly :: (T.ToMjd day) => day -> Date
 yearly  = Yearly . T.toMjd
 
+-- | Convert date into by-week date.
+--
+--   >>> byWeek $ mjdDate (55555 :: Int)
+--   Date 2010-#51 (2010-12-20)
+--
+byWeek :: (T.ToMjd day) => day -> Date
+byWeek = week . Tim.toWeekDate . T.toMjd where
+    week (y, w, _) = byWeekDateClip y w
+
+-- | Convert date into by-month date.
+--
+--   >>> byMonth $ mjdDate (55555 :: Int)
+--   Date 2010-12 (2010-12-01)
+--
+byMonth :: (T.ToMjd day) => day -> Date
+byMonth = month . Tim.toGregorian . T.toMjd where
+    month (y, m, _) = byMonthDateClip y m
+
 -- | Alter the Modified Julian Day of date.
 dateAltMjd :: O.Map T.Mjd -> O.Map Date
-dateAltMjd f (Monthly day)  = Monthly $ f day
-dateAltMjd f (Weekly  day)  = Weekly  $ f day
-dateAltMjd f (Yearly  day)  = Yearly  $ f day
+dateAltMjd f (Monthly mjd)  = Monthly $ f mjd
+dateAltMjd f (Weekly  mjd)  = Weekly  $ f mjd
+dateAltMjd f (Yearly  mjd)  = Yearly  $ f mjd
+dateAltMjd f (ByWeek  mjd)  = ByWeek  $ f mjd
+dateAltMjd f (ByMonth mjd)  = ByMonth $ f mjd
 
 -- | Add days.
 --
---   >>> dateAddDay 7 $ mjdDate 55555
+--   >>> dateAddDay 7 $ mjdDate (55555 :: Int)
 --   Date 2011-01-01
 --
 dateAddDay :: (Integral n) => n -> O.Map Date
