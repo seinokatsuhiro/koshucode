@@ -4,7 +4,8 @@
 
 module Koshucode.Baala.Type.Time.Date
   ( -- * Data type
-    Date (..), Ymd,
+    Date (..),
+    datePrecision,
 
     -- * Creation
     mjdDate,
@@ -49,7 +50,15 @@ instance Show Date where
 
 instance T.ToMjd Date where
     toMjd = dateMjd
-    
+
+-- | Get the name of date precision.
+datePrecision :: Date -> String
+datePrecision (Monthly  _)  = "day"
+datePrecision (Weekly   _)  = "day"
+datePrecision (Yearly   _)  = "day"
+datePrecision (ByWeek   _)  = "week"
+datePrecision (ByMonth  _)  = "month"
+
 -- | Get the internal Modified Julian Day.
 dateMjd :: Date -> T.Mjd
 dateMjd (Monthly mjd)  = mjd
@@ -57,9 +66,6 @@ dateMjd (Weekly  mjd)  = mjd
 dateMjd (Yearly  mjd)  = mjd
 dateMjd (ByWeek  mjd)  = mjd
 dateMjd (ByMonth mjd)  = mjd
-
--- | Type for year, month, and day.
-type Ymd = (T.Year, T.Month, T.Day)
 
 
 -- ----------------------  Encode

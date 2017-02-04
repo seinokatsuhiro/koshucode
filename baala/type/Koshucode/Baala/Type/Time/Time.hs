@@ -14,7 +14,7 @@ module Koshucode.Baala.Type.Time.Time
     timeFromMjd,
     timeFromYmAb, timeFromYwAb,
     timeFromDczAb,
-    timeFromYmd, timeFromYmdTuple,
+    timeFromYmd, mjdTimeClip,
 
     -- * Conversion
     timeCutClock, timeSetClock,
@@ -79,12 +79,12 @@ timeYmdTuple = Tim.toGregorian . T.toMjd
 timePrecision :: Time -> String
 timePrecision (TimeYmdcz _ c _)  = T.clockPrecision c ++ " zone"
 timePrecision (TimeYmdc  _ c)    = T.clockPrecision c
-timePrecision (TimeYmd   _)      = "day"
+timePrecision (TimeYmd   d)      = T.datePrecision d
 timePrecision (TimeYw    _)      = "week"
 timePrecision (TimeYm    _)      = "month"
 
 
--- ----------------------  Write
+-- ----------------------  Encode
 
 instance Show Time where
     show = B.mixToFlatString . B.mixEncode
@@ -212,12 +212,11 @@ timeFromYmd y m d = timeFromMjd $ Tim.fromGregorian y m d
 
 -- | Craete time from tuple of year, month, and day.
 --
---   >>> timeFromYmdTuple (2013, 4, 18)
+--   >>> mjdTimeClip (2013, 4, 18)
 --   2013-04-18
 --
-timeFromYmdTuple :: T.Ymd -> Time
-timeFromYmdTuple = timeFromMjd . dayFromYmdTuple where
-    dayFromYmdTuple (y, m, d) = Tim.fromGregorian y m d
+mjdTimeClip :: (T.ToMjdClip mjd) => mjd -> Time
+mjdTimeClip = timeFromMjd . T.toMjdClip
 
 
 -- ----------------------  Construction with I/O

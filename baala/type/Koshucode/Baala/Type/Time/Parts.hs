@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
 -- | Parts of clock and time.
@@ -16,6 +17,7 @@ module Koshucode.Baala.Type.Time.Parts
 
     -- * Date parts
     Year, Month, Week, Day,
+    Ymd,
     DateParts (..),
     dateYmd, dateYwd, dateYd, dateEom, dateYmnd,
 
@@ -66,7 +68,7 @@ instance Num Tim.Day where
     signum       = toMjd . signum . mjdInteger
     fromInteger  = toMjd
 
--- | Convert to the Modified Just Day but abortable.
+-- | Convert to the Modified Julian Day but abortable.
 class ToMjdClip a where
     toMjdClip :: a -> Mjd
 
@@ -74,7 +76,7 @@ class ToMjdClip a where
     toMjdAb = Right . toMjdClip
 
 
--- ---------------------------------  Day of wekk
+-- ---------------------------------  Day of week
 
 -- | Symbol of day of week.
 data Dayw
@@ -204,6 +206,15 @@ monthlyYmnd y m n d = let diff = daywDiff (bomDayw y m) d
 -- | Day of week of the beginning of month.
 bomDayw :: Year -> Month -> Dayw
 bomDayw y m = mjdDayw $ Tim.fromGregorian y m 1
+
+-- | Type for year, month, and day.
+type Ymd = (Year, Month, Day)
+
+instance ToMjdClip Ymd where
+    toMjdClip (y, m, d) = Tim.fromGregorian y m d
+    toMjdAb   (y, m, d) = case Tim.fromGregorianValid y m d of
+                            Just mjd -> Right mjd
+                            Nothing  -> Msg.notMonthlyDate y m d
 
 
 -- ---------------------------------  Clock
