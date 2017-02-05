@@ -7,11 +7,24 @@ module Koshucode.Baala.Type.Time.Date
     Date (..),
     datePrecision,
 
-    -- * Creation
+    -- * MJD to Date
     mjdDate,
-    ymdDate, ymdDateClip,
-    ywdDate, ydDate, 
-    ywDate, ymDate,
+    mjdDateClip,
+    mjdDateAb,
+
+    -- * Creating Date
+    ymdDate,
+    ywdDate,
+    ydDate,
+    ywDate,
+    ymDate,
+
+    -- * Clipped date
+    ymdDateClip,
+    ywdDateClip,
+    ydDateClip,
+    ywDateClip,
+    ymDateClip,
 
     -- * Conversion
     monthly, weekly, yearly,
@@ -43,7 +56,7 @@ instance Eq Date where
     (==) = O.ordEq
 
 instance Ord Date where
-    a `compare` b = T.toMjd a `compare` T.toMjd b
+    a `compare` b = dateMjd a `compare` dateMjd b
 
 instance Show Date where
     show d@(Monthly _) = "Date " ++ B.encode d
@@ -78,17 +91,17 @@ instance B.MixEncode Date where
 dateToMix :: Date -> B.MixText
 dateToMix date =
     case date of
-      Monthly mjd  -> formatMonthly $ Tim.toGregorian    mjd
-      Weekly  mjd  -> formatWeekly  $ Tim.toWeekDate     mjd
-      Yearly  mjd  -> formatYearly  $ Tim.toOrdinalDate  mjd
-      ByWeek  mjd  -> formatByWeek  $ Tim.toWeekDate     mjd
-      ByMonth mjd  -> formatByMonth $ Tim.toGregorian    mjd
+      Monthly mjd  -> encodeMonthly $ Tim.toGregorian    mjd
+      Weekly  mjd  -> encodeWeekly  $ Tim.toWeekDate     mjd
+      Yearly  mjd  -> encodeYearly  $ Tim.toOrdinalDate  mjd
+      ByWeek  mjd  -> encodeByWeek  $ Tim.toWeekDate     mjd
+      ByMonth mjd  -> encodeByMonth $ Tim.toGregorian    mjd
     where
-      formatMonthly (y, m, d)  = B.mixDec y &-   mix02 m    &- mix02 d
-      formatWeekly  (y, w, d)  = B.mixDec y &-#  B.mixDec w &- B.mixDec d
-      formatYearly  (y, d)     = B.mixDec y &-## B.mixDec d
-      formatByWeek  (y, w, _)  = B.mixDec y &-#  B.mixDec w
-      formatByMonth (y, m, _)  = B.mixDec y &-   mix02 m
+      encodeMonthly (y, m, d)  = B.mixDec y &-   mix02 m    &- mix02 d
+      encodeWeekly  (y, w, d)  = B.mixDec y &-#  B.mixDec w &- B.mixDec d
+      encodeYearly  (y, d)     = B.mixDec y &-## B.mixDec d
+      encodeByWeek  (y, w, _)  = B.mixDec y &-#  B.mixDec w
+      encodeByMonth (y, m, _)  = B.mixDec y &-   mix02 m
 
       (&-)   = B.mixInfix "-"
       (&-#)  = B.mixInfix "-#"
@@ -103,7 +116,7 @@ mix02 :: Int -> B.MixText
 mix02 = B.mixDecZero 2
 
 
--- ----------------------  Creation
+-- ----------------------  MJD
 
 -- | Create date from the Modified Julian Day.
 --
@@ -112,6 +125,25 @@ mix02 = B.mixDecZero 2
 --
 mjdDate :: (T.ToMjd n) => n -> Date
 mjdDate = Monthly . T.toMjd
+
+-- | Create date from the Modified Julian Day.
+--
+--   >>> mjdDateClip $ T.ymd 2013 4 31
+--   Date 2013-04-30
+--
+mjdDateClip :: (T.ToMjdClip n) => n -> Date
+mjdDateClip = Monthly . T.toMjdClip
+
+-- | Create date from the Modified Julian Day.
+--
+--   >>> mjdDateAb $ T.ymd 2013 4 18
+--   Right Date 2013-04-18
+--
+mjdDateAb :: (T.ToMjdClip n) => n -> B.Ab Date
+mjdDateAb = fmap Monthly . T.toMjdAb
+
+
+-- ----------------------  Creation
 
 -- | Create date from year, month, and day.
 --
@@ -126,14 +158,6 @@ ymdDate y m d =
     case Tim.fromGregorianValid y m d of
       Just mjd -> Right $ Monthly mjd
       Nothing  -> Msg.notDate y m d
-
--- | Create date from year, month, and day.
---
---   >>> ymdDateClip 2013 4 18
---   Date 2013-04-18
---
-ymdDateClip :: T.Year -> T.Month -> T.Day -> Date
-ymdDateClip y m d = Monthly $ Tim.fromGregorian y m d
 
 -- | Create date from year, week, and day.
 --   Day 1 for Monday, 2 for Tuesday, ..., and 7 for Sunday.
@@ -169,9 +193,6 @@ ywDate y w =
       Just mjd -> Right $ ByWeek mjd
       Nothing  -> Msg.notDate y w 1
 
-ywDateClip :: T.Year -> T.Week -> Date
-ywDateClip y w = ByWeek $ Tim.fromWeekDate y w 1
-
 -- | Create date from year and month.
 --
 --   >>> ymDate 2013 4
@@ -183,6 +204,46 @@ ymDate y m =
       Just mjd -> Right $ ByMonth mjd
       Nothing  -> Msg.notDate y m 1
 
+
+-- ----------------------  Clipped date
+
+-- | Create date from year, month, and day.
+--
+--   >>> ymdDateClip 2013 4 18
+--   Date 2013-04-18
+--
+ymdDateClip :: T.Year -> T.Month -> T.Day -> Date
+ymdDateClip y m d = Monthly $ Tim.fromGregorian y m d
+
+-- | Create date from year, week, and day.
+--
+--   >>> ywdDateClip 2013 16 10
+--   Date 2013-04-21
+--
+ywdDateClip :: T.Year -> T.Week -> T.Day -> Date
+ywdDateClip y w d = Monthly $ Tim.fromWeekDate y w d
+
+-- | Create date from year and day.
+--
+--   >>> ydDateClip 2013 400
+--   Date 2013-##365 (2013-12-31)
+--
+ydDateClip :: T.Year -> T.Day -> Date
+ydDateClip y d = Yearly $ Tim.fromOrdinalDate y d
+
+-- | Create date from year and week.
+--
+--   >>> ywDateClip 2013 60
+--   Date 2013-#52 (2013-12-23)
+--
+ywDateClip :: T.Year -> T.Week -> Date
+ywDateClip y w = ByWeek $ Tim.fromWeekDate y w 1
+
+-- | Create date from year and month.
+--
+--   >>> ymDateClip 2013 13
+--   Date 2013-12 (2013-12-01)
+--
 ymDateClip :: T.Year -> T.Month -> Date
 ymDateClip y m = ByMonth $ Tim.fromGregorian y m 1
 
