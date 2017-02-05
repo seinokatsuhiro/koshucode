@@ -38,15 +38,15 @@ timeAddWeek n = timeAddDay (7 * n)
 
 -- | Add months to time.
 timeAddMonth :: Integer -> O.Map T.Time
-timeAddMonth n time = T.timeFromYmd y' (fromInteger m') d where
-    (y, m, d)  = T.timeYmdTuple time
+timeAddMonth n time = T.ymdTimeClip y' (fromInteger m') d where
+    (y, m, d)  = T.mjdYmd time
     (yd, m')   = (toInteger m + n) `divMod` 12
     y'         = y + yd
 
 -- | Add years to time.
 timeAddYear :: T.Year -> O.Map T.Time
-timeAddYear n time = T.timeFromYmd (y + n) m d where
-    (y, m, d) = T.timeYmdTuple time
+timeAddYear n time = T.ymdTimeClip (y + n) m d where
+    (y, m, d) = T.mjdYmd time
 
 -- | Add clock to time.
 timeAddClock :: T.Clock -> B.AbMap T.Time
@@ -91,45 +91,45 @@ timeDiffDay d2 d1 = Tim.toModifiedJulianDay d2 - Tim.toModifiedJulianDay d1
 
 -- | Convert to the first day of month.
 --
---   >>> timeFloorMonth $ timeFromYmd 2014 11 3
+--   >>> timeFloorMonth $ ymdTimeClip 2014 11 3
 --   2014-11-01
 --
 timeFloorMonth :: O.Map T.Time
 timeFloorMonth time =
-    case T.timeYmdTuple time of
-      (y, m, _) -> T.timeFromYmd y m 1
+    case T.mjdYmd time of
+      (y, m, _) -> T.ymdTimeClip y m 1
 
 -- | Convert to the first day of year.
 --
---   >>> timeFloorYear $ timeFromYmd 2014 11 3
+--   >>> timeFloorYear $ ymdTimeClip 2014 11 3
 --   2014-01-01
 --
 timeFloorYear :: O.Map T.Time
 timeFloorYear time =
-    case T.timeYmdTuple time of
-      (y, _, _) -> T.timeFromYmd y 1 1
+    case T.mjdYmd time of
+      (y, _, _) -> T.ymdTimeClip y 1 1
 
 -- | Convert to the first day of next month.
 --
---   >>> timeCeilMonth $ timeFromYmd 2014 11 3
+--   >>> timeCeilMonth $ ymdTimeClip 2014 11 3
 --   2014-12-01
 --
---   >>> timeCeilMonth $ timeFromYmd 2014 12 25
+--   >>> timeCeilMonth $ ymdTimeClip 2014 12 25
 --   2015-01-01
 --
 timeCeilMonth :: O.Map T.Time
 timeCeilMonth time =
-    case T.timeYmdTuple time of
+    case T.mjdYmd time of
       (y, m, _) -> T.mjdTimeClip $ monthUp (y, m, 1)
 
 -- | Convert to the first day of next year.
 --
---    >>> timeCeilYaer $ timeFromYmd 2014 11 3
+--    >>> timeCeilYaer $ ymdTimeClip 2014 11 3
 --    2015-01-01
 --
 timeCeilYaer :: O.Map T.Time
 timeCeilYaer time =
-    case T.timeYmdTuple time of
+    case T.mjdYmd time of
       (y, _, _) -> T.mjdTimeClip $ yearUp (y, 1, 1)
 
 
@@ -137,15 +137,15 @@ timeCeilYaer time =
 
 -- | Create range of time.
 --
---   >>> timeRangeDay (T.timeFromYmd 2014 11 3) (T.timeFromYmd 2014 11 5)
+--   >>> timeRangeDay (T.ymdTimeClip 2014 11 3) (T.ymdTimeClip 2014 11 5)
 --   [2014-11-03, 2014-11-04, 2014-11-05]
 --
 timeRangeDay :: B.RangeBy T.Time
-timeRangeDay from to = map T.timeFromMjd [T.toMjd from .. T.toMjd to]
+timeRangeDay from to = map T.mjdTime [T.toMjd from .. T.toMjd to]
 
 -- | Create range of time.
 --
---   >>> timeRangeMonth (timeFromYmd 2014 12 31) (timeFromYmd 2015 03 5)
+--   >>> timeRangeMonth (ymdTimeClip 2014 12 31) (ymdTimeClip 2015 03 5)
 --   [2014-12-31, 2015-01-31, 2015-02-28]
 --
 timeRangeMonth :: B.RangeBy T.Time
@@ -157,8 +157,8 @@ timeRangeYear = timeRangeBy yearUp
 
 timeRangeBy :: O.Map T.Ymd -> B.RangeBy T.Time
 timeRangeBy step from to = times where
-    dayFrom =  T.timeYmdTuple from
-    dayTo   =  T.timeYmdTuple to
+    dayFrom =  T.mjdYmd from
+    dayTo   =  T.mjdYmd to
     times   =  map T.mjdTimeClip $ B.rangeBy step dayFrom dayTo
 
 -- | Increment month.

@@ -15,9 +15,11 @@ module Koshucode.Baala.Type.Time.Parts
     mjdDayw,
     daywDiff,
 
-    -- * Date parts
+    -- * Ymd
     Year, Month, Week, Day,
-    Ymd,
+    Ymd, ymd, mjdYmd,
+
+    -- * Date parts
     DateParts (..),
     dateYmd, dateYwd, dateYd, dateEom, dateYmnd,
 
@@ -36,7 +38,7 @@ import qualified Koshucode.Baala.Type.Message       as Msg
 
 -- ----------------------  Modified Julian Day
 
--- | Synonym for MJD type.
+-- | Type for the Modified Julian Day.
 type Mjd = Tim.Day
 
 -- | Extract MJD integer value.
@@ -131,7 +133,7 @@ daywDiff from to
     | otherwise  = fromEnum to - fromEnum from
 
 
--- ---------------------------------  Date
+-- ---------------------------------  Ymd
 
 -- | Year type.
 type Year = Integer
@@ -144,6 +146,30 @@ type Month = Int
 
 -- | Day type.
 type Day = Int
+
+-- | Type for year, month, and day.
+type Ymd = (Year, Month, Day)
+
+instance ToMjdClip Ymd where
+    toMjdClip (y, m, d) = Tim.fromGregorian y m d
+    toMjdAb   (y, m, d) = case Tim.fromGregorianValid y m d of
+                            Just mjd -> Right mjd
+                            Nothing  -> Msg.notMonthlyDate y m d
+
+-- | Ymd tuple.
+ymd :: Year -> Month -> Day -> Ymd
+ymd y m d = (y, m, d)
+
+-- | Convert MJD to year\/month\/day tuple.
+--
+--   >>> mjdYmd (55555 :: Int)
+--   (2010,12,25)
+--
+mjdYmd :: (ToMjd mjd) => mjd -> Ymd
+mjdYmd = Tim.toGregorian . toMjd
+
+
+-- ---------------------------------  Date
 
 -- | Decomposed date.
 data DateParts
@@ -206,15 +232,6 @@ monthlyYmnd y m n d = let diff = daywDiff (bomDayw y m) d
 -- | Day of week of the beginning of month.
 bomDayw :: Year -> Month -> Dayw
 bomDayw y m = mjdDayw $ Tim.fromGregorian y m 1
-
--- | Type for year, month, and day.
-type Ymd = (Year, Month, Day)
-
-instance ToMjdClip Ymd where
-    toMjdClip (y, m, d) = Tim.fromGregorian y m d
-    toMjdAb   (y, m, d) = case Tim.fromGregorianValid y m d of
-                            Just mjd -> Right mjd
-                            Nothing  -> Msg.notMonthlyDate y m d
 
 
 -- ---------------------------------  Clock

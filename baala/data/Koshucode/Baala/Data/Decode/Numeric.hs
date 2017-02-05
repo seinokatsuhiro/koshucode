@@ -157,13 +157,13 @@ textsTime = year where
     month _ []          = Msg.nothing
     month y (cs : xs)   = case getInt cs of
                             (m, O.tCut -> O.Jp '-' cs') -> day (T.monthlyDate y m) $ cs' : xs
-                            (m, "")          -> T.timeFromYmAb y m
+                            (m, "")          -> T.ymTime y m
                             _                -> Msg.nothing
 
     week _ []           = Msg.nothing
     week y (cs : xs)    = case getInt cs of
                             (w, O.tCut -> O.Jp '-' cs') -> day (T.weeklyDate y w) $ cs' : xs
-                            (w, "")          -> T.timeFromYwAb y w
+                            (w, "")          -> T.ywTime y w
                             _                -> Msg.nothing
 
     day _ []            = Msg.nothing
@@ -171,8 +171,11 @@ textsTime = year where
                             (d, "") | null xs    -> do d' <- date d
                                                        Right $ T.TimeYmd d'
                                     | otherwise  -> do d' <- date d
-                                                       hour (T.timeFromDczAb d') $ O.tJoinAll xs
+                                                       hour (dcz d') $ O.tJoinAll xs
                             _                    -> Msg.nothing
+
+    dcz d c (Nothing) = Right $ T.dcTime d c
+    dcz d c (Just z)  = Right $ T.dczTime d c z
 
     -- ----------------------  hour, minute, second
 

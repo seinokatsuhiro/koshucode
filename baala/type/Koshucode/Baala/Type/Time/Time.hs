@@ -1,20 +1,20 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Time
+-- | Time.
 
 module Koshucode.Baala.Type.Time.Time
-  ( -- * Data type
+  ( -- * Time type
     Time (..), Zone,
-    timeYmdTuple,
     timePrecision,
 
-    -- * Creation
-    monthlyTime, monthlyClippedTime,
-    monthlyTimeDate, monthlyTimeClock,
-    timeFromMjd,
-    timeFromYmAb, timeFromYwAb,
-    timeFromDczAb,
-    timeFromYmd, mjdTimeClip,
+    -- * Date-part time
+    mjdTime, mjdTimeClip, mjdTimeAb,
+    dTime,
+    ymTime, ywTime, ymdTimeClip,
+
+    -- * Date-and-clock time
+    dcTime,
+    dczTime,
 
     -- * Conversion
     timeCutClock, timeSetClock,
@@ -57,7 +57,7 @@ type Zone = T.Sec
 
 -- | The first day of the Modified Julian Day.
 instance B.Default Time where
-    def = timeFromMjd (0 :: Int)
+    def = mjdTime (0 :: Int)
 
 -- | Extract date part and convert to MJT.
 instance T.ToMjd Time where
@@ -66,14 +66,6 @@ instance T.ToMjd Time where
     toMjd (TimeYmd   d)       = T.toMjd d
     toMjd (TimeYw    mjd)     = mjd
     toMjd (TimeYm    mjd)     = mjd
-
--- | Convert time to year\/month\/day tuple.
---
---   >>> timeYmdTuple $ timeFromMjd 55555
---   (2010,12,25)
---
-timeYmdTuple :: Time -> T.Ymd
-timeYmdTuple = Tim.toGregorian . T.toMjd
 
 -- | Get the name of time precision.
 timePrecision :: Time -> String
@@ -120,103 +112,94 @@ timeToMix time =
       ym (y, m, _)      = B.mixJoin "-"  [B.mixDec y, T.mix02 m]
 
 
--- ----------------------  Creation
-
--- | Create monthly time.
---
---   >>> monthlyTime (T.DateYmd 2013 4 18) (Just $ T.ClockPartsMin 0 12 05)
---   Right 2013-04-18 12:05
---
---   >>> monthlyTime (T.DateYmd 2013 4 18) (Nothing :: Maybe T.ClockParts)
---   Right 2013-04-18
---
---   >>> monthlyTime (T.DateYmd 2013 4 31) (Nothing :: Maybe T.ClockParts)
---   Left AbortReason "Not monthly date" ...
---
-monthlyTime :: (T.ToMjdClip day, T.ToClock clock) => day -> Maybe clock -> B.Ab Time
-monthlyTime = timeOf T.monthly
-
--- | Create monthly clipped time.
-monthlyClippedTime :: (T.ToMjdClip day, T.ToClock clock) => day -> Maybe clock -> Time
-monthlyClippedTime = clippedTimeOf T.monthly
-
--- | Create monthly day-precision time.
-monthlyTimeDate :: (T.ToMjdClip day) => day -> B.Ab Time
-monthlyTimeDate day = timeOf T.monthly day (Nothing :: Maybe T.ClockParts)
-
--- | Create monthly clock-precision time.
-monthlyTimeClock :: (T.ToMjdClip day, T.ToClock clock) => day -> clock -> B.Ab Time
-monthlyTimeClock day clock = timeOf T.monthly day (Just clock)
-
-timeOf :: (T.ToMjdClip day, T.ToClock clock) =>
-          (T.Mjd -> T.Date) -> day -> Maybe clock -> B.Ab Time
-timeOf ly day clock = do mjd <- T.toMjdAb day
-                         Right $ createTime (ly mjd) clock
-
-clippedTimeOf :: (T.ToMjdClip day, T.ToClock clock) =>
-                 (T.Mjd -> T.Date) -> day -> Maybe clock -> Time
-clippedTimeOf ly day = createTime (ly $ T.toMjdClip day)
-
-createTime :: (T.ToClock clock) => T.Date -> Maybe clock -> Time
-createTime date (Nothing) = TimeYmd  date
-createTime date (Just c)  = TimeYmdc date (T.toClock c)
+-- ----------------------  Date
 
 -- | Create time data from the Modified Julian day.
 --
---   >>> timeFromMjd (55555 :: Int)
+--   >>> mjdTime (55555 :: Int)
 --   2010-12-25
 --
-timeFromMjd :: (T.ToMjd mjd) => mjd -> Time
-timeFromMjd = TimeYmd . T.monthly
+mjdTime :: (T.ToMjd mjd) => mjd -> Time
+mjdTime = TimeYmd . T.monthly
+
+-- | Craete time from tuple of year, month, and day.
+--
+--   >>> mjdTimeClip $ T.ymd 2013 4 18
+--   2013-04-18
+--
+mjdTimeClip :: (T.ToMjdClip mjd) => mjd -> Time
+mjdTimeClip = mjdTime . T.toMjdClip
+
+-- | Create monthly day-precision time.
+--
+--   >>> mjdTimeAb $ T.ymd 2013 4 18
+--   Right 2013-04-18
+--
+--   >>> mjdTimeAb $ T.ymd 2013 4 31
+--   Left ...
+--
+mjdTimeAb :: (T.ToMjdClip day) => day -> B.Ab Time
+mjdTimeAb day = do mjd <- T.toMjdAb day
+                   Right $ mjdTime mjd
+
+-- | Create time without clock.
+dTime :: T.Date -> Time
+dTime = TimeYmd
 
 -- | Create time data from year and month.
-timeFromYmAb :: T.Year -> T.Month -> B.Ab Time
-timeFromYmAb y m =
+--
+--   >>> ymTime 2013 4
+--   Right 2013-04
+--
+ymTime :: T.Year -> T.Month -> B.Ab Time
+ymTime y m =
     case Tim.fromGregorianValid y m 1 of
       Just day -> Right $ TimeYm day
       Nothing  -> Msg.notDate y m 1
 
 -- | Create time data from year and week.
-timeFromYwAb :: T.Year -> T.Week -> B.Ab Time
-timeFromYwAb y w =
+ywTime :: T.Year -> T.Week -> B.Ab Time
+ywTime y w =
     case Tim.fromWeekDateValid y w 1 of
       Just day -> Right $ TimeYw day
       Nothing  -> Msg.notDate y w 1
 
--- | Create time data from date, clock, and time zone.
-timeFromDczAb :: T.Date -> T.Clock -> Maybe Zone -> B.Ab Time
-timeFromDczAb d c Nothing  = Right $ timeFromDc  d c
-timeFromDczAb d c (Just z) = Right $ timeFromDcz d c z
-
-timeFromDc :: T.Date -> T.Clock -> Time
-timeFromDc d c = let (d', c') = T.clockDaysClock c
-                 in TimeYmdc (T.dateAddDay d' d) c'
-
-timeFromDcz :: T.Date -> T.Clock -> Zone -> Time
-timeFromDcz d c z = let (d', c') = T.clockDaysClock c
-                    in TimeYmdcz (T.dateAddDay d' d) c' z
-
 -- | Create time from year, month, and day.
 --
---   >>> timeFromYmd 2013 4 18
+--   >>> ymdTimeClip 2013 4 18
 --   2013-04-18
 --
---   >>> timeFromYmd 2013 4 0
+--   >>> ymdTimeClip 2013 4 0
 --   2013-04-01
 --
---   >>> timeFromYmd 2013 4 33
+--   >>> ymdTimeClip 2013 4 33
 --   2013-04-30
 --
-timeFromYmd :: T.Year -> T.Month -> T.Day -> Time
-timeFromYmd y m d = timeFromMjd $ Tim.fromGregorian y m d
+ymdTimeClip :: T.Year -> T.Month -> T.Day -> Time
+ymdTimeClip y m d = mjdTime $ Tim.fromGregorian y m d
 
--- | Craete time from tuple of year, month, and day.
+
+-- ----------------------  Date and clock
+
+-- | Create time with clock.
 --
---   >>> mjdTimeClip (2013, 4, 18)
---   2013-04-18
+--   >>> dcTime (T.mjdDate (55555 :: Int)) (T.ClockPartsMin 0 10 40)
+--   2010-12-25 10 40
 --
-mjdTimeClip :: (T.ToMjdClip mjd) => mjd -> Time
-mjdTimeClip = timeFromMjd . T.toMjdClip
+--   >>> dcTime (T.mjdDate (55555 :: Int)) (T.ClockPartsMin 1 10 40)
+--   2010-12-26 10:40
+--
+dcTime :: (T.ToClock clock) => T.Date -> clock -> Time
+dcTime d c = dcTime2 d $ T.toClock c
+
+dcTime2 :: T.Date -> T.Clock -> Time
+dcTime2 d c = let (d', c') = T.clockDaysClock c
+              in TimeYmdc (T.dateAddDay d' d) c'
+
+-- | Create time from date, clock, and time zone.
+dczTime :: T.Date -> T.Clock -> Zone -> Time
+dczTime d c z = let (d', c') = T.clockDaysClock c
+                 in TimeYmdcz (T.dateAddDay d' d) c' z
 
 
 -- ----------------------  Construction with I/O
@@ -263,18 +246,18 @@ today = do time <- now
 
 -- | Cut timezone.
 timeCutZone :: O.Map Time
-timeCutZone (TimeYmdcz d c _)    = timeFromDc d c
+timeCutZone (TimeYmdcz d c _)    = dcTime2 d c
 timeCutZone time                 = time
 
 -- | Cut timezone and convert to local time,
 --   i.e., addition of UTC and time zone.
 timeLocalize :: O.Map Time
-timeLocalize (TimeYmdcz d c z)   = timeFromDc d $ T.clockAddSec z c
+timeLocalize (TimeYmdcz d c z)   = dcTime2 d $ T.clockAddSec z c
 timeLocalize time                = time
 
 -- | Alter time zone part.
 timeAltZone :: O.Map Zone -> O.Map Time
-timeAltZone f (TimeYmdcz d c z)   = timeFromDcz d c $ f z
+timeAltZone f (TimeYmdcz d c z)   = dczTime d c $ f z
 timeAltZone _ time                = time
 
 -- | Cut clock part.
@@ -321,7 +304,7 @@ timeFromZonedTime zt = time where
 
 -- | Days and seconds of time.
 --
---   >>> timeDaysSec $ timeFromMjd 55555
+--   >>> timeDaysSec $ mjdTime 55555
 --   (55555,0)
 --
 timeDaysSec :: Time -> T.DaysSec

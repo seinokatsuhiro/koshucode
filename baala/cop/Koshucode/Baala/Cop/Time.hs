@@ -85,23 +85,25 @@ copTime cs0 = arg1 cs0 where
     arg2 _       _    = bad
 
     arg3 y m     ((D.getIntegral -> Right d) : cs)
-                      = arg4 (T.dateYmd y m d) cs
-    arg3 y m     []   = D.pTime <$> T.monthlyTimeDate (T.dateYmd y m 1)
+                      = do date <- T.monthlyDate y m d
+                           arg4 date cs
+    arg3 y m     []   = do date <- T.monthlyDate y m 1
+                           D.putTime $ T.dTime date
     arg3 _ _     _    = bad
 
     arg4 day     ((D.getIntegral -> Right h) : cs)
                       = arg5 day h cs
-    arg4 day     []   = D.pTime <$> T.monthlyTimeDate day
+    arg4 day     []   = D.putTime $ T.dTime day
     arg4 _       _    = bad
 
     arg5 day h   ((D.getIntegral -> Right m) : cs)
                       = arg6 day h m cs
-    arg5 day h   []   = D.pTime <$> T.monthlyTimeClock day (T.clockDh 0 h)
+    arg5 day h   []   = D.putTime $ T.dcTime day (T.clockDh 0 h)
     arg5 _ _     _    = bad
 
     arg6 day h m [(D.getIntegral -> Right s)]
-                      = D.pTime <$> T.monthlyTimeClock day (T.clockDhms 0 h m s)
-    arg6 day h m []   = D.pTime <$> T.monthlyTimeClock day (T.clockDhm  0 h m)
+                      = D.putTime $ T.dcTime day (T.clockDhms 0 h m s)
+    arg6 day h m []   = D.putTime $ T.dcTime day (T.clockDhm  0 h m)
     arg6 _ _ _   _    = bad
 
     bad = Msg.unexpArg cs0 ["year month? day? hour? min? sec?"]
