@@ -85,9 +85,9 @@ copTime cs0 = arg1 cs0 where
     arg2 _       _    = bad
 
     arg3 y m     ((D.getIntegral -> Right d) : cs)
-                      = do date <- T.monthlyDate y m d
+                      = do date <- T.ymdDate y m d
                            arg4 date cs
-    arg3 y m     []   = do date <- T.monthlyDate y m 1
+    arg3 y m     []   = do date <- T.ymdDate y m 1
                            D.putTime $ T.dTime date
     arg3 _ _     _    = bad
 

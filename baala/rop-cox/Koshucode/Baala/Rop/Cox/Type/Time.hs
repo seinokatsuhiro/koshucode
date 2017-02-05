@@ -59,9 +59,10 @@ relkitAddTime (cops, n, (year, month, day, clock)) (Just he1) = kit where
                 Right $ K.pTime time : cs1
 
 timeFrom :: Integer -> Maybe Int -> Maybe Int -> Maybe K.Clock -> K.Ab K.Time
-timeFrom y (Just m) (Just d) (Just c)       = Right $ K.timeSetClock c $ K.ymdTimeClip y m d
-timeFrom y (Just m) (Just d) (Nothing)      = Right $ K.ymdTimeClip y m d
-timeFrom y (Just m) (Nothing) (Nothing)     = K.ymTime y m
+timeFrom y (Just m) (Just d) (Just c)    = do date <- K.ymdDate y m d
+                                              Right $ K.timeSetClock c $ K.dTime date
+timeFrom y (Just m) (Just d) (Nothing)   = K.dTime <$> K.ymdDate y m d
+timeFrom y (Just m) (Nothing) (Nothing)  = K.dTime <$> K.ymDate y m
 timeFrom _ _ _ _ = K.bug "timeFrom"
 
 getMaybe :: (c -> K.Ab a) -> Maybe c -> K.Ab (Maybe a)

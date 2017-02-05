@@ -10,7 +10,6 @@ module Koshucode.Baala.Type.Time.Time
     -- * Date-part time
     mjdTime, mjdTimeClip, mjdTimeAb,
     dTime,
-    ymTime, ywTime, ymdTimeClip,
 
     -- * Date-and-clock time
     dcTime,
@@ -38,7 +37,6 @@ import qualified Koshucode.Baala.Type.Time.Clock         as T
 import qualified Koshucode.Baala.Type.Time.ClockCalc     as T
 import qualified Koshucode.Baala.Type.Time.Date          as T
 import qualified Koshucode.Baala.Type.Time.Parts         as T
-import qualified Koshucode.Baala.Type.Message            as Msg
 
 
 -- ----------------------  Time
@@ -143,40 +141,18 @@ mjdTimeAb day = do mjd <- T.toMjdAb day
                    Right $ mjdTime mjd
 
 -- | Create time without clock.
-dTime :: T.Date -> Time
-dTime = TimeYmd
-
--- | Create time data from year and month.
 --
---   >>> ymTime 2013 4
---   Right 2013-04
+--   >>> dTime $ T.mjdDate (55555 :: Int)
+--   2010-12-25
 --
-ymTime :: T.Year -> T.Month -> B.Ab Time
-ymTime y m =
-    case Tim.fromGregorianValid y m 1 of
-      Just day -> Right $ TimeYm day
-      Nothing  -> Msg.notDate y m 1
-
--- | Create time data from year and week.
-ywTime :: T.Year -> T.Week -> B.Ab Time
-ywTime y w =
-    case Tim.fromWeekDateValid y w 1 of
-      Just day -> Right $ TimeYw day
-      Nothing  -> Msg.notDate y w 1
-
--- | Create time from year, month, and day.
---
---   >>> ymdTimeClip 2013 4 18
---   2013-04-18
---
---   >>> ymdTimeClip 2013 4 0
---   2013-04-01
---
---   >>> ymdTimeClip 2013 4 33
+--   >>> dTime $ T.ymdDateClip 2013 4 31
 --   2013-04-30
 --
-ymdTimeClip :: T.Year -> T.Month -> T.Day -> Time
-ymdTimeClip y m d = mjdTime $ Tim.fromGregorian y m d
+--   >>> dTime <$> T.ymdDate 2013 4 18
+--   Right 2013-04-18
+--
+dTime :: T.Date -> Time
+dTime = TimeYmd
 
 
 -- ----------------------  Date and clock

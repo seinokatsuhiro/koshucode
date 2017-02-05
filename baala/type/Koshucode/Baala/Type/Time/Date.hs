@@ -9,8 +9,9 @@ module Koshucode.Baala.Type.Time.Date
 
     -- * Creation
     mjdDate,
-    monthlyDate, weeklyDate, yearlyDate, 
-    byWeekDate, byMonthDate,
+    ymdDate, ymdDateClip,
+    ywdDate, ydDate, 
+    ywDate, ymDate,
 
     -- * Conversion
     monthly, weekly, yearly,
@@ -114,68 +115,76 @@ mjdDate = Monthly . T.toMjd
 
 -- | Create date from year, month, and day.
 --
---   >>> monthlyDate 2013 4 18
+--   >>> ymdDate 2013 4 18
 --   Right Date 2013-04-18
 --
---   >>> monthlyDate 2013 4 31
+--   >>> ymdDate 2013 4 31
 --   Left ...
 --
-monthlyDate :: T.Year -> T.Month -> T.Day -> B.Ab Date
-monthlyDate y m d =
+ymdDate :: T.Year -> T.Month -> T.Day -> B.Ab Date
+ymdDate y m d =
     case Tim.fromGregorianValid y m d of
       Just mjd -> Right $ Monthly mjd
       Nothing  -> Msg.notDate y m d
 
+-- | Create date from year, month, and day.
+--
+--   >>> ymdDateClip 2013 4 18
+--   Date 2013-04-18
+--
+ymdDateClip :: T.Year -> T.Month -> T.Day -> Date
+ymdDateClip y m d = Monthly $ Tim.fromGregorian y m d
+
 -- | Create date from year, week, and day.
 --   Day 1 for Monday, 2 for Tuesday, ..., and 7 for Sunday.
 --
---   >>> weeklyDate 2013 16 4
+--   >>> ywdDate 2013 16 4
 --   Right Date 2013-#16-4 (2013-04-18)
 --
-weeklyDate :: T.Year -> T.Week -> T.Day -> B.Ab Date
-weeklyDate y w d =
+ywdDate :: T.Year -> T.Week -> T.Day -> B.Ab Date
+ywdDate y w d =
     case Tim.fromWeekDateValid y w d of
       Just mjd -> Right $ Weekly mjd
       Nothing  -> Msg.notDate y w d
 
 -- | Create date from year and day.
 --
---   >>> yearlyDate 2013 108
+--   >>> ydDate 2013 108
 --   Right Date 2013-##108 (2013-04-18)
 --
-yearlyDate :: T.Year -> T.Day -> B.Ab Date
-yearlyDate y d =
+ydDate :: T.Year -> T.Day -> B.Ab Date
+ydDate y d =
     case Tim.fromOrdinalDateValid y d of
       Just mjd -> Right $ Yearly mjd
       Nothing  -> Msg.notDate y 0 d
 
 -- | Create date from year and week.
 --
---   >>> byWeekDate 2013 16
+--   >>> ywDate 2013 16
 --   Right Date 2013-#16 (2013-04-15)
 --
-byWeekDate :: T.Year -> T.Week -> B.Ab Date
-byWeekDate y w =
+ywDate :: T.Year -> T.Week -> B.Ab Date
+ywDate y w =
     case Tim.fromWeekDateValid y w 1 of
       Just mjd -> Right $ ByWeek mjd
       Nothing  -> Msg.notDate y w 1
 
-byWeekDateClip :: T.Year -> T.Week -> Date
-byWeekDateClip y w = ByWeek $ Tim.fromWeekDate y w 1
+ywDateClip :: T.Year -> T.Week -> Date
+ywDateClip y w = ByWeek $ Tim.fromWeekDate y w 1
 
 -- | Create date from year and month.
 --
---   >>> byMonthDate 2013 4
+--   >>> ymDate 2013 4
 --   Right Date 2013-04 (2013-04-01)
 --
-byMonthDate :: T.Year -> T.Month -> B.Ab Date
-byMonthDate y m =
+ymDate :: T.Year -> T.Month -> B.Ab Date
+ymDate y m =
     case Tim.fromGregorianValid y m 1 of
       Just mjd -> Right $ ByMonth mjd
       Nothing  -> Msg.notDate y m 1
 
-byMonthDateClip :: T.Year -> T.Month -> Date
-byMonthDateClip y m = ByMonth $ Tim.fromGregorian y m 1
+ymDateClip :: T.Year -> T.Month -> Date
+ymDateClip y m = ByMonth $ Tim.fromGregorian y m 1
 
 
 -- ----------------------  Conversion
@@ -211,7 +220,7 @@ yearly  = Yearly . T.toMjd
 --
 byWeek :: (T.ToMjd day) => day -> Date
 byWeek = week . Tim.toWeekDate . T.toMjd where
-    week (y, w, _) = byWeekDateClip y w
+    week (y, w, _) = ywDateClip y w
 
 -- | Convert date into by-month date.
 --
@@ -220,7 +229,7 @@ byWeek = week . Tim.toWeekDate . T.toMjd where
 --
 byMonth :: (T.ToMjd day) => day -> Date
 byMonth = month . Tim.toGregorian . T.toMjd where
-    month (y, m, _) = byMonthDateClip y m
+    month (y, m, _) = ymDateClip y m
 
 -- | Alter the Modified Julian Day of date.
 dateAltMjd :: O.Map T.Mjd -> O.Map Date

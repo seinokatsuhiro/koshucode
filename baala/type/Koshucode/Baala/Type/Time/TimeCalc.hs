@@ -38,14 +38,14 @@ timeAddWeek n = timeAddDay (7 * n)
 
 -- | Add months to time.
 timeAddMonth :: Integer -> O.Map T.Time
-timeAddMonth n time = T.ymdTimeClip y' (fromInteger m') d where
+timeAddMonth n time = T.dTime $ T.ymdDateClip y' (fromInteger m') d where
     (y, m, d)  = T.mjdYmd time
     (yd, m')   = (toInteger m + n) `divMod` 12
     y'         = y + yd
 
 -- | Add years to time.
 timeAddYear :: T.Year -> O.Map T.Time
-timeAddYear n time = T.ymdTimeClip (y + n) m d where
+timeAddYear n time = T.dTime $ T.ymdDateClip (y + n) m d where
     (y, m, d) = T.mjdYmd time
 
 -- | Add clock to time.
@@ -91,30 +91,30 @@ timeDiffDay d2 d1 = Tim.toModifiedJulianDay d2 - Tim.toModifiedJulianDay d1
 
 -- | Convert to the first day of month.
 --
---   >>> timeFloorMonth $ ymdTimeClip 2014 11 3
+--   >>> timeFloorMonth $ T.dTime $ T.ymdDateClip 2014 11 3
 --   2014-11-01
 --
 timeFloorMonth :: O.Map T.Time
 timeFloorMonth time =
     case T.mjdYmd time of
-      (y, m, _) -> T.ymdTimeClip y m 1
+      (y, m, _) -> T.dTime $ T.ymdDateClip y m 1
 
 -- | Convert to the first day of year.
 --
---   >>> timeFloorYear $ ymdTimeClip 2014 11 3
+--   >>> timeFloorYear $ T.dTime $ T.ymdDateClip 2014 11 3
 --   2014-01-01
 --
 timeFloorYear :: O.Map T.Time
 timeFloorYear time =
     case T.mjdYmd time of
-      (y, _, _) -> T.ymdTimeClip y 1 1
+      (y, _, _) -> T.dTime $ T.ymdDateClip y 1 1
 
 -- | Convert to the first day of next month.
 --
---   >>> timeCeilMonth $ ymdTimeClip 2014 11 3
+--   >>> timeCeilMonth $ T.dTime $ T.ymdDateClip 2014 11 3
 --   2014-12-01
 --
---   >>> timeCeilMonth $ ymdTimeClip 2014 12 25
+--   >>> timeCeilMonth $ T.dTime $ T.ymdDateClip 2014 12 25
 --   2015-01-01
 --
 timeCeilMonth :: O.Map T.Time
@@ -124,7 +124,7 @@ timeCeilMonth time =
 
 -- | Convert to the first day of next year.
 --
---    >>> timeCeilYaer $ ymdTimeClip 2014 11 3
+--    >>> timeCeilYaer $ T.dTime $ T.ymdDateClip 2014 11 3
 --    2015-01-01
 --
 timeCeilYaer :: O.Map T.Time
@@ -137,7 +137,7 @@ timeCeilYaer time =
 
 -- | Create range of time.
 --
---   >>> timeRangeDay (T.ymdTimeClip 2014 11 3) (T.ymdTimeClip 2014 11 5)
+--   >>> timeRangeDay (T.dTime $ T.ymdDateClip 2014 11 3) (T.dTime $ T.ymdDateClip 2014 11 5)
 --   [2014-11-03, 2014-11-04, 2014-11-05]
 --
 timeRangeDay :: B.RangeBy T.Time
@@ -145,7 +145,7 @@ timeRangeDay from to = map T.mjdTime [T.toMjd from .. T.toMjd to]
 
 -- | Create range of time.
 --
---   >>> timeRangeMonth (ymdTimeClip 2014 12 31) (ymdTimeClip 2015 03 5)
+--   >>> timeRangeMonth (T.dTime $ T.ymdDateClip 2014 12 31) (T.dTime $ T.ymdDateClip 2015 03 5)
 --   [2014-12-31, 2015-01-31, 2015-02-28]
 --
 timeRangeMonth :: B.RangeBy T.Time
