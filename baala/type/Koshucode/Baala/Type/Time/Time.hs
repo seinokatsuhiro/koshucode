@@ -7,14 +7,9 @@ module Koshucode.Baala.Type.Time.Time
     Time (..), Zone,
     timePrecision,
 
-    -- * Date-part time
-    mjdTime, mjdTimeClip, mjdTimeAb,
-    dTime,
-
-    -- * Date-and-clock time
-    dcTime,
-    dczTime,
-
+    -- * Create time
+    dTime, dcTime, dczTime,
+         
     -- * Conversion
     timeCutClock, timeSetClock,
     timeAltZone, timeCutZone,
@@ -55,7 +50,7 @@ type Zone = T.Sec
 
 -- | The first day of the Modified Julian Day.
 instance B.Default Time where
-    def = mjdTime (0 :: Int)
+    def = dTime $ T.mjdDate (0 :: Int)
 
 -- | Extract date part and convert to MJT.
 instance T.ToMjd Time where
@@ -110,35 +105,7 @@ timeToMix time =
       ym (y, m, _)      = B.mixJoin "-"  [B.mixDec y, T.mix02 m]
 
 
--- ----------------------  Date
-
--- | Create time data from the Modified Julian day.
---
---   >>> mjdTime (55555 :: Int)
---   2010-12-25
---
-mjdTime :: (T.ToMjd mjd) => mjd -> Time
-mjdTime = TimeYmd . T.monthly
-
--- | Craete time from tuple of year, month, and day.
---
---   >>> mjdTimeClip $ T.ymd 2013 4 18
---   2013-04-18
---
-mjdTimeClip :: (T.ToMjdClip mjd) => mjd -> Time
-mjdTimeClip = mjdTime . T.toMjdClip
-
--- | Create monthly day-precision time.
---
---   >>> mjdTimeAb $ T.ymd 2013 4 18
---   Right 2013-04-18
---
---   >>> mjdTimeAb $ T.ymd 2013 4 31
---   Left ...
---
-mjdTimeAb :: (T.ToMjdClip day) => day -> B.Ab Time
-mjdTimeAb day = do mjd <- T.toMjdAb day
-                   Right $ mjdTime mjd
+-- ----------------------  Creation
 
 -- | Create time without clock.
 --
@@ -153,9 +120,6 @@ mjdTimeAb day = do mjd <- T.toMjdAb day
 --
 dTime :: T.Date -> Time
 dTime = TimeYmd
-
-
--- ----------------------  Date and clock
 
 -- | Create time with clock.
 --
@@ -280,7 +244,7 @@ timeFromZonedTime zt = time where
 
 -- | Days and seconds of time.
 --
---   >>> timeDaysSec $ mjdTime 55555
+--   >>> timeDaysSec $ dTime $ T.mjdDate (55555 :: Int)
 --   (55555,0)
 --
 timeDaysSec :: Time -> T.DaysSec

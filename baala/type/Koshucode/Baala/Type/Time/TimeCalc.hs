@@ -120,7 +120,7 @@ timeFloorYear time =
 timeCeilMonth :: O.Map T.Time
 timeCeilMonth time =
     case T.mjdYmd time of
-      (y, m, _) -> T.mjdTimeClip $ monthUp (y, m, 1)
+      (y, m, _) -> T.dTime $ T.mjdDateClip $ monthUp (y, m, 1)
 
 -- | Convert to the first day of next year.
 --
@@ -130,7 +130,7 @@ timeCeilMonth time =
 timeCeilYaer :: O.Map T.Time
 timeCeilYaer time =
     case T.mjdYmd time of
-      (y, _, _) -> T.mjdTimeClip $ yearUp (y, 1, 1)
+      (y, _, _) -> T.dTime $ T.mjdDateClip $ yearUp (y, 1, 1)
 
 
 -- ----------------------  Range
@@ -141,7 +141,7 @@ timeCeilYaer time =
 --   [2014-11-03, 2014-11-04, 2014-11-05]
 --
 timeRangeDay :: B.RangeBy T.Time
-timeRangeDay from to = map T.mjdTime [T.toMjd from .. T.toMjd to]
+timeRangeDay from to = (T.dTime . T.mjdDate) <$> [T.toMjd from .. T.toMjd to]
 
 -- | Create range of time.
 --
@@ -157,9 +157,9 @@ timeRangeYear = timeRangeBy yearUp
 
 timeRangeBy :: O.Map T.Ymd -> B.RangeBy T.Time
 timeRangeBy step from to = times where
-    dayFrom =  T.mjdYmd from
-    dayTo   =  T.mjdYmd to
-    times   =  map T.mjdTimeClip $ B.rangeBy step dayFrom dayTo
+    dayFrom = T.mjdYmd from
+    dayTo   = T.mjdYmd to
+    times   = (T.dTime . T.mjdDateClip) <$> B.rangeBy step dayFrom dayTo
 
 -- | Increment month.
 monthUp :: O.Map T.Ymd
