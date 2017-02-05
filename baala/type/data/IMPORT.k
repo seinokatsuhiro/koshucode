@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    130 judges
+**    129 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Type.Decimal.BinaryAb"     /import "Koshucode.Baala.Base"
@@ -130,7 +130,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Type.Time.Time"            /import "Koshucode.Baala.Type.Time.ClockCalc"
 |-- IMPORT  /module "Koshucode.Baala.Type.Time.Time"            /import "Koshucode.Baala.Type.Time.Date"
 |-- IMPORT  /module "Koshucode.Baala.Type.Time.Time"            /import "Koshucode.Baala.Type.Time.Parts"
-|-- IMPORT  /module "Koshucode.Baala.Type.Time.Time"            /import "Koshucode.Baala.Type.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Type.Time.TimeCalc"        /import "Data.Time.Calendar"
 |-- IMPORT  /module "Koshucode.Baala.Type.Time.TimeCalc"        /import "Koshucode.Baala.Overture"
