@@ -10,6 +10,7 @@ module Koshucode.Baala.Rop.Cox.Type.Dec
     consAltDec, relmapAltDec, relkitAltDec,
     -- * to-dec
     consToDec, relmapToDec, relkitToDec,
+    relmapToDecReplace, relkitToDecReplace,
   ) where
 
 import qualified Data.Ratio                        as R
@@ -28,8 +29,8 @@ ropsTypeDec = Rop.rops "type"
       K.& [ "alt-dec /P [-fracle F]"
             K.& "-term . -fracle? -let?" ]
     , consToDec
-      K.& [ "to-dec /P ..."
-            K.& "-term*" ]
+      K.& [ "to-dec /P ... [-replace E]"
+            K.& "-term* . -replace?" ]
     ]
 
 
@@ -124,12 +125,20 @@ getInt c = do d <- K.getDec c
 
 -- ----------------------  to-dec
 
--- | [to-dec \/P ...]    Convert content of term \/P ... to decimal number.
+-- | [to-dec /\/P/ ...]
+--      Convert content of term /\/P/ ... to decimal number.
+--   [to-dec /\/P/ ... -replace /E/]
+--      Convert content of term /\/P/ ... to decimal number,
+--      or replace inconvertible content to /E/.
 --
 consToDec :: (K.CContent c) => C.RopCons c
 consToDec med =
-    do ns <- Rop.getTerms med "-term"
-       Right $ relmapToDec med ns
+    do cops <- Rop.getLetR     med
+       ns   <- Rop.getTerms    med "-term"
+       rep' <- Rop.getMaybeCox med "-replace"
+       Right $ case rep' of
+         Nothing  -> relmapToDec med ns
+         Just rep -> relmapToDecReplace med (cops, ns, rep)
 
 -- | Create @to-dec@ relmap.
 relmapToDec :: (K.CContent c) => C.Intmed c -> [K.TermName] -> C.Relmap c
@@ -148,4 +157,24 @@ relkitToDec ns (Just he1)
       kit       = C.relkitLine False he2 flow
       flow cs1  = let cs = K.toDec <$> K.pickTerms pk cs1
                   in cs ++ K.cutTerms pk cs1
+
+-- | Create @to-dec@ relmap with @-replace@ option.
+relmapToDecReplace :: (K.CContent c) => C.Intmed c -> (K.CopSet c, [K.TermName], K.Cox c) -> C.Relmap c
+relmapToDecReplace med = C.relmapFlow med . relkitToDecReplace
+
+-- | Create @to-dec@ relkit with @-replace@ option.
+relkitToDecReplace :: (K.CContent c) => (K.CopSet c, [K.TermName], K.Cox c) -> C.RelkitFlow c
+relkitToDecReplace _ Nothing = C.relkitUnfixed
+relkitToDecReplace (cops, ns, rep) (Just he1)
+    | K.duplicated ns     = Msg.dupTerm ns
+    | K.newTermsExist pk  = Msg.newTerm pk he1
+    | otherwise           = Right kit
+    where
+      pk        = K.termPicker ns he1
+      he2       = K.headMap (K.forwardTerms pk) he1
+      kit       = C.relkitLineAb False he2 flow
+      flow cs1  = do let run = K.calcCox cops he1 cs1
+                     cRep <- run rep
+                     let cs = K.toDecReplace cRep <$> K.pickTerms pk cs1
+                     Right $ cs ++ K.cutTerms pk cs1
 

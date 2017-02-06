@@ -5,7 +5,7 @@
 module Koshucode.Baala.Data.Class.Content
   ( -- * Generic content
     CContent (..),
-    toDec,
+    toDec, toDecReplace,
     cTrimBoth, cTrimBegin, cTrimEnd,
     valueContent,
   ) where
@@ -57,16 +57,35 @@ class (Show c, B.Default c,
 
 -- | Convert some content to decimal number.
 toDec :: (CContent c) => O.Map c
-toDec c
+toDec = toDecWith id
+
+-- | Convert content to decimal number,
+--   or replace inconvertible content to constant decimal.
+--
+--   >>> toDecReplace (the $ pInt 0) (the $ pText "12.0")
+--   ContentDec Decimal (1) 12
+--
+--   >>> toDecReplace (the $ pInt 0) (the $ pText "aa")
+--   ContentDec Decimal (0) 0
+--
+toDecReplace :: (CContent c) => c -> O.Map c
+toDecReplace rep = toDecWith $ const rep
+
+toDecWith :: (CContent c) => O.Map c -> O.Map c
+toDecWith f c
     | D.isText c  = case T.decodeDecimal $ D.gText c of
                       Right n  -> D.pDec n
-                      Left _   -> c
+                      Left _   -> f c
     | D.isBool c  = case D.gBool c of
                       True   -> D.pInt 1
                       False  -> D.pInt 0
-    | otherwise   = c
+    | otherwise   = f c
 
 -- | Trim spaces of text content.
+--
+--   >>> cTrimBoth (the $ pText " foo ")
+--   ContentText "foo"
+--
 cTrimBoth :: (CContent c) => O.Map c
 cTrimBoth = cTextMap O.trimBoth
 
