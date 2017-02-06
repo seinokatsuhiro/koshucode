@@ -16,6 +16,7 @@ import qualified Koshucode.Baala.Rop.Cox.Range       as Rop
 import qualified Koshucode.Baala.Rop.Cox.Type.Clock  as Rop
 import qualified Koshucode.Baala.Rop.Cox.Type.Dec    as Rop
 import qualified Koshucode.Baala.Rop.Cox.Type.Time   as Rop
+import qualified Koshucode.Baala.Rop.Cox.Type.Text   as Rop
 
 -- | Relational operators with content calculation.
 ropsCox :: (K.CContent c) => [C.Rop c]
@@ -27,4 +28,5 @@ ropsCox    = Rop.ropsCoxCalc
           ++ Rop.ropsTypeClock
           ++ Rop.ropsTypeDec
           ++ Rop.ropsTypeTime
+          ++ Rop.ropsTypeText
 

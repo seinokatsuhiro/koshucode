@@ -6,11 +6,13 @@ module Koshucode.Baala.Data.Class.Content
   ( -- * Generic content
     CContent (..),
     toDec,
+    cTrimBoth, cTrimBegin, cTrimEnd,
     valueContent,
   ) where
 
 import qualified Koshucode.Baala.Overture                 as O
 import qualified Koshucode.Baala.Base                     as B
+import qualified Koshucode.Baala.Syntax                   as S
 import qualified Koshucode.Baala.Type                     as T
 import qualified Koshucode.Baala.Data.Class.Complex       as D
 import qualified Koshucode.Baala.Data.Class.Edge          as D
@@ -62,6 +64,23 @@ toDec c
     | D.isBool c  = case D.gBool c of
                       True   -> D.pInt 1
                       False  -> D.pInt 0
+    | otherwise   = c
+
+-- | Trim spaces of text content.
+cTrimBoth :: (CContent c) => O.Map c
+cTrimBoth = cTextMap O.trimBoth
+
+-- | Trim beginning spaces of text content.
+cTrimBegin :: (CContent c) => O.Map c
+cTrimBegin = cTextMap O.trimBegin
+
+-- | Trim ending spaces of text content.
+cTrimEnd :: (CContent c) => O.Map c
+cTrimEnd = cTextMap O.trimEnd
+
+cTextMap :: (CContent c) => S.CharsMap -> O.Map c
+cTextMap f c
+    | D.isText c  = D.pText $ f $ D.gText c
     | otherwise   = c
 
 -- | Convert 'O.Value' to content.
