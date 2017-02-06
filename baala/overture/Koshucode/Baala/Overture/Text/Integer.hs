@@ -34,7 +34,13 @@ textMaybe f s = case f s of
 
 -- | Decode decimal integer.
 tDec :: (O.Textual t, Eq n, Num n) => t -> Maybe n
-tDec = textMaybe Num.readDec . O.tString
+tDec (O.tCut -> Just (sign, t))
+    | sign == '+' = tDecDigits t
+    | sign == '-' = negate <$> tDecDigits t
+tDec t = tDecDigits t
+
+tDecDigits :: (O.Textual t, Eq n, Num n) => t -> Maybe n
+tDecDigits t = textMaybe Num.readDec $ O.tString t
 
 -- | Decode decimal integer.
 {-# DEPRECATED stringDec "Use 'tDec' instead." #-}
@@ -43,8 +49,8 @@ stringDec = tDec
 
 -- | Decode decimal integer as 'Int'.
 --
---   >>> tInt "12"
---   Just 12
+--   >>> tInt <$> ["12", "+12", "-12"]
+--   [Just 12,Just 12,Just (-12)]
 --
 --   >>> tInt "12.3"
 --   Nothing
