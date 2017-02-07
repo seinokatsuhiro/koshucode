@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Lexmap trees
@@ -22,14 +23,14 @@ import qualified Koshucode.Baala.Data.Message         as Msg
 data LexmapTrees t = LexmapTrees
     { lexmapTrees   :: [S.TTree t]       -- ^ Positional attribute.
     , lexmapPara    :: TTreePara t       -- ^ Parameter
-    , lexmapAttrEd  :: S.AttrEd S.Chars  -- ^ Attribute editor
+    , lexmapAttrEd  :: S.AttrEd t        -- ^ Attribute editor
     } deriving (Show, Eq, Ord)
 
-clauseAttrType :: S.ParaSpec String
+clauseAttrType :: S.ParaSpec S.Chars
 clauseAttrType = S.paraSpec $ S.paraMin 0 . S.paraOpt ["attr"]
 
 -- | Construct lexmap tree.
-consLexmapTrees :: TTreePara String -> B.Ab (LexmapTrees String)
+consLexmapTrees :: TTreePara S.Chars -> B.Ab (LexmapTrees S.Chars)
 consLexmapTrees para =
     do para' <- case S.paraMatch clauseAttrType para of
          Right p' -> Right p'
