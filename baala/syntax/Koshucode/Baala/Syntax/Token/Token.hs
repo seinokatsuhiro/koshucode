@@ -8,6 +8,10 @@ module Koshucode.Baala.Syntax.Token.Token
     -- * Subtype name
     SubtypeName (..),
 
+    -- * Chars
+    Chars, CharsMap,
+    tChars, csT, stringChars,
+
     -- * Token
     Token,
     TToken (..),
@@ -33,10 +37,34 @@ class SubtypeName a where
     subtypeName :: a -> String
 
 
+-- --------------------------------------------  Chars
+
+-- | Character sequence.
+type Chars = String
+--type Chars = O.Tx
+
+-- | Mapping from chars to chars.
+type CharsMap = O.Map Chars
+
+-- | Convert textual value to character sequence.
+tChars :: (O.Textual t) => t -> Chars
+tChars = O.tString
+--tChars = O.tTx
+
+-- | Convert character sequence to textual value.
+csT :: (O.Textual t) => Chars -> t
+csT = O.stringT
+--csT = O.txT
+
+-- | Convert string to character sequence.
+stringChars :: String -> Chars
+stringChars = O.stringT
+
+
 -- --------------------------------------------  Token type
 
 -- | String token.
-type Token = TToken String
+type Token = TToken Chars
 
 -- | Textual token.
 data TToken t
