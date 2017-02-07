@@ -6,7 +6,6 @@ module Koshucode.Baala.Base.MixText.MixEncode
   ( MixEncode (..),
     TransText,
     encode,
-    plainEncode,
   ) where
 
 import qualified Koshucode.Baala.Overture                as O
@@ -15,9 +14,9 @@ import qualified Koshucode.Baala.Base.MixText.MixText    as B
 -- | Encode via mix text.
 class MixEncode a where
     mixEncode :: a -> B.MixText
-    mixEncode = mixTransEncode O.nothing
+    mixEncode = mixTransEncode (O.nothing :: TransText String)
 
-    mixTransEncode :: TransText String -> a -> B.MixText
+    mixTransEncode :: (O.Textual t) => TransText t -> a -> B.MixText
     mixTransEncode _ = mixEncode
 
 -- | @(+)@ or @(-)@.
@@ -31,9 +30,4 @@ type TransText t = t -> Maybe t
 -- | Encode to string.
 encode :: (MixEncode a) => a -> String
 encode = (B.mixToFlatString . mixEncode)
-
--- | Encode to string.
-{-# DEPRECATED plainEncode "Use 'encode' instead." #-}
-plainEncode :: (MixEncode a) => a -> String
-plainEncode = encode
 

@@ -209,10 +209,10 @@ instance (B.MixEncode c) => B.MixEncode (Judge c) where
     mixTransEncode = judgeMix2
 
 -- | Encode judgement with short sign converter.
-type EncodeJudge c = B.TransText String -> Judge c -> B.MixText
+type EncodeJudge t c = B.TransText t -> Judge c -> B.MixText
 
 -- | Encode judgement with term separator.
-judgeMix :: (B.MixEncode c) => B.MixText -> EncodeJudge c
+judgeMix :: (O.Textual t, B.MixEncode c) => B.MixText -> EncodeJudge t c
 judgeMix sep sh j =
     case j of
       JudgeAffirm      c xs    -> judge "|--"  c xs
@@ -225,16 +225,16 @@ judgeMix sep sh j =
       judge sym c xs = B.mix sym `B.mixSep` B.mix c O.++ sep O.++ termsToMix sep sh xs
 
 -- | Encode judgement with two-spaces term separator.
-judgeMix2 :: (B.MixEncode c) => EncodeJudge c
+judgeMix2 :: (O.Textual t, B.MixEncode c) => EncodeJudge t c
 judgeMix2 = judgeMix B.mix2
 
 -- | Encode judgement with tab term separator.
-judgeMixTab :: (B.MixEncode c) => EncodeJudge c
+judgeMixTab :: (O.Textual t, B.MixEncode c) => EncodeJudge t c
 judgeMixTab = judgeMix B.mixTab
 
 -- | Conditional judgement encoder.
 --   If the first argument is true, 'judgeMix2' is used, otherwise 'judgeMixTab'.
-judgeMix2Tab :: (B.MixEncode c) => Bool -> EncodeJudge c
+judgeMix2Tab :: (O.Textual t, B.MixEncode c) => Bool -> EncodeJudge t c
 judgeMix2Tab True   = judgeMix2
 judgeMix2Tab False  = judgeMixTab
 
@@ -252,14 +252,14 @@ termNameToMix :: S.TermName -> B.MixText
 termNameToMix n = B.mixString $ S.termNameString n
 
 -- | Encode term list with one-space separator.
-termsToMix1 :: (B.MixEncode c) => B.TransText String -> [S.Term c] -> B.MixText
+termsToMix1 :: (O.Textual t, B.MixEncode c) => B.TransText t -> [S.Term c] -> B.MixText
 termsToMix1 = termsToMix B.mix1
 
 -- | Encode term list with two-spaces separator.
-termsToMix2 :: (B.MixEncode c) => B.TransText String -> [S.Term c] -> B.MixText
+termsToMix2 :: (O.Textual t, B.MixEncode c) => B.TransText t -> [S.Term c] -> B.MixText
 termsToMix2 = termsToMix B.mix2
 
-termsToMix :: (B.MixEncode c) => B.MixText -> B.TransText String -> [S.Term c] -> B.MixText
+termsToMix :: (O.Textual t, B.MixEncode c) => B.MixText -> B.TransText t -> [S.Term c] -> B.MixText
 termsToMix sep sh ts = B.mixJoin sep $ map term ts where
     term (n, c) = termNameToMix n `B.mixSep` B.mixTransEncode sh c
 

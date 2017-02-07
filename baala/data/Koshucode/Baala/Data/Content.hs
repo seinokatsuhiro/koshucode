@@ -125,32 +125,36 @@ typeSum cs = case B.unique $ map D.typeOf cs of
 instance D.CContent Content where
 
 instance B.MixEncode Content where
-    mixTransEncode sh c =
-        case c of
-          ContentCode  s   -> B.mix $ quote  (sh s) s
-          ContentText  s   -> B.mix $ qquote (sh s) s
-          ContentTerm  s   -> B.mixString $ "'" O.++ S.termNameString s
-          ContentDec   n   -> B.mixString $ T.encodeDecimal n
-          ContentClock t   -> B.mixEncode t
-          ContentTime  t   -> B.mixEncode t
-          ContentBool  b   -> B.mixEncode b
-          ContentEmpty     -> B.mixString "()"
-          ContentEnd       -> B.mixString "(/)"
+    mixTransEncode = cMix
 
-          ContentList cs   -> D.mixBracketList $ mixBar cs
-          ContentSet  cs   -> D.mixBracketSet  $ mixBar cs
-          ContentTie  ts   -> S.bracketWith S.bracketTie $ T.termsToMix1 sh ts
-          ContentRel  r    -> B.mixTransEncode sh r
-          ContentInterp i  -> B.mixEncode i
-          ContentType t    -> S.bracketWith S.bracketType $ B.mixEncode t
-        where
-          mixBar cs   = B.mixJoinBar $ map (B.mixTransEncode sh) cs
+cMix :: (O.Textual t) => B.TransText t -> Content -> B.MixText
+cMix sh c =
+    case c of
+      ContentCode  s   -> B.mix $ quote  (sh' s) s
+      ContentText  s   -> B.mix $ qquote (sh' s) s
+      ContentTerm  s   -> B.mixString $ "'" O.++ S.termNameString s
+      ContentDec   n   -> B.mixString $ T.encodeDecimal n
+      ContentClock t   -> B.mixEncode t
+      ContentTime  t   -> B.mixEncode t
+      ContentBool  b   -> B.mixEncode b
+      ContentEmpty     -> B.mixString "()"
+      ContentEnd       -> B.mixString "(/)"
 
-quote :: Maybe S.Chars -> S.CharsMap
+      ContentList cs   -> D.mixBracketList $ mixBar cs
+      ContentSet  cs   -> D.mixBracketSet  $ mixBar cs
+      ContentTie  ts   -> S.bracketWith S.bracketTie $ T.termsToMix1 sh ts
+      ContentRel  r    -> B.mixTransEncode sh r
+      ContentInterp i  -> B.mixEncode i
+      ContentType t    -> S.bracketWith S.bracketType $ B.mixEncode t
+    where
+      sh'         = fmap S.tChars . sh . S.csT
+      mixBar cs   = B.mixJoinBar $ map (B.mixTransEncode sh) cs
+
+quote :: (O.Textual t) => Maybe t -> t -> t
 quote (Nothing) t   = '\'' O.<:> t
 quote (Just t)  _   = t
 
-qquote :: Maybe S.Chars -> S.CharsMap
+qquote :: (O.Textual t) => Maybe t -> t -> t
 qquote (Nothing) t | O.tIsEmpty t  = "\"\""
                    | otherwise     = S.angleQuote t
 qquote (Just t)  _                 = t

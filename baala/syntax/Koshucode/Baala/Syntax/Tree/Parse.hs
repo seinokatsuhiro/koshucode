@@ -8,7 +8,7 @@
 module Koshucode.Baala.Syntax.Tree.Parse
   ( -- * Type
     Chars, CharsMap,
-    tChars, stringChars,
+    tChars, csT, stringChars,
     Tree, TTree,
 
     -- * Parser
@@ -38,6 +38,11 @@ type CharsMap = O.Map Chars
 tChars :: (O.Textual t) => t -> Chars
 tChars = O.tString
 --tChars = O.tTx
+
+-- | Convert character sequence to textual value.
+csT :: (O.Textual t) => Chars -> t
+csT = O.stringT
+--csT = O.txT
 
 -- | Convert string to character sequence.
 stringChars :: String -> Chars
