@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Data.Church.Cox  as D
 data Cop c
     = CopCalc S.BlankName (D.CopCalc c)     -- ^ Convert @c@ (content)
     | CopCox  S.BlankName (CopCox c)        -- ^ Convert 'D.Cox' c
-    | CopTree S.BlankName (CopTree String)  -- ^ Convert 'B.TTree'
+    | CopTree S.BlankName (CopTree S.Chars) -- ^ Convert 'B.TTree'
 
 -- | Expression-level syntax.
 type CopCox c = [D.Cox c] -> D.AbCox c
@@ -79,7 +79,7 @@ copInfix = S.BlankInfix . O.tString
 -- | Set of content operators.
 data CopSet c = CopSet
     { copsetCopList    :: [Cop c]
-    , copsetInfixList  :: [B.Named B.InfixHeight]
+    , copsetInfixList  :: [(S.Chars, B.InfixHeight)]
 
     , copsetCalcList   :: [B.Named (Cop c)]  -- ^ CopCalc
     , copsetCoxList    :: [B.Named (Cop c)]  -- ^ CopCox
@@ -87,7 +87,7 @@ data CopSet c = CopSet
 
     , copsetFindCalc   :: CopFind (D.Cox c)   -- ^ This is created by 'copsetFill'.
     , copsetFindCox    :: CopFind (CopCox c)  -- ^ This is created by 'copsetFill'.
-    , copsetFindTree   :: CopFind (CopTree String)  -- ^ This is created by 'copsetFill'.
+    , copsetFindTree   :: CopFind (CopTree S.Chars)  -- ^ This is created by 'copsetFill'.
 
     , copsetDerived    :: [D.NamedCox c]
     }
