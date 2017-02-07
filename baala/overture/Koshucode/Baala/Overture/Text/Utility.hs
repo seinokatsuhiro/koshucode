@@ -9,6 +9,7 @@ module Koshucode.Baala.Overture.Text.Utility
 
     -- * Trim
     trimBegin, trimEnd, trimBoth,
+    sweep, sweepAll,
 
     -- * Padding
     padBegin, padEnd, 
@@ -77,6 +78,31 @@ trimEnd t = t
 --
 trimBoth :: (O.Textual t) => t -> t
 trimBoth = trimEnd . trimBegin
+
+-- | Trim and shorten consecutive spaces.
+--
+--   >>> sweep "  foo  bar   baz "
+--   "foo bar baz"
+--
+sweep :: (O.Textual t) => t -> t
+sweep = loop . trimBegin where
+    loop (O.tCut -> Just(c, t))
+        | Ch.isSpace c  = case loop $ trimBegin t of
+                            t' | O.tIsEmpty t' -> O.tEmpty
+                               | otherwise     -> ' ' O.<:> t'
+        | otherwise     = c O.<:> loop t
+    loop t = t
+
+-- | Delete space characters.
+--
+--   >>> sweepAll "  foo  bar   baz "
+--   "foobarbaz"
+--
+sweepAll :: (O.Textual t) => t -> t
+sweepAll (O.tCut -> Just (c, t))
+    | Ch.isSpace c  = sweepAll t
+    | otherwise     = c O.<:> sweepAll t
+sweepAll t = t
 
 
 -- ============================================  Padding
