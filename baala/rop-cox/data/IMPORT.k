@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    51 judges
+**    56 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.DataPlus"
@@ -50,6 +50,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Rops"              /import "Koshucode.Baala.Rop.Cox.Type.Clock"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Rops"              /import "Koshucode.Baala.Rop.Cox.Type.Dec"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Rops"              /import "Koshucode.Baala.Rop.Cox.Type.Time"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Rops"              /import "Koshucode.Baala.Rop.Cox.Type.Text"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Core"
@@ -60,6 +61,11 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Koshucode.Baala.Rop.Base.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Text"         /import "Koshucode.Baala.DataPlus"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Text"         /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Text"         /import "Koshucode.Baala.Rop.Base"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Text"         /import "Koshucode.Baala.Rop.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Time"         /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Time"         /import "Koshucode.Baala.Core"
