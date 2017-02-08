@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Construction of lexical relmaps.
@@ -46,7 +47,7 @@ type ConsLexmap = [S.GlobalSlot S.Chars] -> FindDeriv -> SecNo -> ConsLexmapBody
 type FindDeriv = SecNo -> C.RopName -> [LexmapClause]
 
 -- | Source of relmap: its name, replacement, and attribute editor.
-type LexmapClause = NNamed (C.LexmapTrees String)
+type LexmapClause = NNamed (C.LexmapTrees S.Chars)
 
 -- ----------------------  Local type
 
@@ -65,7 +66,7 @@ type LexmapLinkTable = [(C.Lexmap, C.Lexmap)]
 -- | First step of constructing relmap,
 --   construct lexmap from token trees.
 --   The function returns lexmap and related lexmap links.
-consLexmap :: RopParaze String -> ConsLexmap
+consLexmap :: RopParaze S.Chars -> ConsLexmap
 consLexmap paraze gslot findDeriv = lexmap 0 where
 
     lexmap :: Int -> SecNo -> ConsLexmapBody
@@ -78,7 +79,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
 
         single :: ConsLexmapBody
         single (P.L tok@(P.TRaw n) : ts)
-            = find tok n ts                       -- derived or base
+            = find tok (O.tString n) ts           -- derived or base
         single (P.L tok@(S.TLocal _ _ _ _) : ts)
             = local tok ts                        -- local relation "^/x" or "^x"
         single [P.BGroup ts]
@@ -121,7 +122,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
               Right $ (lx, lx2) : tab
 
         baseOf :: C.RopName -> ConsLexmapBody
-        baseOf n = base n $ S.rawTextToken n
+        baseOf n = base n $ S.rawTextToken (O.stringT n)
 
         base :: C.RopName -> S.Token -> ConsLexmapBody
         base n tok ts =
@@ -133,7 +134,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
 
         -- -----------  construct lexmap except for its submaps
 
-        cons :: C.LexmapType -> S.Token -> S.AttrPara String -> C.Lexmap
+        cons :: C.LexmapType -> S.Token -> S.AttrPara S.Chars -> C.Lexmap
         cons ty tok para = check $ B.def { C.lexType   = ty
                                          , C.lexToken  = tok
                                          , C.lexAttr   = para }
@@ -166,7 +167,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
 
         namedLexmap (n, ts) =
             do (lx, tab) <- lexmap eid sec ts
-               Right ((S.attrNameCode n, lx), tab)
+               Right ((O.tString $ S.attrNameCode n, lx), tab)
 
         -- Cons up parent token when no parent or same eid.
         markLocalToken :: S.Token -> O.Map S.Token
