@@ -92,7 +92,9 @@ hPutShortChunk
     -> W.JudgeCount -> C.ShortResultChunks c -> IO W.JudgeCount
 hPutShortChunk output h result cnt (S.Short _ def chunks) =
     do hPutShort h def
-       hPutChunks output h result (S.shortText def) chunks cnt
+       hPutChunks output h result (S.shortText (t <$> def)) chunks cnt
+    where
+      t (a, b) = (O.stringT a, O.stringT b)
 
 hPutShort :: IO.Handle -> [S.ShortDef String] -> IO ()
 hPutShort _ [] = return ()

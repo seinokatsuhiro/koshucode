@@ -56,8 +56,8 @@ hPutXsv setting@XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } 
 
 csvContent :: (D.CContent c) => XsvSetting -> c -> String
 csvContent setting@XsvSetting { xsvQuote = quote } c
-    | D.isCode   c  = quote $ D.gCode c
-    | D.isText   c  = quote $ D.gText c
+    | D.isCode   c  = quote $ O.tString $ D.gCode c
+    | D.isText   c  = quote $ O.tString $ D.gText c
     | D.isTerm   c  = quote $ S.termNameString $ D.gTerm c
     | D.isDec    c  = T.encodeDecimalCompact $ D.gDec c
     | D.isClock  c  = quote $ B.mixToFlatString $ B.mixEncode $ D.gClock c
