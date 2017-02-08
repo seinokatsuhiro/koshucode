@@ -75,27 +75,29 @@ copsText =
 -- ----------------------  begin-with / end-with
 
 copBeginWithNormal, copEndWithNormal, copContainNormal :: (D.CContent c) => D.CopCalc c
-copBeginWithNormal  = copMatchNormal B.isPrefixOf B.isPrefixOf
-copEndWithNormal    = copMatchNormal B.isSuffixOf B.isSuffixOf
-copContainNormal    = copMatchNormal B.isInfixOf  B.isInfixOf
+copBeginWithNormal  = copMatchNormal O.csIsPrefix B.isPrefixOf
+copEndWithNormal    = copMatchNormal O.csIsSuffix B.isSuffixOf
+copContainNormal    = copMatchNormal O.csIsInfix  B.isInfixOf
 
 copBeginWithInfix, copEndWithInfix, copContainInfix :: (D.CContent c) => D.CopCalc c
-copBeginWithInfix  = copMatchInfix B.isPrefixOf B.isPrefixOf
-copEndWithInfix    = copMatchInfix B.isSuffixOf B.isSuffixOf
-copContainInfix    = copMatchInfix B.isInfixOf  B.isInfixOf
+copBeginWithInfix   = copMatchInfix O.csIsPrefix B.isPrefixOf
+copEndWithInfix     = copMatchInfix O.csIsSuffix B.isSuffixOf
+copContainInfix     = copMatchInfix O.csIsInfix  B.isInfixOf
 
-copMatchNormal :: (D.CContent c) => (String -> String -> Bool) -> ([c] -> [c] -> Bool) -> D.CopCalc c
+copMatchNormal :: (D.CContent c)
+  => (S.Chars -> S.Chars -> Bool) -> ([c] -> [c] -> Bool) -> D.CopCalc c
 copMatchNormal bf1 bf2 arg =
     do (part, whole) <- D.getRightArg2 arg
        copMatch bf1 bf2 (part, whole)
 
-copMatchInfix :: (D.CContent c) => (String -> String -> Bool) -> ([c] -> [c] -> Bool) -> D.CopCalc c
+copMatchInfix :: (D.CContent c)
+  => (S.Chars -> S.Chars -> Bool) -> ([c] -> [c] -> Bool) -> D.CopCalc c
 copMatchInfix bf1 bf2 arg =
     do (whole, part) <- D.getRightArg2 arg
        copMatch bf1 bf2 (part, whole)
 
 copMatch :: (D.CContent c)
-  => (String -> String -> Bool) -> ([c] -> [c] -> Bool) -> (c, c) -> B.Ab c
+  => (S.Chars -> S.Chars -> Bool) -> ([c] -> [c] -> Bool) -> (c, c) -> B.Ab c
 copMatch bf1 bf2 (part, whole)
     | isText2 part whole = match bf1 D.gText
     | isList2 part whole = match bf2 D.gList
@@ -115,7 +117,7 @@ isText2 x y = D.isText x && D.isText y
 --   [__/TEXT/ =! /PATTERN/__] Test /TEXT/ does not matches /PATTERN/.
 copSiv :: (D.CContent c) => Bool -> D.CopCalc c
 copSiv b [D.getText -> Right t, D.getText -> Right p] =
-    do res <- P.sivMatch p t
+    do res <- P.sivMatch (O.tString p) (O.tString t)
        D.putBool $ res == b
 copSiv _ cs = Msg.unexpArg cs ["text", "pattern text"]
 
@@ -148,11 +150,11 @@ copCharGroup = op where
 
 -- char-group-1 "a!" => 'letter
 copCharGroup1 :: (D.CContent c) => D.CopCalc c
-copCharGroup1 = op where
-    op [Right t] | D.isText t = case D.gText t of
-                                  (c : _) -> D.putText $ charGroup c
-                                  _       -> Right D.empty
-    op xs = Msg.badArg xs
+copCharGroup1 [D.getText -> Right t]
+    = case O.tCut t of
+        O.Jp c _ -> D.putText $ charGroup c
+        _        -> Right D.empty
+copCharGroup1 xs = Msg.badArg xs
 
 charGroup :: Char -> String
 charGroup = O.generalCategoryName . O.majorGeneralCategory
@@ -197,18 +199,16 @@ copDirPart = copDirBasePart fst
 copBasePart :: (D.CContent c) => D.CopCalc c
 copBasePart = copDirBasePart snd
 
-copDirBasePart :: (D.CContent c) => ((String, String) -> String) -> D.CopCalc c
-copDirBasePart part = op where
-    op [Right sep, Right t]
-        | D.isText sep && D.isText t =
-            Right $ D.contentApText (part . dirBasePart (head $ D.gText sep)) t
-    op xs = Msg.badArg xs
+copDirBasePart :: (D.CContent c) => ((S.Chars, S.Chars) -> S.Chars) -> D.CopCalc c
+copDirBasePart part [D.getChar -> Right sep, D.getText -> Right t]
+    = D.putText $ (part . dirBasePart sep) t
+copDirBasePart _ xs = Msg.badArg xs
 
-dirBasePart :: Char -> String -> (String, String)
-dirBasePart sep s =
-    case reverse $ B.divide sep s of
-      (base : dir) -> (B.intercalate [sep] $ reverse dir, base)
-      []           -> ("", "")
+dirBasePart :: (O.Textual t) => Char -> t -> (t, t)
+dirBasePart sep t =
+    case reverse $ O.tDivide (== sep) t of
+      (base : dir) -> (O.tJoinWith (O.charT sep) $ reverse dir, base)
+      []           -> (O.tEmpty, O.tEmpty)
 
 
 -- ----------------------  words words-by
@@ -217,7 +217,7 @@ copWords :: (D.CContent c) => D.CopCalc c
 copWords arg =
     do ws <- D.getRightArg1 arg
        if D.isText ws
-          then D.putList $ map D.pText $ words $ D.gText ws
+          then D.putList (D.pText <$> (O.tWords $ D.gText ws))
           else Msg.badArg arg
 
 copWordsBy :: (D.CContent c) => D.CopCalc c
@@ -225,8 +225,8 @@ copWordsBy arg =
     do (sep, ws) <- D.getRightArg2 arg
        case D.isText ws && D.isText sep of
          False -> Msg.badArg arg
-         True  -> let isSep = (`elem` D.gText sep)
-                  in D.putList $ map D.pText $ B.wordsBy isSep $ D.gText ws
+         True  -> let isSep = (`O.csElem` D.gText sep)
+                  in D.putList $ map D.pText $ O.tWordsBy isSep $ D.gText ws
 
 
 -- ----------------------  unwords unwords-by
@@ -234,17 +234,17 @@ copWordsBy arg =
 copUnwords :: (D.CContent c) => D.CopCalc c
 copUnwords arg =
     do x <- D.getRightArg1 arg
-       D.putText $ unwords $ wordList x
+       D.putText $ O.tUnwords $ wordList x
 
 copUnwordsBy :: (D.CContent c) => D.CopCalc c
 copUnwordsBy arg =
     do (sep, x) <- D.getRightArg2 arg
        case D.isText sep of
          True  -> let sep' = D.gText sep
-                  in D.putText $ B.intercalate sep' $ wordList x
+                  in D.putText $ O.tJoinWith sep' $ wordList x
          False -> Msg.badArg arg
 
-wordList :: (D.CContent c) => c -> [String]
+wordList :: (D.CContent c) => c -> [S.Chars]
 wordList c
     | D.isList c  = concatMap wordList $ D.gList c
     | D.isText c  = [D.gText c]
@@ -263,7 +263,7 @@ copTrimEnd = copTrimBy O.trimEnd
 copTrimBoth :: (D.CContent c) => D.CopCalc c
 copTrimBoth = copTrimBy O.trimBoth
 
-copTrimBy :: (D.CContent c) => O.StringMap -> D.CopCalc c
+copTrimBy :: (D.CContent c) => S.CharsMap -> D.CopCalc c
 copTrimBy f arg =
     do text <- D.getRightArg1 arg
        case D.isText text of
@@ -279,32 +279,32 @@ copTrimTextEnd = copTrimTextBy trimTextEnd
 copTrimTextBoth :: (D.CContent c) => D.CopCalc c
 copTrimTextBoth = copTrimTextBy trimTextBoth
 
-copTrimTextBy :: (D.CContent c) => O.Bin String -> D.CopCalc c
+copTrimTextBy :: (D.CContent c) => O.Bin S.Chars -> D.CopCalc c
 copTrimTextBy f arg =
     do (trim, text) <- D.getRightArg2 arg
        case D.isText trim && D.isText text of
          True  -> D.putText $ f (D.gText trim) (D.gText text)
          False -> Msg.badArg arg
 
-trimTextBegin :: (Eq a) => O.Bin [a]
-trimTextBegin s = dropWhile (`elem` s)
+trimTextBegin :: (O.Textual t) => O.Bin t
+trimTextBegin t = snd . O.tWhile (`O.csElem` t)
 
-trimTextEnd :: (Eq a) => O.Bin [a]
-trimTextEnd s = reverse . trimTextBegin s . reverse
+trimTextEnd :: (O.Textual t) => O.Bin t
+trimTextEnd t = O.csReverse . trimTextBegin t . O.csReverse
 
-trimTextBoth :: (Eq a) => O.Bin [a]
-trimTextBoth s = trimTextEnd s . trimTextBegin s
+trimTextBoth :: (O.Textual t) => O.Bin t
+trimTextBoth t = trimTextEnd t . trimTextBegin t
 
 
 -- ----------------------  divide-text
 
-type Divider a = (a -> Bool) -> [a] -> [[a]]
+type Divider = (Char -> Bool) -> S.Chars -> [S.Chars]
 
-copDivideTextBy :: (D.CContent c) => Divider Char -> D.CopCalc c
+copDivideTextBy :: (D.CContent c) => Divider -> D.CopCalc c
 copDivideTextBy f arg =
     do (divide, text) <- D.getRightArg2 arg
        case D.isText divide && D.isText text of
-         True  -> D.putList $ D.pText <$> f (`elem` D.gText divide) (D.gText text)
+         True  -> D.putList $ D.pText <$> f (`O.csElem` D.gText divide) (D.gText text)
          False -> Msg.badArg arg
 
 -- | Divide list about beginning of list.
@@ -316,9 +316,9 @@ copDivideTextBy f arg =
 --   >>> divideBegin (== '-') "11-22-33-44-55"
 --   ["","11-22-33-44-55"]
 
-divideBegin :: Divider a
+divideBegin :: Divider
 divideBegin p x =
-    let (match, right) = span p x
+    let (match, right) = O.tWhile p x
     in [match, right]
 
 -- | Divide list at matching first.
@@ -333,10 +333,10 @@ divideBegin p x =
 --   >>> divideFirst (== '-') ""
 --   ["","",""]
 
-divideFirst :: Divider a
+divideFirst :: Divider
 divideFirst p x =
-    let (left, y)      = break p x
-        (match, right) = span  p y
+    let (left, y)      = O.tWhileNot p x
+        (match, right) = O.tWhile p y
     in [left, match, right]
 
 -- | Divide list at matching last.
@@ -345,8 +345,8 @@ divideFirst p x =
 --   >>> divideLast (== '-') "11-22-33-44-55"
 --   ["11-22-33-44","-","55"]
 
-divideLast :: Divider a
-divideLast p x = reverse $ reverse <$> (divideFirst p $ reverse x)
+divideLast :: Divider
+divideLast p x = reverse $ O.csReverse <$> (divideFirst p $ O.csReverse x)
 
 -- | Divide list about end of list.
 --   This function returns two-element list: [left, match].
@@ -354,8 +354,8 @@ divideLast p x = reverse $ reverse <$> (divideFirst p $ reverse x)
 --   >>> divideEnd (== '5') "11-22-33-44-55"
 --   ["11-22-33-44-","55"]
 
-divideEnd :: Divider a
-divideEnd p x = reverse $ reverse <$> (divideBegin p $ reverse x)
+divideEnd :: Divider
+divideEnd p x = reverse $ O.csReverse <$> (divideBegin p $ O.csReverse x)
 
 -- | Divide list at all matching positions.
 --   This function returns odd-element list:
@@ -371,11 +371,11 @@ divideEnd p x = reverse $ reverse <$> (divideBegin p $ reverse x)
 --   >>> divideAll (== '-') ""
 --   [""]
 
-divideAll :: Divider a
+divideAll :: Divider
 divideAll p x =
     case divideFirst p x of
-      [left, [], []]       -> [left]
-      [left, match, []]    -> [left, match, []]
+      [left, e1, e2]   | O.tIsEmpty e1 && O.tIsEmpty e2 -> [left]
+      [left, match, e] | O.tIsEmpty e -> [left, match, e]
       [left, match, right] -> left : match : divideAll p right
       _                    -> error "unexpected value from divideFirst"
 
@@ -394,20 +394,20 @@ copNumericSymbol = copTestSymbol S.isNumericSymbol
 copShortSymbol :: (D.CContent c) => D.CopCalc c
 copShortSymbol = copTestSymbol S.isShortSymbol
 
-copTestSymbol :: (D.CContent c) => (S.Symbol String -> Bool) -> D.CopCalc c
+copTestSymbol :: (D.CContent c) => O.Test (S.Symbol S.Chars) -> D.CopCalc c
 copTestSymbol test arg =
     do c <- D.getRightArg1 arg
        D.putBool $ case extractText c of
                      Nothing  -> False
                      Just s   -> case S.nextSymbol s of
-                                   ("", sym) -> test sym
-                                   _         -> False
+                                   (rest, sym) | O.tIsEmpty rest -> test sym
+                                   _ -> False
 
-extractText :: (D.CContent c) => c -> Maybe String
+extractText :: (D.CContent c) => c -> Maybe S.Chars
 extractText c
     | D.isCode c  = Just $ D.gCode c
     | D.isText c  = Just $ D.gText c
-    | D.isTerm c  = Just $ S.termNameContent $ D.gTerm c
+    | D.isTerm c  = Just $ O.stringT $ S.termNameContent $ D.gTerm c
     | otherwise   = Nothing
 
 
@@ -415,11 +415,10 @@ extractText c
 
 -- | [pad-begin /CHAR/ /SIZE/ /TEXT/] Pad /CHAR/ to beginning of /TEXT/ upto /SIZE/.
 --   [pad-end /CHAR/ /SIZE/ /TEXT/] Pad /CHAR/ to end of /TEXT/ upto /SIZE/.
-copPad :: (D.CContent c) => (Char -> Int -> O.StringMap) -> D.CopCalc c
-copPad pad [D.getText -> Right [c], D.getIntegral -> Right n, D.getText -> Right t] =
+copPad :: (D.CContent c) => (Char -> Int -> S.CharsMap) -> D.CopCalc c
+copPad pad [D.getChar -> Right c, D.getIntegral -> Right n, D.getText -> Right t] =
     D.putText $ pad c n t
 copPad _ cs = Msg.unexpArg cs ["padding character", "max size", "text"]
-
 
 
 -- ----------------------  suffix & unsuffix

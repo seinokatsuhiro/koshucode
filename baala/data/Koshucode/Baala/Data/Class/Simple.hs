@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Simple content type.
@@ -15,9 +16,10 @@ module Koshucode.Baala.Data.Class.Simple
     -- ** Textual
     CCode (..),
     CTerm (..),
-    CText (..), pMaybeText, pTx, pTz,
+    CText (..), getChar, pChar, pMaybeText, pTx, pTz,
   ) where
 
+import Prelude hiding (getChar)
 import qualified Data.Text                               as Tx
 import qualified Data.Text.Lazy                          as Tz
 import qualified Koshucode.Baala.Overture                as O
@@ -180,6 +182,16 @@ class (D.Basis c) => CText c where
 
     putText     :: (O.Textual t) => t -> B.Ab c
     putText      = Right . pText
+
+-- | Text content of single character.
+pChar :: (CText c) => Char -> c
+pChar = pText . (O.charT :: Char -> S.Chars)
+
+-- | Get single character of text content.
+getChar :: (CText c) => B.Ab c -> B.Ab Char
+getChar (getText -> Right (O.tCut2 -> O.Jp c Nothing)) = Right c
+getChar (Right c) = Msg.typeUnmatched c
+getChar (Left a)  = Left a
 
 -- | Create text or empty content.
 --
