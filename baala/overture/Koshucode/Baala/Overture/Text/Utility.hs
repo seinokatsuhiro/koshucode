@@ -38,6 +38,7 @@ module Koshucode.Baala.Overture.Text.Utility
 
 import qualified Data.Char                              as Ch
 import qualified System.IO                              as IO
+import qualified Koshucode.Baala.Overture.Infix         as O
 import qualified Koshucode.Baala.Overture.Type          as O
 import qualified Koshucode.Baala.Overture.Text.Textual  as O
 
@@ -112,7 +113,7 @@ sweepAll t = t
 --   >>> padBegin 10 "abc"
 --   "       abc"
 --
-padBegin :: Int -> O.StringMap
+padBegin :: (O.Textual t) => Int -> t -> t
 padBegin = padBeginWith ' '
 
 -- | Add spaces to the right.
@@ -120,7 +121,7 @@ padBegin = padBeginWith ' '
 --   >>> padEnd 10 "abc"
 --   "abc       "
 --
-padEnd :: Int -> O.StringMap
+padEnd :: (O.Textual t) => Int -> t -> t
 padEnd = padEndWith ' '
 
 -- | Add given character to the left.
@@ -128,18 +129,18 @@ padEnd = padEndWith ' '
 --   >>> padBeginWith '.' 10 "abc"
 --   ".......abc"
 --
-padBeginWith :: Char -> Int -> O.StringMap
-padBeginWith p n s = replicate rest p ++ s where
-    rest = max 0 (n - stringWidth s)
+padBeginWith :: (O.Textual t) => Char -> Int -> t -> t
+padBeginWith p n t = O.charsT rest p O.++ t where
+    rest = max 0 (n - stringWidth t)
 
 -- | Add given character to the right.
-padEndWith :: Char -> Int -> O.StringMap
-padEndWith p n s = s ++ replicate rest p where
-    rest = max 0 (n - stringWidth s)
+padEndWith :: (O.Textual t) => Char -> Int -> t -> t
+padEndWith p n t = t O.++ O.charsT rest p where
+    rest = max 0 (n - stringWidth t)
 
 -- | Calculate width of string.
-stringWidth :: String -> Int
-stringWidth = sum . map charWidth
+stringWidth :: (O.Textual t) => t -> Int
+stringWidth = sum . O.tList charWidth
 
 -- | Character width.
 charWidth :: Char -> Int

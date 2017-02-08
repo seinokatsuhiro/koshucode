@@ -12,6 +12,7 @@ module Koshucode.Baala.Overture.Text.Textual
   ) where
 
 import qualified Data.Char                              as Ch
+import qualified Data.List                              as Ls
 import qualified Data.String                            as Str
 import qualified Data.Text                              as Tx
 import qualified Data.Text.Encoding                     as Tx
@@ -205,6 +206,22 @@ class (Show t, Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
     tAll :: (Char -> Bool) -> t -> Bool
     tAll f = and . tList f
 
+    -- | Test any characters of text value.
+    --
+    --   >>> csAny (== '.') "120.5"
+    --   True
+    --
+    csAny :: (Char -> Bool) -> t -> Bool
+    csAny f = or . tList f
+
+    -- | Test character is in text value.
+    -- 
+    --   >>> csElem '.' "120.5"
+    --   True
+    --
+    csElem :: Char -> t -> Bool
+    csElem c = csAny (== c)
+
     -- | Length of /textual-value-#1/.
     --
     --   >>> tLength "foo" :: Int
@@ -213,6 +230,30 @@ class (Show t, Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
     tLength :: (Integral n) => t -> n
     tLength (tCut -> Just (_, t)) = 1 + tLength t
     tLength _ = 0
+
+    -- | Test /text-value-#1/ is prefix of /text-value-#2/.
+    --
+    --   >>> csIsPrefix "foo" "foobarbaz"
+    --   True
+    --
+    csIsPrefix :: t -> t -> Bool
+    csIsPrefix s t = tString s `Ls.isPrefixOf` tString t
+
+    -- | Test /text-value-#1/ is infix of /text-value-#2/.
+    --
+    --   >>> csIsInfix "bar" "foobarbaz"
+    --   True
+    --
+    csIsInfix :: t -> t -> Bool
+    csIsInfix s t = tString s `Ls.isInfixOf` tString t
+
+    -- | Test /text-value-#1/ is suffix of /text-value-#2/.
+    --
+    --   >>> csIsSuffix "baz" "foobarbaz"
+    --   True
+    --
+    csIsSuffix :: t -> t -> Bool
+    csIsSuffix s t = tString s `Ls.isSuffixOf` tString t
 
     -- ----------------------  Divide and split
 
@@ -349,6 +390,9 @@ instance Textual String where
     tTake        = take
     tDrop        = drop
     csReverse    = reverse
+    csIsPrefix   = Ls.isPrefixOf
+    csIsInfix    = Ls.isInfixOf
+    csIsSuffix   = Ls.isSuffixOf
 
     tString      = id
     stringT      = id
@@ -368,6 +412,9 @@ instance Textual O.Tx where
     tTake        = Tx.take
     tDrop        = Tx.drop
     csReverse    = Tx.reverse
+    csIsPrefix   = Tx.isPrefixOf
+    csIsInfix    = Tx.isInfixOf
+    csIsSuffix   = Tx.isSuffixOf
 
     tString      = Tx.unpack
     stringT      = Tx.pack
@@ -387,6 +434,9 @@ instance Textual O.Tz where
     tTake        = Tz.take . fromIntegral
     tDrop        = Tz.drop . fromIntegral
     csReverse    = Tz.reverse
+    csIsPrefix   = Tz.isPrefixOf
+    csIsInfix    = Tz.isInfixOf
+    csIsSuffix   = Tz.isSuffixOf
 
     tString      = Tz.unpack
     stringT      = Tz.pack
