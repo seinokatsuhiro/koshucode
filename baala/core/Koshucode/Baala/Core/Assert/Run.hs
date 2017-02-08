@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -64,7 +65,7 @@ runRelmapViaRelkit hook links r (T.Rel he1 bo1) =
 
 -- ---------------------------------  Options
 
-optionType :: S.ParaSpec String
+optionType :: S.ParaSpec S.Chars
 optionType = S.paraSpec $ S.paraMin 0 . S.paraOpt
              [ "empty"     -- show empty filler
              , "forward"   -- move terms to front
@@ -77,12 +78,12 @@ optionType = S.paraSpec $ S.paraMin 0 . S.paraOpt
 
 optionProcess :: (Ord c, D.CRel c, B.MixEncode c)
     => [S.ShortDef String] -> (Bool -> T.JudgeOf c) -> S.JudgeClass
-    -> C.Option c -> C.TTreePara String
+    -> C.Option c -> C.TTreePara S.Chars
     -> T.Rel c -> B.Ab [C.ResultChunk c]
 optionProcess sh judgeOf pat option opt r1 =
     do case S.paraMatch optionType opt of
          Right _  -> Right ()
-         Left u   -> Msg.unkOption u
+         Left u   -> Msg.unkOption (O.tString <$> u)
        showEmpty <- S.paraGetSwitch opt "empty"
        r2 <- optionRelmapResource option r1
        r3 <- optionRelmapAssert   opt    r2
@@ -98,7 +99,7 @@ optionRelmapResource option r1 =
     where call f True  r2 = f [] r2
           call _ False r2 = Right r2
 
-optionRelmapAssert :: (Ord c, D.CRel c) => C.TTreePara String -> B.AbMap (T.Rel c)
+optionRelmapAssert :: (Ord c, D.CRel c) => C.TTreePara S.Chars -> B.AbMap (T.Rel c)
 optionRelmapAssert opt r1 =
     Right r1 >>= call optionForward  "forward"
              >>= call optionBackward "backward"
@@ -109,7 +110,7 @@ optionRelmapAssert opt r1 =
                              Left _     -> Right r2
 
 optionComment :: (D.CRel c, B.MixEncode c) =>
-    [S.ShortDef String] -> S.JudgeClass -> C.TTreePara String -> T.Rel c -> B.Ab [String]
+    [S.ShortDef String] -> S.JudgeClass -> C.TTreePara S.Chars -> T.Rel c -> B.Ab [String]
 optionComment sh p opt r =
     do optTable <- S.paraGetSwitch opt "table"
        case optTable of

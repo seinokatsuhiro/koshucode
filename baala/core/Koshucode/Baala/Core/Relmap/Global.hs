@@ -29,6 +29,7 @@ module Koshucode.Baala.Core.Relmap.Global
 import qualified Data.Version                        as Ver
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Type                as T
 import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core.Relmap.Option  as C
@@ -88,7 +89,7 @@ globalCops :: Global' h c -> [D.Cop c]
 globalCops = D.copsetCopList . D.getCops
 
 -- | List of settings of infix operators.
-globalInfix :: Global' h c -> [B.Named B.InfixHeight]
+globalInfix :: Global' h c -> [(S.Chars, B.InfixHeight)]
 globalInfix = D.copsetInfixList . opsetCop . globalOpset
 
 -- | Abort with command line.
