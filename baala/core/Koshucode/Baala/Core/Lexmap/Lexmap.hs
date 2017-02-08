@@ -20,7 +20,7 @@ import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Syntax       as S
 
 -- | String version of 'TLexmap'.
-type Lexmap = TLexmap String
+type Lexmap = TLexmap S.Chars
 
 -- | Intermediate data that represents use of relmap operator.
 --   Lexmap is constructed from a list of 'B.TTree',

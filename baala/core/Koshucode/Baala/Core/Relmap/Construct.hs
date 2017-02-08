@@ -143,5 +143,5 @@ consRelmap findRop hook = relmap where
               name = C.lexName lx
 
     namedRelmap (n, lx) = do rmap <- relmap lx
-                             Right (n, rmap)
+                             Right (O.tString n, rmap)
 
