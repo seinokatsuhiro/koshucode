@@ -170,6 +170,14 @@ class (Show t, Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
         | tIsEmpty cs  = Just as
         | otherwise    = Nothing
 
+    -- | Reverse character sequence.
+    --
+    --   >>> csReverse "abc"
+    --   "cba"
+    --
+    csReverse :: t -> t
+    csReverse = stringT . reverse . tString
+
     -- | Map /function-#1/ to characters of /text-value-#2/.
     tMap :: (Char -> Char) -> t -> t
     tMap f = loop where
@@ -340,6 +348,7 @@ instance Textual String where
     tCut         = O.uncons
     tTake        = take
     tDrop        = drop
+    csReverse    = reverse
 
     tString      = id
     stringT      = id
@@ -358,6 +367,7 @@ instance Textual O.Tx where
     tCut         = Tx.uncons
     tTake        = Tx.take
     tDrop        = Tx.drop
+    csReverse    = Tx.reverse
 
     tString      = Tx.unpack
     stringT      = Tx.pack
@@ -376,6 +386,7 @@ instance Textual O.Tz where
     tCut         = Tz.uncons
     tTake        = Tz.take . fromIntegral
     tDrop        = Tz.drop . fromIntegral
+    csReverse    = Tz.reverse
 
     tString      = Tz.unpack
     stringT      = Tz.pack
