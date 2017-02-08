@@ -115,7 +115,7 @@ resInput :: Resource c -> [B.IOPoint]
 resInput = map C.inputPoint . resInputPoint
 
 -- | All input points.
-resInputPoint :: Resource c -> [C.InputPoint String]
+resInputPoint :: Resource c -> [C.InputPoint S.Chars]
 resInputPoint Resource { resInputQueue = (q, done) } = ps where
     ps = B.qTo q ++ map (ip . B.nioPoint) done
     ip p = C.InputPoint p []
@@ -143,7 +143,7 @@ resQueueMap :: O.Map InputQueue -> O.Map (Resource c)
 resQueueMap f res@Resource {..} = res { resInputQueue = f resInputQueue }
 
 -- | Add input to todo-part of input queue.
-resQueueTodo :: C.InputPoint String -> O.Map (Resource c)
+resQueueTodo :: C.InputPoint S.Chars -> O.Map (Resource c)
 resQueueTodo t = resQueueMap todo where
     todo (q, done) = (B.enq t q, done)
 

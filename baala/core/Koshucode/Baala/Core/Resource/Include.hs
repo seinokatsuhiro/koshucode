@@ -65,12 +65,12 @@ resIncludeNonJudge :: forall t c. (O.Textual t, D.CContent c) =>
     FilePath -> C.Resource c -> C.Clause t -> C.AbResource c
 resIncludeNonJudge cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseShort = sh } b) =
     case b of
-      C.CAssert  q cl toks  -> ab $ assert q cl $ str toks
-      C.CRelmap  n toks     -> ab $ relmap n $ str toks
-      C.CSlot    n toks     -> ab $ slot n $ str toks
-      C.CInput   toks       -> feat (ab $ input $ str toks)  C.featInputClause  Msg.disabledInputClause
-      C.COutput  toks       -> feat (ab $ output $ str toks) C.featOutputClause Msg.disabledOutputClause
-      C.COption  toks       -> ab $ option $ str toks
+      C.CAssert  q cl toks  -> ab $ assert q cl $ chars toks
+      C.CRelmap  n toks     -> ab $ relmap n $ chars toks
+      C.CSlot    n toks     -> ab $ slot n toks
+      C.CInput   toks       -> feat (ab $ input  $ chars toks) C.featInputClause  Msg.disabledInputClause
+      C.COutput  toks       -> feat (ab $ output $ chars toks) C.featOutputClause Msg.disabledOutputClause
+      C.COption  toks       -> ab $ option $ chars toks
       C.CEcho    clause     -> ab $ echo clause
       C.CLicense line       -> ab $ license line
       C.CUnknown (Left a)   -> Left a
@@ -79,12 +79,12 @@ resIncludeNonJudge cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.claus
 
       -- ----------------------  Utility
 
-      str = (O.tString O.<$$>)
+      chars = (S.tChars O.<$$>)
 
       short (t1, t2) = (O.tString t1, O.tString t2)
 
-      src :: [S.TToken String]
-      src = B.takeFirst $ str $ B.clauseTokens $ C.clauseSource h
+      src :: [S.TToken S.Chars]
+      src = B.takeFirst $ chars $ B.clauseTokens $ C.clauseSource h
 
       ab = Msg.abClause [h]
 
@@ -92,7 +92,7 @@ resIncludeNonJudge cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.claus
       feat e f msg | f feature = e
                    | otherwise = msg
 
-      calc :: D.CalcContent String c
+      calc :: D.CalcContent S.Chars c
       calc = calcContG $ C.resGlobal res
 
       f << y  = y : f res
@@ -110,8 +110,8 @@ resIncludeNonJudge cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.claus
              Right $ res { C.resLexmap = C.resLexmap  << ((sec, n), lt) }
 
       slot n toks =
-          do trees <- S.toTrees toks
-             Right res { C.resSlot = C.resSlot << (n, trees) }
+          do trees <- S.toTrees $ chars toks
+             Right res { C.resSlot = C.resSlot << (O.tString n, trees) }
 
       option toks =
           do opt <- C.optionParse calc toks $ C.resOption res
@@ -125,7 +125,7 @@ resIncludeNonJudge cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.claus
           do io <- ioPoint toks
              checkIOPoint $ res { C.resOutput = C.inputPoint io }
 
-      ioPoint :: [S.TToken String] -> B.Ab (C.InputPoint String)
+      ioPoint :: [S.TToken S.Chars] -> B.Ab (C.InputPoint S.Chars)
       ioPoint = paraInputPoint cd O.#. C.ttreePara2
 
       checkIOPoint :: B.AbMap (C.Resource c)
@@ -136,12 +136,12 @@ resIncludeNonJudge cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.claus
                             else Right res'
 
       echo clause =
-          Right $ res { C.resEcho = C.resEcho << (O.tString O.<$$> B.clauseLines clause) }
+          Right $ res { C.resEcho = C.resEcho << (S.tChars O.<$$> B.clauseLines clause) }
 
       license line =
           Right $ res { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
-calcContG :: (D.CContent c) => C.Global c -> D.CalcContent String c
+calcContG :: (D.CContent c) => C.Global c -> D.CalcContent S.Chars c
 calcContG = D.calcTree . D.getCops
 
 paraInputPoint :: forall t. (O.Textual t) =>
