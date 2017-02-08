@@ -104,10 +104,9 @@ relkitMemberExpand x xsi (Just he1) = Right kit where
     kit     = C.relkitMany False he2 flow
     flow cs = let [xsc] = [xsi] `K.selectElems` cs
               in case xsc of
-                   _ | K.isSet  xsc -> map (: cs) $ K.gSet xsc
-                   _ | K.isList xsc -> map (: cs) $ K.unique $ K.gList xsc
-                   _ | K.isText xsc -> map (: cs) $ map (K.pText . K.list1)
-                                         $ K.unique $ K.gText xsc
+                   _ | K.isSet  xsc -> (: cs) <$> K.gSet xsc
+                   _ | K.isList xsc -> (: cs) <$> (K.unique $ K.gList xsc)
+                   _ | K.isText xsc -> (: cs) <$> (pChar <$> (K.unique $ K.tString $ K.gText xsc))
                    _                -> [xsc : cs]
 
 
@@ -149,8 +148,7 @@ relkitIndexElemExpand from i x xsi (Just he1) = Right kit2 where
                in case xsc of
                     _ | K.isSet  xsc -> indexElem cs $ K.sort $ K.gSet xsc
                     _ | K.isList xsc -> indexElem cs $ K.gList xsc
-                    _ | K.isText xsc -> indexElem cs $ map (K.pText . K.list1)
-                                                     $ K.gText xsc
+                    _ | K.isText xsc -> indexElem cs (pChar `K.tList` K.gText xsc)
                     _                -> [xsc : cs]
 
     indexElem :: [c] -> [c] -> [[c]]
@@ -267,12 +265,11 @@ relkitUncollect (coll, to) (Just he1) = kit2 where
     ito      = headIndex he1 to
     he2      = K.headAppend to he1
     flow cs  = let [xsc]    = icoll `K.selectElems` cs
-                   char     = K.pText . K.list1
                    ys << xs = appendCount K.empty (length to) xs ys
                in case () of
                     _ | K.isSet  xsc  -> cs << (K.sort $ K.gSet xsc)
                       | K.isList xsc  -> cs << (K.gList xsc)
-                      | K.isText xsc  -> cs << (map char $ K.gText xsc)
+                      | K.isText xsc  -> cs << (pChar `K.tList` K.gText xsc)
                       | otherwise     -> cs << []
 
 appendCount :: a -> Int -> [a] -> [a] -> [a]
@@ -281,3 +278,5 @@ appendCount fill num xs ys = loop num xs where
     loop n (x:xs2)  = x    : loop (n - 1) xs2
     loop n []       = fill : loop (n - 1) []
 
+pChar :: (K.CText c) => Char -> c
+pChar = K.pText . (K.charT :: Char -> K.Chars)
