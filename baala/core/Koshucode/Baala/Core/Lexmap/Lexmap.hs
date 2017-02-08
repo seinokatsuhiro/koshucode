@@ -43,6 +43,9 @@ data LexmapType
 instance (O.Textual t) => B.GetCodePos (TLexmap t) where
     getCPs = B.getCPs . lexToken
 
+instance B.CsGetCP TLexmap where
+    csGetCPs = B.csGetCPs . lexToken
+
 -- | Empty base lexmap.
 instance (O.Textual t) => B.Default (TLexmap t) where
     def = Lexmap { lexType     = LexmapBase

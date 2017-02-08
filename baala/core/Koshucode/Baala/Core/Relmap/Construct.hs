@@ -94,7 +94,7 @@ relmapLocalSymbol med n = relmapLocal med $ S.LocalSymbol n
 relmapLocal :: C.Intmed' h c -> S.LocalRef -> C.Relmap' h c
 relmapLocal use ref = relmapLink use' where
     lx    = C.medLexmap use
-    cp    = B.getCP lx
+    cp    = B.csGetCP lx
     tok   = C.lexToken lx
     use'  = use { C.medLexmap = lx' }
     lx'   = lx  { C.lexType   = C.LexmapLocal

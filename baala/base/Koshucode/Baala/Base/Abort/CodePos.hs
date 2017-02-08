@@ -12,6 +12,7 @@ module Koshucode.Baala.Base.Abort.CodePos
 
     -- * Get code positions
     GetCodePos (..),
+    CsGetCP (..),
 
     -- * Codic
     Codic (..),
@@ -127,6 +128,13 @@ instance GetCodePos CodePos where
 
 instance (GetCodePos cp) => GetCodePos [cp] where
     getCPs = concatMap getCPs
+
+-- | Type which has code positions.
+class CsGetCP a where
+    csGetCPs :: (O.Textual t) => a t -> [TCodePos t]
+
+    csGetCP :: (O.Textual t) => a t -> TCodePos t
+    csGetCP a = B.headNull B.def $ csGetCPs a
 
 
 -- ----------------------  Codic
