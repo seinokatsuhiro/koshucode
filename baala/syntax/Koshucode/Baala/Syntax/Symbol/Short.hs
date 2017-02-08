@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Short sign.
@@ -16,7 +17,6 @@ module Koshucode.Baala.Syntax.Symbol.Short
     shortText,
   ) where
 
-import qualified Data.List                                as L
 import qualified Koshucode.Baala.Overture                 as O
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Syntax.Symbol.AngleText  as S
@@ -63,19 +63,27 @@ shortGroup (Short cp1 sh1 a : xs) =
 -- ----------------------  Shorten
 
 -- | String shortener.
-shortText :: [ShortDef String] -> B.TransText String
+--
+--   >>> shortText [("f", "foo/bar/")] "foo/bar/baz"
+--   Just "f.baz"
+--
+--   >>> shortText [("f", "foo/bar/")] "foo/baz"
+--   Nothing
+--
+shortText :: forall t. (O.Textual t) => [ShortDef t] -> B.TransText t
 shortText = loop . reverse . B.sortWith len where
-    len = length . snd
+    len :: ShortDef t -> Int
+    len = O.tLength . snd
 
-    loop :: [ShortDef String] -> B.TransText String
+    loop :: [ShortDef t] -> B.TransText t
     loop [] _ = Nothing
     loop ((prefix, replace) : sh) s =
-        case L.stripPrefix replace s of
-          Just s2             -> Just $ prefix O.++ ('.' O.<:> text2 s2)
-          _                   -> loop sh s
+        case O.tDropPrefix replace s of
+          Just s2   -> Just $ prefix O.++ ('.' O.<:> text2 s2)
+          _         -> loop sh s
 
-    text2 s   | isGeneralText s   = s
-              | otherwise         = S.angleQuote s
+    text2 s | isGeneralText s  = s
+            | otherwise        = S.angleQuote s
 
 -- | Test text value is general sign.
 isGeneralText :: (O.Textual t) => O.Test t

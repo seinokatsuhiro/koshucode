@@ -78,7 +78,7 @@ hPutLicense h C.Result { C.resultLicense = ls }
 hPutEcho :: IO.Handle -> C.Result c -> IO ()
 hPutEcho h result =
     do let echo = C.resultEcho result
-       O.hPutLines h $ concat echo
+       O.hPutLines h (O.tString <$> concat echo)
        B.when (echo /= []) $ O.hPutLn h
 
 hPutFoot :: IO.Handle -> B.ExitCode -> W.JudgeCount -> IO ()
@@ -109,7 +109,7 @@ hPutShort h def =
 -- | Output result chunk.
 hPutChunks
     :: (B.MixEncode c)
-    => (B.LineBreak, T.EncodeJudge S.Chars c) -> IO.Handle -> C.Result c -> B.TransText String 
+    => (B.LineBreak, T.EncodeJudge S.Chars c) -> IO.Handle -> C.Result c -> B.TransText S.Chars
     -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
 hPutChunks (lb, encode) h result sh = loop where
     loop [] cnt                            = return cnt
