@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Assertion options.
@@ -11,6 +12,7 @@ module Koshucode.Baala.Core.Relmap.Option
   ) where
 
 import qualified Data.Map.Strict                      as Ms
+import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data                 as D
@@ -20,12 +22,12 @@ import qualified Koshucode.Baala.Core.Relmap.Message  as Msg
 
 
 -- | Option type.
-type Option c = Ms.Map String (OptionContent c)
+type Option c = Ms.Map S.Chars (OptionContent c)
 
 -- | Content of assertion option.
 data OptionContent c
     = OptionBool Bool
-    | OptionChar [Char] Char
+    | OptionChar S.Chars Char
     | OptionTerms [S.TermName]
       deriving (Show, Eq, Ord)
 
@@ -38,7 +40,7 @@ option = Ms.fromList
          , ("backward" , OptionTerms []) ]
 
 -- | Get boolean option value.
-optionBool :: String -> Option c -> Bool
+optionBool :: S.Chars -> Option c -> Bool
 optionBool name opt =
     case Ms.lookup name opt of
       Just (OptionBool b) -> b
@@ -46,12 +48,12 @@ optionBool name opt =
 
 -- | Parse assertion option.
 optionParse :: (Eq c, D.CBool c, D.CText c)
-  => D.CalcContent String c -> [S.Token] -> B.AbMap (Option c)
+  => D.CalcContent S.Chars c -> [S.Token] -> B.AbMap (Option c)
 optionParse calc toks opt =
     do assn <- optionAssn toks
        B.foldM (optionUpdate calc) opt assn
 
-type NamedT a = ((String, [S.Tree]), a)
+type NamedT a = ((S.Chars, [S.Tree]), a)
 
 optionAssn :: [S.Token] -> B.Ab [NamedT [S.Tree]]
 optionAssn toks =
@@ -64,12 +66,12 @@ optionAssn toks =
       maybeName _ = Nothing
 
 optionUpdate :: (Eq c, D.CBool c, D.CText c)
-   => D.CalcContent String c -> Option c -> NamedT [S.Tree] -> B.Ab (Option c)
+   => D.CalcContent S.Chars c -> Option c -> NamedT [S.Tree] -> B.Ab (Option c)
 optionUpdate calc opt ((name, pt), trees) =
     Msg.abOption pt $ do
       case Ms.lookup name opt of
         Just oc  -> Msg.abOption trees $ upd oc
-        Nothing  -> Msg.adlib $ "unknown option: " ++ name
+        Nothing  -> Msg.adlib ("unknown option: " O.++ O.tString name)
     where
       abc = calc $ S.ttreeGroup trees
 
@@ -77,9 +79,10 @@ optionUpdate calc opt ((name, pt), trees) =
                                  ins $ OptionBool bool
 
       upd (OptionChar cs _) = do text <- D.getText abc
-                                 case text of
-                                   [ch] | elem ch cs -> ins $ OptionChar cs ch
-                                   _                 -> Msg.adlib "not one letter"
+                                 case O.tCut2 text of
+                                   O.Jp ch Nothing | elem ch (O.tString cs)
+                                      -> ins $ OptionChar cs ch
+                                   _  -> Msg.adlib "not one letter"
 
       upd (OptionTerms _)   = do terms <- D.treesFlatNames trees
                                  ins $ OptionTerms terms
