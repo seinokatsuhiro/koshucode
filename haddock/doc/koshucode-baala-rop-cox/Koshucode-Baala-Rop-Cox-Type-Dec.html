@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-cox-0.209.0.0: Relation-mapping operators with content calculations</p
+      >koshucode-baala-rop-cox-0.210.0.0: Relation-mapping operators with content calculations</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -198,6 +198,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapToDecReplace"
+	    >relmapToDecReplace</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitToDecReplace"
+	    >relkitToDecReplace</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
 	    >RelkitFlow</a
 	    > c</li
 	  ></ul
@@ -417,9 +447,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ><div class="doc"
 	  ><dl
 	    ><dt
-	      >to-dec /P ...</dt
+	      >to-dec <em
+		>/P</em
+		> ...</dt
 	      ><dd
-	      >Convert content of term /P ... to decimal number.</dd
+	      >Convert content of term <em
+		>/P</em
+		> ... to decimal number.</dd
+	      ><dt
+	      >to-dec <em
+		>/P</em
+		> ... -replace <em
+		>E</em
+		></dt
+	      ><dd
+	      >Convert content of term <em
+		>/P</em
+		> ... to decimal number,
+      or replace inconvertible content to <em
+		>E</em
+		>.</dd
 	      ></dl
 	    ></div
 	  ></div
@@ -463,6 +510,60 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Create <code
 	      >to-dec</code
 	      > relkit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapToDecReplace" class="def"
+	    >relmapToDecReplace</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Type-Dec.html#relmapToDecReplace');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create <code
+	      >to-dec</code
+	      > relmap with <code
+	      >-replace</code
+	      > option.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitToDecReplace" class="def"
+	    >relkitToDecReplace</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Type-Dec.html#relkitToDecReplace');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create <code
+	      >to-dec</code
+	      > relkit with <code
+	      >-replace</code
+	      > option.</p
 	    ></div
 	  ></div
 	></div

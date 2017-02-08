@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-type-0.209.0.0: Additional data types for Koshucode</p
+      >koshucode-baala-type-0.210.0.0: Additional data types for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -201,19 +201,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-D
 	  ><li class="src short"
 	  ><a href="#v:encodeDecimal"
 	    >encodeDecimal</a
-	    > :: <a href="Koshucode-Baala-Type-Decimal-Decimal.html#t:Decimal"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Type-Decimal-Decimal.html#t:Decimal"
 	    >Decimal</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    ></li
+	    > -&gt; t</li
 	  ><li class="src short"
 	  ><a href="#v:encodeDecimalCompact"
 	    >encodeDecimalCompact</a
-	    > :: <a href="Koshucode-Baala-Type-Decimal-Decimal.html#t:Decimal"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Type-Decimal-Decimal.html#t:Decimal"
 	    >Decimal</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    ></li
+	    > -&gt; t</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -367,11 +367,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-D
 	><p class="src"
 	  ><a name="v:encodeDecimal" class="def"
 	    >encodeDecimal</a
-	    > :: <a href="Koshucode-Baala-Type-Decimal-Decimal.html#t:Decimal"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Type-Decimal-Decimal.html#t:Decimal"
 	    >Decimal</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Type-Decimal-Coder.html#encodeDecimal');" href="javascript:void(0);" class="link"
+	    > -&gt; t <a onclick="showSource('src/Koshucode-Baala-Type-Decimal-Coder.html#encodeDecimal');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -382,17 +382,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>encodeDecimal $ T.realDecimal 0 (12345 T.%% 10)
+		>encodeDecimal $ T.realDecimal 0 (12345 T.%% 10) :: String
 </code
 		></strong
-	      >&quot;1 234&quot;
+	      >&quot;1 235&quot;
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>encodeDecimal $ T.realDecimal 2 (12345 T.%% 10)
+		>encodeDecimal $ T.realDecimal 2 (12345 T.%% 10) :: String
 </code
 		></strong
 	      >&quot;1 234.50&quot;
@@ -402,10 +402,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>encodeDecimal $ T.realDecimal (-2) (12345 T.%% 10)
+		>encodeDecimal $ T.realDecimal (-2) (12345 T.%% 10) :: String
 </code
 		></strong
-	      >&quot;1 2oo&quot;
+	      >&quot;1 3oo&quot; :: String
 </pre
 	    ></div
 	  ></div
@@ -413,11 +413,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-D
 	><p class="src"
 	  ><a name="v:encodeDecimalCompact" class="def"
 	    >encodeDecimalCompact</a
-	    > :: <a href="Koshucode-Baala-Type-Decimal-Decimal.html#t:Decimal"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Type-Decimal-Decimal.html#t:Decimal"
 	    >Decimal</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Type-Decimal-Coder.html#encodeDecimalCompact');" href="javascript:void(0);" class="link"
+	    > -&gt; t <a onclick="showSource('src/Koshucode-Baala-Type-Decimal-Coder.html#encodeDecimalCompact');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

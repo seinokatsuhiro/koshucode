@@ -9,7 +9,7 @@
 --   writer is for Koshucode, and other writers are defined for CSV, HTML
 --   table, etc.
 @package koshucode-baala-writer
-@version 0.209.0.0
+@version 0.210.0.0
 
 
 -- | Judgement writer.
@@ -166,7 +166,7 @@ resultHtmlIndented :: (CContent c) => ResultWriter c
 resultHtmlCompact :: (CContent c) => ResultWriter c
 
 -- | Encode term content in HTML.
-contToHtml :: (CContent c) => TransString -> c -> Html
+contToHtml :: (CContent c) => TransText String -> c -> Html
 instance Text.Blaze.ToMarkup Koshucode.Baala.Base.Abort.Reason.AbortReason
 
 

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.209.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.210.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -69,17 +69,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a href="#t:AttrEd"
 	    >AttrEd</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:Codic"
+	    > t = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:Codic"
 	    >Codic</a
-	    > <a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEdBody"
+	    > (<a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEdBody"
 	    >AttrEdBody</a
-	    ></li
+	    > t)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
 	    > <a href="#t:AttrEdBody"
 	    >AttrEdBody</a
-	    ><ul class="subs"
+	    > t<ul class="subs"
 	    ><li
 	      >= <a href="#v:AttrEdId"
 		>AttrEdId</a
@@ -89,64 +89,62 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		>AttrEdAdd</a
 		> <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		>Bool</a
-		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		> [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-		>Tree</a
-		>]</li
+		> t [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+		>TTree</a
+		> t]</li
 	      ><li
 	      >| <a href="#v:AttrEdRename"
 		>AttrEdRename</a
-		> (<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		>, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		>)</li
+		> (t, t)</li
 	      ><li
 	      >| <a href="#v:AttrEdFill"
 		>AttrEdFill</a
 		> [<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 		>Maybe</a
-		> <a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-		>Tree</a
-		>]</li
+		> (<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+		>TTree</a
+		> t)]</li
 	      ><li
 	      >| <a href="#v:AttrEdNest"
 		>AttrEdNest</a
-		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		> [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-		>Tree</a
-		>]</li
+		> t [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+		>TTree</a
+		> t]</li
 	      ><li
 	      >| <a href="#v:AttrEdAppend"
 		>AttrEdAppend</a
 		> [<a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEd"
 		>AttrEd</a
-		>]</li
+		> t]</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:consAttrEd"
 	    >consAttrEd</a
-	    > :: [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-	    >Tree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    > :: <span class="keyword"
+	    >forall</span
+	    > t. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+	    >TTree</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEd"
+	    > (<a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEd"
 	    >AttrEd</a
-	    ></li
+	    > t)</li
 	  ><li class="src short"
 	  ><a href="#v:runAttrEd"
 	    >runAttrEd</a
 	    > :: <a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEd"
 	    >AttrEd</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
+	    >Chars</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 	    >AbMap</a
 	    > [<a href="Koshucode-Baala-Syntax-Attr-Slot.html#t:AttrTree"
 	    >AttrTree</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
+	    >Chars</a
 	    >]</li
 	  ></ul
 	></div
@@ -159,11 +157,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a name="t:AttrEd" class="def"
 	    >AttrEd</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:Codic"
+	    > t = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:Codic"
 	    >Codic</a
-	    > <a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEdBody"
+	    > (<a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEdBody"
 	    >AttrEdBody</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#AttrEd');" href="javascript:void(0);" class="link"
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#AttrEd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -177,7 +175,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >data</span
 	    > <a name="t:AttrEdBody" class="def"
 	    >AttrEdBody</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#AttrEdBody');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#AttrEdBody');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -206,11 +204,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  >AttrEdAdd</a
 		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		  >Bool</a
-		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  > [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-		  >Tree</a
-		  >]</td
+		  > t [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+		  >TTree</a
+		  > t]</td
 		><td class="doc"
 		><p
 		  ><strong
@@ -222,11 +218,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ><td class="src"
 		><a name="v:AttrEdRename" class="def"
 		  >AttrEdRename</a
-		  > (<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  >)</td
+		  > (t, t)</td
 		><td class="doc"
 		><p
 		  ><strong
@@ -240,9 +232,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  >AttrEdFill</a
 		  > [<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 		  >Maybe</a
-		  > <a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-		  >Tree</a
-		  >]</td
+		  > (<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+		  >TTree</a
+		  > t)]</td
 		><td class="doc"
 		><p
 		  ><strong
@@ -254,11 +246,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ><td class="src"
 		><a name="v:AttrEdNest" class="def"
 		  >AttrEdNest</a
-		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  > [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-		  >Tree</a
-		  >]</td
+		  > t [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+		  >TTree</a
+		  > t]</td
 		><td class="doc"
 		><p
 		  ><strong
@@ -272,7 +262,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  >AttrEdAppend</a
 		  > [<a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEd"
 		  >AttrEd</a
-		  >]</td
+		  > t]</td
 		><td class="doc"
 		><p
 		  >Append editors</p
@@ -290,10 +280,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  ><span class="inst-left"
 		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
 		      >Eq</a
-		      > <a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEdBody"
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEdBody"
 		      >AttrEdBody</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#line-35');" href="javascript:void(0);" class="link"
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#line-38');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -302,12 +294,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 		      >Ord</a
-		      > <a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEdBody"
+		      > (<a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEdBody"
 		      >AttrEdBody</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#line-35');" href="javascript:void(0);" class="link"
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#line-38');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -316,12 +310,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		      >Textual</a
+		      > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
 		      >Show</a
-		      > <a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEdBody"
+		      > (<a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEdBody"
 		      >AttrEdBody</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#line-35');" href="javascript:void(0);" class="link"
+		      > t)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#line-38');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -335,13 +331,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:consAttrEd" class="def"
 	    >consAttrEd</a
-	    > :: [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
-	    >Tree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    > :: <span class="keyword"
+	    >forall</span
+	    > t. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:TTree"
+	    >TTree</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEd"
+	    > (<a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEd"
 	    >AttrEd</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#consAttrEd');" href="javascript:void(0);" class="link"
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#consAttrEd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -355,12 +355,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >runAttrEd</a
 	    > :: <a href="Koshucode-Baala-Syntax-Attr-AttrEd.html#t:AttrEd"
 	    >AttrEd</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
+	    >Chars</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 	    >AbMap</a
 	    > [<a href="Koshucode-Baala-Syntax-Attr-Slot.html#t:AttrTree"
 	    >AttrTree</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
+	    >Chars</a
 	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrEd.html#runAttrEd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p

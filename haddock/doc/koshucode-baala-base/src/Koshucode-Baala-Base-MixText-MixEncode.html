@@ -13,38 +13,32 @@
 <a class="number" name="line-4">4</a>
 <a class="number" name="line-5">5</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span><span class='hs-varop'>.</span><span class='hs-conid'>MixEncode</span>
 <a class="number" name="line-6">6</a>  <span class='hs-layout'>(</span> <span class='hs-conid'>MixEncode</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a class="number" name="line-7">7</a>    <span class='hs-conid'>TransString</span><span class='hs-layout'>,</span>
+<a class="number" name="line-7">7</a>    <span class='hs-conid'>TransText</span><span class='hs-layout'>,</span>
 <a class="number" name="line-8">8</a>    <span class='hs-varid'>encode</span><span class='hs-layout'>,</span>
-<a class="number" name="line-9">9</a>    <span class='hs-varid'>plainEncode</span><span class='hs-layout'>,</span>
-<a class="number" name="line-10">10</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-11">11</a>
-<a class="number" name="line-12">12</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
-<a class="number" name="line-13">13</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span>    <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
-<a class="number" name="line-14">14</a>
-<a class="number" name="line-15">15</a><a name="MixEncode"></a><span class='hs-comment'>-- | Encode via mix text.</span>
-<a class="number" name="line-16">16</a><a name="MixEncode"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>MixEncode</span> <span class='hs-varid'>a</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-17">17</a>    <span class='hs-varid'>mixEncode</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span>
-<a class="number" name="line-18">18</a>    <span class='hs-varid'>mixEncode</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mixTransEncode</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>nothing</span>
-<a class="number" name="line-19">19</a>
-<a class="number" name="line-20">20</a>    <span class='hs-varid'>mixTransEncode</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TransString</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span>
-<a class="number" name="line-21">21</a>    <span class='hs-varid'>mixTransEncode</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mixEncode</span>
-<a class="number" name="line-22">22</a>
-<a class="number" name="line-23">23</a><a name="instance%20MixEncode%20Bool"></a><span class='hs-comment'>-- | @(+)@ or @(-)@.</span>
-<a class="number" name="line-24">24</a><a name="instance%20MixEncode%20Bool"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>MixEncode</span> <span class='hs-conid'>Bool</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-25">25</a>    <span class='hs-varid'>mixEncode</span> <span class='hs-conid'>True</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixString</span> <span class='hs-str'>"(+)"</span>
-<a class="number" name="line-26">26</a>    <span class='hs-varid'>mixEncode</span> <span class='hs-conid'>False</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixString</span> <span class='hs-str'>"(-)"</span>
-<a class="number" name="line-27">27</a>
-<a class="number" name="line-28">28</a><a name="TransString"></a><span class='hs-comment'>-- | Transform string to another form.</span>
-<a class="number" name="line-29">29</a><a name="TransString"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TransString</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-30">30</a>
-<a class="number" name="line-31">31</a><a name="encode"></a><span class='hs-comment'>-- | Encode to string.</span>
-<a class="number" name="line-32">32</a><span class='hs-definition'>encode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>MixEncode</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-33">33</a><span class='hs-definition'>encode</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixToFlatString</span> <span class='hs-varop'>.</span> <span class='hs-varid'>mixEncode</span><span class='hs-layout'>)</span>
-<a class="number" name="line-34">34</a>
-<a class="number" name="line-35">35</a><a name="plainEncode"></a><span class='hs-comment'>-- | Encode to string.</span>
-<a class="number" name="line-36">36</a><span class='hs-comment'>{-# DEPRECATED plainEncode "Use 'encode' instead." #-}</span>
-<a class="number" name="line-37">37</a><span class='hs-definition'>plainEncode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>MixEncode</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-38">38</a><span class='hs-definition'>plainEncode</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>encode</span>
-<a class="number" name="line-39">39</a>
+<a class="number" name="line-9">9</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-10">10</a>
+<a class="number" name="line-11">11</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
+<a class="number" name="line-12">12</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span>    <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a class="number" name="line-13">13</a>
+<a class="number" name="line-14">14</a><a name="MixEncode"></a><span class='hs-comment'>-- | Encode via mix text.</span>
+<a class="number" name="line-15">15</a><a name="MixEncode"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>MixEncode</span> <span class='hs-varid'>a</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-16">16</a>    <span class='hs-varid'>mixEncode</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span>
+<a class="number" name="line-17">17</a>    <span class='hs-varid'>mixEncode</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mixTransEncode</span> <span class='hs-layout'>(</span><span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>nothing</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TransText</span> <span class='hs-conid'>String</span><span class='hs-layout'>)</span>
+<a class="number" name="line-18">18</a>
+<a class="number" name="line-19">19</a>    <span class='hs-varid'>mixTransEncode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Textual</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>TransText</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span>
+<a class="number" name="line-20">20</a>    <span class='hs-varid'>mixTransEncode</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mixEncode</span>
+<a class="number" name="line-21">21</a>
+<a class="number" name="line-22">22</a><a name="instance%20MixEncode%20Bool"></a><span class='hs-comment'>-- | @(+)@ or @(-)@.</span>
+<a class="number" name="line-23">23</a><a name="instance%20MixEncode%20Bool"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>MixEncode</span> <span class='hs-conid'>Bool</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-24">24</a>    <span class='hs-varid'>mixEncode</span> <span class='hs-conid'>True</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixString</span> <span class='hs-str'>"(+)"</span>
+<a class="number" name="line-25">25</a>    <span class='hs-varid'>mixEncode</span> <span class='hs-conid'>False</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixString</span> <span class='hs-str'>"(-)"</span>
+<a class="number" name="line-26">26</a>
+<a class="number" name="line-27">27</a><a name="TransText"></a><span class='hs-comment'>-- | Transform string to another form.</span>
+<a class="number" name="line-28">28</a><a name="TransText"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TransText</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>t</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-varid'>t</span>
+<a class="number" name="line-29">29</a>
+<a class="number" name="line-30">30</a><a name="encode"></a><span class='hs-comment'>-- | Encode to string.</span>
+<a class="number" name="line-31">31</a><span class='hs-definition'>encode</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>MixEncode</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-32">32</a><span class='hs-definition'>encode</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixToFlatString</span> <span class='hs-varop'>.</span> <span class='hs-varid'>mixEncode</span><span class='hs-layout'>)</span>
+<a class="number" name="line-33">33</a>
 </pre></body>
 </html>

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-type-0.209.0.0: Additional data types for Koshucode</p
+      >koshucode-baala-type-0.210.0.0: Additional data types for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -66,10 +66,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Date parts</a
+	    >Ymd</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
+	    >Date parts</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
 	    >Clock parts</a
 	    ></li
 	  ></ul
@@ -227,6 +231,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    >Day</a
 	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Ymd"
+	    >Ymd</a
+	    > = (<a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
+	    >Month</a
+	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
+	    >Day</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:ymd"
+	    >ymd</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
+	    >Month</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Ymd"
+	    >Ymd</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:mjdYmd"
+	    >mjdYmd</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjd"
+	    >ToMjd</a
+	    > mjd =&gt; mjd -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Ymd"
+	    >Ymd</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
@@ -486,7 +522,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Synonym for MJD type.</p
+	    >Type for the Modified Julian Day.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -545,7 +581,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 		      >Int</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-53');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-57');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -569,7 +605,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
 		      >Integer</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-58');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-62');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -593,7 +629,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="http://hackage.haskell.org/package/time/docs/Data-Time-Calendar.html#t:Day"
 		      >Day</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-48');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-52');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -607,7 +643,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 		      >Date</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-50');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-65');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -621,7 +657,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Time.html#t:Time"
 		      >Time</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-62');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-56');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -646,7 +682,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert to the Modified Just Day but abortable.</p
+	    >Convert to the Modified Julian Day but abortable.</p
 	    ></div
 	  ><div class="subs minimal"
 	  ><p class="caption"
@@ -691,7 +727,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:DateParts"
 		      >DateParts</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-180');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-208');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjdClip"
+		      >ToMjdClip</a
+		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:Ymd"
+		      >Ymd</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-153');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -819,7 +869,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:Dayw"
 		      >Dayw</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-90');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-94');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -833,7 +883,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:Dayw"
 		      >Dayw</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-88');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-92');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -847,7 +897,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:Dayw"
 		      >Dayw</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-88');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-92');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -861,7 +911,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:Dayw"
 		      >Dayw</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-88');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-92');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -936,7 +986,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    ></div
 	  ></div
 	><h1 id="g:3"
-	>Date parts</h1
+	>Ymd</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -1001,6 +1051,74 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    >Day type.</p
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Ymd" class="def"
+	    >Ymd</a
+	    > = (<a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
+	    >Month</a
+	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
+	    >Day</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#Ymd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Type for year, month, and day.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ymd" class="def"
+	    >ymd</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
+	    >Month</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Ymd"
+	    >Ymd</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#ymd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Ymd tuple.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mjdYmd" class="def"
+	    >mjdYmd</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjd"
+	    >ToMjd</a
+	    > mjd =&gt; mjd -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Ymd"
+	    >Ymd</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#mjdYmd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert MJD to year/month/day tuple.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>mjdYmd (55555 :: Int)
+</code
+		></strong
+	      >(2010,12,25)
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Date parts</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -1125,7 +1243,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:DateParts"
 		      >DateParts</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-154');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-182');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1139,7 +1257,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:DateParts"
 		      >DateParts</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-154');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-182');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1153,7 +1271,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:DateParts"
 		      >DateParts</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-154');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-182');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1167,7 +1285,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:DateParts"
 		      >DateParts</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-180');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-208');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1287,7 +1405,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 </pre
 	    ></div
 	  ></div
-	><h1 id="g:4"
+	><h1 id="g:5"
 	>Clock parts</h1
 	><div class="top"
 	><p class="src"
@@ -1437,7 +1555,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:ClockParts"
 		      >ClockParts</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-229');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-257');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1451,7 +1569,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:ClockParts"
 		      >ClockParts</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-229');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-257');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1465,7 +1583,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Parts.html#t:ClockParts"
 		      >ClockParts</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-229');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Parts.html#line-257');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"

@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.209.0.0
+@version 0.210.0.0
 
 
 -- | Exit process.
@@ -957,6 +957,12 @@ tString :: Textual t => t -> String
 --   </pre>
 stringT :: Textual t => String -> t
 
+-- | Convert textual value to strict text.
+tTx :: Textual t => t -> Tx
+
+-- | Convert strict text to textual value.
+txT :: Textual t => Tx -> t
+
 -- | Convert show instance to textual value.
 --   
 --   <pre>
@@ -971,6 +977,14 @@ bsT :: Textual t => Bs -> t
 -- | Convert lazy bytestring to textual value.
 bzT :: Textual t => Bz -> t
 
+-- | Add charactor to the top of textual value, same as <a>tAdd</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; 'b' &lt;:&gt; "ar" :: String
+--   "bar"
+--   </pre>
+(<:>) :: (Textual t) => Char -> t -> t
+
 -- | Convert textual something to string something.
 stringify :: (Functor f, Textual t) => f t -> f String
 instance Koshucode.Baala.Overture.Text.Textual.Textual GHC.Base.String
@@ -982,68 +996,108 @@ instance Koshucode.Baala.Overture.Text.Textual.Textual Koshucode.Baala.Overture.
 module Koshucode.Baala.Overture.Text.Integer
 
 -- | Decode decimal integer.
-stringDec :: (Eq n, Num n) => String -> Maybe n
+tDec :: (Textual t, Eq n, Num n) => t -> Maybe n
 
 -- | Decode decimal integer as <a>Int</a>.
 --   
 --   <pre>
---   &gt;&gt;&gt; stringInt "12"
---   Just 12
+--   &gt;&gt;&gt; tInt &lt;$&gt; ["12", "+12", "-12"]
+--   [Just 12,Just 12,Just (-12)]
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; stringInt "12.3"
+--   &gt;&gt;&gt; tInt "12.3"
 --   Nothing
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; stringInt "12345678901234567890"
+--   &gt;&gt;&gt; tInt "12345678901234567890"
 --   Just (-6101065172474983726)
 --   </pre>
-stringInt :: String -> Maybe Int
+tInt :: (Textual t) => t -> Maybe Int
 
 -- | Decode decimal integer as <a>Integer</a>.
 --   
 --   <pre>
---   &gt;&gt;&gt; stringInteger "12345678901234567890"
+--   &gt;&gt;&gt; tInteger "12345678901234567890"
 --   Just 12345678901234567890
 --   </pre>
-stringInteger :: String -> Maybe Integer
+tInteger :: (Textual t) => t -> Maybe Integer
 
 -- | Decode hexadecimal digits.
-stringHex :: (Textual t, Eq n, Num n) => t -> Maybe n
+tHex :: (Textual t, Eq n, Num n) => t -> Maybe n
 
 -- | Decode hexadecimal digits as <a>Int</a>.
 --   
 --   <pre>
---   &gt;&gt;&gt; stringHexInt "0F"
+--   &gt;&gt;&gt; tHexInt "0F"
 --   Just 15
 --   </pre>
-stringHexInt :: (Textual t) => t -> Maybe Int
+tHexInt :: (Textual t) => t -> Maybe Int
 
 -- | Decode hexadecimal digits as <a>Integer</a>.
 --   
 --   <pre>
---   &gt;&gt;&gt; stringHexInteger "0F"
+--   &gt;&gt;&gt; tHexInteger "0F"
 --   Just 15
 --   </pre>
-stringHexInteger :: (Textual t) => t -> Maybe Integer
+tHexInteger :: (Textual t) => t -> Maybe Integer
 
 -- | Decode custom digits to integer.
 --   
 --   <pre>
---   &gt;&gt;&gt; stringCustomInteger "01234567" "144"
+--   &gt;&gt;&gt; tCustomInteger "01234567" "144"
 --   Just 100
 --   </pre>
-stringCustomInteger :: String -> String -> Maybe Integer
+tCustomInteger :: (Textual t) => String -> t -> Maybe Integer
 
 -- | Decode counting digits to integer.
 --   
 --   <pre>
---   &gt;&gt;&gt; stringCountInteger ['A'..'Z'] &lt;$&gt; ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
+--   &gt;&gt;&gt; tCountInteger ['A'..'Z'] &lt;$&gt; ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
 --   [Just 0, Just 1, Just 2, Just 25, Just 26, Just 27, Just 52, Just 53, Just 100, Just 1000, Just 5303449]
 --   </pre>
-stringCountInteger :: String -> String -> Maybe Integer
+tCountInteger :: (Textual t) => String -> t -> Maybe Integer
+
+-- | Decode decimal integer.
+
+-- | <i>Deprecated: Use <a>tDec</a> instead.</i>
+stringDec :: (Textual t, Eq n, Num n) => t -> Maybe n
+
+-- | Decode decimal integer as <a>Int</a>.
+
+-- | <i>Deprecated: Use <a>tInt</a> instead.</i>
+stringInt :: (Textual t, Eq n, Num n) => t -> Maybe n
+
+-- | Decode decimal integer as <a>Integer</a>.
+
+-- | <i>Deprecated: Use <a>tInteger</a> instead.</i>
+stringInteger :: (Textual t) => t -> Maybe Integer
+
+-- | Decode hexadecimal digits.
+
+-- | <i>Deprecated: Use <a>tHex</a> instead.</i>
+stringHex :: (Textual t, Eq n, Num n) => t -> Maybe n
+
+-- | Decode hexadecimal digits as <a>Int</a>.
+
+-- | <i>Deprecated: Use <a>tHexInt</a> instead.</i>
+stringHexInt :: (Textual t) => t -> Maybe Int
+
+-- | Decode hexadecimal digits as <a>Integer</a>.
+
+-- | <i>Deprecated: Use <a>tHexInteger</a> instead.</i>
+stringHexInteger :: (Textual t) => t -> Maybe Integer
+
+-- | Decode custom digits to integer.
+
+-- | <i>Deprecated: Use <a>tCustomInteger</a> instead.</i>
+stringCustomInteger :: (Textual t) => String -> t -> Maybe Integer
+
+-- | Decode counting digits to integer.
+
+-- | <i>Deprecated: Use <a>tCountInteger</a> instead.</i>
+stringCountInteger :: (Textual t) => String -> t -> Maybe Integer
 
 -- | Encode integer to hexadecimal string.
 --   
@@ -1128,6 +1182,22 @@ trimEnd :: (Textual t) => t -> t
 --   "abc"
 --   </pre>
 trimBoth :: (Textual t) => t -> t
+
+-- | Trim and shorten consecutive spaces.
+--   
+--   <pre>
+--   &gt;&gt;&gt; sweep "  foo  bar   baz "
+--   "foo bar baz"
+--   </pre>
+sweep :: (Textual t) => t -> t
+
+-- | Delete space characters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; sweepAll "  foo  bar   baz "
+--   "foobarbaz"
+--   </pre>
+sweepAll :: (Textual t) => t -> t
 
 -- | Add spaces to the left.
 --   

@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.209.0.0
+@version 0.210.0.0
 
 
 -- | Message list.
@@ -80,7 +80,7 @@ cacheT :: (ToTermName t) => CacheT t
 --   &gt;&gt;&gt; S.toTree "/a/x" &gt;&gt;= treeFlatName
 --   Left ...
 --   </pre>
-treeFlatName :: (Ord t, ToTermName t) => TTree t -> Ab TermName
+treeFlatName :: (ToTermName t) => TTree t -> Ab TermName
 
 -- | Cached version of <a>treeFlatName</a>.
 treeFlatNameCached :: (Ord t) => CacheT t -> TTree t -> Ab (CacheT t, TermName)
@@ -91,7 +91,7 @@ treeFlatNameCached :: (Ord t) => CacheT t -> TTree t -> Ab (CacheT t, TermName)
 --   &gt;&gt;&gt; S.toTrees "/a +/b -/c" &gt;&gt;= treesFlatNames
 --   Right [TermName EQ "a",TermName GT "b",TermName LT "c"]
 --   </pre>
-treesFlatNames :: (Ord t, ToTermName t) => [TTree t] -> Ab [TermName]
+treesFlatNames :: (ToTermName t) => [TTree t] -> Ab [TermName]
 
 -- | Decode term names with optional complement symbol.
 --   
@@ -104,7 +104,7 @@ treesFlatNames :: (Ord t, ToTermName t) => [TTree t] -> Ab [TermName]
 --   &gt;&gt;&gt; S.toTrees "/a /b" &gt;&gt;= treesFlatNamesCo
 --   Right (False, [TermName EQ "a",TermName EQ "b"])
 --   </pre>
-treesFlatNamesCo :: (Textual t, ToTermName t) => [TTree t] -> Ab (Bool, [TermName])
+treesFlatNamesCo :: (TextualTermName t) => [TTree t] -> Ab (Bool, [TermName])
 
 -- | Decode a list of name-and-name pairs.
 --   
@@ -112,7 +112,7 @@ treesFlatNamesCo :: (Textual t, ToTermName t) => [TTree t] -> Ab (Bool, [TermNam
 --   &gt;&gt;&gt; S.toTrees "/a /x /b /y" &gt;&gt;= treesFlatNamePairs
 --   Right [(TermName EQ "a", TermName EQ "x"), (TermName EQ "b", TermName EQ "y")]
 --   </pre>
-treesFlatNamePairs :: (Textual t, ToTermName t) => [TTree t] -> Ab [TermName2]
+treesFlatNamePairs :: (TextualTermName t) => [TTree t] -> Ab [TermName2]
 
 -- | Decode term names grouped by colons.
 --   
@@ -122,7 +122,7 @@ treesFlatNamePairs :: (Textual t, ToTermName t) => [TTree t] -> Ab [TermName2]
 --         , [TermName EQ "p", TermName EQ "q"]
 --         , [TermName EQ "x", TermName EQ "y"] ]
 --   </pre>
-treesNamesByColon :: (Textual t, ToTermName t) => [TTree t] -> Ab [[TermName]]
+treesNamesByColon :: (TextualTermName t) => [TTree t] -> Ab [[TermName]]
 
 -- | Read list of named token trees from token trees.
 --   
@@ -131,14 +131,14 @@ treesNamesByColon :: (Textual t, ToTermName t) => [TTree t] -> Ab [[TermName]]
 --   Right [ (TermName EQ "a", [TreeL ...]),
 --           (TermName EQ "b", [TreeL ...]) ]
 --   </pre>
-treesTerms :: (Ord t, ToTermName t) => [TTree t] -> Ab [Term [TTree t]]
+treesTerms :: (ToTermName t) => [TTree t] -> Ab [Term [TTree t]]
 
 -- | Cached version of <a>treesTerms</a>.
-treesTermsCached :: (Ord t, ToTermName t) => CacheT t -> [TTree t] -> Ab (CacheT t, [Term [TTree t]])
+treesTermsCached :: (ToTermName t) => CacheT t -> [TTree t] -> Ab (CacheT t, [Term [TTree t]])
 
 -- | Read list of named token trees from token trees. This function wraps
 --   long branches into group.
-treesTerms1 :: (Ord t, ToTermName t) => [TTree t] -> Ab [Term (TTree t)]
+treesTerms1 :: (ToTermName t) => [TTree t] -> Ab [Term (TTree t)]
 
 
 -- | Decode specific-type contents.
@@ -159,10 +159,10 @@ treesTexts :: Bool -> [TTree t] -> Ab [t]
 --   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
 --                   interpTerms = ["a"] })
 --   </pre>
-treesInterp :: (Textual t, ToTermName t) => [TTree t] -> Ab Interp
+treesInterp :: (TextualTermName t) => [TTree t] -> Ab Interp
 
 -- | Decode type content.
-treesType :: (Textual t, ToTermName t) => [TTree t] -> Ab Type
+treesType :: (TextualTermName t) => [TTree t] -> Ab Type
 
 
 -- | Decode numeric contents.
@@ -213,7 +213,7 @@ stringTime :: String -> Ab Time
 --   &gt;&gt;&gt; S.toTrees "2013-#16" &gt;&gt;= treesTime
 --   Right 2013-#16
 --   </pre>
-treesTime :: (Textual t, ToTermName t) => [TTree t] -> Ab Time
+treesTime :: (TextualTermName t) => [TTree t] -> Ab Time
 
 
 -- | Message list.
@@ -380,9 +380,9 @@ putTime :: CTime c => Time -> Ab c
 -- | Code.
 class (Basis c) => CCode c where getCode = getContent isCode gCode putCode = Right . pCode
 isCode :: CCode c => c -> Bool
-gCode :: CCode c => c -> String
+gCode :: CCode c => c -> Chars
 pCode :: (CCode c, Textual t) => t -> c
-getCode :: CCode c => GetContent String c
+getCode :: CCode c => GetContent Chars c
 putCode :: (CCode c, Textual t) => t -> Ab c
 
 -- | Term name.
@@ -396,9 +396,9 @@ putTerm :: CTerm c => TermName -> Ab c
 -- | Double-quoted text content.
 class (Basis c) => CText c where getText = getContent isText gText putText = Right . pText
 isText :: CText c => c -> Bool
-gText :: CText c => c -> String
+gText :: CText c => c -> Chars
 pText :: (CText c, Textual t) => t -> c
-getText :: CText c => GetContent String c
+getText :: CText c => GetContent Chars c
 putText :: (CText c, Textual t) => t -> Ab c
 
 -- | Create text or empty content.
@@ -510,6 +510,34 @@ typeOrder :: CContent c => c -> Int
 -- | Convert some content to decimal number.
 toDec :: (CContent c) => Map c
 
+-- | Convert content to decimal number, or replace inconvertible content to
+--   constant decimal.
+--   
+--   <pre>
+--   &gt;&gt;&gt; toDecReplace (the $ pInt 0) (the $ pText "12.0")
+--   ContentDec Decimal (1) 12
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; toDecReplace (the $ pInt 0) (the $ pText "aa")
+--   ContentDec Decimal (0) 0
+--   </pre>
+toDecReplace :: (CContent c) => c -> Map c
+
+-- | Trim spaces of text content.
+--   
+--   <pre>
+--   &gt;&gt;&gt; cTrimBoth (the $ pText " foo ")
+--   ContentText "foo"
+--   </pre>
+cTrimBoth :: (CContent c) => Map c
+
+-- | Trim beginning spaces of text content.
+cTrimBegin :: (CContent c) => Map c
+
+-- | Trim ending spaces of text content.
+cTrimEnd :: (CContent c) => Map c
+
 -- | Convert <a>Value</a> to content.
 valueContent :: (CContent c) => Value -> c
 
@@ -549,7 +577,7 @@ module Koshucode.Baala.Data.Class.Map
 type CGetPut a c = (c -> a, a -> c)
 
 -- | <tt>gText</tt> and <tt>pText</tt>.
-gpText :: (CText c) => CGetPut String c
+gpText :: (CText c) => CGetPut Chars c
 
 -- | <tt>gList</tt> and <tt>pList</tt>.
 gpList :: (CList c) => CGetPut [c] c
@@ -577,7 +605,7 @@ contentMap :: (Functor f) => (c -> f a) -> (f b -> c') -> (a -> b) -> c -> c'
 --   &gt;&gt;&gt; contentApText reverse (the $ pText "abc")
 --   VText "cba"
 --   </pre>
-contentApText :: (CText c) => StringMap -> Map c
+contentApText :: (CText c) => CharsMap -> Map c
 
 -- | Map function to characters of internal string of text content.
 --   
@@ -748,7 +776,7 @@ CopCalc :: BlankName -> (CopCalc c) -> Cop c
 CopCox :: BlankName -> (CopCox c) -> Cop c
 
 -- | Convert <a>TTree</a>
-CopTree :: BlankName -> (CopTree String) -> Cop c
+CopTree :: BlankName -> (CopTree Chars) -> Cop c
 
 -- | Expression-level syntax.
 type CopCox c = [Cox c] -> AbCox c
@@ -776,9 +804,9 @@ copPostfix :: (Textual t) => t -> BlankName
 
 -- | Set of content operators.
 data CopSet c
-CopSet :: [Cop c] -> [Named InfixHeight] -> [Named (Cop c)] -> [Named (Cop c)] -> [Named (Cop c)] -> CopFind (Cox c) -> CopFind (CopCox c) -> CopFind (CopTree String) -> [NamedCox c] -> CopSet c
+CopSet :: [Cop c] -> [(Chars, InfixHeight)] -> [Named (Cop c)] -> [Named (Cop c)] -> [Named (Cop c)] -> CopFind (Cox c) -> CopFind (CopCox c) -> CopFind (CopTree Chars) -> [NamedCox c] -> CopSet c
 [copsetCopList] :: CopSet c -> [Cop c]
-[copsetInfixList] :: CopSet c -> [Named InfixHeight]
+[copsetInfixList] :: CopSet c -> [(Chars, InfixHeight)]
 
 -- | CopCalc
 [copsetCalcList] :: CopSet c -> [Named (Cop c)]
@@ -796,7 +824,7 @@ CopSet :: [Cop c] -> [Named InfixHeight] -> [Named (Cop c)] -> [Named (Cop c)] -
 [copsetFindCox] :: CopSet c -> CopFind (CopCox c)
 
 -- | This is created by <a>copsetFill</a>.
-[copsetFindTree] :: CopSet c -> CopFind (CopTree String)
+[copsetFindTree] :: CopSet c -> CopFind (CopTree Chars)
 [copsetDerived] :: CopSet c -> [NamedCox c]
 
 -- | Find content operator from its name.
@@ -836,11 +864,11 @@ type CalcContent t c = TTree t -> Ab c
 stringContent :: (CContent c) => String -> Ab c
 
 -- | Decode content from token tree.
-treeContent :: (Textual t, ToTermName t, CContent c) => DecodeContent t c
+treeContent :: (TextualTermName t, CContent c) => DecodeContent t c
 
 -- | Decode judge from token trees. Judges itself are not content type. It
 --   can be only used in the top-level of resources.
-treesJudge :: (Textual t, ToTermName t, CContent c) => CacheT t -> AssertType -> JudgeClass -> [TTree t] -> Ab (CacheT t, Judge c)
+treesJudge :: (TextualTermName t, CContent c) => CacheT t -> AssertType -> JudgeClass -> [TTree t] -> Ab (CacheT t, Judge c)
 
 
 -- | Dataset as a set of judges.
@@ -879,12 +907,6 @@ module Koshucode.Baala.Data.Decode
 
 -- | The Baala content type.
 module Koshucode.Baala.Data.Content
-
--- | Character sequence.
-type Chars = String
-
--- | Mapping from chars to chars.
-type CharsMap = Map Chars
 
 -- | The Baala content type.
 data Content
@@ -1156,7 +1178,7 @@ calcCox :: (GetCops cops, CContent c) => cops c -> Head -> [c] -> Cox c -> Ab c
 --   <li><i>Tree-to-Content</i> Calculate token tree as content
 --   expression.</li>
 --   </ul>
-calcTree :: (GetCops cops, CContent c) => cops c -> CalcContent String c
+calcTree :: (GetCops cops, CContent c) => cops c -> CalcContent Chars c
 
 -- | Extract single non-abortable argument.
 getRightArg1 :: (Basis c) => [Ab c] -> Ab c

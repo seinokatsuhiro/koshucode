@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.209.0.0
+@version 0.210.0.0
 
 
 -- | Term types and related functions.
@@ -51,8 +51,11 @@ type TermPath = [TermName]
 --   &gt;&gt;&gt; toTermName "+/a"
 --   TermName GT "a"
 --   </pre>
-class ToTermName a
+class (Ord a) => ToTermName a
 toTermName :: ToTermName a => a -> TermName
+
+-- | <tt>Textual</tt> and <a>ToTermName</a> values.
+class (Textual t, ToTermName t) => TextualTermName t
 
 -- | Add necessary slash character indicating term name.
 --   
@@ -182,6 +185,9 @@ instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName GHC.Base.String
 instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName Koshucode.Baala.Overture.Shorthand.Tx
 instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName Koshucode.Baala.Overture.Shorthand.Tz
 instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName GHC.Types.Int
+instance Koshucode.Baala.Syntax.Symbol.Term.TextualTermName GHC.Base.String
+instance Koshucode.Baala.Syntax.Symbol.Term.TextualTermName Koshucode.Baala.Overture.Shorthand.Tx
+instance Koshucode.Baala.Syntax.Symbol.Term.TextualTermName Koshucode.Baala.Overture.Shorthand.Tz
 
 
 -- | Text enclosed in angle brackets.
@@ -649,37 +655,6 @@ paraGetRest :: Para n a -> Ab [a]
 paraGetRRest :: Para n a -> Ab [a]
 
 
--- | Attribute name.
-module Koshucode.Baala.Syntax.Attr.AttrName
-
--- | Attribute name of relmap.
-data AttrName
-
--- | Normal attribute
-AttrNormal :: String -> AttrName
-
--- | Attribute for submap
-AttrRelmapNormal :: String -> AttrName
-
--- | Attribute for submap with local relation references
-AttrRelmapLocal :: String -> AttrName
-
--- | Test attribute name is for subrelmap.
-isAttrNameRelmap :: AttrName -> Bool
-
--- | String part of attribute names.
-attrNameText :: AttrName -> String
-
--- | Attribute string with hyphen.
-attrNameCode :: AttrName -> String
-
--- | Constant for attribute name <tt>@trunk</tt>.
-attrNameTrunk :: AttrName
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.AttrName.AttrName
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.AttrName.AttrName
-instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.AttrName.AttrName
-
-
 -- | Message list.
 module Koshucode.Baala.Syntax.Token.Message
 
@@ -935,7 +910,7 @@ shortListM :: (Monad m) => [Short t (m a)] -> m [Short t a]
 shortGroup :: (Eq t) => [Short t a] -> [Short t [a]]
 
 -- | String shortener.
-shortText :: [ShortDef String] -> TransString
+shortText :: [ShortDef String] -> TransText String
 instance (GHC.Classes.Eq t, GHC.Classes.Eq a) => GHC.Classes.Eq (Koshucode.Baala.Syntax.Symbol.Short.Short t a)
 instance (GHC.Classes.Ord a, Koshucode.Baala.Overture.Text.Textual.Textual t) => GHC.Classes.Ord (Koshucode.Baala.Syntax.Symbol.Short.Short t a)
 instance (GHC.Show.Show a, Koshucode.Baala.Overture.Text.Textual.Textual t) => GHC.Show.Show (Koshucode.Baala.Syntax.Symbol.Short.Short t a)
@@ -1197,8 +1172,23 @@ module Koshucode.Baala.Syntax.Token.Token
 class SubtypeName a
 subtypeName :: SubtypeName a => a -> String
 
+-- | Character sequence.
+type Chars = String
+
+-- | Mapping from chars to chars.
+type CharsMap = Map Chars
+
+-- | Convert textual value to character sequence.
+tChars :: (Textual t) => t -> Chars
+
+-- | Convert character sequence to textual value.
+csT :: (Textual t) => Chars -> t
+
+-- | Convert string to character sequence.
+stringChars :: String -> Chars
+
 -- | String token.
-type Token = TToken String
+type Token = TToken Chars
 
 -- | Textual token.
 data TToken t
@@ -1578,7 +1568,7 @@ scanTextAssert :: Scanner String
 module Koshucode.Baala.Syntax.Token.Rel
 
 -- | Scan a next token in relational section.
-scanRel :: (Textual t, ToTermName t) => Scanner t
+scanRel :: (TextualTermName t) => Scanner t
 
 -- | Scan interpretation content between <tt>{|</tt> and <tt>|}</tt>.
 scanInterp :: (Textual t) => Scanner t
@@ -1591,16 +1581,16 @@ module Koshucode.Baala.Syntax.Token.Clause
 type TokenLine t = CodeLine TToken t
 
 -- | Tokenize with given scanner.
-tokenLinesBy :: (ToLines i, Textual t, ToTermName t) => Scanner t -> IxIOPoint -> i -> [TokenLine t]
+tokenLinesBy :: (ToLines i, TextualTermName t) => Scanner t -> IxIOPoint -> i -> [TokenLine t]
 
 -- | Tokenize relational section.
-tokenLines :: (ToLines i, Textual t, ToTermName t) => IxIOPoint -> i -> [TokenLine t]
+tokenLines :: (ToLines i, TextualTermName t) => IxIOPoint -> i -> [TokenLine t]
 
 -- | Tokenize lazy bytestring.
 tokenLinesTextAssert :: (ToLines i) => IxIOPoint -> i -> [TokenLine String]
 
 -- | Read token lines from file.
-readTokenLines :: (Textual t, ToTermName t) => FilePath -> IOAb [TokenLine t]
+readTokenLines :: (TextualTermName t) => FilePath -> IOAb [TokenLine t]
 
 -- | Code clause of tokens.
 type TokenClause t = CodeClause TToken t
@@ -1635,13 +1625,13 @@ tokenClauses :: [TokenLine t] -> [TokenClause t]
 --                                                  TText /0.3.1/ TextRaw "cc"]}
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.6.0/ TextRaw "ee"]}
 --   </pre>
-readClauses :: (Textual t, ToTermName t) => FilePath -> IOAb [TokenClause t]
+readClauses :: (TextualTermName t) => FilePath -> IOAb [TokenClause t]
 
 -- | Read clauses and extract tokens.
-readClauseTokens :: (Textual t, ToTermName t) => FilePath -> IOAb [[TToken t]]
+readClauseTokens :: (TextualTermName t) => FilePath -> IOAb [[TToken t]]
 
 -- | Abbreviated tokenizer.
-toks :: (Textual t, ToTermName t) => String -> [TToken t]
+toks :: (TextualTermName t) => String -> [TToken t]
 
 -- | Print token list.
 printToks :: [Token] -> IO ()
@@ -1732,6 +1722,37 @@ clausePrint :: [String] -> IO ()
 
 -- | Token and tokenizer.
 module Koshucode.Baala.Syntax.Token
+
+
+-- | Attribute name.
+module Koshucode.Baala.Syntax.Attr.AttrName
+
+-- | Attribute name of relmap.
+data AttrName
+
+-- | Normal attribute
+AttrNormal :: Chars -> AttrName
+
+-- | Attribute for submap
+AttrRelmapNormal :: Chars -> AttrName
+
+-- | Attribute for submap with local relation references
+AttrRelmapLocal :: Chars -> AttrName
+
+-- | Test attribute name is for subrelmap.
+isAttrNameRelmap :: AttrName -> Bool
+
+-- | String part of attribute names.
+attrNameText :: AttrName -> Chars
+
+-- | Attribute string with hyphen.
+attrNameCode :: AttrName -> Chars
+
+-- | Constant for attribute name <tt>@trunk</tt>.
+attrNameTrunk :: AttrName
+instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.AttrName.AttrName
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.AttrName.AttrName
+instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.AttrName.AttrName
 
 
 -- | Bracket type.
@@ -1884,7 +1905,7 @@ module Koshucode.Baala.Syntax.Pattern
 module Koshucode.Baala.Syntax.Tree.Parse
 
 -- | Tree of tokens.
-type Tree = TTree String
+type Tree = TTree Chars
 
 -- | Tree of tokens.
 type TTree t = CodeTree BracketType TToken t
@@ -1893,16 +1914,16 @@ type TTree t = CodeTree BracketType TToken t
 class ToTrees t a where toTree a = ttreeGroup <$> toTrees a toTrees' = unabort . toTrees toTree' = unabort . toTree
 
 -- | Convert to list of token trees.
-toTrees :: (ToTrees t a, Textual t, ToTermName t) => a -> Ab [TTree t]
+toTrees :: (ToTrees t a, TextualTermName t) => a -> Ab [TTree t]
 
 -- | Convert to token tree.
-toTree :: (ToTrees t a, Textual t, ToTermName t) => a -> Ab (TTree t)
+toTree :: (ToTrees t a, TextualTermName t) => a -> Ab (TTree t)
 
 -- | List of token trees or error.
-toTrees' :: (ToTrees t a, Textual t, ToTermName t) => a -> [TTree t]
+toTrees' :: (ToTrees t a, TextualTermName t) => a -> [TTree t]
 
 -- | Token tree or error.
-toTree' :: (ToTrees t a, Textual t, ToTermName t) => a -> TTree t
+toTree' :: (ToTrees t a, TextualTermName t) => a -> TTree t
 
 -- | Wrap trees in group.
 ttreeGroup :: [TTree t] -> TTree t
@@ -1913,10 +1934,10 @@ ttreeGroup :: [TTree t] -> TTree t
 --   &gt;&gt;&gt; withTrees Right "a"
 --   Right [TreeL (TText /0.1.0/ TextRaw "a")]
 --   </pre>
-withTrees :: (Textual t, ToTermName t, ToTrees t a) => ([TTree t] -> Ab b) -> a -> Ab b
+withTrees :: (TextualTermName t, ToTrees t a) => ([TTree t] -> Ab b) -> a -> Ab b
 
 -- | Read clauses and convert to token trees.
-readClauseTrees :: FilePath -> IOAb [[TTree String]]
+readClauseTrees :: (TextualTermName t) => FilePath -> IOAb [[TTree t]]
 instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees t GHC.Base.String
 instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees t Koshucode.Baala.Overture.Shorthand.Tx
 instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees t Koshucode.Baala.Overture.Shorthand.Tz
@@ -2008,10 +2029,10 @@ module Koshucode.Baala.Syntax.Subtree.Decode
 --   TText /0.12.4/ TextQQ "cc"
 --   TClose /0.0.0/ ")"
 --   </pre>
-readSubtreeClauses :: FilePath -> IOAb [TokenClause String]
+readSubtreeClauses :: (TextualTermName t) => FilePath -> IOAb [TokenClause t]
 
 -- | Insert open/sep/close to subtree clause.
-subtreeClause :: TokenClause String -> Ab (TokenClause String)
+subtreeClause :: (Textual t) => TokenClause t -> Ab (TokenClause t)
 
 -- | Decode token trees to subtree patterns.
 --   
@@ -2041,7 +2062,7 @@ subtreeClause :: TokenClause String -> Ab (TokenClause String)
 --   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt;&gt; \"Y1\" ( - A B /z \"Z1\" )"
 --   Right [SubtreeR (SivmapEq "Y1") [SubtreeL (SubtreeText ["A","B"] (TermName EQ "z")) (SivmapEq "Z1")]]
 --   </pre>
-decodeSubtreePattern :: [Tree] -> Ab [SubtreePattern]
+decodeSubtreePattern :: (TextualTermName t, ToSivExpr t) => [TTree t] -> Ab [SubtreePattern]
 
 
 -- | Subtree.
@@ -2071,16 +2092,16 @@ dupAttr :: [TermName] -> Ab a
 extraAttr :: Ab a
 
 -- | No slot content
-noSlotName :: Int -> String -> Ab a
+noSlotName :: (Textual t) => Int -> t -> Ab a
 
 -- | No slot content
 noSlotIndex :: [String] -> Int -> Ab a
 
 -- | Require attribute
-reqAttr :: String -> Ab a
+reqAttr :: (Textual t) => t -> Ab a
 
 -- | Require attribute
-reqAttrName :: String -> Ab a
+reqAttrName :: (Textual t) => t -> Ab a
 
 -- | Unexpected attribute
 unexpAttr :: String -> Ab a
@@ -2100,47 +2121,47 @@ module Koshucode.Baala.Syntax.Attr.Slot
 type AttrTree t = (AttrName, [TTree t])
 
 -- | Global slot name and its content.
-type GlobalSlot = (String, [TTree String])
+type GlobalSlot t = (String, [TTree t])
 
 -- | Substitute slots by global and attribute slots.
-substSlot :: [GlobalSlot] -> [AttrTree String] -> AbMap [Tree]
+substSlot :: (Textual t) => [GlobalSlot t] -> [AttrTree t] -> AbMap [TTree t]
 
 
 -- | Attribute editor.
 module Koshucode.Baala.Syntax.Attr.AttrEd
 
 -- | Attribute editor with source code information.
-type AttrEd = Codic AttrEdBody
+type AttrEd t = Codic (AttrEdBody t)
 
 -- | Operators for attribute editors.
-data AttrEdBody
+data AttrEdBody t
 
 -- | <b>id:</b> Identity editor
-AttrEdId :: AttrEdBody
+AttrEdId :: AttrEdBody t
 
 -- | <b>add:</b> Add attribute
-AttrEdAdd :: Bool -> String -> [Tree] -> AttrEdBody
+AttrEdAdd :: Bool -> t -> [TTree t] -> AttrEdBody t
 
 -- | <b>rename:</b> Rename attribute keyword
-AttrEdRename :: (String, String) -> AttrEdBody
+AttrEdRename :: (t, t) -> AttrEdBody t
 
 -- | <b>fill:</b> Fill positional attributes
-AttrEdFill :: [Maybe Tree] -> AttrEdBody
+AttrEdFill :: [Maybe (TTree t)] -> AttrEdBody t
 
 -- | <b>nest:</b> Nested relation reference
-AttrEdNest :: String -> [Tree] -> AttrEdBody
+AttrEdNest :: t -> [TTree t] -> AttrEdBody t
 
 -- | Append editors
-AttrEdAppend :: [AttrEd] -> AttrEdBody
+AttrEdAppend :: [AttrEd t] -> AttrEdBody t
 
 -- | Construct attribute editor.
-consAttrEd :: [Tree] -> Ab AttrEd
+consAttrEd :: (Textual t) => [TTree t] -> Ab (AttrEd t)
 
 -- | Edit relmap attributes.
-runAttrEd :: AttrEd -> AbMap [AttrTree String]
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.AttrEd.AttrEdBody
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.AttrEd.AttrEdBody
-instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.AttrEd.AttrEdBody
+runAttrEd :: AttrEd Chars -> AbMap [AttrTree Chars]
+instance Koshucode.Baala.Overture.Text.Textual.Textual t => GHC.Classes.Ord (Koshucode.Baala.Syntax.Attr.AttrEd.AttrEdBody t)
+instance GHC.Classes.Eq t => GHC.Classes.Eq (Koshucode.Baala.Syntax.Attr.AttrEd.AttrEdBody t)
+instance Koshucode.Baala.Overture.Text.Textual.Textual t => GHC.Show.Show (Koshucode.Baala.Syntax.Attr.AttrEd.AttrEdBody t)
 
 
 -- | Attributes of relmap operator.
@@ -2182,10 +2203,10 @@ type AttrPara t = Para AttrName (TTree t)
 type AttrParaze t = [TTree t] -> Ab (AttrPara t)
 
 -- | Parameterize named attributes.
-attrPara :: AttrParaze String
+attrPara :: AttrParaze Chars
 
 -- | Parameterize attributes by its layout.
-attrParaBy :: AttrLayout -> AttrParaze String
+attrParaBy :: AttrLayout -> AttrParaze Chars
 
 -- | Take out hyphened text (like <tt>"-x"</tt>) from token tree.
 maybeSingleHyphen :: (Textual t) => TTree t -> Maybe t
@@ -2213,11 +2234,6 @@ maybeDoubleHyphen :: (Textual t) => TTree t -> Maybe t
 --   </pre>
 class ToAttrLayout a
 toAttrLayout :: ToAttrLayout a => a -> AttrLayout
-
--- | Parse relmap attribute layout.
-
--- | <i>Deprecated: Use <a>toAttrLayout</a> instead.</i>
-parseAttrLayout :: String -> AttrLayout
 instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrLayout
 instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrBranch
 instance Koshucode.Baala.Syntax.Attr.Attr.ToAttrLayout Koshucode.Baala.Syntax.Attr.Attr.AttrLayout

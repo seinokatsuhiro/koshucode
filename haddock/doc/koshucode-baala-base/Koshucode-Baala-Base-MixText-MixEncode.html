@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.209.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.210.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -81,9 +81,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	      ><li
 	      ><a href="#v:mixTransEncode"
 		>mixTransEncode</a
-		> :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:TransString"
-		>TransString</a
-		> -&gt; a -&gt; <a href="Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+		>Textual</a
+		> t =&gt; <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:TransText"
+		>TransText</a
+		> t -&gt; a -&gt; <a href="Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
 		>MixText</a
 		></li
 	      ></ul
@@ -91,26 +93,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:TransString"
-	    >TransString</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > <a href="#t:TransText"
+	    >TransText</a
+	    > t = t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:encode"
 	    >encode</a
-	    > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
-	    >MixEncode</a
-	    > a =&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:plainEncode"
-	    >plainEncode</a
 	    > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
 	    >MixEncode</a
 	    > a =&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
@@ -156,9 +146,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	    ><p class="src"
 	    ><a name="v:mixTransEncode" class="def"
 	      >mixTransEncode</a
-	      > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:TransString"
-	      >TransString</a
-	      > -&gt; a -&gt; <a href="Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	      >Textual</a
+	      > t =&gt; <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:TransText"
+	      >TransText</a
+	      > t -&gt; a -&gt; <a href="Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
 	      >MixText</a
 	      > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#mixTransEncode');" href="javascript:void(0);" class="link"
 	      >Source</a
@@ -177,7 +169,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 		      > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		      >Bool</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#line-24');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#line-23');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -197,15 +189,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:TransString" class="def"
-	    >TransString</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > <a name="t:TransText" class="def"
+	    >TransText</a
+	    > t = t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#TransString');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#TransText');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -226,30 +214,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Encode to string.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:plainEncode" class="def"
-	    >plainEncode</a
-	    > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
-	    >MixEncode</a
-	    > a =&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#plainEncode');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><div class="warning"
-	    ><p
-	      >Deprecated: Use <code
-		><a href="Koshucode-Baala-Base-MixText-MixEncode.html#v:encode"
-		  >encode</a
-		  ></code
-		> instead.</p
-	      ></div
-	    ><p
 	    >Encode to string.</p
 	    ></div
 	  ></div

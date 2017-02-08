@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.209.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.210.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -127,6 +127,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><a href="#v:toDec"
 	    >toDec</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:toDecReplace"
+	    >toDecReplace</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:cTrimBoth"
+	    >cTrimBoth</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:cTrimBegin"
+	    >cTrimBegin</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:cTrimEnd"
+	    >cTrimEnd</a
 	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -229,7 +261,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content.html#t:Content"
 		      >Content</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Content.html#line-131');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Content.html#line-125');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -253,6 +285,101 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><div class="doc"
 	  ><p
 	    >Convert some content to decimal number.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:toDecReplace" class="def"
+	    >toDecReplace</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Content.html#toDecReplace');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert content to decimal number,
+   or replace inconvertible content to constant decimal.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>toDecReplace (the $ pInt 0) (the $ pText &quot;12.0&quot;)
+</code
+		></strong
+	      >ContentDec Decimal (1) 12
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>toDecReplace (the $ pInt 0) (the $ pText &quot;aa&quot;)
+</code
+		></strong
+	      >ContentDec Decimal (0) 0
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cTrimBoth" class="def"
+	    >cTrimBoth</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Content.html#cTrimBoth');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Trim spaces of text content.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>cTrimBoth (the $ pText &quot; foo &quot;)
+</code
+		></strong
+	      >ContentText &quot;foo&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cTrimBegin" class="def"
+	    >cTrimBegin</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Content.html#cTrimBegin');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Trim beginning spaces of text content.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cTrimEnd" class="def"
+	    >cTrimEnd</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Content.html#cTrimEnd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Trim ending spaces of text content.</p
 	    ></div
 	  ></div
 	><div class="top"

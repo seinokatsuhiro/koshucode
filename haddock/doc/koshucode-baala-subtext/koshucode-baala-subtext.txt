@@ -8,7 +8,7 @@
 --   alternative, and repetitive expressions. It collects submatches and
 --   switch matching expression among multiple expressions.
 @package koshucode-baala-subtext
-@version 0.209.0.0
+@version 0.210.0.0
 
 
 -- | Token for sieve pattern.
@@ -572,6 +572,7 @@ sivmapAssoc :: t -> t -> Sivmap t
 sivmapChain :: Bin (Sivmap t)
 instance GHC.Classes.Eq t => GHC.Classes.Eq (Koshucode.Baala.Subtext.Sieve.Sivmap.Sivmap t)
 instance GHC.Show.Show t => GHC.Show.Show (Koshucode.Baala.Subtext.Sieve.Sivmap.Sivmap t)
+instance GHC.Base.Functor Koshucode.Baala.Subtext.Sieve.Sivmap.Sivmap
 instance GHC.Base.Monoid (Koshucode.Baala.Subtext.Sieve.Sivmap.Sivmap t)
 
 

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-overture-0.209.0.0: Preliminary library for Koshucode</p
+      >koshucode-baala-overture-0.210.0.0: Preliminary library for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -79,33 +79,123 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><a href="#v:stringDec"
-	    >stringDec</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	  ><a href="#v:tDec"
+	    >tDec</a
+	    > :: (<a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
 	    >Eq</a
 	    > n, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Num"
 	    >Num</a
-	    > n) =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > n) =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > n</li
 	  ><li class="src short"
-	  ><a href="#v:stringInt"
-	    >stringInt</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	  ><a href="#v:tInt"
+	    >tInt</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:tInteger"
+	    >tInteger</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:tHex"
+	    >tHex</a
+	    > :: (<a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Num"
+	    >Num</a
+	    > n) =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:tHexInt"
+	    >tHexInt</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:tHexInteger"
+	    >tHexInteger</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:tCustomInteger"
+	    >tCustomInteger</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:tCountInteger"
+	    >tCountInteger</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:stringDec"
+	    >stringDec</a
+	    > :: (<a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Num"
+	    >Num</a
+	    > n) =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:stringInt"
+	    >stringInt</a
+	    > :: (<a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Num"
+	    >Num</a
+	    > n) =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > n</li
+	  ><li class="src short"
 	  ><a href="#v:stringInteger"
 	    >stringInteger</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
 	    >Integer</a
@@ -145,11 +235,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ><li class="src short"
 	  ><a href="#v:stringCustomInteger"
 	    >stringCustomInteger</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
 	    >Integer</a
@@ -157,11 +247,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ><li class="src short"
 	  ><a href="#v:stringCountInteger"
 	    >stringCountInteger</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
 	    >Integer</a
@@ -219,17 +309,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	>Decoder</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:stringDec" class="def"
-	    >stringDec</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	  ><a name="v:tDec" class="def"
+	    >tDec</a
+	    > :: (<a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
 	    >Eq</a
 	    > n, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Num"
 	    >Num</a
-	    > n) =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > n) =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > n <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#stringDec');" href="javascript:void(0);" class="link"
+	    > n <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#tDec');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -239,15 +329,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:stringInt" class="def"
-	    >stringInt</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	  ><a name="v:tInt" class="def"
+	    >tInt</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#stringInt');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#tInt');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -262,17 +352,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>stringInt &quot;12&quot;
+		>tInt &lt;$&gt; [&quot;12&quot;, &quot;+12&quot;, &quot;-12&quot;]
 </code
 		></strong
-	      >Just 12
+	      >[Just 12,Just 12,Just (-12)]
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>stringInt &quot;12.3&quot;
+		>tInt &quot;12.3&quot;
 </code
 		></strong
 	      >Nothing
@@ -282,7 +372,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>stringInt &quot;12345678901234567890&quot;
+		>tInt &quot;12345678901234567890&quot;
 </code
 		></strong
 	      >Just (-6101065172474983726)
@@ -291,15 +381,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:stringInteger" class="def"
-	    >stringInteger</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	  ><a name="v:tInteger" class="def"
+	    >tInteger</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
 	    >Integer</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#stringInteger');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#tInteger');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -314,11 +404,245 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>stringInteger &quot;12345678901234567890&quot;
+		>tInteger &quot;12345678901234567890&quot;
 </code
 		></strong
 	      >Just 12345678901234567890
 </pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tHex" class="def"
+	    >tHex</a
+	    > :: (<a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Num"
+	    >Num</a
+	    > n) =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#tHex');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode hexadecimal digits.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tHexInt" class="def"
+	    >tHexInt</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#tHexInt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode hexadecimal digits as <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		></code
+	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>tHexInt &quot;0F&quot;
+</code
+		></strong
+	      >Just 15
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tHexInteger" class="def"
+	    >tHexInteger</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#tHexInteger');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode hexadecimal digits as <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+		>Integer</a
+		></code
+	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>tHexInteger &quot;0F&quot;
+</code
+		></strong
+	      >Just 15
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tCustomInteger" class="def"
+	    >tCustomInteger</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#tCustomInteger');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode custom digits to integer.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>tCustomInteger &quot;01234567&quot; &quot;144&quot;
+</code
+		></strong
+	      >Just 100
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tCountInteger" class="def"
+	    >tCountInteger</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#tCountInteger');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode counting digits to integer.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>tCountInteger ['A'..'Z'] &lt;$&gt; [&quot;&quot;, &quot;A&quot;, &quot;B&quot;, &quot;Y&quot;, &quot;Z&quot;, &quot;AA&quot;, &quot;AZ&quot;, &quot;BA&quot;, &quot;CV&quot;, &quot;ALL&quot;, &quot;KOSHU&quot;]
+</code
+		></strong
+	      >[Just 0, Just 1, Just 2, Just 25, Just 26, Just 27, Just 52, Just 53, Just 100, Just 1000, Just 5303449]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringDec" class="def"
+	    >stringDec</a
+	    > :: (<a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Num"
+	    >Num</a
+	    > n) =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#stringDec');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Overture-Text-Integer.html#v:tDec"
+		  >tDec</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
+	    >Decode decimal integer.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringInt" class="def"
+	    >stringInt</a
+	    > :: (<a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Num"
+	    >Num</a
+	    > n) =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#stringInt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Overture-Text-Integer.html#v:tInt"
+		  >tInt</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
+	    >Decode decimal integer as <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringInteger" class="def"
+	    >stringInteger</a
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#stringInteger');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Overture-Text-Integer.html#v:tInteger"
+		  >tInteger</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
+	    >Decode decimal integer as <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+		>Integer</a
+		></code
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -337,7 +661,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Overture-Text-Integer.html#v:tHex"
+		  >tHex</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Decode hexadecimal digits.</p
 	    ></div
 	  ></div
@@ -355,22 +687,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Overture-Text-Integer.html#v:tHexInt"
+		  >tHexInt</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Decode hexadecimal digits as <code
 	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 		>Int</a
 		></code
 	      >.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>stringHexInt &quot;0F&quot;
-</code
-		></strong
-	      >Just 15
-</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -387,33 +717,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Overture-Text-Integer.html#v:tHexInteger"
+		  >tHexInteger</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Decode hexadecimal digits as <code
 	      ><a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
 		>Integer</a
 		></code
 	      >.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>stringHexInteger &quot;0F&quot;
-</code
-		></strong
-	      >Just 15
-</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:stringCustomInteger" class="def"
 	    >stringCustomInteger</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
 	    >Integer</a
@@ -421,29 +749,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Overture-Text-Integer.html#v:tCustomInteger"
+		  >tCustomInteger</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Decode custom digits to integer.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>stringCustomInteger &quot;01234567&quot; &quot;144&quot;
-</code
-		></strong
-	      >Just 100
-</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:stringCountInteger" class="def"
 	    >stringCountInteger</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > :: <a href="Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > -&gt; t -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
 	    >Integer</a
@@ -451,18 +777,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Overture-Text-Integer.html#v:tCountInteger"
+		  >tCountInteger</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Decode counting digits to integer.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>stringCountInteger ['A'..'Z'] &lt;$&gt; [&quot;&quot;, &quot;A&quot;, &quot;B&quot;, &quot;Y&quot;, &quot;Z&quot;, &quot;AA&quot;, &quot;AZ&quot;, &quot;BA&quot;, &quot;CV&quot;, &quot;ALL&quot;, &quot;KOSHU&quot;]
-</code
-		></strong
-	      >[Just 0, Just 1, Just 2, Just 25, Just 26, Just 27, Just 52, Just 53, Just 100, Just 1000, Just 5303449]
-</pre
 	    ></div
 	  ></div
 	><h1 id="g:2"

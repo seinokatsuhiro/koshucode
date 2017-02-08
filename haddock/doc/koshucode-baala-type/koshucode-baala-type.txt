@@ -6,7 +6,7 @@
 --   
 --   Additional data types for Koshucode
 @package koshucode-baala-type
-@version 0.209.0.0
+@version 0.210.0.0
 
 
 -- | Common properties of judgements and relations.
@@ -150,24 +150,24 @@ assertAs :: AssertType -> JudgeOf c
 assertSymbol :: AssertType -> String
 
 -- | Encode judgement with short sign converter.
-type EncodeJudge c = TransString -> Judge c -> MixText
+type EncodeJudge t c = TransText t -> Judge c -> MixText
 
 -- | Conventional line-break setting for judges: 4-spaces indent and
 --   120-columns line.
 judgeBreak :: LineBreak
 
 -- | Encode judgement with term separator.
-judgeMix :: (MixEncode c) => MixText -> EncodeJudge c
+judgeMix :: (Textual t, MixEncode c) => MixText -> EncodeJudge t c
 
 -- | Encode judgement with two-spaces term separator.
-judgeMix2 :: (MixEncode c) => EncodeJudge c
+judgeMix2 :: (Textual t, MixEncode c) => EncodeJudge t c
 
 -- | Encode judgement with tab term separator.
-judgeMixTab :: (MixEncode c) => EncodeJudge c
+judgeMixTab :: (Textual t, MixEncode c) => EncodeJudge t c
 
 -- | Conditional judgement encoder. If the first argument is true,
 --   <a>judgeMix2</a> is used, otherwise <a>judgeMixTab</a>.
-judgeMix2Tab :: (MixEncode c) => Bool -> EncodeJudge c
+judgeMix2Tab :: (Textual t, MixEncode c) => Bool -> EncodeJudge t c
 
 -- | Encode term name.
 --   
@@ -178,10 +178,10 @@ judgeMix2Tab :: (MixEncode c) => Bool -> EncodeJudge c
 termNameToMix :: TermName -> MixText
 
 -- | Encode term list with one-space separator.
-termsToMix1 :: (MixEncode c) => TransString -> [Term c] -> MixText
+termsToMix1 :: (Textual t, MixEncode c) => TransText t -> [Term c] -> MixText
 
 -- | Encode term list with two-spaces separator.
-termsToMix2 :: (MixEncode c) => TransString -> [Term c] -> MixText
+termsToMix2 :: (Textual t, MixEncode c) => TransText t -> [Term c] -> MixText
 instance GHC.Classes.Ord Koshucode.Baala.Type.Judge.Judge.AssertType
 instance GHC.Classes.Eq Koshucode.Baala.Type.Judge.Judge.AssertType
 instance GHC.Show.Show Koshucode.Baala.Type.Judge.Judge.AssertType
@@ -267,7 +267,7 @@ encodableLines :: (MixEncode c) => [c] -> [String]
 -- | Parts of clock and time.
 module Koshucode.Baala.Type.Time.Parts
 
--- | Synonym for MJD type.
+-- | Type for the Modified Julian Day.
 type Mjd = Day
 
 -- | Extract MJD integer value.
@@ -277,7 +277,7 @@ mjdInteger :: Mjd -> Integer
 class ToMjd a
 toMjd :: ToMjd a => a -> Mjd
 
--- | Convert to the Modified Just Day but abortable.
+-- | Convert to the Modified Julian Day but abortable.
 class ToMjdClip a where toMjdAb = Right . toMjdClip
 toMjdClip :: ToMjdClip a => a -> Mjd
 toMjdAb :: ToMjdClip a => a -> Ab Mjd
@@ -338,6 +338,20 @@ type Week = Int
 
 -- | Day type.
 type Day = Int
+
+-- | Type for year, month, and day.
+type Ymd = (Year, Month, Day)
+
+-- | Ymd tuple.
+ymd :: Year -> Month -> Day -> Ymd
+
+-- | Convert MJD to year/month/day tuple.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mjdYmd (55555 :: Int)
+--   (2010,12,25)
+--   </pre>
+mjdYmd :: (ToMjd mjd) => mjd -> Ymd
 
 -- | Decomposed date.
 data DateParts
@@ -424,13 +438,14 @@ instance Koshucode.Baala.Type.Time.Parts.ToMjd GHC.Types.Int
 instance Koshucode.Baala.Type.Time.Parts.ToMjd GHC.Integer.Type.Integer
 instance GHC.Num.Num Data.Time.Calendar.Days.Day
 instance GHC.Enum.Enum Koshucode.Baala.Type.Time.Parts.Dayw
+instance Koshucode.Baala.Type.Time.Parts.ToMjdClip Koshucode.Baala.Type.Time.Parts.Ymd
 instance Koshucode.Baala.Type.Time.Parts.ToMjdClip Koshucode.Baala.Type.Time.Parts.DateParts
 
 
 -- | Date using the Modified Julian Day (MJD).
 module Koshucode.Baala.Type.Time.Date
 
--- | Date.
+-- | Date with format.
 data Date
 
 -- | Date in <i>YYYY-MM-DD</i>
@@ -442,51 +457,129 @@ Weekly :: Mjd -> Date
 -- | Date in <i>YYYY-##D</i>
 Yearly :: Mjd -> Date
 
--- | Type for year, month, and day.
-type Ymd = (Year, Month, Day)
+-- | Date in <i>YYYY-#WW</i>
+ByWeek :: Mjd -> Date
+
+-- | Date in <i>YYYY-MM</i>
+ByMonth :: Mjd -> Date
+
+-- | Get the name of date precision.
+datePrecision :: Date -> String
 
 -- | Create date from the Modified Julian Day.
 --   
 --   <pre>
---   &gt;&gt;&gt; dateFromMjd (55555 :: Int)
+--   &gt;&gt;&gt; mjdDate (55555 :: Int)
 --   Date 2010-12-25
 --   </pre>
-dateFromMjd :: (ToMjd n) => n -> Date
+mjdDate :: (ToMjd n) => n -> Date
+
+-- | Create date from the Modified Julian Day.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mjdDateClip $ T.ymd 2013 4 31
+--   Date 2013-04-30
+--   </pre>
+mjdDateClip :: (ToMjdClip n) => n -> Date
+
+-- | Create date from the Modified Julian Day.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mjdDateAb $ T.ymd 2013 4 18
+--   Right Date 2013-04-18
+--   </pre>
+mjdDateAb :: (ToMjdClip n) => n -> Ab Date
 
 -- | Create date from year, month, and day.
 --   
 --   <pre>
---   &gt;&gt;&gt; dateFromYmd 2013 4 18
+--   &gt;&gt;&gt; ymdDate 2013 4 18
 --   Right Date 2013-04-18
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; dateFromYmd 2013 4 31
+--   &gt;&gt;&gt; ymdDate 2013 4 31
 --   Left ...
 --   </pre>
-dateFromYmd :: Year -> Month -> Day -> Ab Date
+ymdDate :: Year -> Month -> Day -> Ab Date
 
 -- | Create date from year, week, and day. Day 1 for Monday, 2 for Tuesday,
 --   ..., and 7 for Sunday.
 --   
 --   <pre>
---   &gt;&gt;&gt; dateFromYwd 2013 16 4
+--   &gt;&gt;&gt; ywdDate 2013 16 4
 --   Right Date 2013-#16-4 (2013-04-18)
 --   </pre>
-dateFromYwd :: Year -> Week -> Day -> Ab Date
+ywdDate :: Year -> Week -> Day -> Ab Date
 
 -- | Create date from year and day.
 --   
 --   <pre>
---   &gt;&gt;&gt; dateFromYd 2013 108
+--   &gt;&gt;&gt; ydDate 2013 108
 --   Right Date 2013-##108 (2013-04-18)
 --   </pre>
-dateFromYd :: Year -> Day -> Ab Date
+ydDate :: Year -> Day -> Ab Date
+
+-- | Create date from year and week.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ywDate 2013 16
+--   Right Date 2013-#16 (2013-04-15)
+--   </pre>
+ywDate :: Year -> Week -> Ab Date
+
+-- | Create date from year and month.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ymDate 2013 4
+--   Right Date 2013-04 (2013-04-01)
+--   </pre>
+ymDate :: Year -> Month -> Ab Date
+
+-- | Create date from year, month, and day.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ymdDateClip 2013 4 18
+--   Date 2013-04-18
+--   </pre>
+ymdDateClip :: Year -> Month -> Day -> Date
+
+-- | Create date from year, week, and day.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ywdDateClip 2013 16 10
+--   Date 2013-04-21
+--   </pre>
+ywdDateClip :: Year -> Week -> Day -> Date
+
+-- | Create date from year and day.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ydDateClip 2013 400
+--   Date 2013-##365 (2013-12-31)
+--   </pre>
+ydDateClip :: Year -> Day -> Date
+
+-- | Create date from year and week.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ywDateClip 2013 60
+--   Date 2013-#52 (2013-12-23)
+--   </pre>
+ywDateClip :: Year -> Week -> Date
+
+-- | Create date from year and month.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ymDateClip 2013 13
+--   Date 2013-12 (2013-12-01)
+--   </pre>
+ymDateClip :: Year -> Month -> Date
 
 -- | Convert date into monthly date.
 --   
 --   <pre>
---   &gt;&gt;&gt; monthly $ dateFromMjd 55555
+--   &gt;&gt;&gt; monthly $ mjdDate (55555 :: Int)
 --   Date 2010-12-25
 --   </pre>
 monthly :: (ToMjd day) => day -> Date
@@ -494,7 +587,7 @@ monthly :: (ToMjd day) => day -> Date
 -- | Convert date into weekly date.
 --   
 --   <pre>
---   &gt;&gt;&gt; weekly $ dateFromMjd 55555
+--   &gt;&gt;&gt; weekly $ mjdDate (55555 :: Int)
 --   Date 2010-#51-6 (2010-12-25)
 --   </pre>
 weekly :: (ToMjd day) => day -> Date
@@ -502,10 +595,26 @@ weekly :: (ToMjd day) => day -> Date
 -- | Convert date into yearly date.
 --   
 --   <pre>
---   &gt;&gt;&gt; yearly $ dateFromMjd 55555
+--   &gt;&gt;&gt; yearly $ mjdDate (55555 :: Int)
 --   Date 2010-##359 (2010-12-25)
 --   </pre>
 yearly :: (ToMjd day) => day -> Date
+
+-- | Convert date into by-week date.
+--   
+--   <pre>
+--   &gt;&gt;&gt; byWeek $ mjdDate (55555 :: Int)
+--   Date 2010-#51 (2010-12-20)
+--   </pre>
+byWeek :: (ToMjd day) => day -> Date
+
+-- | Convert date into by-month date.
+--   
+--   <pre>
+--   &gt;&gt;&gt; byMonth $ mjdDate (55555 :: Int)
+--   Date 2010-12 (2010-12-01)
+--   </pre>
+byMonth :: (ToMjd day) => day -> Date
 
 -- | Alter the Modified Julian Day of date.
 dateAltMjd :: Map Mjd -> Map Date
@@ -513,10 +622,10 @@ dateAltMjd :: Map Mjd -> Map Date
 -- | Add days.
 --   
 --   <pre>
---   &gt;&gt;&gt; dateAdd 7 $ dateFromMjd 55555
+--   &gt;&gt;&gt; dateAddDay 7 $ mjdDate (55555 :: Int)
 --   Date 2011-01-01
 --   </pre>
-dateAdd :: (Integral n) => n -> Map Date
+dateAddDay :: (Integral n) => n -> Map Date
 
 -- | Create mix text with two-width zeros.
 --   
@@ -709,7 +818,7 @@ clockRangeBy :: Map (Days, Sec) -> RangeBy Clock
 clockStep :: Sec -> Map (Days, Sec)
 
 
--- | Time
+-- | Time.
 module Koshucode.Baala.Type.Time.Time
 
 -- | Time is a small duration on timeline.
@@ -733,86 +842,75 @@ TimeYm :: Mjd -> Time
 -- | Time zone as offset from UTC.
 type Zone = Sec
 
--- | Convert time to year/month/day tuple.
---   
---   <pre>
---   &gt;&gt;&gt; timeYmdTuple $ timeFromMjd 55555
---   (2010,12,25)
---   </pre>
-timeYmdTuple :: Time -> Ymd
-
 -- | Get the name of time precision.
 timePrecision :: Time -> String
 
--- | Create monthly time.
+-- | Create time without clock.
 --   
 --   <pre>
---   &gt;&gt;&gt; monthlyTime (T.DateYmd 2013 4 18) (Just $ T.ClockPartsMin 0 12 05)
---   Right 2013-04-18 12:05
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; monthlyTime (T.DateYmd 2013 4 18) (Nothing :: Maybe T.ClockParts)
---   Right 2013-04-18
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; monthlyTime (T.DateYmd 2013 4 31) (Nothing :: Maybe T.ClockParts)
---   Left AbortReason "Not monthly date" ...
---   </pre>
-monthlyTime :: (ToMjdClip day, ToClock clock) => day -> Maybe clock -> Ab Time
-
--- | Create monthly clipped time.
-monthlyClippedTime :: (ToMjdClip day, ToClock clock) => day -> Maybe clock -> Time
-
--- | Create monthly day-precision time.
-monthlyTimeDate :: (ToMjdClip day) => day -> Ab Time
-
--- | Create monthly clock-precision time.
-monthlyTimeClock :: (ToMjdClip day, ToClock clock) => day -> clock -> Ab Time
-
--- | Create time data from the Modified Julian day.
---   
---   <pre>
---   &gt;&gt;&gt; timeFromMjd (55555 :: Int)
+--   &gt;&gt;&gt; dTime $ T.mjdDate (55555 :: Int)
 --   2010-12-25
 --   </pre>
-timeFromMjd :: (ToMjd mjd) => mjd -> Time
-
--- | Create time data from year and month.
-timeFromYmAb :: Year -> Month -> Ab Time
-
--- | Create time data from year and week.
-timeFromYwAb :: Year -> Week -> Ab Time
-
--- | Create time data from date, clock, and time zone.
-timeFromDczAb :: Date -> Clock -> Maybe Zone -> Ab Time
-
--- | Create time from year, month, and day.
 --   
 --   <pre>
---   &gt;&gt;&gt; timeFromYmd 2013 4 18
---   2013-04-18
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; timeFromYmd 2013 4 0
---   2013-04-01
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; timeFromYmd 2013 4 33
+--   &gt;&gt;&gt; dTime $ T.ymdDateClip 2013 4 31
 --   2013-04-30
 --   </pre>
-timeFromYmd :: Year -> Month -> Day -> Time
-
--- | Craete time from tuple of year, month, and day.
 --   
 --   <pre>
---   &gt;&gt;&gt; timeFromYmdTuple (2013, 4, 18)
---   2013-04-18
+--   &gt;&gt;&gt; dTime &lt;$&gt; T.ymdDate 2013 4 18
+--   Right 2013-04-18
 --   </pre>
-timeFromYmdTuple :: Ymd -> Time
+dTime :: Date -> Time
+
+-- | Create time with clock.
+--   
+--   <pre>
+--   &gt;&gt;&gt; dcTime (T.mjdDate (55555 :: Int)) (T.ClockPartsMin 0 10 40)
+--   2010-12-25 10 40
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; dcTime (T.mjdDate (55555 :: Int)) (T.ClockPartsMin 1 10 40)
+--   2010-12-26 10:40
+--   </pre>
+dcTime :: (ToClock clock) => Date -> clock -> Time
+
+-- | Create time from date, clock, and time zone.
+dczTime :: Date -> Clock -> Zone -> Time
+
+-- | Cut clock part.
+timeCutClock :: Map Time
+
+-- | Set or add clock to time.
+timeSetClock :: Clock -> Map Time
+
+-- | Alter time zone part.
+timeAltZone :: Map Zone -> Map Time
+
+-- | Cut timezone.
+timeCutZone :: Map Time
+
+-- | Cut timezone and convert to local time, i.e., addition of UTC and time
+--   zone.
+timeLocalize :: Map Time
+
+-- | Alter day part.
+timeAltDate :: Map Date -> Map Time
+
+-- | Alter integer content of the Modified Julian Day.
+timeAltDays :: Map Days -> Map Time
+
+-- | Convert local time to Koshu time content.
+timeFromZonedTime :: ZonedTime -> Time
+
+-- | Days and seconds of time.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeDaysSec $ dTime $ T.mjdDate (55555 :: Int)
+--   (55555,0)
+--   </pre>
+timeDaysSec :: Time -> DaysSec
 
 -- | Get UTC.
 --   
@@ -845,36 +943,6 @@ now :: IO Time
 --   2013-04-18
 --   </pre>
 today :: IO Time
-
--- | Cut clock part.
-timeCutClock :: Map Time
-
--- | Alter time zone part.
-timeAltZone :: Map Zone -> Map Time
-
--- | Cut timezone.
-timeCutZone :: Map Time
-
--- | Cut timezone and convert to local time, i.e., addition of UTC and time
---   zone.
-timeLocalize :: Map Time
-
--- | Alter day part.
-timeAltDate :: Map Date -> Map Time
-
--- | Alter integer content of the Modified Julian Day.
-timeAltDays :: Map Days -> Map Time
-
--- | Convert local time to Koshu time content.
-timeFromZonedTime :: ZonedTime -> Time
-
--- | Days and seconds of time.
---   
---   <pre>
---   &gt;&gt;&gt; timeDaysSec $ timeFromMjd 55555
---   (55555,0)
---   </pre>
-timeDaysSec :: Time -> DaysSec
 instance GHC.Classes.Ord Koshucode.Baala.Type.Time.Time.Time
 instance GHC.Classes.Eq Koshucode.Baala.Type.Time.Time.Time
 instance Data.Default.Class.Default Koshucode.Baala.Type.Time.Time.Time
@@ -907,7 +975,7 @@ timeDiff :: Time -> Time -> Ab Clock
 -- | Convert to the first day of month.
 --   
 --   <pre>
---   &gt;&gt;&gt; timeFloorMonth $ timeFromYmd 2014 11 3
+--   &gt;&gt;&gt; timeFloorMonth $ T.dTime $ T.ymdDateClip 2014 11 3
 --   2014-11-01
 --   </pre>
 timeFloorMonth :: Map Time
@@ -915,7 +983,7 @@ timeFloorMonth :: Map Time
 -- | Convert to the first day of year.
 --   
 --   <pre>
---   &gt;&gt;&gt; timeFloorYear $ timeFromYmd 2014 11 3
+--   &gt;&gt;&gt; timeFloorYear $ T.dTime $ T.ymdDateClip 2014 11 3
 --   2014-01-01
 --   </pre>
 timeFloorYear :: Map Time
@@ -923,12 +991,12 @@ timeFloorYear :: Map Time
 -- | Convert to the first day of next month.
 --   
 --   <pre>
---   &gt;&gt;&gt; timeCeilMonth $ timeFromYmd 2014 11 3
+--   &gt;&gt;&gt; timeCeilMonth $ T.dTime $ T.ymdDateClip 2014 11 3
 --   2014-12-01
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; timeCeilMonth $ timeFromYmd 2014 12 25
+--   &gt;&gt;&gt; timeCeilMonth $ T.dTime $ T.ymdDateClip 2014 12 25
 --   2015-01-01
 --   </pre>
 timeCeilMonth :: Map Time
@@ -936,7 +1004,7 @@ timeCeilMonth :: Map Time
 -- | Convert to the first day of next year.
 --   
 --   <pre>
---   &gt;&gt;&gt; timeCeilYaer $ timeFromYmd 2014 11 3
+--   &gt;&gt;&gt; timeCeilYaer $ T.dTime $ T.ymdDateClip 2014 11 3
 --   2015-01-01
 --   </pre>
 timeCeilYaer :: Map Time
@@ -944,7 +1012,7 @@ timeCeilYaer :: Map Time
 -- | Create range of time.
 --   
 --   <pre>
---   &gt;&gt;&gt; timeRangeDay (T.timeFromYmd 2014 11 3) (T.timeFromYmd 2014 11 5)
+--   &gt;&gt;&gt; timeRangeDay (T.dTime $ T.ymdDateClip 2014 11 3) (T.dTime $ T.ymdDateClip 2014 11 5)
 --   [2014-11-03, 2014-11-04, 2014-11-05]
 --   </pre>
 timeRangeDay :: RangeBy Time
@@ -952,7 +1020,7 @@ timeRangeDay :: RangeBy Time
 -- | Create range of time.
 --   
 --   <pre>
---   &gt;&gt;&gt; timeRangeMonth (timeFromYmd 2014 12 31) (timeFromYmd 2015 03 5)
+--   &gt;&gt;&gt; timeRangeMonth (T.dTime $ T.ymdDateClip 2014 12 31) (T.dTime $ T.ymdDateClip 2015 03 5)
 --   [2014-12-31, 2015-01-31, 2015-02-28]
 --   </pre>
 timeRangeMonth :: RangeBy Time
@@ -1275,23 +1343,23 @@ decodeBase :: (Textual t) => Integer -> DecodeAb t Decimal
 -- | Encode decimals.
 --   
 --   <pre>
---   &gt;&gt;&gt; encodeDecimal $ T.realDecimal 0 (12345 T.%% 10)
---   "1 234"
+--   &gt;&gt;&gt; encodeDecimal $ T.realDecimal 0 (12345 T.%% 10) :: String
+--   "1 235"
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; encodeDecimal $ T.realDecimal 2 (12345 T.%% 10)
+--   &gt;&gt;&gt; encodeDecimal $ T.realDecimal 2 (12345 T.%% 10) :: String
 --   "1 234.50"
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; encodeDecimal $ T.realDecimal (-2) (12345 T.%% 10)
---   "1 2oo"
+--   &gt;&gt;&gt; encodeDecimal $ T.realDecimal (-2) (12345 T.%% 10) :: String
+--   "1 3oo" :: String
 --   </pre>
-encodeDecimal :: Decimal -> String
+encodeDecimal :: (Textual t) => Decimal -> t
 
 -- | Encode decimals without spaces.
-encodeDecimalCompact :: Decimal -> String
+encodeDecimalCompact :: (Textual t) => Decimal -> t
 instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Type.Decimal.Decimal.Decimal
 
 

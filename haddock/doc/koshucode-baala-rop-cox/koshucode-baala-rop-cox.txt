@@ -9,7 +9,57 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.209.0.0
+@version 0.210.0.0
+
+
+-- | Relmap operators for text type.
+module Koshucode.Baala.Rop.Cox.Type.Text
+
+-- | Implementation of relational operators.
+ropsTypeText :: (CContent c) => [Rop c]
+
+-- | <ul>
+--   <li><i>trim /P ... -both /P ... -begin /P ... -end /P ...</i> Trim
+--   spaces of text content of term /P ....</li>
+--   </ul>
+consTrim :: (CContent c) => RopCons c
+
+-- | Create <tt>trim</tt> relmap.
+relmapTrim :: (CContent c) => Intmed c -> ([TermName], [TermName], [TermName]) -> Relmap c
+
+-- | Create <tt>trim</tt> relkit.
+relkitTrim :: (CContent c) => ([TermName], [TermName], [TermName]) -> RelkitFlow c
+
+-- | <ul>
+--   <li><i>sweep /P ... -all</i> Sweep spaces of text content of term /P
+--   ....</li>
+--   </ul>
+consSweep :: (CContent c) => RopCons c
+
+-- | Create <tt>sweep</tt> relmap.
+relmapSweep :: (CContent c) => Intmed c -> (Map c, [TermName]) -> Relmap c
+
+-- | Create <tt>sweep</tt> relkit.
+relkitSweep :: (CContent c) => (Map c, [TermName]) -> RelkitFlow c
+
+
+-- | Relmap operators for time type.
+module Koshucode.Baala.Rop.Cox.Type.Time
+
+-- | Implementation of relational operators.
+ropsTypeTime :: (CContent c) => [Rop c]
+
+-- | <ul>
+--   <li><i>add-time /c -year <i>Y</i> -month <i>M</i> -day <i>D</i></i>
+--   Add term /c as a time of <i>Y</i>-<i>M</i>-<i>D</i>.</li>
+--   </ul>
+consAddTime :: (CContent c) => RopCons c
+
+-- | Create <tt>time</tt> relmap.
+relmapAddTime :: (CContent c) => Intmed c -> (CopSet c, TermName, (Cox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> Relmap c
+
+-- | Create <tt>time</tt> relkit.
+relkitAddTime :: (CContent c) => (CopSet c, TermName, (Cox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> RelkitFlow c
 
 
 -- | Relmap operators for dec type.
@@ -49,8 +99,11 @@ relmapAltDec :: (CContent c) => Intmed c -> (CopSet c, TermName, MaybeCox c) -> 
 relkitAltDec :: (CContent c) => (CopSet c, TermName, MaybeCox c) -> RelkitFlow c
 
 -- | <ul>
---   <li><i>to-dec /P ...</i> Convert content of term /P ... to decimal
---   number.</li>
+--   <li><i>to-dec <i>/P</i> ...</i> Convert content of term <i>/P</i> ...
+--   to decimal number.</li>
+--   <li><i>to-dec <i>/P</i> ... -replace <i>E</i></i> Convert content of
+--   term <i>/P</i> ... to decimal number, or replace inconvertible content
+--   to <i>E</i>.</li>
 --   </ul>
 consToDec :: (CContent c) => RopCons c
 
@@ -59,6 +112,12 @@ relmapToDec :: (CContent c) => Intmed c -> [TermName] -> Relmap c
 
 -- | Create <tt>to-dec</tt> relkit.
 relkitToDec :: (CContent c) => [TermName] -> RelkitFlow c
+
+-- | Create <tt>to-dec</tt> relmap with <tt>-replace</tt> option.
+relmapToDecReplace :: (CContent c) => Intmed c -> (CopSet c, [TermName], Cox c) -> Relmap c
+
+-- | Create <tt>to-dec</tt> relkit with <tt>-replace</tt> option.
+relkitToDecReplace :: (CContent c) => (CopSet c, [TermName], Cox c) -> RelkitFlow c
 
 
 -- | Relmap operators for clock type.

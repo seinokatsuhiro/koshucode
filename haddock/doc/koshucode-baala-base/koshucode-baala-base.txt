@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.209.0.0
+@version 0.210.0.0
 
 
 -- | Suffix and prefix.
@@ -1175,20 +1175,15 @@ mixJudge :: (Mix sep, Mix cl, Mix c) => sep -> cl -> [(String, c)] -> MixText
 module Koshucode.Baala.Base.MixText.MixEncode
 
 -- | Encode via mix text.
-class MixEncode a where mixEncode = mixTransEncode nothing mixTransEncode _ = mixEncode
+class MixEncode a where mixEncode = mixTransEncode (nothing :: TransText String) mixTransEncode _ = mixEncode
 mixEncode :: MixEncode a => a -> MixText
-mixTransEncode :: MixEncode a => TransString -> a -> MixText
+mixTransEncode :: (MixEncode a, Textual t) => TransText t -> a -> MixText
 
 -- | Transform string to another form.
-type TransString = String -> Maybe String
+type TransText t = t -> Maybe t
 
 -- | Encode to string.
 encode :: (MixEncode a) => a -> String
-
--- | Encode to string.
-
--- | <i>Deprecated: Use <a>encode</a> instead.</i>
-plainEncode :: (MixEncode a) => a -> String
 instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode GHC.Types.Bool
 
 

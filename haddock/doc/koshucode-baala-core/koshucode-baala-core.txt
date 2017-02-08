@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.209.0.0
+@version 0.210.0.0
 
 
 -- | Result of relational calculation.
@@ -109,7 +109,7 @@ module Koshucode.Baala.Core.Lexmap.LexmapTrees
 
 -- | Tree representation of lexmap.
 data LexmapTrees t
-LexmapTrees :: [TTree t] -> TTreePara t -> AttrEd -> LexmapTrees t
+LexmapTrees :: [TTree t] -> TTreePara t -> AttrEd t -> LexmapTrees t
 
 -- | Positional attribute.
 [lexmapTrees] :: LexmapTrees t -> [TTree t]
@@ -118,19 +118,19 @@ LexmapTrees :: [TTree t] -> TTreePara t -> AttrEd -> LexmapTrees t
 [lexmapPara] :: LexmapTrees t -> TTreePara t
 
 -- | Attribute editor
-[lexmapAttrEd] :: LexmapTrees t -> AttrEd
+[lexmapAttrEd] :: LexmapTrees t -> AttrEd t
 
 -- | Construct lexmap tree.
-consLexmapTrees :: TTreePara String -> Ab (LexmapTrees String)
+consLexmapTrees :: TTreePara Chars -> Ab (LexmapTrees Chars)
 
 -- | Token tree parameter.
 type TTreePara t = Para t (TTree t)
 
 -- | Make token tree parameter with single-hyphen names.
-ttreePara1 :: (Textual t, ToTermName t) => [TToken t] -> Ab (TTreePara t)
+ttreePara1 :: (TextualTermName t) => [TToken t] -> Ab (TTreePara t)
 
 -- | Make token tree parameter with double-hyphen names.
-ttreePara2 :: (Textual t, ToTermName t) => [TToken t] -> Ab (TTreePara t)
+ttreePara2 :: (TextualTermName t) => [TToken t] -> Ab (TTreePara t)
 instance Koshucode.Baala.Overture.Text.Textual.Textual t => GHC.Classes.Ord (Koshucode.Baala.Core.Lexmap.LexmapTrees.LexmapTrees t)
 instance GHC.Classes.Eq t => GHC.Classes.Eq (Koshucode.Baala.Core.Lexmap.LexmapTrees.LexmapTrees t)
 instance Koshucode.Baala.Overture.Text.Textual.Textual t => GHC.Show.Show (Koshucode.Baala.Core.Lexmap.LexmapTrees.LexmapTrees t)
@@ -140,7 +140,7 @@ instance Koshucode.Baala.Overture.Text.Textual.Textual t => GHC.Show.Show (Koshu
 module Koshucode.Baala.Core.Lexmap.Lexmap
 
 -- | String version of <a>TLexmap</a>.
-type Lexmap = TLexmap String
+type Lexmap = TLexmap Chars
 
 -- | Intermediate data that represents use of relmap operator. Lexmap is
 --   constructed from a list of <a>TTree</a>, and generic relmap is
@@ -272,22 +272,22 @@ disabledOutputClause :: Ab b
 module Koshucode.Baala.Core.Relmap.Option
 
 -- | Option type.
-type Option c = Map String (OptionContent c)
+type Option c = Map Chars (OptionContent c)
 
 -- | Content of assertion option.
 data OptionContent c
 OptionBool :: Bool -> OptionContent c
-OptionChar :: [Char] -> Char -> OptionContent c
+OptionChar :: Chars -> Char -> OptionContent c
 OptionTerms :: [TermName] -> OptionContent c
 
 -- | Option set.
 option :: (CBool c, CText c) => Option c
 
 -- | Get boolean option value.
-optionBool :: String -> Option c -> Bool
+optionBool :: Chars -> Option c -> Bool
 
 -- | Parse assertion option.
-optionParse :: (Eq c, CBool c, CText c) => CalcContent String c -> [Token] -> AbMap (Option c)
+optionParse :: (Eq c, CBool c, CText c) => CalcContent Chars c -> [Token] -> AbMap (Option c)
 instance GHC.Classes.Ord (Koshucode.Baala.Core.Relmap.Option.OptionContent c)
 instance GHC.Classes.Eq (Koshucode.Baala.Core.Relmap.Option.OptionContent c)
 instance GHC.Show.Show (Koshucode.Baala.Core.Relmap.Option.OptionContent c)
@@ -324,16 +324,16 @@ module Koshucode.Baala.Core.Lexmap.Construct
 
 -- | First step of constructing relmap, construct lexmap from token trees.
 --   The function returns lexmap and related lexmap links.
-consLexmap :: RopParaze String -> ConsLexmap
+consLexmap :: RopParaze Chars -> ConsLexmap
 
 -- | Construct lexmap.
-type ConsLexmap = [GlobalSlot] -> FindDeriv -> SecNo -> ConsLexmapBody
+type ConsLexmap = [GlobalSlot Chars] -> FindDeriv -> SecNo -> ConsLexmapBody
 
 -- | Find derived relmap operator.
 type FindDeriv = SecNo -> RopName -> [LexmapClause]
 
 -- | Source of relmap: its name, replacement, and attribute editor.
-type LexmapClause = NNamed (LexmapTrees String)
+type LexmapClause = NNamed (LexmapTrees Chars)
 
 -- | Find parameterizer for relmap operator.
 type RopParaze t = RopName -> Maybe (AttrParaze t)
@@ -1036,7 +1036,7 @@ module Koshucode.Baala.Core.Resource.Resource
 
 -- | Relational data resource
 data Resource c
-Resource :: Global c -> SecNo -> CacheT Chars -> Option c -> [String] -> [Resource c] -> InputQueue -> [Judge c] -> Dataset c -> [GlobalSlot] -> [LexmapClause] -> [ShortAssert c] -> IOPoint -> [[TokenLine String]] -> [(SecNo, String)] -> [String] -> Resource c
+Resource :: Global c -> SecNo -> CacheT Chars -> Option c -> [String] -> [Resource c] -> InputQueue -> [Judge c] -> Dataset c -> [GlobalSlot Chars] -> [LexmapClause] -> [ShortAssert c] -> IOPoint -> [[TokenLine Chars]] -> [(SecNo, String)] -> [String] -> Resource c
 
 -- | <b>Global:</b> Global parameter
 [resGlobal] :: Resource c -> Global c
@@ -1066,7 +1066,7 @@ Resource :: Global c -> SecNo -> CacheT Chars -> Option c -> [String] -> [Resour
 [resDataset] :: Resource c -> Dataset c
 
 -- | <b>Calc:</b> Global slots
-[resSlot] :: Resource c -> [GlobalSlot]
+[resSlot] :: Resource c -> [GlobalSlot Chars]
 
 -- | <b>Calc:</b> Source of relmaps
 [resLexmap] :: Resource c -> [LexmapClause]
@@ -1078,7 +1078,7 @@ Resource :: Global c -> SecNo -> CacheT Chars -> Option c -> [String] -> [Resour
 [resOutput] :: Resource c -> IOPoint
 
 -- | <b>Output:</b> Echo text
-[resEcho] :: Resource c -> [[TokenLine String]]
+[resEcho] :: Resource c -> [[TokenLine Chars]]
 
 -- | <b>Output:</b> License text
 [resLicense] :: Resource c -> [(SecNo, String)]
@@ -1193,7 +1193,7 @@ instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode c => Koshucode.Baala.B
 module Koshucode.Baala.Core.Resource.Include
 
 -- | Include source code into resource.
-resInclude :: (Textual t, ToTermName t, ToTrees Chars [TToken t], CContent c) => [TToken t] -> FilePath -> Resource c -> IxIOPoint -> Bytes -> AbResource c
+resInclude :: (TextualTermName t, ToTrees Chars [TToken t], CContent c) => [TToken t] -> FilePath -> Resource c -> IxIOPoint -> Bytes -> AbResource c
 
 
 -- | Read data resource.

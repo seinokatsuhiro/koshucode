@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-type-0.209.0.0: Additional data types for Koshucode</p
+      >koshucode-baala-type-0.210.0.0: Additional data types for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -336,7 +336,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>timeFloorMonth $ timeFromYmd 2014 11 3
+		>timeFloorMonth $ T.dTime $ T.ymdDateClip 2014 11 3
 </code
 		></strong
 	      >2014-11-01
@@ -362,7 +362,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>timeFloorYear $ timeFromYmd 2014 11 3
+		>timeFloorYear $ T.dTime $ T.ymdDateClip 2014 11 3
 </code
 		></strong
 	      >2014-01-01
@@ -388,7 +388,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>timeCeilMonth $ timeFromYmd 2014 11 3
+		>timeCeilMonth $ T.dTime $ T.ymdDateClip 2014 11 3
 </code
 		></strong
 	      >2014-12-01
@@ -398,7 +398,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>timeCeilMonth $ timeFromYmd 2014 12 25
+		>timeCeilMonth $ T.dTime $ T.ymdDateClip 2014 12 25
 </code
 		></strong
 	      >2015-01-01
@@ -424,7 +424,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>timeCeilYaer $ timeFromYmd 2014 11 3
+		>timeCeilYaer $ T.dTime $ T.ymdDateClip 2014 11 3
 </code
 		></strong
 	      >2015-01-01
@@ -452,7 +452,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>timeRangeDay (T.timeFromYmd 2014 11 3) (T.timeFromYmd 2014 11 5)
+		>timeRangeDay (T.dTime $ T.ymdDateClip 2014 11 3) (T.dTime $ T.ymdDateClip 2014 11 5)
 </code
 		></strong
 	      >[2014-11-03, 2014-11-04, 2014-11-05]
@@ -478,7 +478,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>timeRangeMonth (timeFromYmd 2014 12 31) (timeFromYmd 2015 03 5)
+		>timeRangeMonth (T.dTime $ T.ymdDateClip 2014 12 31) (T.dTime $ T.ymdDateClip 2015 03 5)
 </code
 		></strong
 	      >[2014-12-31, 2015-01-31, 2015-02-28]

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-type-0.209.0.0: Additional data types for Koshucode</p
+      >koshucode-baala-type-0.210.0.0: Additional data types for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -62,15 +62,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Creation</a
+	    >MJD to Date</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Conversion</a
+	    >Creating Date</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Utility</a
+	    >Clipped date</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >Conversion</a
 	    ></li
 	  ></ul
 	></div
@@ -110,31 +114,57 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		> <a href="Koshucode-Baala-Type-Time-Parts.html#t:Mjd"
 		>Mjd</a
 		></li
+	      ><li
+	      >| <a href="#v:ByWeek"
+		>ByWeek</a
+		> <a href="Koshucode-Baala-Type-Time-Parts.html#t:Mjd"
+		>Mjd</a
+		></li
+	      ><li
+	      >| <a href="#v:ByMonth"
+		>ByMonth</a
+		> <a href="Koshucode-Baala-Type-Time-Parts.html#t:Mjd"
+		>Mjd</a
+		></li
 	      ></ul
 	    ></li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Ymd"
-	    >Ymd</a
-	    > = (<a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
-	    >Year</a
-	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
-	    >Month</a
-	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
-	    >Day</a
-	    >)</li
+	  ><a href="#v:datePrecision"
+	    >datePrecision</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
 	  ><li class="src short"
-	  ><a href="#v:dateFromMjd"
-	    >dateFromMjd</a
+	  ><a href="#v:mjdDate"
+	    >mjdDate</a
 	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjd"
 	    >ToMjd</a
 	    > n =&gt; n -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 	    >Date</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:dateFromYmd"
-	    >dateFromYmd</a
+	  ><a href="#v:mjdDateClip"
+	    >mjdDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjdClip"
+	    >ToMjdClip</a
+	    > n =&gt; n -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:mjdDateAb"
+	    >mjdDateAb</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjdClip"
+	    >ToMjdClip</a
+	    > n =&gt; n -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ymdDate"
+	    >ymdDate</a
 	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
 	    >Year</a
 	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
@@ -147,8 +177,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    >Date</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:dateFromYwd"
-	    >dateFromYwd</a
+	  ><a href="#v:ywdDate"
+	    >ywdDate</a
 	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
 	    >Year</a
 	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Week"
@@ -161,8 +191,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    >Date</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:dateFromYd"
-	    >dateFromYd</a
+	  ><a href="#v:ydDate"
+	    >ydDate</a
 	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
 	    >Year</a
 	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
@@ -170,6 +200,84 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ywDate"
+	    >ywDate</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Week"
+	    >Week</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ymDate"
+	    >ymDate</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
+	    >Month</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ymdDateClip"
+	    >ymdDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
+	    >Month</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ywdDateClip"
+	    >ywdDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Week"
+	    >Week</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ydDateClip"
+	    >ydDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ywDateClip"
+	    >ywDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Week"
+	    >Week</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ymDateClip"
+	    >ymDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
+	    >Month</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 	    >Date</a
 	    ></li
 	  ><li class="src short"
@@ -197,6 +305,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    >Date</a
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:byWeek"
+	    >byWeek</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjd"
+	    >ToMjd</a
+	    > day =&gt; day -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:byMonth"
+	    >byMonth</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjd"
+	    >ToMjd</a
+	    > day =&gt; day -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:dateAltMjd"
 	    >dateAltMjd</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -209,8 +333,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    >Date</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:dateAdd"
-	    >dateAdd</a
+	  ><a href="#v:dateAddDay"
+	    >dateAddDay</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
 	    >Integral</a
 	    > n =&gt; n -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -242,7 +366,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Date.</p
+	    >Date with format.</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -290,6 +414,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		    ></p
 		  ></td
 		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ByWeek" class="def"
+		  >ByWeek</a
+		  > <a href="Koshucode-Baala-Type-Time-Parts.html#t:Mjd"
+		  >Mjd</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Date in <em
+		    >YYYY-#WW</em
+		    ></p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ByMonth" class="def"
+		  >ByMonth</a
+		  > <a href="Koshucode-Baala-Type-Time-Parts.html#t:Mjd"
+		  >Mjd</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Date in <em
+		    >YYYY-MM</em
+		    ></p
+		  ></td
+		></tr
 	      ></table
 	    ></div
 	  ><div class="subs instances"
@@ -305,7 +457,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 		      >Date</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#line-40');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#line-55');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -319,7 +471,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 		      >Date</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#line-43');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#line-58');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -333,7 +485,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 		      >Date</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#line-46');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#line-61');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -347,7 +499,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 		      >Date</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#line-65');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#line-87');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -361,7 +513,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 		      > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 		      >Date</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#line-50');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#line-65');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -373,35 +525,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Ymd" class="def"
-	    >Ymd</a
-	    > = (<a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
-	    >Year</a
-	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
-	    >Month</a
-	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
-	    >Day</a
-	    >) <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#Ymd');" href="javascript:void(0);" class="link"
+	  ><a name="v:datePrecision" class="def"
+	    >datePrecision</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#datePrecision');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Type for year, month, and day.</p
+	    >Get the name of date precision.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Creation</h1
+	>MJD to Date</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:dateFromMjd" class="def"
-	    >dateFromMjd</a
+	  ><a name="v:mjdDate" class="def"
+	    >mjdDate</a
 	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjd"
 	    >ToMjd</a
 	    > n =&gt; n -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 	    >Date</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#dateFromMjd');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#mjdDate');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -412,7 +560,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>dateFromMjd (55555 :: Int)
+		>mjdDate (55555 :: Int)
 </code
 		></strong
 	      >Date 2010-12-25
@@ -421,8 +569,64 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:dateFromYmd" class="def"
-	    >dateFromYmd</a
+	  ><a name="v:mjdDateClip" class="def"
+	    >mjdDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjdClip"
+	    >ToMjdClip</a
+	    > n =&gt; n -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#mjdDateClip');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create date from the Modified Julian Day.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>mjdDateClip $ T.ymd 2013 4 31
+</code
+		></strong
+	      >Date 2013-04-30
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mjdDateAb" class="def"
+	    >mjdDateAb</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjdClip"
+	    >ToMjdClip</a
+	    > n =&gt; n -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#mjdDateAb');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create date from the Modified Julian Day.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>mjdDateAb $ T.ymd 2013 4 18
+</code
+		></strong
+	      >Right Date 2013-04-18
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Creating Date</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ymdDate" class="def"
+	    >ymdDate</a
 	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
 	    >Year</a
 	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
@@ -433,7 +637,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 	    >Date</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#dateFromYmd');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#ymdDate');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -444,7 +648,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>dateFromYmd 2013 4 18
+		>ymdDate 2013 4 18
 </code
 		></strong
 	      >Right Date 2013-04-18
@@ -454,7 +658,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>dateFromYmd 2013 4 31
+		>ymdDate 2013 4 31
 </code
 		></strong
 	      >Left ...
@@ -463,8 +667,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:dateFromYwd" class="def"
-	    >dateFromYwd</a
+	  ><a name="v:ywdDate" class="def"
+	    >ywdDate</a
 	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
 	    >Year</a
 	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Week"
@@ -475,7 +679,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 	    >Date</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#dateFromYwd');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#ywdDate');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -487,7 +691,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>dateFromYwd 2013 16 4
+		>ywdDate 2013 16 4
 </code
 		></strong
 	      >Right Date 2013-#16-4 (2013-04-18)
@@ -496,8 +700,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:dateFromYd" class="def"
-	    >dateFromYd</a
+	  ><a name="v:ydDate" class="def"
+	    >ydDate</a
 	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
 	    >Year</a
 	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
@@ -506,7 +710,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 	    >Date</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#dateFromYd');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#ydDate');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -517,14 +721,220 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>dateFromYd 2013 108
+		>ydDate 2013 108
 </code
 		></strong
 	      >Right Date 2013-##108 (2013-04-18)
 </pre
 	    ></div
 	  ></div
-	><h1 id="g:3"
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ywDate" class="def"
+	    >ywDate</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Week"
+	    >Week</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#ywDate');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create date from year and week.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>ywDate 2013 16
+</code
+		></strong
+	      >Right Date 2013-#16 (2013-04-15)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ymDate" class="def"
+	    >ymDate</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
+	    >Month</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#ymDate');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create date from year and month.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>ymDate 2013 4
+</code
+		></strong
+	      >Right Date 2013-04 (2013-04-01)
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Clipped date</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ymdDateClip" class="def"
+	    >ymdDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
+	    >Month</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#ymdDateClip');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create date from year, month, and day.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>ymdDateClip 2013 4 18
+</code
+		></strong
+	      >Date 2013-04-18
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ywdDateClip" class="def"
+	    >ywdDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Week"
+	    >Week</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#ywdDateClip');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create date from year, week, and day.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>ywdDateClip 2013 16 10
+</code
+		></strong
+	      >Date 2013-04-21
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ydDateClip" class="def"
+	    >ydDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#ydDateClip');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create date from year and day.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>ydDateClip 2013 400
+</code
+		></strong
+	      >Date 2013-##365 (2013-12-31)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ywDateClip" class="def"
+	    >ywDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Week"
+	    >Week</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#ywDateClip');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create date from year and week.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>ywDateClip 2013 60
+</code
+		></strong
+	      >Date 2013-#52 (2013-12-23)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ymDateClip" class="def"
+	    >ymDateClip</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Parts.html#t:Month"
+	    >Month</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#ymDateClip');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create date from year and month.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>ymDateClip 2013 13
+</code
+		></strong
+	      >Date 2013-12 (2013-12-01)
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:5"
 	>Conversion</h1
 	><div class="top"
 	><p class="src"
@@ -545,7 +955,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>monthly $ dateFromMjd 55555
+		>monthly $ mjdDate (55555 :: Int)
 </code
 		></strong
 	      >Date 2010-12-25
@@ -571,7 +981,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>weekly $ dateFromMjd 55555
+		>weekly $ mjdDate (55555 :: Int)
 </code
 		></strong
 	      >Date 2010-#51-6 (2010-12-25)
@@ -597,15 +1007,65 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>yearly $ dateFromMjd 55555
+		>yearly $ mjdDate (55555 :: Int)
 </code
 		></strong
 	      >Date 2010-##359 (2010-12-25)
 </pre
 	    ></div
 	  ></div
-	><h1 id="g:4"
-	>Utility</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:byWeek" class="def"
+	    >byWeek</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjd"
+	    >ToMjd</a
+	    > day =&gt; day -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#byWeek');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert date into by-week date.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>byWeek $ mjdDate (55555 :: Int)
+</code
+		></strong
+	      >Date 2010-#51 (2010-12-20)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:byMonth" class="def"
+	    >byMonth</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:ToMjd"
+	    >ToMjd</a
+	    > day =&gt; day -&gt; <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#byMonth');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert date into by-month date.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>byMonth $ mjdDate (55555 :: Int)
+</code
+		></strong
+	      >Date 2010-12 (2010-12-01)
+</pre
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:dateAltMjd" class="def"
@@ -628,15 +1088,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:dateAdd" class="def"
-	    >dateAdd</a
+	  ><a name="v:dateAddDay" class="def"
+	    >dateAddDay</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
 	    >Integral</a
 	    > n =&gt; n -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Type-Time-Date.html#t:Date"
 	    >Date</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#dateAdd');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-Date.html#dateAddDay');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -647,7 +1107,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>dateAdd 7 $ dateFromMjd 55555
+		>dateAddDay 7 $ mjdDate (55555 :: Int)
 </code
 		></strong
 	      >Date 2011-01-01
