@@ -175,7 +175,7 @@ treesEqDef ts =
 
 -- | Extract raw text from token tree.
 treeRawText :: K.Tree -> K.Ab String
-treeRawText (P.LRaw n) = Right n
+treeRawText (P.LRaw n) = Right $ K.tString n
 treeRawText t          = Msg.abPara t Msg.reqRawText
 
 

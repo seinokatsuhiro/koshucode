@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Get parameters of relmap operator.
@@ -52,7 +54,8 @@ type RopGet4 a c = C.Intmed c -> String -> String -> String -> String -> K.Ab a
 
 -- | Lookup relmap parameter.
 (?) :: C.Intmed c -> String -> Maybe [K.Tree]
-(?) med ('-' : name) = K.AttrNormal name `K.paraLookupSingle` getPara med
+(?) med (K.tCut -> K.Jp '-' name) = K.AttrNormal (K.stringT name)
+                                    `K.paraLookupSingle` getPara med
 (?) _ _ = K.bug "rop"
 
 -- | Get trees from relmap parameter.
@@ -82,7 +85,7 @@ getTree = getWith K.ttreeGroup
 -- ----------------------  Basic
 
 -- | Get relmap parameter.
-getPara :: C.Intmed c -> K.AttrPara String
+getPara :: C.Intmed c -> K.AttrPara K.Chars
 getPara = C.lexAttr . C.medLexmap
 
 -- | Test usage tag.
@@ -132,5 +135,5 @@ getOpt y get med name =
 --
 getWord :: RopGet String c
 getWord = getWithAb word where
-    word [P.LText _ s] = Right s
+    word [P.LText _ s] = Right $ K.tString s
     word _ = Msg.unexpAttr "Require one word"
