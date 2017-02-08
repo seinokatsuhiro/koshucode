@@ -43,7 +43,7 @@ resRunBody rslt res@C.Resource { C.resAssert  = ass
        Right rslt
                { C.resultInput     = C.resInputPoint res
                , C.resultOutput    = C.resOutput res
-               , C.resultEcho      = map B.lineContent `map` echo
+               , C.resultEcho      = B.lineContent O.<$$> echo
                , C.resultLicense   = group license
                , C.resultViolated  = S.shortTrim js1
                , C.resultNormal    = msgChunk : S.shortTrim js2
@@ -95,7 +95,7 @@ relmapCons :: (C.GetGlobal' h) => h c -> (C.ConsLexmap, C.ConsRelmap' h c)
 relmapCons hook = (consL, consR) where
     consL         = C.consLexmap findSorter
     consR         = C.consRelmap findRop hook
-    findSorter n  = C.ropParaze `fmap` findRop n
+    findSorter n  = C.ropParaze <$> findRop n
     findRop       = C.opsetFindRop $ C.globalOpset $ C.getGlobal' hook
 
 findRelmap :: [C.LexmapClause] -> C.FindDeriv

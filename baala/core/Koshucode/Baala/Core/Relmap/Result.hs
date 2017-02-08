@@ -38,9 +38,9 @@ data Result c = Result
     , resultPrintFoot  :: Bool
     , resultGutter     :: Int
     , resultMeasure    :: Int
-    , resultInput      :: [InputPoint String]
+    , resultInput      :: [InputPoint S.Chars]
     , resultOutput     :: B.IOPoint
-    , resultEcho       :: [[String]]
+    , resultEcho       :: [[S.Chars]]
     , resultLicense    :: [[String]]
     , resultViolated   :: [ShortResultChunks c]
     , resultNormal     :: [ShortResultChunks c]

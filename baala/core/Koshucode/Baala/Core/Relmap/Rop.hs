@@ -24,7 +24,7 @@ data Rop' h c = Rop
     { ropName     :: C.RopName        -- ^ Operator name
     , ropGroup    :: RopGroup         -- ^ Operator group
     , ropAttr     :: S.AttrLayout     -- ^ Attribute of operator
-    , ropParaze   :: S.AttrParaze String     -- ^ Attribute parameterizer
+    , ropParaze   :: S.AttrParaze S.Chars  -- ^ Attribute parameterizer
     , ropCons     :: RopCons' h c     -- ^ Constructor of operator
     }
 
