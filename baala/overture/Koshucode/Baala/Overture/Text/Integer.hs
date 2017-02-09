@@ -23,6 +23,7 @@ import qualified Data.Char                              as Ch
 import qualified Data.IntMap.Strict                     as Mi
 import qualified Data.Map.Strict                        as Ms
 import qualified Numeric                                as Num
+import qualified Koshucode.Baala.Overture.List          as O
 import qualified Koshucode.Baala.Overture.Text.Textual  as O
 
 

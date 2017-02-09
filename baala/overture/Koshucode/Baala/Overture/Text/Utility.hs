@@ -40,6 +40,7 @@ module Koshucode.Baala.Overture.Text.Utility
 import qualified Data.Char                              as Ch
 import qualified System.IO                              as IO
 import qualified Koshucode.Baala.Overture.Infix         as O
+import qualified Koshucode.Baala.Overture.List          as O
 import qualified Koshucode.Baala.Overture.Type          as O
 import qualified Koshucode.Baala.Overture.Text.Textual  as O
 

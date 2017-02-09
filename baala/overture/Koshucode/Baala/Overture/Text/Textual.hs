@@ -8,8 +8,6 @@
 
 module Koshucode.Baala.Overture.Text.Textual
   ( Textual (..),
-    (<:>),
-    cut, cut2, cut3,
     stringify,
   ) where
 
@@ -24,8 +22,8 @@ import qualified Data.Text.Lazy.Encoding                as Tz
 import qualified Data.ByteString.UTF8                   as Bs
 import qualified Data.ByteString.Lazy                   as Bz
 import qualified Data.ByteString.Lazy.UTF8              as Bz
-import qualified Data.ListLike                          as Ll
 import qualified Koshucode.Baala.Overture.Infix         as O
+import qualified Koshucode.Baala.Overture.List          as O
 import qualified Koshucode.Baala.Overture.Misc          as O
 import qualified Koshucode.Baala.Overture.Shorthand     as O
 
@@ -35,7 +33,8 @@ import qualified Koshucode.Baala.Overture.Shorthand     as O
 {-# DEPRECATED tCut3 "Use 'cut3' instead." #-}
 
 -- | Text-like value.
-class (Show t, Eq t, Ord t, Monoid t, Str.IsString t, Ll.ListLike t Char) => Textual t where
+class (Show t, Eq t, Ord t, Monoid t, Str.IsString t, O.List t Char)
+    => Textual t where
 
     -- ----------------------  Monoid
 
@@ -430,47 +429,6 @@ instance Textual O.Tz where
     txT          = Tz.fromStrict
     bsT          = bzT . Bz.fromStrict
     bzT          = Tz.decodeUtf8With Err.lenientDecode
-
-infixr 5 <:>
-
--- | Add charactor to the top of textual value, same as 'tAdd'.
---
---   >>> 'b' <:> "ar" :: String
---   "bar"
---
-{-# INLINE (<:>) #-}
-(<:>) :: (Ll.ListLike es e) => e -> es -> es
-(<:>) = Ll.cons
-
-{-| Split first element and rest of list.
-
-    >>> cut "foo"
-    Just ('f',"oo")
-
-    >>> cut ""
-    Nothing
--}
-cut :: (Ll.ListLike es e) => es -> Maybe (e, es)
-cut = Ll.uncons
-
-{-| Split first and second elements and rest of list.
-
-    >>> cut2 "bar"
-    Just ('b', Just ('a', "r"))
--}
-cut2 :: (Ll.ListLike es e) => es -> Maybe (e, Maybe (e, es))
-cut2 es = cut O.<$$> cut es
-
-{-| Split first, second, third elements and rest of list.
-    
-    >>> cut3 "bar"
-    Just ('b', Just ('a', Just ('r', "")))
-
-    >>> cut3 "b"
-    Just ('b', Nothing)
--}
-cut3 :: (Ll.ListLike es e) => es -> Maybe (e, Maybe (e, Maybe (e, es)))
-cut3 es = cut2 O.<$$> cut es
 
 -- | Convert textual something to string something.
 stringify :: (Functor f, Textual t) => f t -> f String
