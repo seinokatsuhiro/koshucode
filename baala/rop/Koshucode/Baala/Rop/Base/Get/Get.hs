@@ -54,7 +54,7 @@ type RopGet4 a c = C.Intmed c -> String -> String -> String -> String -> K.Ab a
 
 -- | Lookup relmap parameter.
 (?) :: C.Intmed c -> String -> Maybe [K.Tree]
-(?) med (K.tCut -> K.Jp '-' name) = K.AttrNormal (K.stringT name)
+(?) med (K.cut -> K.Jp '-' name) = K.AttrNormal (K.stringT name)
                                     `K.paraLookupSingle` getPara med
 (?) _ _ = K.bug "rop"
 
