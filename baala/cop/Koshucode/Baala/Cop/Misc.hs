@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -8,6 +10,7 @@ module Koshucode.Baala.Cop.Misc
     -- $Operators
   ) where
 
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
@@ -75,13 +78,13 @@ toInfix _ = Msg.adlib "require operand"
 
 -- ----------------------  if
 
-nameLeaf :: S.BlankName -> S.Tree
+nameLeaf :: (O.Textual t) => S.BlankName -> S.TTree t
 nameLeaf = B.TreeL . S.TName B.def
 
-treeIf :: S.Tree -> S.Tree -> S.Tree -> S.Tree
+treeIf :: (O.Textual t) => S.TTree t -> S.TTree t -> S.TTree t -> S.TTree t
 treeIf test con alt = S.ttreeGroup [ nameLeaf $ D.copInternal "#if" , test, con , alt ]
 
-treeOrList :: [S.Tree] -> S.Tree
+treeOrList :: (O.Textual t) => [S.TTree t] -> S.TTree t
 treeOrList [x] = x
 treeOrList xs = S.ttreeGroup $ (nameLeaf $ D.copNormal "or") : xs
 
@@ -89,41 +92,41 @@ copFunIf  :: (D.CBool c, D.CEmpty c) => D.CopCalc c
 copFunIf [D.getBool -> Right testB, conC, altC]
     | testB      = conC
     | otherwise  = altC
-copFunIf cs = Msg.badArg cs
+copFunIf xs = Msg.badArg xs
 
 --  if TEST -> CON | ALT 
 --  if TEST -> CON
 --  if TEST -> CON | TEST -> CON | TEST -> CON
 --  if | TEST -> CON | TEST -> CON | TEST -> CON
 
-copTreeIf :: D.CopTree String
+copTreeIf :: forall t. (O.Textual t) => D.CopTree t
 copTreeIf trees = folding $ B.omit null $ S.divideTreesBy (`elem` ["|", ":"]) trees where
-    folding :: [[S.Tree]] -> B.Ab S.Tree
-    folding []        = Right $ B.TreeL $ S.rawTextToken "()"
+    folding :: [[S.TTree t]] -> B.Ab (S.TTree t)
+    folding []        = Right $ B.TreeL $ S.rawTextToken ("()")
     folding (x : xs)  = fore x =<< folding xs
 
-    fore :: [S.Tree] -> B.AbMap S.Tree
+    fore :: [S.TTree t] -> B.AbMap (S.TTree t)
     fore trees2 alt =
         case S.divideTreesBy (== "->") trees2 of
           [_]         -> back trees2 alt
-          [test, con] -> do test2 <- stairs ">>" "<<" test
+          [test, con] -> do test2 <- stairs (">>") ("<<") test
                             Right $ treeIf test2 (S.ttreeGroup con) alt
           _           -> abortSyntax trees2 "Expect E -> E"
 
-    back :: [S.Tree] -> B.AbMap S.Tree
+    back :: [S.TTree t] -> B.AbMap (S.TTree t)
     back trees2 alt =
         case S.divideTreesBy (== "<-") trees2 of
           [alt2]      -> Right $ S.ttreeGroup alt2
-          [con, test] -> do test2 <- stairs "<<" ">>" test
+          [con, test] -> do test2 <- stairs ("<<") (">>") test
                             Right $ treeIf test2 (S.ttreeGroup con) alt
           _           -> abortSyntax trees2 "Expect E <- E"
 
-    stairs :: String -> String -> [S.Tree] -> B.Ab S.Tree
+    stairs :: t -> t -> [S.TTree t] -> B.Ab (S.TTree t)
     stairs del del2 xs =
         do notInclude del2 xs
            Right $ treeOrList $ map S.ttreeGroup $ S.divideTreesBy (== del) xs
 
-    notInclude :: String -> [S.Tree] -> B.Ab ()
+    notInclude :: t -> [S.TTree t] -> B.Ab ()
     notInclude del xs =
         case S.divideTreesBy (== del) xs of
           [_] -> Right ()
