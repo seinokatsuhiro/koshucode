@@ -54,24 +54,24 @@ copName (CopTree  n _) = n
 -- ----------------------  Operator name
 
 -- | Name for non-binary operator.
-copNormal :: (O.Textual t) => t -> S.BlankName
-copNormal = S.BlankNormal . O.tString
+copNormal :: String -> S.BlankName
+copNormal = S.BlankNormal
 
 -- | Name for program-generated operator.
-copInternal :: (O.Textual t) => t -> S.BlankName
-copInternal = S.BlankInternal . O.tString
+copInternal :: String -> S.BlankName
+copInternal = S.BlankInternal
 
 -- | Name for prefix operator.
-copPrefix :: (O.Textual t) => t -> S.BlankName
-copPrefix = S.BlankPrefix . O.tString
+copPrefix :: String -> S.BlankName
+copPrefix = S.BlankPrefix
 
 -- | Name for postfix operator.
-copPostfix :: (O.Textual t) => t -> S.BlankName
-copPostfix = S.BlankPostfix . O.tString
+copPostfix :: String -> S.BlankName
+copPostfix = S.BlankPostfix
 
 -- | Name for infix operator.
-copInfix :: (O.Textual t) => t -> S.BlankName
-copInfix = S.BlankInfix . O.tString
+copInfix :: String -> S.BlankName
+copInfix = S.BlankInfix
 
 
 -- ----------------------  Operator set

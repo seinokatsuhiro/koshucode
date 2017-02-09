@@ -153,8 +153,8 @@ prefix htab tree =
        Left  xs    -> Msg.ambInfixes (detail <$> xs)
     where
       conv = (c D.copPrefix, c D.copInfix, c D.copPostfix)
-      c :: (t -> S.BlankName) -> O.Map (S.TToken t)
-      c f (S.TText cp S.TextRaw s) = S.TName cp $ f s
+      c :: (String -> S.BlankName) -> O.Map (S.TToken t)
+      c f (S.TText cp S.TextRaw s) = S.TName cp $ f $ O.tString s
       c _ x = x
 
       ht :: S.TToken t -> B.InfixHeight
