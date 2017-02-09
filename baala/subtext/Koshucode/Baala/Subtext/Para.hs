@@ -21,15 +21,15 @@ import qualified Koshucode.Baala.Subtext.Operator  as T
 
 
 -- | Matching parameter.
-data Para a = Para
-  { paraBundle     :: T.BundleMap [a] a -- ^ Expression bundle
-  , paraRawSubs    :: [Submatch [a] a]  -- ^ Submatches.
+data Para as a = Para
+  { paraBundle     :: T.BundleMap as a  -- ^ Expression bundle
+  , paraRawSubs    :: [Submatch as a]   -- ^ Submatches.
   , paraGather     :: Bool              -- ^ Gather or skip match result
-  , paraExpr       :: T.Expr [a] a      -- ^ Match expression
+  , paraExpr       :: T.Expr as a       -- ^ Match expression
   , paraPos        :: Int               -- ^ Position on input sequence
-  , paraInput      :: [a]               -- ^ Input sequence
+  , paraInput      :: as                -- ^ Input sequence
   , paraPrev       :: Maybe a           -- ^ Previous element
-  , paraRawOutput  :: [a]               -- ^ Match result
+  , paraRawOutput  :: as                -- ^ Match result
   } deriving (Show, Eq, Ord)
 
 -- | Submatch result, its name and matched sequence.
@@ -37,7 +37,7 @@ type Submatch as a = (O.Name, as)
 
 -- | Create matching parameter from
 --   expression bundle and input sequence.
-createPara :: T.Bundle [a] a -> [a] -> Para a
+createPara :: T.Bundle [a] a -> [a] -> Para [a] a
 createPara bun s =
     let bun' = simplify bun
     in Para { paraBundle     = Ms.fromList $ T.bundleExpr bun'

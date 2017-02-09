@@ -43,19 +43,19 @@ matchBundle es s =
        Just $ matchResult result
 
 -- | Extract match result from parameter.
-matchResult :: T.Para a -> MatchResult a
+matchResult :: T.Para [a] a -> MatchResult a
 matchResult result = (mainMatch result, subMatches result)
 
 -- | Extract matched text.
-mainMatch :: T.Para a -> [a]
+mainMatch :: (O.List as a) => T.Para as a -> as
 mainMatch = O.reverse . T.paraRawOutput
 
 -- | Extract submatches.
-subMatches :: T.Para a -> [T.Submatch [a] a]
+subMatches :: T.Para as a -> [T.Submatch as a]
 subMatches = O.reverse . T.paraRawSubs
 
 -- | Match procedure.
-match :: (Show a) => T.Para a -> Maybe (T.Para a)
+match :: (O.List as a, Show a) => T.Para as a -> Maybe (T.Para as a)
 match pa@T.Para { T.paraBundle    = bundle
                 , T.paraGather    = gather
                 , T.paraExpr      = expr
@@ -98,11 +98,11 @@ match pa@T.Para { T.paraBundle    = bundle
                                  let o'   = T.paraRawOutput pa'
                                      subs = T.paraRawSubs pa'
                                  Just $ pa' { T.paraRawSubs   = (n, O.reverse o') : subs
-                                            , T.paraRawOutput = o' ++ o }
+                                            , T.paraRawOutput = o' O.++ o }
       rec (T.EAs (O.Fn _ f) e)
                             = do pa' <- pa { T.paraRawOutput = O.empty } ? e
                                  let o' = T.paraRawOutput pa'
-                                 Just $ pa' { T.paraRawOutput = O.reverse (f o') ++ o }
+                                 Just $ pa' { T.paraRawOutput = O.reverse (f o') O.++ o }
       rec (T.EGath b e)     = do pa' <- pa { T.paraGather = b } ? e
                                  Just $ pa' { T.paraGather = gather }
 
