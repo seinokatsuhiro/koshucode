@@ -174,13 +174,13 @@ attrClassify spec n = n' where
 
 attrName :: (O.Textual t) => t -> S.AttrName
 attrName = name . reverse . unhyphen . O.tString where
-    name (O.tCut2 -> O.Jp2 '^' '/' n) = S.AttrRelmapLocal  $ rev n
-    name (O.tCut  -> O.Jp '/' n)      = S.AttrRelmapNormal $ rev n
+    name (O.cut2 -> O.Jp2 '^' '/' n) = S.AttrRelmapLocal  $ rev n
+    name (O.cut  -> O.Jp '/' n)      = S.AttrRelmapNormal $ rev n
     name n                            = S.AttrNormal       $ rev n
 
     rev = S.stringChars . reverse
 
 unhyphen :: (O.Textual t) => t -> t
-unhyphen (O.tCut -> O.Jp '-' n) = n
+unhyphen (O.cut -> O.Jp '-' n) = n
 unhyphen n = S.paraBug "no hyphen" $ O.tString n
 

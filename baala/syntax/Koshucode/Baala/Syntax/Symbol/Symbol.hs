@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -181,7 +182,7 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
     done n cs k           = (cs, k $ O.tTake n cs0)
 
     -- General and Plain and Numeric
-    symbolGpn n (O.tCut -> O.Jp c cs)
+    symbolGpn n (O.cut -> O.Jp c cs)
         | isCharGpn c     = symbolGpn n' cs
         | isCharGp  c     = symbolGp  n' cs
         | isCharGn  c     = symbolGn  n' cs
@@ -192,7 +193,7 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
     symbolGpn n cs        = done n cs SymbolCommon
 
     -- General and Plain
-    symbolGp n (O.tCut -> O.Jp c cs)
+    symbolGp n (O.cut -> O.Jp c cs)
         | c == '.'        = shortBody (O.tTake n cs0) cs
         | isCharGp' c     = symbolGp  n' cs
         | isCharG   c     = symbolG   n' cs
@@ -201,7 +202,7 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
     symbolGp n cs         = done n cs SymbolPlain
 
     -- General and Numeric
-    symbolGn n (O.tCut -> O.Jp c cs)
+    symbolGn n (O.cut -> O.Jp c cs)
         | isCharGn' c     = symbolGn  n' cs
         | isCharG   c     = symbolG   n' cs
         | isCharN   c     = symbolN   n' cs
@@ -210,21 +211,21 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
     symbolGn n cs         = done n cs SymbolNumeric
 
     -- General
-    symbolG n (O.tCut -> O.Jp c cs)
+    symbolG n (O.cut -> O.Jp c cs)
         | isCharG' c      = symbolG   n' cs
         | isSymbolChar c  = symbolUnk n' cs
         where n' = n + 1
     symbolG n cs          = done n cs SymbolGeneral
 
     -- Numeric
-    symbolN n (O.tCut -> O.Jp c cs)
+    symbolN n (O.cut -> O.Jp c cs)
         | isCharN' c      = symbolN   n' cs
         | isSymbolChar c  = symbolUnk n' cs
         where n' = n + 1
     symbolN n cs          = done n cs SymbolNumeric
 
     -- Unknown symbol
-    symbolUnk n (O.tCut -> O.Jp c cs)
+    symbolUnk n (O.cut -> O.Jp c cs)
         | isSymbolChar c  = symbolUnk (n + 1) cs
     symbolUnk n cs        = done n cs SymbolUnknown
 
@@ -233,14 +234,14 @@ shortBody pre cs0 = short O.zero cs0 where
     done n cs k           = (cs, k $ O.tTake n cs0)
 
     -- Plain "." Plain
-    short n (O.tCut -> O.Jp c cs)
+    short n (O.cut -> O.Jp c cs)
         | isCharGp' c     = short n' cs
         | isSymbolChar c  = symbolUnk n' cs
         where n' = n + 1
     short n cs            = done n cs $ SymbolShort pre
 
     -- Unknown symbol
-    symbolUnk n (O.tCut -> O.Jp c cs)
+    symbolUnk n (O.cut -> O.Jp c cs)
         | isSymbolChar c  = symbolUnk (n + 1) cs
     symbolUnk n cs        = done n cs SymbolUnknown
 

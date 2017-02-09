@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ViewPatterns #-}
@@ -43,7 +44,7 @@ data AttrEdBody t
 -- | Construct attribute editor.
 consAttrEd :: forall t. (O.Textual t) => [S.TTree t] -> B.Ab (AttrEd t)
 consAttrEd = loop where
-    notKeyword (O.tCut -> O.Jp '-' _) = False
+    notKeyword (O.cut -> O.Jp '-' _) = False
     notKeyword _ = True
 
     fill (P.LRaw "*" : xs) = Nothing : fill xs
@@ -59,7 +60,7 @@ consAttrEd = loop where
             | op == "id"      -> right trees $ AttrEdId
             | op == "fill"    -> right trees $ AttrEdFill $ fill xs
 
-          [P.LRaw op : P.LRaw (O.tCut -> O.Jp '-' k) : xs]
+          [P.LRaw op : P.LRaw (O.cut -> O.Jp '-' k) : xs]
             | op == "add"     -> right trees $ AttrEdAdd False k xs
             | op == "opt"     -> right trees $ AttrEdAdd True  k xs
             | op == "nest"    -> right trees $ AttrEdNest k xs

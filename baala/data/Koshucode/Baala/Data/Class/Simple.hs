@@ -189,7 +189,7 @@ pChar = pText . (O.charT :: Char -> S.Chars)
 
 -- | Get single character of text content.
 getChar :: (CText c) => B.Ab c -> B.Ab Char
-getChar (getText -> Right (O.tCut2 -> O.Jp c Nothing)) = Right c
+getChar (getText -> Right (O.cut2 -> O.Jp c Nothing)) = Right c
 getChar (Right c) = Msg.typeUnmatched c
 getChar (Left a)  = Left a
 

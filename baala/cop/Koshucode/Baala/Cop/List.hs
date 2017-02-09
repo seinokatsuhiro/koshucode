@@ -84,11 +84,11 @@ copList argC = do arg <- sequence argC
                   D.putList arg
 
 csTakeOdd :: (O.Textual t) => t -> t
-csTakeOdd (O.tCut2 -> O.Jp2 c _ t) = c O.<:> csTakeOdd t
+csTakeOdd (O.cut2 -> O.Jp2 c _ t) = c O.<:> csTakeOdd t
 csTakeOdd t = t
 
 csTakeEven ::(O.Textual t) => t -> t
-csTakeEven (O.tCut2 -> O.Jp2 _ c t) = c O.<:> csTakeEven t
+csTakeEven (O.cut2 -> O.Jp2 _ c t) = c O.<:> csTakeEven t
 csTakeEven _ = O.tEmpty
 
 -- ----------------------  aggregation

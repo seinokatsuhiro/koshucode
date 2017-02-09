@@ -79,7 +79,7 @@ optionUpdate calc opt ((name, pt), trees) =
                                  ins $ OptionBool bool
 
       upd (OptionChar cs _) = do text <- D.getText abc
-                                 case O.tCut2 text of
+                                 case O.cut2 text of
                                    O.Jp ch Nothing | elem ch (O.tString cs)
                                       -> ins $ OptionChar cs ch
                                    _  -> Msg.adlib "not one letter"

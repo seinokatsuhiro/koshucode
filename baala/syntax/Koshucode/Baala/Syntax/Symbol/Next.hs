@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -37,7 +38,7 @@ isQQ = (== '"')
 --
 nextSpace :: (O.Textual t) => Next t Int
 nextSpace = loop 0 where
-    loop n (O.tCut -> O.Jp c cs)
+    loop n (O.cut -> O.Jp c cs)
         | Ch.isSpace c   = loop (n + 1) cs
     loop n cs            = (cs, n)
 
@@ -54,12 +55,12 @@ nextSpace = loop 0 where
 --
 nextQQ :: (O.Textual t) => AbNext t t
 nextQQ cs0 = loop O.zero cs0 where
-    loop n (O.tCut -> O.Jp c cs)
+    loop n (O.cut -> O.Jp c cs)
         | isQQ c      = qq n cs
         | otherwise   = loop (n + 1) cs
     loop _ _          = Msg.quotNotEnd
 
-    qq n (O.tCut -> O.Jp c cs)
+    qq n (O.cut -> O.Jp c cs)
         | isQQ c      = do (cs', s') <- nextQQ cs
                            Right (cs', O.tTake (n + 1) cs0 O.++ s')
     qq n cs           = Right (cs, O.tTake n cs0)
@@ -70,8 +71,8 @@ nextQQ cs0 = loop O.zero cs0 where
 --   Right (" def","abc")
 --
 nextBefore :: (O.Textual t) => t -> AbNext t t
-nextBefore (O.tCut -> O.Jp t0 to) cs0 = loop O.zero cs0 where
-    loop n (O.tCut -> O.Jp c cs)
+nextBefore (O.cut -> O.Jp t0 to) cs0 = loop O.zero cs0 where
+    loop n (O.cut -> O.Jp c cs)
         | c == t0     = case O.tDropPrefix to cs of
                           Just cs' -> Right (cs', O.tTake n cs0)
                           Nothing  -> loop (n + 1) cs

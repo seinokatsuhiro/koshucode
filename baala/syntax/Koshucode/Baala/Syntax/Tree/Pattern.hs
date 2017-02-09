@@ -40,10 +40,10 @@ pattern LText f s <- L (P.T f s)
 pattern LRaw s <- L (P.TRaw s)
 
 -- | Single-hyphen attribute text leaf.
-pattern LAtt1 s <- LRaw (O.tCut -> O.Jp '-' s)
+pattern LAtt1 s <- LRaw (O.cut -> O.Jp '-' s)
 
 -- | Double-hyphen attribute text leaf.
-pattern LAtt2 s <- LRaw (O.tCut2 -> O.Jp2 '-' '-' s)
+pattern LAtt2 s <- LRaw (O.cut2 -> O.Jp2 '-' '-' s)
 
 -- | Single-quoted text leaf.
 pattern LQ s <- L (P.TQ s)

@@ -30,7 +30,7 @@ type Replace t = t -> t -> t -> t
 
 replaceAll :: (O.Textual t) => Replace t
 replaceAll from to = loop where
-    loop xxs@(O.tCut -> O.Jp x xs)
+    loop xxs@(O.cut -> O.Jp x xs)
         | xxs =* from   = to O.++ loop (dropLength from xxs)
         | otherwise     = x O.<:> loop xs
     loop xs = xs
@@ -48,7 +48,7 @@ replaceAll from to = loop where
 
 replaceFirst :: (O.Textual t) => Replace t
 replaceFirst from to = loop where
-    loop xxs@(O.tCut -> O.Jp x xs)
+    loop xxs@(O.cut -> O.Jp x xs)
         | xxs =* from   = to O.++ dropLength from xxs
         | otherwise     = x O.<:> loop xs
     loop xs = xs

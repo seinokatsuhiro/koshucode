@@ -77,7 +77,7 @@ sivExpr = top where
                 Right $ S.seq es
 
     expr (Lt a : Lr : Lt b : ts)
-                             = case (O.tCut2 a, O.tCut2 b) of 
+                             = case (O.cut2 a, O.cut2 b) of 
                                  (Just (a0, Nothing), Just (b0, Nothing))
                                    -> S.to a0 b0 <:> ts
                                  _ -> Msg.adlib "Malformed range"

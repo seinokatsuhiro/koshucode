@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -22,15 +23,15 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 
 tCut3 :: (O.Textual t) => Char -> (Int -> Char -> Char -> Char -> t -> t -> t -> a) -> t -> a
 tCut3 z f = first where
-    first (O.tCut -> O.Jp a bs)
+    first (O.cut -> O.Jp a bs)
                      = second a bs
     first _          = f 0 z z z O.tEmpty O.tEmpty O.tEmpty
 
-    second a bs@(O.tCut -> O.Jp b cs)
+    second a bs@(O.cut -> O.Jp b cs)
                      = third a b bs cs
     second a _       = f 1 a z z O.tEmpty O.tEmpty O.tEmpty
 
-    third a b bs cs@(O.tCut -> O.Jp c ds)
+    third a b bs cs@(O.cut -> O.Jp c ds)
                      = f 3 a b c bs cs ds
     third a b bs _   = f 2 a b z bs O.tEmpty O.tEmpty
 
@@ -102,7 +103,7 @@ scanRel change sc@B.CodeScan { B.scanCp = cp, B.scanCache = wtab } = sc' where
         | otherwise              = upd O.tEmpty $ S.unknownToken cp cs
                                                 $ Msg.forbiddenInput $ S.angleQuote [a]
 
-    aster (O.tCut -> O.Jp c cs) w
+    aster (O.cut -> O.Jp c cs) w
         | w == O.stringT "****"  = upd (c O.<:> cs) $ raw w
         | c == '*'               = aster cs (c O.<:> w)
     aster cs w
@@ -130,23 +131,23 @@ clipAngle cp cs0 = angle (0 :: Int) cs0 where
     text n = O.tTake n cs0
 
     -- <...
-    angle n (O.tCut -> O.Jp c cs)
+    angle n (O.cut -> O.Jp c cs)
         | S.isSymbol c  = sym n (c O.<:> cs)
     angle n cs          = (cs, raw ('<' O.<:> text n))
 
     -- <symbol ...
-    sym n (O.tCut -> O.Jp c cs)
+    sym n (O.cut -> O.Jp c cs)
         | c == '>'      = close n cs
         | S.isSymbol c  = sym (n + 1) cs
     sym n cs            = (cs, raw ('<' O.<:> text n)) -- '<<'
 
     -- <symbol> ...
-    close n (O.tCut -> O.Jp c cs)
+    close n (O.cut -> O.Jp c cs)
         | c == '>'    = close (n + 1) cs
     close n cs        = (cs, key $ text n)
 
     -- symbol in '<symbol>'
-    key (O.tCut2 -> O.Jp2 'U' '+' s) = fromCodePoint textHexInts s
+    key (O.cut2 -> O.Jp2 'U' '+' s) = fromCodePoint textHexInts s
     key s | O.tIsEmpty s   = raw $ O.stringT "<>"
           | otherwise      = case lookup s S.angleTexts of
                                Just w  -> S.TText cp S.TextKey w
@@ -162,7 +163,7 @@ tFromCode ns = O.stringT (toEnum <$> ns)
 -- | Clip token beginning with "@".
 clipAt :: (O.Textual t) => B.TCodePos t -> t -> Int -> S.ClipResult t
 clipAt cp = at where
-    at (O.tCut -> O.Jp c cs)
+    at (O.cut -> O.Jp c cs)
        n | c == '@'    = at cs $ n + 1
          | c == '\''   = S.clipSlot 0 cp cs  -- positional
     at cs n            = S.clipSlot n cp cs
@@ -170,8 +171,8 @@ clipAt cp = at where
 -- | Clip local reference token, like @^/g@.
 clipHat :: (S.TextualTermName t) => B.TCodePos t -> t -> S.ClipResult t
 clipHat cp = hat where
-    hat (O.tCut -> O.Jp '/' cs) = localToken cs (S.LocalNest . S.toTermName)
-    hat cs@(O.tCut -> O.Jp c _)
+    hat (O.cut -> O.Jp '/' cs) = localToken cs (S.LocalNest . S.toTermName)
+    hat cs@(O.cut -> O.Jp c _)
         | S.isSymbol c          = localToken cs (S.LocalSymbol . O.tString)
     hat cs                      = (O.tEmpty, S.unknownToken cp cs $ Msg.adlib "local")
 
@@ -191,7 +192,7 @@ scanInterp change sc@B.CodeScan { B.scanCp = cp
     upd cs tok  = B.codeUpdate cs tok sc
     gen cs tok  = B.codeScanRestore $ upd cs tok
 
-    int (O.tCut -> O.Jp c cs)
+    int (O.cut -> O.Jp c cs)
         | S.isSpace c   = clip   $ S.clipSpace    cp cs
         | S.isTerm c    = clipcl $ S.clipTermName cp wtab cs
         | otherwise     = word (c O.<:> cs)
@@ -199,9 +200,9 @@ scanInterp change sc@B.CodeScan { B.scanCp = cp
 
     word cs0 = loop O.zero cs0 where
         raw n = S.TText cp S.TextRaw $ O.tTake n cs0
-        loop n cs@(O.tCut2 -> O.Jp2 '|' '}' _)
+        loop n cs@(O.cut2 -> O.Jp2 '|' '}' _)
                             = gen  cs            $ raw n
-        loop n (O.tCut -> O.Jp c cs)
+        loop n (O.cut -> O.Jp c cs)
             | S.isSpace c   = upd  (c O.<:> cs) $ raw n
             | S.isTerm c    = upd  (c O.<:> cs) $ raw n
             | otherwise     = loop (n + 1) cs

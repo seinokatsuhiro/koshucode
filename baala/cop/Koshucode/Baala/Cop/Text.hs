@@ -151,7 +151,7 @@ copCharGroup = op where
 -- char-group-1 "a!" => 'letter
 copCharGroup1 :: (D.CContent c) => D.CopCalc c
 copCharGroup1 [D.getText -> Right t]
-    = case O.tCut t of
+    = case O.cut t of
         O.Jp c _ -> D.putText $ charGroup c
         _        -> Right D.empty
 copCharGroup1 xs = Msg.badArg xs

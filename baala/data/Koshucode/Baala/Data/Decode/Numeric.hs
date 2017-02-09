@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
@@ -32,7 +33,7 @@ treesDigits = concatDigits O.#. D.treesTexts False
 
 concatDigits :: (O.Textual t) => [t] -> B.Ab t
 concatDigits = first where
-    first ((O.tCut -> O.Jp c cs) : xs)
+    first ((O.cut -> O.Jp c cs) : xs)
         | c `elem` ("+-0123456789o" :: String) = loop [O.charT c] $ cs : xs
     first _ = Msg.nothing
 
@@ -49,32 +50,32 @@ concatDigits = first where
 --   Right |12:00|
 --
 tokenClock :: (O.Textual t) => S.TToken t -> B.Ab T.Clock
-tokenClock (P.TBar (O.tCut -> O.Jp '|' w)) = textClock w
+tokenClock (P.TBar (O.cut -> O.Jp '|' w)) = textClock w
 tokenClock _ = Msg.nothing
 
 textClock :: (O.Textual t) => t -> B.Ab T.Clock
 textClock = sign where
-    sign (O.tCut -> O.Jp '-' cs)  = T.clockNeg <$> dayOrHour cs
-    sign (O.tCut -> O.Jp '+' cs)  = dayOrHour cs
+    sign (O.cut -> O.Jp '-' cs)  = T.clockNeg <$> dayOrHour cs
+    sign (O.cut -> O.Jp '+' cs)  = dayOrHour cs
     sign cs                       = dayOrHour cs
 
     dayOrHour cs     = case getInt cs of
                          (d, "'|")       -> Right $ T.ClockD $ toInteger d
                          (h, "|")        -> clock T.ClockDh 0 h 0 0
-                         (n, O.tCut -> O.Jp c cs')
+                         (n, O.cut -> O.Jp c cs')
                              | c == ':'  -> minute 0 n cs'
                              | c == '\'' -> hour (toInteger n) cs'
                          _               -> Msg.nothing
 
     hour d cs        = case getInt cs of
                          (h, "|")         -> clock T.ClockDh d h 0 0
-                         (h, O.tCut -> O.Jp ':' cs')
+                         (h, O.cut -> O.Jp ':' cs')
                                           -> minute d h cs'
                          _                -> Msg.nothing
 
     minute d h cs    = case getInt cs of
                          (m, "|")         -> clock T.ClockDhm d h m 0
-                         (m, O.tCut -> O.Jp ':' cs')
+                         (m, O.cut -> O.Jp ':' cs')
                                           -> second d h m cs'
                          _                -> Msg.nothing
 
@@ -92,7 +93,7 @@ textClock = sign where
 -- (12,"a")
 getInt :: (O.Textual t) => t -> (Int, t)
 getInt = loop 0 where
-    loop n (O.tCut -> O.Jp c cs) = case fromDigit c of
+    loop n (O.cut -> O.Jp c cs) = case fromDigit c of
                                      Just x  -> loop (10 * n + x) cs
                                      Nothing -> (n, c O.<:> cs)
     loop n t = (n, t)
@@ -145,24 +146,24 @@ textsTime = year where
 
     year []             = Msg.nothing
     year (cs : xs)      = case getInt cs of
-                            (y, O.tCut -> O.Jp '-' cs')
+                            (y, O.cut -> O.Jp '-' cs')
                                   -> mwd (toInteger y) $ cs' : xs
                             _     -> Msg.nothing
 
     mwd _ []                                    = Msg.nothing
-    mwd y ((O.tCut2 -> O.Jp2 '#' '#' cs) : xs)  = day (T.ydDate y) $ cs : xs
-    mwd y ((O.tCut  -> O.Jp '#' cs) : xs)       = week y $ cs : xs
+    mwd y ((O.cut2 -> O.Jp2 '#' '#' cs) : xs)  = day (T.ydDate y) $ cs : xs
+    mwd y ((O.cut  -> O.Jp '#' cs) : xs)       = week y $ cs : xs
     mwd y xs                                    = month y xs
 
     month _ []          = Msg.nothing
     month y (cs : xs)   = case getInt cs of
-                            (m, O.tCut -> O.Jp '-' cs') -> day (T.ymdDate y m) $ cs' : xs
+                            (m, O.cut -> O.Jp '-' cs') -> day (T.ymdDate y m) $ cs' : xs
                             (m, "")          -> (Right . T.dTime) O.# T.ymDate y m
                             _                -> Msg.nothing
 
     week _ []           = Msg.nothing
     week y (cs : xs)    = case getInt cs of
-                            (w, O.tCut -> O.Jp '-' cs') -> day (T.ywdDate y w) $ cs' : xs
+                            (w, O.cut -> O.Jp '-' cs') -> day (T.ywdDate y w) $ cs' : xs
                             (w, "")          -> T.dTime <$> T.ywDate y w
                             _                -> Msg.nothing
 
@@ -180,12 +181,12 @@ textsTime = year where
     -- ----------------------  hour, minute, second
 
     hour k cs           = case getInt cs of
-                            (h, O.tCut -> O.Jp ':' cs') -> minute k h cs'
+                            (h, O.cut -> O.Jp ':' cs') -> minute k h cs'
                             (h, "")          -> k (T.clockFromDh 0 h) Nothing
                             _                -> Msg.nothing
 
     minute k h cs       = case getInt cs of
-                            (m, O.tCut -> O.Jp ':' cs') -> second k h m cs'
+                            (m, O.cut -> O.Jp ':' cs') -> second k h m cs'
                             (m, "")          -> k (T.clockFromDhm 0 h m) Nothing
                             (m, cs')         -> zone1 k (T.ClockPartsMin 0 h m) cs'
 
@@ -196,13 +197,13 @@ textsTime = year where
     -- ----------------------  time zone
 
     zone1 k clock cs    = case cs of
-                            (O.tCut -> O.Jp '+' cs') -> zone2 k clock   1  cs'
-                            (O.tCut -> O.Jp '-' cs') -> zone2 k clock (-1) cs'
+                            (O.cut -> O.Jp '+' cs') -> zone2 k clock   1  cs'
+                            (O.cut -> O.Jp '-' cs') -> zone2 k clock (-1) cs'
                             "UTC"            -> zone4 k clock 0 0
                             _                -> Msg.nothing
 
     zone2 k clock pm cs = case getInt cs of
-                            (zh, O.tCut -> O.Jp ':' cs')  -> zone3 k clock (pm * zh) cs'
+                            (zh, O.cut -> O.Jp ':' cs')  -> zone3 k clock (pm * zh) cs'
                             _                -> Msg.nothing
 
     zone3 k clock zh cs = case getInt cs of

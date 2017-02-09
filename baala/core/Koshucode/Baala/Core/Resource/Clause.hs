@@ -159,7 +159,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     -- ----------------------  Clause dispatcher
 
     dispatch :: [S.TToken t] -> (Clause t, ClauseHead t)
-    dispatch (P.TBar (O.tCut -> O.Jp '|' k) : xs)   -- Frege's judgement stroke
+    dispatch (P.TBar (O.cut -> O.Jp '|' k) : xs)   -- Frege's judgement stroke
                                     = clause   $ frege (lower k) xs
     dispatch (P.TRaw name : P.TRaw is : body)
         | isDelim is                = clause   $ CRelmap (O.tString name) body

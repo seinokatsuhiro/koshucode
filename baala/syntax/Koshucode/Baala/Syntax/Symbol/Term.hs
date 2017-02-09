@@ -116,18 +116,18 @@ instance TextualTermName O.Tz
 --   ["/foo", "/bar", "+/baz", "-/qux"]
 --
 enslash :: (O.Textual t) => O.Map t
-enslash n@(O.tCut  -> O.Jp '/' _)        = n
-enslash n@(O.tCut2 -> O.Jp2 '+' '/' _)   = n
-enslash n@(O.tCut2 -> O.Jp2 '-' '/' _)   = n
-enslash n                                = '/' O.<:> n
+enslash n@(O.cut  -> O.Jp '/' _)        = n
+enslash n@(O.cut2 -> O.Jp2 '+' '/' _)   = n
+enslash n@(O.cut2 -> O.Jp2 '-' '/' _)   = n
+enslash n                               = '/' O.<:> n
 
 -- | Decode term name from string.
 {-# DEPRECATED textualTermName "Use 'toTermName' instead." #-}
 textualTermName :: (O.Textual t) => t -> TermName
-textualTermName (O.tCut  -> O.Jp '/' n)       = TermName EQ $ O.tString n
-textualTermName (O.tCut2 -> O.Jp2 '+' '/' n)  = TermName GT $ O.tString n
-textualTermName (O.tCut2 -> O.Jp2 '-' '/' n)  = TermName LT $ O.tString n
-textualTermName n                             = TermName EQ $ O.tString n
+textualTermName (O.cut  -> O.Jp '/' n)       = TermName EQ $ O.tString n
+textualTermName (O.cut2 -> O.Jp2 '+' '/' n)  = TermName GT $ O.tString n
+textualTermName (O.cut2 -> O.Jp2 '-' '/' n)  = TermName LT $ O.tString n
+textualTermName n                            = TermName EQ $ O.tString n
 
 -- | Convert string to multiple term names.
 --

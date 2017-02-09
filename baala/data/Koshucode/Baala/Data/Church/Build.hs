@@ -134,7 +134,7 @@ construct = expr where
     untag vars  = (Nothing, vars)
 
 isName :: (O.Textual t) => O.Test t
-isName (O.tCut -> O.Jp c _)  = isNameFirst c
+isName (O.cut -> O.Jp c _)  = isNameFirst c
 isName _                     = False
 
 isNameFirst :: O.Test Char

@@ -29,13 +29,13 @@ angleQuote :: (O.Textual t) => t -> t
 angleQuote = openLoop where
     openLoop = open . loop
 
-    loop (O.tCut -> O.Jp c cs) =
+    loop (O.cut -> O.Jp c cs) =
         case angleSplit c cs of
           Nothing       -> c O.<:> loop cs
           Just (w, cs2) -> "\" " O.++ w O.++ O.addSpace (openLoop cs2)
     loop _ = "\""
 
-    open (O.tCut -> O.Jp '"' cs)  = O.trimBegin cs   -- omit closing double quote
+    open (O.cut -> O.Jp '"' cs)  = O.trimBegin cs   -- omit closing double quote
     open cs                       = '"' O.<:> cs    -- append opening double quote
 
 -- | Split angle keyword.
@@ -67,7 +67,7 @@ angleSplit c cs =
       other '\t'           = just "<tab>"
       other _              = just (angleChar c)
 
-      cr (O.tCut -> O.Jp '\n' cs2)  = just2 "<crlf>" cs2
+      cr (O.cut -> O.Jp '\n' cs2)  = just2 "<crlf>" cs2
       cr _                          = just "<cr>"
 
 -- | Angle text of the Unicode code point.

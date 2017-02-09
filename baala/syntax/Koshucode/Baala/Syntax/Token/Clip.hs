@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
@@ -165,7 +166,7 @@ clipQn cp wtab (countQuote -> (n, cs)) =
 
 countQuote :: (O.Textual t) => t -> (Int, t)
 countQuote = loop 0 where
-    loop n (O.tCut -> O.Jp '\'' t) = loop (n + 1) t
+    loop n (O.cut -> O.Jp '\'' t) = loop (n + 1) t
     loop n t = (n, t)
 
 -- ---------------------------------  Identifier
@@ -232,7 +233,7 @@ clipTermQ = clipTerm True "/"
 -- | Clip term name or a term path.
 clipTerm :: (O.Textual t) => Bool -> t -> ClipTokenCL t
 clipTerm q slash cp wtab cs0 = word [] cs0 where
-    word ns ccs@(O.tCut -> O.Jp c cs)
+    word ns ccs@(O.cut -> O.Jp c cs)
         | c == '='    = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
         | isSymbol c  = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
         | isQQ c      = call (S.nextQQ cs)           (\w -> term (w : ns))
@@ -244,7 +245,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
     nterm ns w cs'    = let w' = (O.showT $ O.getIx cp) O.++ ('=' O.<:> w)
                         in term (w' : ns) cs'
 
-    term ns (O.tCut -> O.Jp c cs)
+    term ns (O.cut -> O.Jp c cs)
         | isTerm c    = word ns cs
     term [n] cs
         | not q       = case O.cacheGet wtab $ slash O.++ n of
@@ -277,20 +278,20 @@ clipBar cp cs0 = bar (0 :: Int) cs0 where
     barToken n = S.TText cp S.TextBar $ text n
     rawToken n = S.TText cp S.TextRaw $ text n
 
-    bar n (O.tCut -> O.Jp c cs)
+    bar n (O.cut -> O.Jp c cs)
         | c == '|'              = bar   (n + 1) cs
         | n == 0 && isJudge c   = judge (n + 1) cs
         | n == 0 && isSymbol c  = clock (n + 1) cs
     bar n cs = (O.trimBegin cs, rawToken n)   -- '||'
 
     -- judgement sign, like |--, |-x
-    judge n (O.tCut -> O.Jp c cs)
+    judge n (O.cut -> O.Jp c cs)
         | isJudge c || Ch.isAlpha c  = judge (n + 1) cs
         | isSymbol c                 = clock n (c O.<:> cs)
     judge n cs                       = (cs, barToken n)
 
     -- clock, like |03:30|
-    clock n (O.tCut -> O.Jp c cs)
+    clock n (O.cut -> O.Jp c cs)
         | c == '|'                   = (cs, barToken (n + 1))
         | isClock c                  = clock (n + 1) cs
     clock n cs                       = (cs, barToken n)

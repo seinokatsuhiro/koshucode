@@ -85,7 +85,7 @@ decodeBase :: forall t. (O.Textual t) => Integer -> DecodeAb t T.Decimal
 decodeBase base ccs = headPart id ccs where
     minus x = - x
 
-    headPart sign (O.tCut -> O.Jp c cs) = case c of
+    headPart sign (O.cut -> O.Jp c cs) = case c of
         ' '  -> headPart sign  cs
         '-'  -> headPart minus cs
         '+'  -> headPart sign  cs
@@ -93,7 +93,7 @@ decodeBase base ccs = headPart id ccs where
     headPart _ _ = Msg.notNumber ccs
 
     intPart :: Sign -> T.DecimalInteger -> DecodeAb t T.Decimal
-    intPart sign n (O.tCut -> O.Jp c cs)
+    intPart sign n (O.cut -> O.Jp c cs)
         = case digitToInteger c of
             Just i           -> do n' <- up c i n
                                    intPart  sign n' cs
@@ -104,14 +104,14 @@ decodeBase base ccs = headPart id ccs where
     intPart sign n _ = decimal 0 (sign n)
 
     ooPart :: Sign -> T.DecimalFracle -> T.DecimalInteger-> DecodeAb t T.Decimal
-    ooPart sign l n (O.tCut -> O.Jp c cs)
+    ooPart sign l n (O.cut -> O.Jp c cs)
         | c == ' '   = ooPart   sign l n cs
         | c == 'o'   = ooPart   sign (l - 1) n cs
         | otherwise  = tailPart sign (n, l) (c O.<:> cs)
     ooPart sign l n _ = decimal l (sign n)
 
     fracPart :: Sign -> T.DecimalInteger -> T.DecimalFracle -> DecodeAb t T.Decimal
-    fracPart sign n f (O.tCut -> O.Jp c cs)
+    fracPart sign n f (O.cut -> O.Jp c cs)
         = case digitToInteger c of
             Just i           -> do n' <- up c i n
                                    fracPart sign n' (f + 1) cs
@@ -120,7 +120,7 @@ decodeBase base ccs = headPart id ccs where
     fracPart sign n f _ = decimal f (sign n)
 
     tailPart :: Sign -> (T.DecimalInteger, T.DecimalFracle) -> DecodeAb t T.Decimal
-    tailPart sign dec (O.tCut -> O.Jp c cs) = case c of
+    tailPart sign dec (O.cut -> O.Jp c cs) = case c of
         ' '  -> tailPart sign  dec cs
         '-'  -> tailPart minus dec cs
         '+'  -> tailPart id    dec cs
@@ -165,10 +165,10 @@ instance B.MixEncode T.Decimal where
 --   " 1234"
 --
 separator :: (O.Textual t) => O.Map t
-separator t@(O.tCut2 -> Just (_, Nothing))  = t
-separator t@(O.tCut  -> O.Jp ' ' _)         = t
-separator t | O.tIsEmpty t                  = t
-            | otherwise                     = ' ' O.<:> t
+separator t@(O.cut2 -> Just (_, Nothing))  = t
+separator t@(O.cut  -> O.Jp ' ' _)         = t
+separator t | O.tIsEmpty t                 = t
+            | otherwise                    = ' ' O.<:> t
 
 -- | Encode decimals.
 --

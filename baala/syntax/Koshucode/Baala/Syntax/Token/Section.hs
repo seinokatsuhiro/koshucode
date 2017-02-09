@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -38,7 +39,7 @@ section change f
         sc@B.CodeScan { B.scanMap    = prev
                       , B.scanInput  = cs0
                       , B.scanOutput = out } = body out cs0 where
-    body [] (O.tCut -> O.Jp '=' _) = B.codeChange (selectSection change prev) sc
+    body [] (O.cut -> O.Jp '=' _) = B.codeChange (selectSection change prev) sc
     body _ cs = f cs
 
 selectSection :: (O.Textual t) => ChangeSection t -> S.TokenScanMap t -> S.TokenScanMap t
@@ -51,9 +52,9 @@ selectSection change prev
     clipw  = S.clipUpdateC sc
     out    = reverse $ S.sweepToken $ B.scanOutput sc
 
-    sec (O.tCut2 -> O.Jp2 '*' '*' _)
+    sec (O.cut2 -> O.Jp2 '*' '*' _)
                          = dispatch out  -- end of effective text
-    sec ccs@(O.tCut -> O.Jp c cs)
+    sec ccs@(O.cut -> O.Jp c cs)
         | S.isSpace c    = clip  $ S.clipSpace  cp cs
         | S.isSymbol c   = clipw $ S.clipSymbol cp ws ccs
         | otherwise      = sectionUnexp [] sc
@@ -111,7 +112,7 @@ scanLine form change sc = section change text sc where
 
 scanLineInClause :: (O.Textual t) => S.TextForm -> Scanner t
 scanLineInClause form change sc = section change text sc where
-    text cs@(O.tCut -> O.Jp c _)
+    text cs@(O.cut -> O.Jp c _)
         | S.isSpace c = S.clipUpdate sc $ S.clipSpace (B.scanCp sc) cs
         | B.isBol sc  = B.codeScanRestore sc
         | otherwise   = let tok = S.TText (B.scanCp sc) form cs
@@ -124,7 +125,7 @@ scanTextAssert change sc = section change text sc where
     cp = B.getCP sc
     raw = S.TText cp S.TextRaw
 
-    text ccs@(O.tCut -> O.Jp c cs)
+    text ccs@(O.cut -> O.Jp c cs)
         | S.isSpace c  = S.clipUpdate  sc $ S.clipSpace cp ccs
         | c == '|'     = S.clipUpdate  sc $ S.clipBar cp cs
         | c == ':'     = B.codeChange (scanLineInClause S.TextRaw change)
