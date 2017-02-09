@@ -22,18 +22,18 @@ import qualified Koshucode.Baala.Subtext.Operator  as T
 
 -- | Matching parameter.
 data Para a = Para
-  { paraBundle     :: T.BundleMap a  -- ^ Expression bundle
-  , paraRawSubs    :: [Submatch a]   -- ^ Submatches.
-  , paraGather     :: Bool           -- ^ Gather or skip match result
-  , paraExpr       :: T.Expr [a] a   -- ^ Match expression
-  , paraPos        :: Int            -- ^ Position on input sequence
-  , paraInput      :: [a]            -- ^ Input sequence
-  , paraPrev       :: Maybe a        -- ^ Previous element
-  , paraRawOutput  :: [a]            -- ^ Match result
+  { paraBundle     :: T.BundleMap a     -- ^ Expression bundle
+  , paraRawSubs    :: [Submatch [a] a]  -- ^ Submatches.
+  , paraGather     :: Bool              -- ^ Gather or skip match result
+  , paraExpr       :: T.Expr [a] a      -- ^ Match expression
+  , paraPos        :: Int               -- ^ Position on input sequence
+  , paraInput      :: [a]               -- ^ Input sequence
+  , paraPrev       :: Maybe a           -- ^ Previous element
+  , paraRawOutput  :: [a]               -- ^ Match result
   } deriving (Show, Eq, Ord)
 
 -- | Submatch result, its name and matched sequence.
-type Submatch a = (O.Name, [a])
+type Submatch as a = (O.Name, as)
 
 -- | Create matching parameter from
 --   expression bundle and input sequence.
@@ -57,7 +57,7 @@ simplify bun@T.Bundle { T.bundleExpr = es } =
            , T.bundleStart = T.startExpr es' }
 
 -- | Remove redundant expressions.
-reduce :: T.Expr [a] a -> T.Expr [a] a
+reduce :: T.Expr as a -> T.Expr as a
 reduce = top where
     top (T.ERec  r)    = rec r
     top (T.EBase b)    = T.EBase b
@@ -86,7 +86,7 @@ reduce = top where
     rec (T.EGath b e)  = T.ERec $ T.EGath b (top e)
 
 -- | Replace context-dependent operator.
-what :: T.Expr [a] a -> T.Expr [a] a
+what :: T.Expr as a -> T.Expr as a
 what = top where
     top (T.ERec r)     = T.ERec $ rec r
     top e              = case replaceWhat T.anySeq e of
@@ -113,13 +113,13 @@ what = top where
     seq [e] = [top e]
     seq []  = []
 
-replaceWhat :: T.Expr [a] a -> T.Expr [a] a -> Maybe (T.Expr [a] a)
+replaceWhat :: T.Expr as a -> T.Expr as a -> Maybe (T.Expr as a)
 replaceWhat rep = berryM loop where
     loop (T.EBase T.EWhat)  = Just rep
     loop _                  = Nothing
 
 -- | Map to berry expression.
-berryM :: (Monad m) => (T.Expr [a] a -> m (T.Expr [a] a)) -> T.Expr [a] a -> m (T.Expr [a] a)
+berryM :: (Monad m) => (T.Expr as a -> m (T.Expr as a)) -> T.Expr as a -> m (T.Expr as a)
 berryM f = loop where
     loop (T.ERec (T.ESub n e))  = return . T.ERec . T.ESub  n O.# loop e
     loop (T.ERec (T.EGath b e)) = return . T.ERec . T.EGath b O.# loop e

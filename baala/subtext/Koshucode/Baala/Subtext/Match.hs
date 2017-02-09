@@ -30,7 +30,7 @@ type GeneralMatch a = [a] -> Maybe (MatchResult a)
 type CharMatch = GeneralMatch Char
 
 -- | Main and submatches.
-type MatchResult a = ([a], [T.Submatch a])
+type MatchResult a = ([a], [T.Submatch [a] a])
 
 -- | Apply match expression to input sequence.
 matchExpr :: (Show a) => T.Expr [a] a -> GeneralMatch a
@@ -51,7 +51,7 @@ mainMatch :: T.Para a -> [a]
 mainMatch = O.reverse . T.paraRawOutput
 
 -- | Extract submatches.
-subMatches :: T.Para a -> [T.Submatch a]
+subMatches :: T.Para a -> [T.Submatch [a] a]
 subMatches = O.reverse . T.paraRawSubs
 
 -- | Match procedure.
