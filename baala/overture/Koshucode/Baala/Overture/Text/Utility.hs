@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -55,7 +56,7 @@ trimBegin = tDropWhile Ch.isSpace
 
 tDropWhile :: (O.Textual t) => O.Test Char -> t -> t
 tDropWhile f = loop where
-    loop (O.tCut -> Just (c, t)) | f c  = loop t
+    loop (O.cut -> Just (c, t)) | f c  = loop t
     loop t = t
 
 -- | Remove space and space-like characters from the end of string.
@@ -64,9 +65,9 @@ tDropWhile f = loop where
 --   "  abc"
 --
 trimEnd :: (O.Textual t) => t -> t
-trimEnd (O.tCut -> Just (x, xs)) =
+trimEnd (O.cut -> Just (x, xs)) =
     let ys = x O.<:> trimEnd xs
-    in case O.tCut2 ys of
+    in case O.cut2 ys of
          Just (y, Nothing) | Ch.isSpace y -> O.tEmpty
          _ -> ys
 trimEnd t = t
@@ -87,7 +88,7 @@ trimBoth = trimEnd . trimBegin
 --
 sweep :: (O.Textual t) => t -> t
 sweep = loop . trimBegin where
-    loop (O.tCut -> Just(c, t))
+    loop (O.cut -> Just(c, t))
         | Ch.isSpace c  = case loop $ trimBegin t of
                             t' | O.tIsEmpty t' -> O.tEmpty
                                | otherwise     -> ' ' O.<:> t'
@@ -100,7 +101,7 @@ sweep = loop . trimBegin where
 --   "foobarbaz"
 --
 sweepAll :: (O.Textual t) => t -> t
-sweepAll (O.tCut -> Just (c, t))
+sweepAll (O.cut -> Just (c, t))
     | Ch.isSpace c  = sweepAll t
     | otherwise     = c O.<:> sweepAll t
 sweepAll t = t
@@ -160,7 +161,7 @@ charWidth c
 --   ""
 --
 addSpace :: (O.Textual t) => t -> t
-addSpace cs@(O.tCut -> Just (c, _))
+addSpace cs@(O.cut -> Just (c, _))
     | Ch.isSpace c   = cs
     | otherwise      = ' ' O.<:> cs
 addSpace _           = O.tEmpty

@@ -88,9 +88,9 @@ textualLines s
     | otherwise = ln : next s2
     where
       (ln, s2) = O.tWhileNot isCrlf s
-      next (O.tCut -> O.Jp '\r' s3) = next s3
-      next (O.tCut -> O.Jp '\n' s3) = textualLines s3
-      next s3                       = textualLines s3
+      next (O.cut -> O.Jp '\r' s3) = next s3
+      next (O.cut -> O.Jp '\n' s3) = textualLines s3
+      next s3                      = textualLines s3
 
 isCrlf :: Char -> Bool
 isCrlf '\r' = True

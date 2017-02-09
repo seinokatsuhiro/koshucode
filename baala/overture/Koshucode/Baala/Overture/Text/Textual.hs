@@ -9,7 +9,7 @@
 module Koshucode.Baala.Overture.Text.Textual
   ( Textual (..),
     (<:>),
-    cut,
+    cut, cut2, cut3,
     stringify,
   ) where
 
@@ -116,31 +116,13 @@ class (Show t, Eq t, Ord t, Monoid t, Str.IsString t, Ll.ListLike t Char) => Tex
     tAdd3 c d e = tAdd c . tAdd2 d e
 
     -- | Split text into first character and rest of text.
-    --
-    --   >>> tCut "foo"
-    --   Just ('f',"oo")
-    --
-    --   >>> tCut ""
-    --   Nothing
-    --
     tCut :: t -> Maybe (Char, t)
 
     -- | Split one or two characters.
-    --
-    --   >>> tCut2 "bar"
-    --   Just ('b', Just ('a', "r"))
-    --
     tCut2 :: t -> Maybe (Char, Maybe (Char, t))
     tCut2 a = tCut O.<$$> tCut a
 
     -- | Split one, two, or three characters.
-    --
-    --   >>> tCut3 "bar"
-    --   Just ('b', Just ('a', Just ('r', "")))
-    --
-    --   >>> tCut3 "b"
-    --   Just ('b', Nothing)
-    --
     tCut3 :: t -> Maybe (Char, Maybe (Char, Maybe (Char, t)))
     tCut3 a = tCut2 O.<$$> tCut a
 
@@ -459,9 +441,35 @@ infixr 5 <:>
 (<:>) :: (Ll.ListLike es e) => e -> es -> es
 (<:>) = Ll.cons
 
--- | Split first element and rest of list.
+{-| Split first element and rest of list.
+
+    >>> cut "foo"
+    Just ('f',"oo")
+
+    >>> cut ""
+    Nothing
+-}
 cut :: (Ll.ListLike es e) => es -> Maybe (e, es)
 cut = Ll.uncons
+
+{-| Split first and second elements and rest of list.
+
+    >>> cut2 "bar"
+    Just ('b', Just ('a', "r"))
+-}
+cut2 :: (Ll.ListLike es e) => es -> Maybe (e, Maybe (e, es))
+cut2 es = cut O.<$$> cut es
+
+{-| Split first, second, third elements and rest of list.
+    
+    >>> cut3 "bar"
+    Just ('b', Just ('a', Just ('r', "")))
+
+    >>> cut3 "b"
+    Just ('b', Nothing)
+-}
+cut3 :: (Ll.ListLike es e) => es -> Maybe (e, Maybe (e, Maybe (e, es)))
+cut3 es = cut2 O.<$$> cut es
 
 -- | Convert textual something to string something.
 stringify :: (Functor f, Textual t) => f t -> f String

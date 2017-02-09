@@ -19,7 +19,7 @@ import qualified Koshucode.Baala.Overture          as O
 --
 unprefix :: (O.Textual t) => O.Test Char -> Char -> t -> t
 unprefix test del s = loop s where
-    loop (O.tCut -> O.Jp c cs)
+    loop (O.cut -> O.Jp c cs)
         | test c     = loop cs
         | c == del   = cs
         | otherwise  = s

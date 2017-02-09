@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -34,7 +35,7 @@ textMaybe f s = case f s of
 
 -- | Decode decimal integer.
 tDec :: (O.Textual t, Eq n, Num n) => t -> Maybe n
-tDec (O.tCut -> Just (sign, t))
+tDec (O.cut -> Just (sign, t))
     | sign == '+' = tDecDigits t
     | sign == '-' = negate <$> tDecDigits t
 tDec t = tDecDigits t
@@ -145,7 +146,7 @@ tIntegerFrom from digits = loop 0 where
     m = Ms.fromList $ zip digits [from ..]
     b = toInteger $ length digits
 
-    loop n (O.tCut -> Just (d, ds)) =
+    loop n (O.cut -> Just (d, ds)) =
         case Ms.lookup d m of
           Nothing -> Nothing
           Just i  -> loop (b * n + i) ds
