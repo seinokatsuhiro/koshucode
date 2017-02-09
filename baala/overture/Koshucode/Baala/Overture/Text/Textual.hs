@@ -29,6 +29,11 @@ import qualified Koshucode.Baala.Overture.Infix         as O
 import qualified Koshucode.Baala.Overture.Misc          as O
 import qualified Koshucode.Baala.Overture.Shorthand     as O
 
+{-# DEPRECATED tAdd "Use '<:>' instead." #-}
+{-# DEPRECATED tCut "Use 'cut' instead." #-}
+{-# DEPRECATED tCut2 "Use 'cut2' instead." #-}
+{-# DEPRECATED tCut3 "Use 'cut3' instead." #-}
+
 -- | Text-like value.
 class (Show t, Eq t, Ord t, Monoid t, Str.IsString t, Ll.ListLike t Char) => Textual t where
 
@@ -93,10 +98,6 @@ class (Show t, Eq t, Ord t, Monoid t, Str.IsString t, Ll.ListLike t Char) => Tex
     -- ----------------------  Subtext
 
     -- | Preppend character to text.
-    --
-    --   >>> tAdd 'g' "foo"
-    --   "gfoo"
-    --
     tAdd :: Char -> t -> t
 
     -- | Preppend two characters to text.
