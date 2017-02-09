@@ -33,7 +33,7 @@ type CharMatch = GeneralMatch Char
 type MatchResult a = ([a], [T.Submatch a])
 
 -- | Apply match expression to input sequence.
-matchExpr :: (Show a) => T.Expr a -> GeneralMatch a
+matchExpr :: (Show a) => T.Expr [a] a -> GeneralMatch a
 matchExpr e = matchBundle $ T.bundle [("start", e)]
 
 -- | Apply expression bundle to input sequence.

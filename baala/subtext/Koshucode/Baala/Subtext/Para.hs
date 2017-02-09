@@ -25,7 +25,7 @@ data Para a = Para
   { paraBundle     :: T.BundleMap a  -- ^ Expression bundle
   , paraRawSubs    :: [Submatch a]   -- ^ Submatches.
   , paraGather     :: Bool           -- ^ Gather or skip match result
-  , paraExpr       :: T.Expr a       -- ^ Match expression
+  , paraExpr       :: T.Expr [a] a   -- ^ Match expression
   , paraPos        :: Int            -- ^ Position on input sequence
   , paraInput      :: [a]            -- ^ Input sequence
   , paraPrev       :: Maybe a        -- ^ Previous element
@@ -57,7 +57,7 @@ simplify bun@T.Bundle { T.bundleExpr = es } =
            , T.bundleStart = T.startExpr es' }
 
 -- | Remove redundant expressions.
-reduce :: T.Expr a -> T.Expr a
+reduce :: T.Expr [a] a -> T.Expr [a] a
 reduce = top where
     top (T.ERec  r)    = rec r
     top (T.EBase b)    = T.EBase b
@@ -86,7 +86,7 @@ reduce = top where
     rec (T.EGath b e)  = T.ERec $ T.EGath b (top e)
 
 -- | Replace context-dependent operator.
-what :: T.Expr a -> T.Expr a
+what :: T.Expr [a] a -> T.Expr [a] a
 what = top where
     top (T.ERec r)     = T.ERec $ rec r
     top e              = case replaceWhat T.anySeq e of
@@ -113,13 +113,13 @@ what = top where
     seq [e] = [top e]
     seq []  = []
 
-replaceWhat :: T.Expr a -> T.Expr a -> Maybe (T.Expr a)
+replaceWhat :: T.Expr [a] a -> T.Expr [a] a -> Maybe (T.Expr [a] a)
 replaceWhat rep = berryM loop where
     loop (T.EBase T.EWhat)  = Just rep
     loop _                  = Nothing
 
 -- | Map to berry expression.
-berryM :: (Monad m) => (T.Expr a -> m (T.Expr a)) -> T.Expr a -> m (T.Expr a)
+berryM :: (Monad m) => (T.Expr [a] a -> m (T.Expr [a] a)) -> T.Expr [a] a -> m (T.Expr [a] a)
 berryM f = loop where
     loop (T.ERec (T.ESub n e))  = return . T.ERec . T.ESub  n O.# loop e
     loop (T.ERec (T.EGath b e)) = return . T.ERec . T.EGath b O.# loop e

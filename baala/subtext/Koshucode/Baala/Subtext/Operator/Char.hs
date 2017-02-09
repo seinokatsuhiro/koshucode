@@ -31,7 +31,7 @@ import qualified Koshucode.Baala.Subtext.Operator.Repeat     as T
 import qualified Koshucode.Baala.Subtext.Operator.Combine    as T
 
 -- | Subtext expression for character input.
-type CharExpr = T.Expr Char
+type CharExpr = T.Expr String Char
 
 -- | Match some character in a list of characters.
 char :: [Char] -> CharExpr
