@@ -1,4 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Content operators on lists.
@@ -72,8 +73,8 @@ copsList =
     , D.CopCalc  (D.copNormal "sort")           copSort
     , D.CopCalc  (D.copNormal "take")           copTake
     , D.CopCalc  (D.copNormal "take-tail")      copTakeTail
-    , D.CopCalc  (D.copNormal "take-odd")     $ copTakeOddEven (B.takeOdd,  B.takeOdd)
-    , D.CopCalc  (D.copNormal "take-even")    $ copTakeOddEven (B.takeEven, B.takeEven)
+    , D.CopCalc  (D.copNormal "take-odd")     $ copTakeOddEven (csTakeOdd,  B.takeOdd)
+    , D.CopCalc  (D.copNormal "take-even")    $ copTakeOddEven (csTakeEven, B.takeEven)
     , D.CopCalc  (D.copNormal "term-set")       copTermSet
     , D.CopCalc  (D.copNormal "total")          copTotal
     ]
@@ -82,6 +83,13 @@ copList :: (D.CList c) => D.CopCalc c
 copList argC = do arg <- sequence argC
                   D.putList arg
 
+csTakeOdd :: (O.Textual t) => t -> t
+csTakeOdd (O.tCut2 -> O.Jp2 c _ t) = c O.<:> csTakeOdd t
+csTakeOdd t = t
+
+csTakeEven ::(O.Textual t) => t -> t
+csTakeEven (O.tCut2 -> O.Jp2 _ c t) = c O.<:> csTakeEven t
+csTakeEven _ = O.tEmpty
 
 -- ----------------------  aggregation
 
@@ -106,11 +114,12 @@ copLength :: (D.CContent c) => D.CopCalc c
 copLength = op where
     op [Right c] | D.isList c  = len c D.gList
                  | D.isSet  c  = len c D.gSet
-                 | D.isText c  = len c D.gText
+                 | D.isText c  = tlen c D.gText
                  | D.isRel  c  = len c (T.relBody . D.gRel)
     op xs = Msg.badArg xs
 
-    len c f = Right . D.pInt $ length (f c)
+    len  c f = Right . D.pInt $ length (f c)
+    tlen c f = Right . D.pInt $ O.tLength (f c)
 
 
 -- ----------------------  set-like operation
@@ -118,7 +127,7 @@ copLength = op where
 copAppend :: (D.CContent c) => D.CopCalc c
 copAppend [] = Right D.empty
 copAppend xs@(x : _) = op x where
-    op (Right c) | D.isText c = D.putText . concat =<< mapM D.getText xs
+    op (Right c) | D.isText c = D.putText . O.tJoinAll =<< mapM D.getText xs
                  | D.isSet  c = D.putSet  . concat =<< mapM D.getSet  xs
                  | D.isList c = D.putList . concat =<< mapM D.getList xs
     op _ = Msg.badArg xs
@@ -154,50 +163,59 @@ copSort = op where
 
 copReverse :: (D.CContent c) => D.CopCalc c
 copReverse = op where
-    op [Right c] | D.isText c  = D.putText $ reverse $ D.gText c
+    op [Right c] | D.isText c  = D.putText $ O.csReverse $ D.gText c
                  | D.isList c  = D.putList $ reverse $ D.gList c
     op xs = Msg.badArg xs
 
 
 -- ----------------------  take-odd & take-even
 
-copTakeOddEven :: (D.CContent c) => (String -> String, [c] -> [c]) -> D.CopCalc c
+copTakeOddEven :: (D.CContent c) => (S.CharsMap, [c] -> [c]) -> D.CopCalc c
 copTakeOddEven fg arg = D.getRightArg1 arg >>= collMap fg
 
-collMap :: (D.CContent c) => (String -> String, [c] -> [c]) -> c -> B.Ab c
+collMap :: (D.CContent c) => (S.CharsMap, [c] -> [c]) -> c -> B.Ab c
 collMap (f, g) xs
-    | D.isText  xs  = gpMap D.gpText    f xs
-    | D.isList  xs  = gpMap D.gpList    g xs
-    | D.isSet   xs  = gpMap D.gpSetSort g xs
+    | D.isText  xs  = gpMapCs D.gpText    f xs
+    | D.isList  xs  = gpMap   D.gpList    g xs
+    | D.isSet   xs  = gpMap   D.gpSetSort g xs
     | D.isEmpty xs  = Right D.empty
     | otherwise     = Msg.badArg [Right xs]
 
 gpMap :: D.CGetPut [a] c -> O.Map [a] -> c -> B.Ab c
 gpMap (get, put) f = Right . put . f . get
 
+gpMapCs :: D.CGetPut S.Chars c -> O.Map S.Chars -> c -> B.Ab c
+gpMapCs (get, put) f = Right . put . f . get
+
 
 -- ----------------------  take & drop
 
 type TakeDrop a   = Int -> [a] -> [a]
-type TakeDrop2 a  = (TakeDrop Char, TakeDrop a)
+type TakeDrop2 a  = (Int -> S.Chars -> S.Chars, TakeDrop a)
 
 copTake :: (D.CContent c) => D.CopCalc c
-copTake = copTakeOrDrop (take, take)
+copTake = copTakeOrDrop (O.tTake, take)
 
 copDrop :: (D.CContent c) => D.CopCalc c
-copDrop = copTakeOrDrop (drop, drop)
+copDrop = copTakeOrDrop (O.tDrop, drop)
 
 copTakeTail :: (D.CContent c) => D.CopCalc c
-copTakeTail = copTakeOrDrop (takeTail, takeTail)
+copTakeTail = copTakeOrDrop (csTakeTail, takeTail)
 
 copDropTail :: (D.CContent c) => D.CopCalc c
-copDropTail = copTakeOrDrop (dropTail, dropTail)
+copDropTail = copTakeOrDrop (csDropTail, dropTail)
 
 takeTail :: Int -> [a] -> [a]
 takeTail n = (take n O./$/)
 
 dropTail :: Int -> [a] -> [a]
 dropTail n = (drop n O./$/)
+
+csTakeTail :: (O.Textual t) => Int -> t -> t
+csTakeTail n = O.csReverse . O.tTake n . O.csReverse
+
+csDropTail :: (O.Textual t) => Int -> t -> t
+csDropTail n = O.csReverse . O.tDrop n . O.csReverse
 
 copTakeOrDrop :: (D.CContent c) => TakeDrop2 c -> D.CopCalc c
 copTakeOrDrop (f, g) arg =
@@ -212,17 +230,26 @@ copTakeOrDrop (f, g) arg =
 -- ----------------------  drop-take
 
 type DropTake a   = Int -> Int -> [a] -> [a]
-type DropTake2 a  = (DropTake Char, DropTake a)
+type DropTakeCs   = Int -> Int -> S.Chars -> S.Chars
+type DropTake2 a  = (DropTakeCs, DropTake a)
 
 copDropTake :: (D.CContent c) => D.CopCalc c
-copDropTake = dropTakeCop (dropTake, dropTake)
+copDropTake = dropTakeCop (csDropTake, dropTake)
 
 copDropTakeTail :: (D.CContent c) => D.CopCalc c
-copDropTakeTail = dropTakeCop (dropTake', dropTake') where
-    dropTake' d t = (dropTake d t O./$/)
+copDropTakeTail = dropTakeCop (csDropTakeTail, dropTakeTail) where
 
 dropTake :: DropTake a
 dropTake d t = take t . drop d
+
+dropTakeTail :: DropTake a
+dropTakeTail d t = (dropTake d t O./$/)
+
+csDropTake :: DropTakeCs
+csDropTake d t = O.tTake t . O.tDrop d
+
+csDropTakeTail :: DropTakeCs
+csDropTakeTail d t = O.csReverse . csDropTake d t . O.csReverse
 
 dropTakeCop :: (D.CContent c) => DropTake2 c -> D.CopCalc c
 dropTakeCop fg arg =
@@ -235,9 +262,9 @@ dropTakeCop fg arg =
 
 dropTakeDispatch :: (D.CContent c) => DropTake2 c -> [B.Ab c] -> Int -> Int -> c -> B.Ab c
 dropTakeDispatch (f, g) arg d t xs'
-    | D.isText  xs'  = gpMap D.gpText    (f d t) xs'
-    | D.isList  xs'  = gpMap D.gpList    (g d t) xs'
-    | D.isSet   xs'  = gpMap D.gpSetSort (g d t) xs'
+    | D.isText  xs'  = gpMapCs D.gpText    (f d t) xs'
+    | D.isList  xs'  = gpMap   D.gpList    (g d t) xs'
+    | D.isSet   xs'  = gpMap   D.gpSetSort (g d t) xs'
     | D.isEmpty xs'  = Right D.empty
     | otherwise      = Msg.badArg arg
 
