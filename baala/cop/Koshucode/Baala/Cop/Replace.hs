@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Replace sublists.
@@ -11,10 +12,10 @@ module Koshucode.Baala.Cop.Replace
     replaceEnd,
   ) where
 
-import qualified Data.List  as List
+import qualified Koshucode.Baala.Overture as O
 
 -- | Type of replace function, /from/ → /to/ → /xs/ → /ys/.
-type Replace a = [a] -> [a] -> [a] -> [a]
+type Replace t = t -> t -> t -> t
 
 -- | Replace all occurrences.
 --
@@ -27,12 +28,12 @@ type Replace a = [a] -> [a] -> [a] -> [a]
 -- >>> replaceAll "" "BR" "abracadabra"
 -- "abracadabra"
 
-replaceAll :: (Eq a) => Replace a
+replaceAll :: (O.Textual t) => Replace t
 replaceAll from to = loop where
-    loop [] = []
-    loop xxs@(x:xs)
-        | xxs =* from   = to ++ loop (dropLength from xxs)
-        | otherwise     = x : loop xs
+    loop xxs@(O.tCut -> O.Jp x xs)
+        | xxs =* from   = to O.++ loop (dropLength from xxs)
+        | otherwise     = x O.<:> loop xs
+    loop xs = xs
 
 -- | Replace first occurrence.
 --
@@ -45,12 +46,12 @@ replaceAll from to = loop where
 -- >>> replaceFirst "" "BR" "abracadabra"
 -- "abracadabra"
 
-replaceFirst :: (Eq a) => Replace a
+replaceFirst :: (O.Textual t) => Replace t
 replaceFirst from to = loop where
-    loop [] = []
-    loop xxs@(x:xs)
-        | xxs =* from   = to ++ dropLength from xxs
-        | otherwise     = x : loop xs
+    loop xxs@(O.tCut -> O.Jp x xs)
+        | xxs =* from   = to O.++ dropLength from xxs
+        | otherwise     = x O.<:> loop xs
+    loop xs = xs
 
 -- | Replace last occurrence.
 --
@@ -63,7 +64,7 @@ replaceFirst from to = loop where
 -- >>> replaceLast "" "BR" "abracadabra"
 -- "abracadabra"
 
-replaceLast :: (Eq a) => [a] -> [a] -> [a] -> [a]
+replaceLast :: (O.Textual t) => Replace t
 replaceLast = replaceReverse replaceFirst
 
 -- | Replace occurrence at the beginning.
@@ -77,9 +78,9 @@ replaceLast = replaceReverse replaceFirst
 -- >>> replaceBegin "" "BR" "abracadabra"
 -- "abracadabra"
 
-replaceBegin :: (Eq a) => Replace a
+replaceBegin :: (O.Textual t) => Replace t
 replaceBegin from to xs
-    | xs =* from   = to ++ dropLength from xs
+    | xs =* from   = to O.++ dropLength from xs
     | otherwise    = xs
 
 -- | Replace occurrence at the end.
@@ -93,22 +94,23 @@ replaceBegin from to xs
 -- >>> replaceEnd "" "BR" "abracadabra"
 -- "abracadabra"
 
-replaceEnd :: (Eq a) => Replace a
+replaceEnd :: (O.Textual t) => Replace t
 replaceEnd = replaceReverse replaceBegin
 
 
 -- ----------------------  Utility
 
-(=*) :: (Eq a) => [a] -> [a] -> Bool
-_  =* []    = False
-xs =* from  = from `List.isPrefixOf` xs
+(=*) :: (O.Textual t) => t -> t -> Bool
+xs =* from
+   | O.tIsEmpty from = False
+   | otherwise       = O.csIsPrefix from xs
 
-dropLength :: [a] -> [a] -> [a]
-dropLength = drop . length
+dropLength :: (O.Textual t) => t -> t -> t
+dropLength = O.tDrop . O.tLength
 
-replaceReverse :: (Eq a) => Replace a -> Replace a
-replaceReverse rep from to xs = reverse $ rep from' to' xs' where
-    from' = reverse from
-    to'   = reverse to
-    xs'   = reverse xs
+replaceReverse :: (O.Textual t) => Replace t -> Replace t
+replaceReverse rep from to xs = O.csReverse $ rep from' to' xs' where
+    from' = O.csReverse from
+    to'   = O.csReverse to
+    xs'   = O.csReverse xs
 

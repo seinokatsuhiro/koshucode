@@ -11,6 +11,7 @@ module Koshucode.Baala.Cop.List
 import qualified Data.List                         as List
 import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Type              as T
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Cop.Coxhand       as H
@@ -291,7 +292,7 @@ copReplaceBegin = copReplace Cop.replaceBegin
 copReplaceEnd :: (D.CContent c) => D.CopCalc c
 copReplaceEnd = copReplace Cop.replaceEnd
 
-copReplace :: (D.CContent c) => Cop.Replace Char -> D.CopCalc c
+copReplace :: (D.CContent c) => Cop.Replace S.Chars -> D.CopCalc c
 copReplace rep = op where
     op [Right from, Right to, Right text]
         | D.isText from && D.isText to && D.isText text =
