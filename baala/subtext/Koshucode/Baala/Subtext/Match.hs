@@ -14,6 +14,7 @@ module Koshucode.Baala.Subtext.Match
 import Prelude hiding (seq)
 
 import qualified Data.Map.Strict                   as Ms
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Overture.Fn       as O
 import qualified Koshucode.Baala.Subtext.Bundle    as T
 import qualified Koshucode.Baala.Subtext.Expr      as T
@@ -47,11 +48,11 @@ matchResult result = (mainMatch result, subMatches result)
 
 -- | Extract matched text.
 mainMatch :: T.Para a -> [a]
-mainMatch = reverse . T.paraRawOutput
+mainMatch = O.reverse . T.paraRawOutput
 
 -- | Extract submatches.
 subMatches :: T.Para a -> [T.Submatch a]
-subMatches = reverse . T.paraRawSubs
+subMatches = O.reverse . T.paraRawSubs
 
 -- | Match procedure.
 match :: (Show a) => T.Para a -> Maybe (T.Para a)
@@ -92,16 +93,16 @@ match pa@T.Para { T.paraBundle    = bundle
 
       rec (T.ERep m e)      = rep m e
       rec (T.ELast  e)      = let m s' = pa { T.paraInput = s' } ? e
-                              in firstJust (m <$> reverse (tails s))
-      rec (T.ESub n e)      = do pa' <- pa { T.paraRawOutput = [] } ? e
+                              in firstJust (m <$> O.reverse (tails s))
+      rec (T.ESub n e)      = do pa' <- pa { T.paraRawOutput = O.empty } ? e
                                  let o'   = T.paraRawOutput pa'
                                      subs = T.paraRawSubs pa'
-                                 Just $ pa' { T.paraRawSubs   = (n, reverse o') : subs
+                                 Just $ pa' { T.paraRawSubs   = (n, O.reverse o') : subs
                                             , T.paraRawOutput = o' ++ o }
       rec (T.EAs (O.Fn _ f) e)
-                            = do pa' <- pa { T.paraRawOutput = [] } ? e
+                            = do pa' <- pa { T.paraRawOutput = O.empty } ? e
                                  let o' = T.paraRawOutput pa'
-                                 Just $ pa' { T.paraRawOutput = reverse (f o') ++ o }
+                                 Just $ pa' { T.paraRawOutput = O.reverse (f o') ++ o }
       rec (T.EGath b e)     = do pa' <- pa { T.paraGather = b } ? e
                                  Just $ pa' { T.paraGather = gather }
 
@@ -134,27 +135,28 @@ match pa@T.Para { T.paraBundle    = bundle
       -- ----------------------  base
 
       base (T.EElem (O.Fn _ f)) =
-          case s of
-            x : s' | f x   -> Just $ pa { T.paraPos       = pos + 1
-                                        , T.paraInput     = s'
-                                        , T.paraPrev      = Just x
-                                        , T.paraRawOutput = output $ x : o }
-            _              -> Nothing
+          case O.cut s of
+            Just (x, s') | f x
+                 -> Just $ pa { T.paraPos       = pos + 1
+                              , T.paraInput     = s'
+                              , T.paraPrev      = Just x
+                              , T.paraRawOutput = output $ x O.<:> o }
+            _    -> Nothing
 
       base (T.ESpan (O.Fn _ f)) =
           do (w, s') <- f s
-             Just $ pa { T.paraPos       = pos + length w
+             Just $ pa { T.paraPos       = pos + O.length w
                        , T.paraInput     = s'
-                       , T.paraPrev      = case reverse w of
-                                             x : _ -> Just x
-                                             []    -> prev
-                       , T.paraRawOutput = output $ w ++ o }
+                       , T.paraPrev      = case O.cut $ O.reverse w of
+                                             Just (x, _) -> Just x
+                                             Nothing     -> prev
+                       , T.paraRawOutput = output $ w O.++ o }
 
       base (T.EInter (O.Fn2 _ f)) =
-          case s of
-            r : _  | f prev (Just r)   -> Just pa
-            []     | f prev (Nothing)  -> Just pa
-            _                          -> Nothing
+          case O.cut s of
+            Just (r, _) | f prev (Just r)  -> Just pa
+            Nothing     | f prev (Nothing) -> Just pa
+            _                              -> Nothing
 
       base (T.EChange n) =
           do e' <- Ms.lookup n bundle
@@ -169,9 +171,10 @@ match pa@T.Para { T.paraBundle    = bundle
       when True   = Just pa
       when False  = Nothing
 
-tails :: [a] -> [[a]]
-tails []         = [[]]
-tails xs@(_:xs') = xs : tails xs'
+tails :: (O.List es e) => es -> [es]
+tails es = case O.cut es of
+             Just (_, es') -> es O.<:> tails es'
+             Nothing       -> [O.empty]
 
 firstJust :: [Maybe a] -> Maybe a
 firstJust []              = Nothing
