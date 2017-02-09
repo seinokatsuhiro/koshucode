@@ -97,7 +97,7 @@ trimIf False t = t
 -- --------------------------------------------  Parser
 
 -- | Type for subtext bundle.
-type CharBundle = T.Bundle Char
+type CharBundle = T.Bundle String Char
 
 pattern LChar c <- P.LQq [c]
 pattern To      <- P.LRaw "to"

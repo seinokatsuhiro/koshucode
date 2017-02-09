@@ -37,7 +37,7 @@ matchExpr :: (Show a) => T.Expr [a] a -> GeneralMatch a
 matchExpr e = matchBundle $ T.bundle [("start", e)]
 
 -- | Apply expression bundle to input sequence.
-matchBundle :: (Show a) => T.Bundle a -> GeneralMatch a
+matchBundle :: (Show a) => T.Bundle [a] a -> GeneralMatch a
 matchBundle es s =
     do result <- match $ T.createPara es s
        Just $ matchResult result

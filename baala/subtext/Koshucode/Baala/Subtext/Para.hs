@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Subtext.Operator  as T
 
 -- | Matching parameter.
 data Para a = Para
-  { paraBundle     :: T.BundleMap a     -- ^ Expression bundle
+  { paraBundle     :: T.BundleMap [a] a -- ^ Expression bundle
   , paraRawSubs    :: [Submatch [a] a]  -- ^ Submatches.
   , paraGather     :: Bool              -- ^ Gather or skip match result
   , paraExpr       :: T.Expr [a] a      -- ^ Match expression
@@ -37,7 +37,7 @@ type Submatch as a = (O.Name, as)
 
 -- | Create matching parameter from
 --   expression bundle and input sequence.
-createPara :: T.Bundle a -> [a] -> Para a
+createPara :: T.Bundle [a] a -> [a] -> Para a
 createPara bun s =
     let bun' = simplify bun
     in Para { paraBundle     = Ms.fromList $ T.bundleExpr bun'
@@ -50,7 +50,7 @@ createPara bun s =
             , paraRawOutput  = [] }
 
 -- | Simplify bundle of match expressions.
-simplify :: T.Bundle a -> T.Bundle a
+simplify :: T.Bundle as a -> T.Bundle as a
 simplify bun@T.Bundle { T.bundleExpr = es } =
     let es' = fmap (what . reduce) <$> es
     in bun { T.bundleExpr  = es'
