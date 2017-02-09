@@ -90,7 +90,7 @@ judgeAdd x = judgeTermsMap (x :)
 
 -- | Normalize judgement, i.e., sort terms in alphabetical order.
 judgeNormalize :: (Ord c) => O.Map (Judge c)
-judgeNormalize = judgeTermsMap B.sort
+judgeNormalize = judgeTermsMap O.sort
 
 
 -- ----------------------  Logical quality

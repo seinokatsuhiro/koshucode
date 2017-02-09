@@ -156,8 +156,8 @@ intersectLists (a : b : xs) = intersectLists $ List.intersect a b : xs
 
 copSort :: (D.CContent c) => D.CopCalc c
 copSort = op where
-    op [Right c] | D.isList c  = D.putList $ B.sort $ D.gList c
-                 | D.isSet  c  = D.putSet  $ B.sort $ D.gSet  c
+    op [Right c] | D.isList c  = D.putList $ O.sort $ D.gList c
+                 | D.isSet  c  = D.putSet  $ O.sort $ D.gSet  c
                  | otherwise   = Right c
     op xs = Msg.badArg xs
 

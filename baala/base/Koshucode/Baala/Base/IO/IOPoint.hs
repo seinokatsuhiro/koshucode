@@ -113,9 +113,9 @@ ioPointDir _ iop = iop
 
 -- | Test path is URI.
 isUri :: O.Test O.IOPath
-isUri path = B.isPrefixOf "http://"  path
-          || B.isPrefixOf "https://" path
-          || B.isPrefixOf "ftp://"   path
+isUri path = O.isPrefixOf "http://"  path
+          || O.isPrefixOf "https://" path
+          || O.isPrefixOf "ftp://"   path
 
 -- | Create I/O points from using stdin, texts itself, filenames, and URIs.
 ioPointTogether :: Bool -> [Bytes] -> [FilePath] -> [IOPoint]

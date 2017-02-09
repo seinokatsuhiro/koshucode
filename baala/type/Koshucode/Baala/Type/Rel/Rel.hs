@@ -82,12 +82,12 @@ relSort = relSortBody . relSortHead
 -- | Sort head of relation.
 relSortHead :: O.Map (Rel c)
 relSortHead (Rel he bo) = Rel he' bo' where
-    he' = T.headMap B.sort he
+    he' = T.headMap O.sort he
     bo' = T.bodyForward he' he bo
 
 -- | Sort body of relation.
 relSortBody :: (Ord c) => O.Map (Rel c)
-relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
+relSortBody (Rel he bo) = Rel he (O.sort $ B.unique bo)
 
 
 -- ----------------------  Constant

@@ -6,7 +6,6 @@
 
 module Koshucode.Baala.Overture.Misc
  ( IOPath, GetIOPath (..),
-   uncons,
    keepOn, omitOn,
    zero,
    ints,
@@ -31,17 +30,6 @@ instance GetIOPath String where
 
 
 -- ---------------------------------
-
--- | Head and tail of list.
---   This is a list version of text 'Data.Text.uncons'.
---
---   >>> uncons "abcdefg"
---   Just ('a', "bcdefg")
---
-{-# INLINE uncons #-}
-uncons :: [a] -> Maybe (a, [a])
-uncons (x : xs)  = Just (x, xs)
-uncons []        = Nothing
 
 -- | Keep elements.
 keepOn :: (a -> Maybe b) -> O.Test b -> O.Map [a]

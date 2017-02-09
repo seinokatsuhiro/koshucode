@@ -10,7 +10,7 @@ module Koshucode.Baala.Base.Prelude.Import
     Control.Monad.filterM,
     Control.Monad.foldM,
     Control.Monad.guard,
-    Control.Monad.sequence,
+    --Control.Monad.sequence,
     Control.Monad.unless,
     Control.Monad.when,
   
@@ -24,11 +24,6 @@ module Koshucode.Baala.Base.Prelude.Import
 
     -- * Data.List
     Data.List.intercalate,
-    Data.List.intersect,
-    Data.List.isPrefixOf,
-    Data.List.isInfixOf,
-    Data.List.isSuffixOf,
-    Data.List.sort,
     Data.List.transpose,
     (Data.List.\\),
   

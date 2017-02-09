@@ -68,7 +68,7 @@ sortByNameOrder ords ns xs = sortBy ords2 xs2 where
     f x    = (B.selectElems p x, x)
 
 sortBy :: (Ord a, Ord b) => [OrderCapping a] -> [([a], b)] -> [([OrderCap a], b)]
-sortBy ords = B.sort . B.mapFstTo (caps ords)
+sortBy ords = O.sort . B.mapFstTo (caps ords)
 
 caps :: [OrderCapping a] -> [a] -> [OrderCap a]
 caps ords = zipWith ($) (ords ++ repeat Asc)
@@ -79,7 +79,7 @@ caps ords = zipWith ($) (ords ++ repeat Asc)
 --   ["b", "dd", "aaa", "ccc"]
 --
 sortWith :: (Ord a, Ord b) => (a -> b) -> O.Map [a]
-sortWith f = map snd . B.sort . map g where
+sortWith f = map snd . O.sort . map g where
     g x = (f x, x)
 
 

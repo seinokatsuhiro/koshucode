@@ -10,7 +10,7 @@ module Koshucode.Baala.DataPlus
     module Koshucode.Baala.Data,
   ) where
 
-import Koshucode.Baala.Overture
+import Koshucode.Baala.Overture hiding (empty)
 import Koshucode.Baala.Base
 import Koshucode.Baala.Syntax
 import Koshucode.Baala.Type

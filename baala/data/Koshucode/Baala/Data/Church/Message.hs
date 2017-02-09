@@ -30,6 +30,7 @@ module Koshucode.Baala.Data.Church.Message
     msgTerms2,
   ) where
 
+import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Type                 as T
@@ -146,8 +147,8 @@ linesFrom = lines . show
 msgTerms2 :: (T.GetTermNames t1, T.GetTermNames t2) => String -> t1 -> String -> t2 -> [String]
 msgTerms2 s1 t1 s2 t2 = detail where
     detail = [s1] ++ msg1 t1 ++ [s2] ++ msg2 t2
-    msg1 = indentLines . B.sort . termNameStrings
-    msg2 = indentLines . B.sort . termNameStrings
+    msg1 = indentLines . O.sort . termNameStrings
+    msg2 = indentLines . O.sort . termNameStrings
 
 -- | Indent message lines.
 indentLines :: [String] -> [String]

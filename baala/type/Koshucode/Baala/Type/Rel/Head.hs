@@ -105,7 +105,7 @@ headFrom = headOf . T.typeFlatRel . map S.toTermName
 -- | Test two heads are equivalent.
 headEquiv :: Head -> Head -> Bool
 headEquiv he1 he2 = ts he1 == ts he2 where
-    ts = B.sort . T.typeRelTermNames . headType
+    ts = O.sort . T.typeRelTermNames . headType
 
 -- | Test heading is subset of another heading.
 --

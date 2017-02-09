@@ -23,6 +23,7 @@ module Koshucode.Baala.Data.Class.Complex
     CType (..),
   ) where
 
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Type                    as T
@@ -74,7 +75,7 @@ pTextSet = pSet . map D.pText
 
 -- | Sorted version of 'gSet'.
 gSetSort :: (CSet c) => c -> [c]
-gSetSort = B.sort . gSet
+gSetSort = O.sort . gSet
 
 -- | Test membership between element and collection contents.
 isMember :: (CSet c, CList c) => c -> c -> Bool

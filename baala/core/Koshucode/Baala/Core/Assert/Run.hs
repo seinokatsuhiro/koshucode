@@ -148,7 +148,7 @@ optionLexical _ = lexicalOrderRel
 
 lexicalOrderRel :: (Ord c) => B.AbMap (T.Rel c)
 lexicalOrderRel rel@(T.Rel he1 _) = towardRel True ns' rel where
-    ns' = B.sort $ T.getTermNames he1
+    ns' = O.sort $ T.getTermNames he1
 
 
 -- ---------------------------------  Option "order"
@@ -158,7 +158,7 @@ optionOrder _ r1 = Right $ relSortDeep r1
 
 relSortDeep :: (Ord c, D.CRel c) => O.Map (T.Rel c)
 relSortDeep = relApply f where
-    f (T.Rel he bo) = T.Rel he $ B.sort bo
+    f (T.Rel he bo) = T.Rel he $ O.sort bo
 
 relApply :: (D.CRel c) => O.Map (O.Map (T.Rel c))
 relApply f (T.Rel he bo) = f $ T.Rel he (nest O.<$$> bo) where

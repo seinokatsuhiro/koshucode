@@ -7,7 +7,9 @@
 {-| List class. -}
 
 module Koshucode.Baala.Overture.List
- ( List,
+ ( -- * List class
+   List,
+   L.ListLike (..),
    (<:>),
    cut, cut2, cut3,
  ) where
@@ -15,7 +17,7 @@ module Koshucode.Baala.Overture.List
 import qualified Data.ListLike                        as L
 import qualified Koshucode.Baala.Overture.Infix       as O
 
-{-| List class as alias of 'L.ListLike'. -}
+{-| List class as synonym of 'L.ListLike'. -}
 type List es e = L.ListLike es e
 
 infixr 5 <:>

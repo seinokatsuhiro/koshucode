@@ -75,14 +75,14 @@ copsText =
 -- ----------------------  begin-with / end-with
 
 copBeginWithNormal, copEndWithNormal, copContainNormal :: (D.CContent c) => D.CopCalc c
-copBeginWithNormal  = copMatchNormal O.csIsPrefix B.isPrefixOf
-copEndWithNormal    = copMatchNormal O.csIsSuffix B.isSuffixOf
-copContainNormal    = copMatchNormal O.csIsInfix  B.isInfixOf
+copBeginWithNormal  = copMatchNormal O.csIsPrefix O.isPrefixOf
+copEndWithNormal    = copMatchNormal O.csIsSuffix O.isSuffixOf
+copContainNormal    = copMatchNormal O.csIsInfix  O.isInfixOf
 
 copBeginWithInfix, copEndWithInfix, copContainInfix :: (D.CContent c) => D.CopCalc c
-copBeginWithInfix   = copMatchInfix O.csIsPrefix B.isPrefixOf
-copEndWithInfix     = copMatchInfix O.csIsSuffix B.isSuffixOf
-copContainInfix     = copMatchInfix O.csIsInfix  B.isInfixOf
+copBeginWithInfix   = copMatchInfix O.csIsPrefix O.isPrefixOf
+copEndWithInfix     = copMatchInfix O.csIsSuffix O.isSuffixOf
+copContainInfix     = copMatchInfix O.csIsInfix  O.isInfixOf
 
 copMatchNormal :: (D.CContent c)
   => (S.Chars -> S.Chars -> Bool) -> ([c] -> [c] -> Bool) -> D.CopCalc c

@@ -24,7 +24,6 @@ import qualified Data.ByteString.Lazy                   as Bz
 import qualified Data.ByteString.Lazy.UTF8              as Bz
 import qualified Koshucode.Baala.Overture.Infix         as O
 import qualified Koshucode.Baala.Overture.List          as O
-import qualified Koshucode.Baala.Overture.Misc          as O
 import qualified Koshucode.Baala.Overture.Shorthand     as O
 
 {-# DEPRECATED tAdd "Use '<:>' instead." #-}
