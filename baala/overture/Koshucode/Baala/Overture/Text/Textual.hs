@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ViewPatterns #-}
@@ -8,6 +9,7 @@
 module Koshucode.Baala.Overture.Text.Textual
   ( Textual (..),
     (<:>),
+    cut,
     stringify,
   ) where
 
@@ -22,12 +24,13 @@ import qualified Data.Text.Lazy.Encoding                as Tz
 import qualified Data.ByteString.UTF8                   as Bs
 import qualified Data.ByteString.Lazy                   as Bz
 import qualified Data.ByteString.Lazy.UTF8              as Bz
+import qualified Data.ListLike                          as Ll
 import qualified Koshucode.Baala.Overture.Infix         as O
 import qualified Koshucode.Baala.Overture.Misc          as O
 import qualified Koshucode.Baala.Overture.Shorthand     as O
 
 -- | Text-like value.
-class (Show t, Eq t, Ord t, Monoid t, Str.IsString t) => Textual t where
+class (Show t, Eq t, Ord t, Monoid t, Str.IsString t, Ll.ListLike t Char) => Textual t where
 
     -- ----------------------  Monoid
 
@@ -453,8 +456,12 @@ infixr 5 <:>
 --   "bar"
 --
 {-# INLINE (<:>) #-}
-(<:>) :: (Textual t) => Char -> t -> t
-(<:>) = tAdd
+(<:>) :: (Ll.ListLike es e) => e -> es -> es
+(<:>) = Ll.cons
+
+-- | Split first element and rest of list.
+cut :: (Ll.ListLike es e) => es -> Maybe (e, es)
+cut = Ll.uncons
 
 -- | Convert textual something to string something.
 stringify :: (Functor f, Textual t) => f t -> f String
