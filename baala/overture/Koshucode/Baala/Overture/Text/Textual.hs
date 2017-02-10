@@ -349,6 +349,12 @@ class (Show t, Eq t, Ord t, Monoid t, Str.IsString t, O.List t Char)
     -- | Convert strict text to textual value.
     txT :: O.Tx -> t
 
+    {-| Convert textual value to lazy text. -}
+    tTz :: t -> O.Tz
+
+    {-| Convert lazy text to textual value. -}
+    tzT :: O.Tz -> t
+
     -- | Convert show instance to textual value.
     --
     --   >>> showT (120 :: Int) :: String
@@ -382,6 +388,8 @@ instance Textual String where
     stringT      = id
     tTx          = Tx.pack
     txT          = Tx.unpack
+    tTz          = Tz.pack
+    tzT          = Tz.unpack
     bsT          = Bs.toString
     bzT          = Bz.toString
 
@@ -404,6 +412,8 @@ instance Textual O.Tx where
     stringT      = Tx.pack
     tTx          = id
     txT          = id
+    tTz          = Tz.fromStrict
+    tzT          = Tz.toStrict
     bsT          = Tx.decodeUtf8With Err.lenientDecode
     bzT          = bsT . Bz.toStrict
 
@@ -426,6 +436,8 @@ instance Textual O.Tz where
     stringT      = Tz.pack
     tTx          = Tz.toStrict
     txT          = Tz.fromStrict
+    tTz          = id
+    tzT          = id
     bsT          = bzT . Bz.fromStrict
     bzT          = Tz.decodeUtf8With Err.lenientDecode
 

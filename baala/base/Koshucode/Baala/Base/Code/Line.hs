@@ -11,7 +11,6 @@ module Koshucode.Baala.Base.Code.Line
     ToLines (..),
     dropBom,
     bzLines,
-    textualLines,
     linesCrlf, linesCrlfBz, linesCrlfNumbered,
 
     -- * CodeLine
@@ -41,7 +40,13 @@ instance ToLines O.Bz where
     toLines = map O.bzT . bzLines
 
 instance ToLines String where
-    toLines = textualLines . O.stringT
+    toLines = csLines . O.stringT
+
+instance ToLines O.Tx where
+    toLines = csLines . O.txT
+
+instance ToLines O.Tz where
+    toLines = csLines . O.tzT
 
 -- | Remove UTF-8 BOM (EF BB BF in hexadecimal) from lazy bytestring.
 --
@@ -79,18 +84,18 @@ bzLines = loop . dropBom where
 --   carriage returns (@\\r@)
 --   and line feeds (@\\n@).
 --
---   >>> textualLines "aaa\nbbb\r\nccc\n\nddd\n"
+--   >>> csLines "aaa\nbbb\r\nccc\n\nddd\n"
 --   ["aaa", "bbb", "ccc", "", "ddd"]
 --
-textualLines :: (O.Textual t) => t -> [t]
-textualLines s
+csLines :: (O.Textual t) => t -> [t]
+csLines s
     | O.tIsEmpty s = []
     | otherwise = ln : next s2
     where
       (ln, s2) = O.tWhileNot isCrlf s
       next (O.cut -> O.Jp '\r' s3) = next s3
-      next (O.cut -> O.Jp '\n' s3) = textualLines s3
-      next s3                      = textualLines s3
+      next (O.cut -> O.Jp '\n' s3) = csLines s3
+      next s3                      = csLines s3
 
 isCrlf :: Char -> Bool
 isCrlf '\r' = True
@@ -100,7 +105,7 @@ isCrlf _    = False
 -- | Split string into lines.
 {-# DEPRECATED linesCrlf "Consider 'bzLines'." #-}
 linesCrlf :: String -> [String]
-linesCrlf = textualLines
+linesCrlf = csLines
 
 -- | Line number and its content.
 {-# DEPRECATED linesCrlfNumbered "Consider 'bzLines'." #-}
