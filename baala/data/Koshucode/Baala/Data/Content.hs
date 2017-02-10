@@ -18,7 +18,7 @@ module Koshucode.Baala.Data.Content
 
     -- * Concrete type
     TermC, JudgeC, RelC, AbC, DatasetC,
-    the, stringC,
+    the, stringC, charsC,
   ) where
 
 import qualified Data.Set                                as Set
@@ -422,4 +422,8 @@ the = id
 --
 stringC :: String -> B.Ab Content
 stringC = D.stringContent
+
+{-| Decode the Baala content from chars. -}
+charsC :: S.Chars -> B.Ab Content
+charsC = D.charsContent
 

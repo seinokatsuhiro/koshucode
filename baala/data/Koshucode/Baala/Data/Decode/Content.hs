@@ -10,6 +10,7 @@ module Koshucode.Baala.Data.Decode.Content
     DecodeContent,
     CalcContent, 
     stringContent,
+    charsContent,
     treeContent,
     treesJudge,
   ) where
@@ -38,6 +39,10 @@ type CalcContent t c = S.TTree t -> B.Ab c
 -- | Decode content from string.
 stringContent :: (D.CContent c) => String -> B.Ab c
 stringContent = treeContent O.#. (S.toTree :: String -> B.Ab S.Tree)
+
+{-| Decode content from chars. -}
+charsContent :: (D.CContent c) => S.Chars -> B.Ab c
+charsContent = treeContent O.#. (S.toTree :: S.Chars -> B.Ab S.Tree)
 
 -- | Decode content from token tree.
 treeContent :: forall t c. (S.TextualTermName t, D.CContent c) => DecodeContent t c
