@@ -80,6 +80,7 @@ library
         Koshucode.Baala.Syntax.Symbol.Term
 
         Koshucode.Baala.Syntax.Token
+        Koshucode.Baala.Syntax.Token.Chars
         Koshucode.Baala.Syntax.Token.Clause
         Koshucode.Baala.Syntax.Token.Clip
         Koshucode.Baala.Syntax.Token.Message

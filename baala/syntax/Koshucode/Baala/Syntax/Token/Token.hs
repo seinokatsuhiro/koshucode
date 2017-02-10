@@ -1,19 +1,10 @@
-{-# LANGUAGE CPP #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Tokens in Koshucode.
 
 module Koshucode.Baala.Syntax.Token.Token
-  (
-    -- * Subtype name
+  ( -- * Subtype name
     SubtypeName (..),
-
-    -- * Chars
-    Chars, CharsMap,
-    tChars, csT, stringChars,
-    charsType,
 
     -- * Token
     Token,
@@ -31,63 +22,21 @@ module Koshucode.Baala.Syntax.Token.Token
     BlankName (..),
   ) where
 
-import qualified Koshucode.Baala.Overture         as O
-import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Syntax.Symbol    as S
+import qualified Koshucode.Baala.Overture            as O
+import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Syntax.Symbol       as S
+import qualified Koshucode.Baala.Syntax.Token.Chars  as S
+
 
 -- | Type wihch has subtype and its name.
 class SubtypeName a where
     subtypeName :: a -> String
 
 
--- --------------------------------------------  Chars
-
-#ifdef STRING_INPUT
--- | Character sequence.
-type Chars = String
-
--- | Convert textual value to character sequence.
-tChars :: (O.Textual t) => t -> Chars
-tChars = O.tString
-
--- | Convert character sequence to textual value.
-csT :: (O.Textual t) => Chars -> t
-csT = O.stringT
-
--- | Type of input.
-charsType :: Chars
-charsType = "string"
-
-#else
--- | Character sequence.
-type Chars = O.Tx
-
--- | Convert textual value to character sequence.
-tChars :: (O.Textual t) => t -> Chars
-tChars = O.tTx
-
--- | Convert character sequence to textual value.
-csT :: (O.Textual t) => Chars -> t
-csT = O.txT
-
--- | Type of input.
-charsType :: Chars
-charsType = "text"
-
-#endif
-
--- | Mapping from chars to chars.
-type CharsMap = O.Map Chars
-
--- | Convert string to character sequence.
-stringChars :: String -> Chars
-stringChars = O.stringT
-
-
 -- --------------------------------------------  Token type
 
 -- | String token.
-type Token = TToken Chars
+type Token = TToken S.Chars
 
 -- | Textual token.
 data TToken t
