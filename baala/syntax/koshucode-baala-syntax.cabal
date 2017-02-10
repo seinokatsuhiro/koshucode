@@ -73,6 +73,7 @@ library
 
         Koshucode.Baala.Syntax.Symbol
         Koshucode.Baala.Syntax.Symbol.AngleText
+        Koshucode.Baala.Syntax.Symbol.Chars
         Koshucode.Baala.Syntax.Symbol.Message
         Koshucode.Baala.Syntax.Symbol.Next
         Koshucode.Baala.Syntax.Symbol.Short
@@ -80,7 +81,6 @@ library
         Koshucode.Baala.Syntax.Symbol.Term
 
         Koshucode.Baala.Syntax.Token
-        Koshucode.Baala.Syntax.Token.Chars
         Koshucode.Baala.Syntax.Token.Clause
         Koshucode.Baala.Syntax.Token.Clip
         Koshucode.Baala.Syntax.Token.Message

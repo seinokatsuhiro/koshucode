@@ -16,7 +16,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
     ToTermName (..),
     TextualTermName,
     enslash,
-    textualTermName, stringTermNames,
+    stringTermNames,
     termNameString, termPathString,
     termNameContent,
     termNameSign, termNameAltSign,
@@ -122,7 +122,6 @@ enslash n@(O.cut2 -> O.Jp2 '-' '/' _)   = n
 enslash n                               = '/' O.<:> n
 
 -- | Decode term name from string.
-{-# DEPRECATED textualTermName "Use 'toTermName' instead." #-}
 textualTermName :: (O.Textual t) => t -> TermName
 textualTermName (O.cut  -> O.Jp '/' n)       = TermName EQ $ O.tString n
 textualTermName (O.cut2 -> O.Jp2 '+' '/' n)  = TermName GT $ O.tString n

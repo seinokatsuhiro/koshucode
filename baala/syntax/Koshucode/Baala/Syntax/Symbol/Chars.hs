@@ -4,7 +4,7 @@
 
 -- | Character sequence.
 
-module Koshucode.Baala.Syntax.Token.Chars
+module Koshucode.Baala.Syntax.Symbol.Chars
   ( -- * Chars
     Chars, CharsMap,
     tChars, csT, stringChars,

@@ -80,7 +80,7 @@ instance ToTrees t (S.TokenClause t) where
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
-tokenTrees :: (O.Textual t, B.IsString t) => [S.TToken t] -> B.Ab [TTree t]
+tokenTrees :: (O.Textual t) => [S.TToken t] -> B.Ab [TTree t]
 tokenTrees = B.codeTrees S.getBracketType B.BracketNone . S.prepareTokens
 
 -- | Call function with token trees.

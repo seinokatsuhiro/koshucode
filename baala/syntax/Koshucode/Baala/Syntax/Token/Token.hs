@@ -25,7 +25,6 @@ module Koshucode.Baala.Syntax.Token.Token
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Syntax.Symbol       as S
-import qualified Koshucode.Baala.Syntax.Token.Chars  as S
 
 
 -- | Type wihch has subtype and its name.

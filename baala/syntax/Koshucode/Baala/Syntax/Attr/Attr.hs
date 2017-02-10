@@ -28,7 +28,7 @@ import qualified Data.List                              as Ls
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Para            as S
-import qualified Koshucode.Baala.Syntax.Token           as S
+import qualified Koshucode.Baala.Syntax.Symbol          as S
 import qualified Koshucode.Baala.Syntax.Tree            as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S
 import qualified Koshucode.Baala.Syntax.Pattern         as P

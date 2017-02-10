@@ -12,6 +12,7 @@ module Koshucode.Baala.Syntax.Attr.Slot
 
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Syntax.Symbol          as S
 import qualified Koshucode.Baala.Syntax.Tree            as S
 import qualified Koshucode.Baala.Syntax.Token           as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S

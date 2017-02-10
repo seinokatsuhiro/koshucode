@@ -11,7 +11,7 @@ module Koshucode.Baala.Syntax.Attr.AttrName
   ) where
 
 import qualified Koshucode.Baala.Overture          as O
-import qualified Koshucode.Baala.Syntax.Token      as S
+import qualified Koshucode.Baala.Syntax.Symbol     as S
 
 -- | Attribute name of relmap.
 data AttrName
