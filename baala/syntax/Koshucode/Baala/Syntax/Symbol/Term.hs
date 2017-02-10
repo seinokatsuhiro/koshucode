@@ -93,11 +93,11 @@ instance ToTermName String where
 
 -- | Strict text.
 instance ToTermName O.Tx where
-    toTermName = toTermName
+    toTermName = textualTermName
 
 -- | Lazy text.
 instance ToTermName O.Tz where
-    toTermName = toTermName
+    toTermName = textualTermName
 
 -- | Integer term name.
 instance ToTermName Int where
