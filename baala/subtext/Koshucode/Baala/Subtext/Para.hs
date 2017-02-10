@@ -37,7 +37,7 @@ type Submatch as a = (O.Name, as)
 
 -- | Create matching parameter from
 --   expression bundle and input sequence.
-createPara :: T.Bundle [a] a -> [a] -> Para [a] a
+createPara :: (O.List as a) => T.Bundle as a -> as -> Para as a
 createPara bun s =
     let bun' = simplify bun
     in Para { paraBundle     = Ms.fromList $ T.bundleExpr bun'
@@ -47,7 +47,7 @@ createPara bun s =
             , paraPos        = 0
             , paraInput      = s
             , paraPrev       = Nothing
-            , paraRawOutput  = [] }
+            , paraRawOutput  = O.empty }
 
 -- | Simplify bundle of match expressions.
 simplify :: T.Bundle as a -> T.Bundle as a

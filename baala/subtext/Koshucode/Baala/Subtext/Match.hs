@@ -24,26 +24,26 @@ import qualified Koshucode.Baala.Subtext.Para      as T
 
 -- | Function from input sequence to match result.
 --   When unmatched, 'Nothing' is returned.
-type GeneralMatch a = [a] -> Maybe (MatchResult a)
+type GeneralMatch as a = as -> Maybe (MatchResult as a)
 
 -- | Character sequence (string) version of 'GeneralMatch'.
-type CharMatch = GeneralMatch Char
+type CharMatch = GeneralMatch String Char
 
 -- | Main and submatches.
-type MatchResult a = ([a], [T.Submatch [a] a])
+type MatchResult as a = (as, [T.Submatch as a])
 
 -- | Apply match expression to input sequence.
-matchExpr :: (Show a) => T.Expr [a] a -> GeneralMatch a
+matchExpr :: (O.List as a, Show a) => T.Expr as a -> GeneralMatch as a
 matchExpr e = matchBundle $ T.bundle [("start", e)]
 
 -- | Apply expression bundle to input sequence.
-matchBundle :: (Show a) => T.Bundle [a] a -> GeneralMatch a
+matchBundle :: (O.List as a, Show a) => T.Bundle as a -> GeneralMatch as a
 matchBundle es s =
     do result <- match $ T.createPara es s
        Just $ matchResult result
 
 -- | Extract match result from parameter.
-matchResult :: T.Para [a] a -> MatchResult a
+matchResult :: (O.List as a) => T.Para as a -> MatchResult as a
 matchResult result = (mainMatch result, subMatches result)
 
 -- | Extract matched text.
