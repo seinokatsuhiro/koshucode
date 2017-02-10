@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    70 judges
+**    72 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Bundle"            /import "Data.Map.Strict"
@@ -21,6 +21,7 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Match"             /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Match"             /import "Data.Map.Strict"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Match"             /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Match"             /import "Koshucode.Baala.Overture.Fn"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Match"             /import "Koshucode.Baala.Subtext.Bundle"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Match"             /import "Koshucode.Baala.Subtext.Expr"
@@ -31,7 +32,7 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Basic"    /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Basic"    /import "Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Basic"    /import "Data.List"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Basic"    /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Basic"    /import "Koshucode.Baala.Overture.Fn"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Basic"    /import "Koshucode.Baala.Subtext.Expr"
 
@@ -45,6 +46,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Char"     /import "Koshucode.Baala.Subtext.Operator.Combine"
 
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Combine"  /import "Prelude"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Combine"  /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Combine"  /import "Koshucode.Baala.Overture.Fn"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Combine"  /import "Koshucode.Baala.Subtext.Expr"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Combine"  /import "Koshucode.Baala.Subtext.MinMax"

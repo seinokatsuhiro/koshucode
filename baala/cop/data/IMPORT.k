@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    63 judges
+**    65 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Cop.Arith"                 /import "Koshucode.Baala.Overture"
@@ -35,6 +35,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Cop.Coxhand"
@@ -45,6 +46,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Cop.Logic"                 /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Logic"                 /import "Koshucode.Baala.Cop.Coxhand"
 
+|-- IMPORT  /module "Koshucode.Baala.Cop.Misc"                  /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Misc"                  /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Misc"                  /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Misc"                  /import "Koshucode.Baala.Data"
@@ -56,7 +58,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Cop.Order"                 /import "Koshucode.Baala.Cop.Coxhand"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Order"                 /import "Koshucode.Baala.Rop.Base.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Cop.Replace"               /import "Data.List"
+|-- IMPORT  /module "Koshucode.Baala.Cop.Replace"               /import "Koshucode.Baala.Overture"
 
 |-- IMPORT  /module "Koshucode.Baala.Cop.Text"                  /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Text"                  /import "Koshucode.Baala.Overture"

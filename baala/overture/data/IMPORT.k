@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    65 judges
+**    70 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Cache"            /import "Data.Map.Strict"
@@ -19,6 +19,9 @@
 |-- IMPORT  /module "Koshucode.Baala.Overture.Infix"            /import "Control.Monad"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Infix"            /import "Data.Maybe"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Infix"            /import "Koshucode.Baala.Overture.Type"
+
+|-- IMPORT  /module "Koshucode.Baala.Overture.List"             /import "Data.ListLike"
+|-- IMPORT  /module "Koshucode.Baala.Overture.List"             /import "Koshucode.Baala.Overture.Infix"
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Misc"             /import "Koshucode.Baala.Overture.Type"
 
@@ -40,6 +43,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Integer"     /import "Data.IntMap.Strict"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Integer"     /import "Data.Map.Strict"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Integer"     /import "Numeric"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Integer"     /import "Koshucode.Baala.Overture.List"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Integer"     /import "Koshucode.Baala.Overture.Text.Textual"
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.Char"
@@ -54,7 +58,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.ByteString.Lazy.UTF8"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Koshucode.Baala.Overture.Infix"
-|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Koshucode.Baala.Overture.Misc"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Koshucode.Baala.Overture.List"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Koshucode.Baala.Overture.Shorthand"
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Unicode"     /import "Data.Char"
@@ -62,6 +66,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Utility"     /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Utility"     /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Utility"     /import "Koshucode.Baala.Overture.Infix"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Utility"     /import "Koshucode.Baala.Overture.List"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Utility"     /import "Koshucode.Baala.Overture.Type"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Utility"     /import "Koshucode.Baala.Overture.Text.Textual"
 
@@ -78,6 +83,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Overture"                  /import "Koshucode.Baala.Overture.Cache"
 |-- IMPORT  /module "Koshucode.Baala.Overture"                  /import "Koshucode.Baala.Overture.Index"
 |-- IMPORT  /module "Koshucode.Baala.Overture"                  /import "Koshucode.Baala.Overture.Infix"
+|-- IMPORT  /module "Koshucode.Baala.Overture"                  /import "Koshucode.Baala.Overture.List"
 |-- IMPORT  /module "Koshucode.Baala.Overture"                  /import "Koshucode.Baala.Overture.Misc"
 |-- IMPORT  /module "Koshucode.Baala.Overture"                  /import "Koshucode.Baala.Overture.Shorthand"
 |-- IMPORT  /module "Koshucode.Baala.Overture"                  /import "Koshucode.Baala.Overture.Some"
