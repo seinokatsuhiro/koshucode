@@ -59,11 +59,11 @@ consSubtext med =
      Right $ relmapSubtext med (term, ns, match, trim)
 
 -- | Create @subtext@ relmap.
-relmapSubtext :: (K.CContent c) => C.Intmed c -> SubtextPara String -> C.Relmap c
+relmapSubtext :: (K.CContent c) => C.Intmed c -> SubtextPara K.Chars -> C.Relmap c
 relmapSubtext med = C.relmapFlow med . relkitSubtext
 
 -- | Create @subtext@ relkit.
-relkitSubtext :: (K.CContent c) => SubtextPara String -> Maybe K.Head -> K.Ab (C.Relkit c)
+relkitSubtext :: (K.CContent c) => SubtextPara K.Chars -> Maybe K.Head -> K.Ab (C.Relkit c)
 relkitSubtext _ Nothing = C.relkitUnfixed
 relkitSubtext (n, ns, match, trim) (Just he1) = Right kit where
     pick    = K.pickDirect [n] he1
@@ -78,7 +78,7 @@ relkitSubtext (n, ns, match, trim) (Just he1) = Right kit where
                _ -> result [] ++ cs
 
 subtextResult :: (K.CEmpty c, K.CText c, K.CList c) =>
-    Bool -> [T.NameDepth] -> [(String, String)] -> [c]
+    Bool -> [T.NameDepth] -> [(String, K.Chars)] -> [c]
 subtextResult trim ns rs = result <$> ns where
     text = K.pText . trimIf trim
     result (n, depth) =
@@ -91,7 +91,7 @@ lookup' :: (Eq a) => a -> [(a, b)] -> [b]
 lookup' n ass = snd <$> filter eq ass where
     eq (n', _) = n == n'
 
-trimIf :: Bool -> String -> String
+trimIf :: (K.Textual t) => Bool -> t -> t
 trimIf True  t = K.trimBoth t
 trimIf False t = t
 
