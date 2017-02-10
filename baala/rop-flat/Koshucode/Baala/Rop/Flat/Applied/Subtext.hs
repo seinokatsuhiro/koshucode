@@ -99,7 +99,7 @@ trimIf False t = t
 -- --------------------------------------------  Parser
 
 -- | Type for subtext bundle.
-type CharBundle = T.Bundle String Char
+type CharBundle t = T.Bundle t Char
 
 pattern To      <- P.LRaw "to"
 pattern Empty   <- P.BGroup []
@@ -120,7 +120,7 @@ divide :: (Eq t) => t -> [K.TTree t] -> [[K.TTree t]]
 divide s = K.divideTreesBy (== s)
 
 -- | Parse token trees into subtext bundle.
-parseBundle :: [K.TTree String] -> K.Ab CharBundle
+parseBundle :: forall t. (K.Textual t) => [K.TTree t] -> K.Ab (CharBundle t)
 parseBundle = bundle where
     bundle xs@[P.BSet sub] =
         case step1 `mapM` divide "|" sub of
@@ -133,14 +133,14 @@ parseBundle = bundle where
     single xs = do e <- parseSubtext [] xs
                    Right $ T.bundle [("start", e)]
 
-    step1 :: [K.TTree String] -> K.Ab (String, [K.TTree String])
+    step1 :: [K.TTree t] -> K.Ab (t, [K.TTree t])
     step1 xs = case divide "=" xs of
                  [[P.LRaw n], x] -> Right (n, x)
                  _               -> unknownSyntax xs
 
-    step2 :: [String] -> (String, [K.TTree String]) -> K.Ab (String, T.CharExpr String)
+    step2 :: [t] -> (t, [K.TTree t]) -> K.Ab (String, T.CharExpr t)
     step2 ns (n, x) = do e <- parseSubtext ns x
-                         Right (n, e)
+                         Right (K.tString n, e)
 
 -- | Parse token trees into subtext expression.
 parseSubtext :: forall t. (K.Textual t) => [t] -> [K.TTree t] -> K.Ab (T.CharExpr t)
