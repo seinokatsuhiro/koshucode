@@ -1,4 +1,6 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Text decomposition by subtext.
@@ -30,7 +32,7 @@ ropsAppliedSubtext = Rop.rops "applied"
 -- --------------------------------------------  Operator
 
 -- | Type of subtext parameters.
-type SubtextPara = (K.TermName, [T.NameDepth], T.CharMatch String, Bool)
+type SubtextPara t = (K.TermName, [T.NameDepth], T.CharMatch t, Bool)
 
 -- | __subtext \/P E__
 --
@@ -57,11 +59,11 @@ consSubtext med =
      Right $ relmapSubtext med (term, ns, match, trim)
 
 -- | Create @subtext@ relmap.
-relmapSubtext :: (K.CContent c) => C.Intmed c -> SubtextPara -> C.Relmap c
+relmapSubtext :: (K.CContent c) => C.Intmed c -> SubtextPara String -> C.Relmap c
 relmapSubtext med = C.relmapFlow med . relkitSubtext
 
 -- | Create @subtext@ relkit.
-relkitSubtext :: (K.CContent c) => SubtextPara -> Maybe K.Head -> K.Ab (C.Relkit c)
+relkitSubtext :: (K.CContent c) => SubtextPara String -> Maybe K.Head -> K.Ab (C.Relkit c)
 relkitSubtext _ Nothing = C.relkitUnfixed
 relkitSubtext (n, ns, match, trim) (Just he1) = Right kit where
     pick    = K.pickDirect [n] he1
@@ -99,7 +101,6 @@ trimIf False t = t
 -- | Type for subtext bundle.
 type CharBundle = T.Bundle String Char
 
-pattern LChar c <- P.LQq [c]
 pattern To      <- P.LRaw "to"
 pattern Empty   <- P.BGroup []
 
@@ -109,17 +110,17 @@ unknownSyntax x = Msg.adlib $ "subtext syntax error " ++ show x
 unknownBracket :: (Show a) => a -> K.Ab b
 unknownBracket g = Msg.adlib $ "subtext unknown bracket " ++ show g
 
-unknownKeyword :: String -> K.Ab b
-unknownKeyword n = Msg.adlib $ "subtext unknown keyword " ++ n
+unknownKeyword :: (K.Textual t) => t -> K.Ab b
+unknownKeyword n = Msg.adlib $ "subtext unknown keyword " ++ K.tString n
 
 unknownCategory :: String -> K.Ab b
 unknownCategory n = Msg.adlib $ "subtext unknown general category " ++ n
 
-divide :: String -> [K.Tree] -> [[K.Tree]]
+divide :: (Eq t) => t -> [K.TTree t] -> [[K.TTree t]]
 divide s = K.divideTreesBy (== s)
 
 -- | Parse token trees into subtext bundle.
-parseBundle :: [K.Tree] -> K.Ab CharBundle
+parseBundle :: [K.TTree String] -> K.Ab CharBundle
 parseBundle = bundle where
     bundle xs@[P.BSet sub] =
         case step1 `mapM` divide "|" sub of
@@ -132,41 +133,41 @@ parseBundle = bundle where
     single xs = do e <- parseSubtext [] xs
                    Right $ T.bundle [("start", e)]
 
-    step1 :: [K.Tree] -> K.Ab (String, [K.Tree])
+    step1 :: [K.TTree String] -> K.Ab (String, [K.TTree String])
     step1 xs = case divide "=" xs of
                  [[P.LRaw n], x] -> Right (n, x)
                  _               -> unknownSyntax xs
 
-    step2 :: [String] -> (String, [K.Tree]) -> K.Ab (String, T.CharExpr String)
+    step2 :: [String] -> (String, [K.TTree String]) -> K.Ab (String, T.CharExpr String)
     step2 ns (n, x) = do e <- parseSubtext ns x
                          Right (n, e)
 
 -- | Parse token trees into subtext expression.
-parseSubtext :: [String] -> [K.Tree] -> K.Ab (T.CharExpr String)
+parseSubtext :: forall t. (K.Textual t) => [t] -> [K.TTree t] -> K.Ab (T.CharExpr t)
 parseSubtext ns = trees False where
 
     -- Trees
-    trees :: Bool -> [K.Tree] -> K.Ab (T.CharExpr String)
+    trees :: Bool -> [K.TTree t] -> K.Ab (T.CharExpr t)
     trees False xs              = opTop xs
     trees True (P.LRaw n : xs)  = pre n xs
-    trees True [P.LTerm n, x]   = Right . T.sub n =<< tree x  -- /N E
-    trees True [P.LTerm n]      = Right $ T.sub n T.what      -- /N
+    trees True [P.LTerm n, x]   = Right . T.sub (K.tString n) =<< tree x  -- /N E
+    trees True [P.LTerm n]      = Right $ T.sub (K.tString n) T.what      -- /N
     trees True []               = Right T.succ                -- ()
     trees True [x]              = tree x
     trees True  xs              = unknownSyntax $ show xs
 
     -- Leaf or branch
-    tree :: K.Tree -> K.Ab (T.CharExpr String)
+    tree :: K.TTree t -> K.Ab (T.CharExpr t)
     tree (P.L x)      = leaf x
     tree (P.B g xs)   = branch g xs
     tree x            = unknownSyntax x
 
-    leaf :: K.Token -> K.Ab (T.CharExpr String)
+    leaf :: K.TToken t -> K.Ab (T.CharExpr t)
     leaf (P.TQq t)    = Right $ T.equal t     -- "LITERAL"
     leaf (P.TRaw n)   = pre n []
     leaf x            = unknownSyntax x
 
-    branch :: K.BracketType -> [K.Tree] -> K.Ab (T.CharExpr String)
+    branch :: K.BracketType -> [K.TTree t] -> K.Ab (T.CharExpr t)
     branch K.BracketGroup   = opTop            -- ( E )
     branch K.BracketSet     = bracket T.many   -- { E }
     branch K.BracketTie     = bracket T.many1  -- {- E -}
@@ -176,7 +177,7 @@ parseSubtext ns = trees False where
     bracket op xs = do e <- trees False xs
                        Right $ op e
 
-    times :: [K.Tree] -> [K.Tree] -> K.Ab (T.CharExpr String)
+    times :: [K.TTree t] -> [K.TTree t] -> K.Ab (T.CharExpr t)
     times [ Empty   , To , Empty    ] = bracket (T.many)
     times [ P.LRaw a, To            ] = bracket (T.min (int a))
     times [ P.LRaw a, To , Empty    ] = bracket (T.min (int a))
@@ -195,7 +196,7 @@ parseSubtext ns = trees False where
     text x                     = unknownSyntax x
 
     -- Infix operators
-    opTop :: [K.Tree] -> K.Ab (T.CharExpr String)
+    opTop :: [K.TTree t] -> K.Ab (T.CharExpr t)
     opTop [P.BSet xs, P.BGroup m] = times m xs
     opTop xs = opAlt xs
     opAlt    = inf "|"   T.or    opSeq   -- E | E | E
@@ -231,12 +232,16 @@ parseSubtext ns = trees False where
                  _                  -> unknownSyntax xs
 
     opTo xs = case divide "to" xs of    -- C to C
-                 [[LChar fr], [LChar to]] -> Right $ T.to fr to
-                 [xs2]            -> trees True xs2  -- Turn on loop check
-                 _                -> unknownSyntax xs
+                 [[P.LQq fr], [P.LQq to]]
+                        -> case (K.cut2 fr, K.cut2 to) of
+                             (K.Jp f Nothing, K.Jp t Nothing)
+                                 -> Right $ T.to f t
+                             _   -> unknownSyntax xs
+                 [xs2]  -> trees True xs2  -- Turn on loop check
+                 _      -> unknownSyntax xs
 
     -- Prefix operators
-    pre n [] | n `elem` ns  = Right $ T.change n
+    pre n [] | n `elem` ns  = Right $ T.change (K.tString n)
 
     pre "?"       []        = Right T.any
     pre "??"      []        = Right T.what
@@ -256,7 +261,7 @@ parseSubtext ns = trees False where
     pre "koshu-plain"   []  = Right koshuPlain
     pre "koshu-numeric" []  = Right koshuNumeric
 
-    pre "char"   [P.LQq s]  = Right $ T.char s             -- char T
+    pre "char"   [P.LQq s]  = Right $ T.char (K.tString s) -- char T
     pre "word"   [P.LQq s]  = Right $ T.word s             -- word T
     pre "not"    [x]        = Right . T.not    =<< tree x  -- not E
     pre "last"   [x]        = Right . T.last   =<< tree x  -- last E
@@ -270,19 +275,19 @@ parseSubtext ns = trees False where
                                    Left n  -> unknownCategory n
     pre n _                 = unknownKeyword n
 
-    keyword (P.LRaw s)      = Right s
+    keyword (P.LRaw s)      = Right (K.tString s)
     keyword x               = unknownSyntax x
 
-koshuSymbol :: T.CharExpr String
+koshuSymbol :: T.CharExpr t
 koshuSymbol = T.elem "koshu-symbol" K.isSymbolChar
 
-koshuGeneral :: T.CharExpr String
+koshuGeneral :: T.CharExpr t
 koshuGeneral = T.elem "koshu-general" K.isGeneralChar
 
-koshuPlain :: T.CharExpr String
+koshuPlain :: T.CharExpr t
 koshuPlain = T.elem "koshu-plain" K.isPlainChar
 
-koshuNumeric :: T.CharExpr String
+koshuNumeric :: T.CharExpr t
 koshuNumeric = T.elem "koshu-numeric" K.isNumericChar
 
 
