@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -11,6 +13,7 @@ module Koshucode.Baala.Syntax.Token.Token
     -- * Chars
     Chars, CharsMap,
     tChars, csT, stringChars,
+    charsType,
 
     -- * Token
     Token,
@@ -39,22 +42,42 @@ class SubtypeName a where
 
 -- --------------------------------------------  Chars
 
+#ifdef STRING_INPUT
 -- | Character sequence.
 type Chars = String
---type Chars = O.Tx
-
--- | Mapping from chars to chars.
-type CharsMap = O.Map Chars
 
 -- | Convert textual value to character sequence.
 tChars :: (O.Textual t) => t -> Chars
 tChars = O.tString
---tChars = O.tTx
 
 -- | Convert character sequence to textual value.
 csT :: (O.Textual t) => Chars -> t
 csT = O.stringT
---csT = O.txT
+
+-- | Type of input.
+charsType :: Chars
+charsType = "string"
+
+#else
+-- | Character sequence.
+type Chars = O.Tx
+
+-- | Convert textual value to character sequence.
+tChars :: (O.Textual t) => t -> Chars
+tChars = O.tTx
+
+-- | Convert character sequence to textual value.
+csT :: (O.Textual t) => Chars -> t
+csT = O.txT
+
+-- | Type of input.
+charsType :: Chars
+charsType = "text"
+
+#endif
+
+-- | Mapping from chars to chars.
+type CharsMap = O.Map Chars
 
 -- | Convert string to character sequence.
 stringChars :: String -> Chars
@@ -159,7 +182,7 @@ rawTextToken = TText B.def TextRaw
 -- | Create unknown token.
 unknownToken :: B.TCodePos t -> t -> B.Ab a -> TToken t
 unknownToken cp w (Left a)  = TUnknown cp w a
-unknownToken cp w (Right _) = TUnknown cp w $ B.abortBecause "bug?"
+unknownToken cp w (Right _) = TUnknown cp w $ B.abortBecause ("bug?" :: String)
 
 
 -- --------------------------------------------  Subtype

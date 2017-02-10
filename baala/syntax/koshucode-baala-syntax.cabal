@@ -38,7 +38,11 @@ build-type:          Simple
 -- Constraint on the version of Cabal needed to build this package.
 cabal-version:       >= 1.8
 
-extra-source-files:
+flag string-input
+  description: Use string type for input code.
+  default: False
+
+--extra-source-files:
 
 library
   -- Modules exported by the library.
@@ -106,3 +110,7 @@ library
        , koshucode-baala-subtext   == 0.212.0.0
 
   ghc-options:         -Wall
+
+  if flag(string-input)
+     cpp-options: -DSTRING_INPUT
+
