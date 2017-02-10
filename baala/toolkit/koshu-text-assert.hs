@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -59,7 +60,7 @@ readRun f path =
                     
 -- --------------------------------------------  Clause
 
-type ClauseMix = S.TokenClause String -> B.MixText
+type ClauseMix = S.TokenClause S.Chars -> B.MixText
 
 clauseMixForBz :: ClauseMix -> O.Bz -> B.MixText
 clauseMixForBz f bz = B.mixLines texts where
@@ -68,10 +69,10 @@ clauseMixForBz f bz = B.mixLines texts where
 
 pattern Affirm name ts <- (TBar "|==") : (TRaw name) : (TRaw ":") : ts
 
-clauseMix :: S.TokenClause String -> B.MixText
+clauseMix :: S.TokenClause S.Chars -> B.MixText
 clauseMix = dispatch . B.clauseTokens where
-    dispatch (Affirm name ts) = B.mix name `B.mixSep` B.mix ":" `B.mixSep` tokensMix ts
-    dispatch ts = B.mix "**" `B.mixSep` B.mixShow ts
+    dispatch (Affirm name ts) = B.mix name `B.mixSep` B.mixString ":" `B.mixSep` tokensMix ts
+    dispatch ts = B.mixString "**" `B.mixSep` B.mixShow ts
 
 tokensMix :: [S.Token] -> B.MixText
 tokensMix (t : ts)  = tokenMix t `B.mixSep` tokensMix ts

@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Rops and cops.
@@ -8,6 +9,7 @@ module Koshucode.Baala.Cop.Bundle
   ) where
 
 import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Syntax     as S
 import qualified Koshucode.Baala.Data       as D
 import qualified Koshucode.Baala.Cop.Arith  as Cop
 import qualified Koshucode.Baala.Cop.List   as Cop
@@ -30,7 +32,7 @@ baalaCops = concat [ Cop.copsArith
                    , Cop.copsType ]
 
 -- | Height table.
-baalaInfix :: [B.Named B.InfixHeight]
+baalaInfix :: [(S.Chars, B.InfixHeight)]
 baalaInfix = htab where
     h # name = (name, Left h)
     h ! name = (name, Right h)

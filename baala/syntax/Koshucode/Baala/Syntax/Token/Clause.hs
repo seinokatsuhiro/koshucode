@@ -56,7 +56,7 @@ tokenLinesString :: (B.ToLines i, S.TextualTermName t) => B.IxIOPoint -> i -> [T
 tokenLinesString = B.codeScanUp $ S.scanRel changeSection
 
 -- | Tokenize lazy bytestring.
-tokenLinesTextAssert :: (B.ToLines i) => B.IxIOPoint -> i -> [TokenLine String]
+tokenLinesTextAssert :: (B.ToLines i, S.TextualTermName t) => B.IxIOPoint -> i -> [TokenLine t]
 tokenLinesTextAssert = tokenLinesBy S.scanTextAssert
 
 changeSection :: (S.TextualTermName t) => S.ChangeSection t

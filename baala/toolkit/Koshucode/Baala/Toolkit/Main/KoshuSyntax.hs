@@ -102,12 +102,12 @@ dumpDesc path = B.CommentDoc [desc, input, js] where
              , "   Type of the token is /token-type ."
              , "   Some tokens are classified into /token-subtype . |}" ]
 
-judgeClause :: Int -> C.Clause String -> D.JudgeC
+judgeClause :: Int -> C.Clause S.Chars -> D.JudgeC
 judgeClause clseq c = T.affirm "CLAUSE" args where
     args = [ "clause"       // D.pInt clseq
            , "clause-type"  // D.pText $ C.clauseTypeText c ]
 
-judgeLine :: Int -> S.TokenLine String -> D.JudgeC
+judgeLine :: Int -> S.TokenLine S.Chars -> D.JudgeC
 judgeLine clseq (B.CodeLine ln _ _) = T.affirm "LINE" args where
     args = [ "line"         // D.pInt ln
            , "clause"       // D.pInt clseq ]
@@ -134,7 +134,7 @@ dumpCode omit path code =
                     dumpClause omit `mapM_` zip [1 ..] cs
                     putNewline
 
-dumpClause :: Bool -> (Int, C.Clause String) -> IO ()
+dumpClause :: Bool -> (Int, C.Clause S.Chars) -> IO ()
 dumpClause _ (_, C.Clause _ (C.CUnknown (Left a))) =
     do putNewline
        B.abortPrint [] a
@@ -150,10 +150,10 @@ dumpClause omit (clseq, c) =
     where
       comment line = "*** " ++ O.tString (B.lineContent line)
 
-dumpLine :: Int -> [S.TokenLine String] -> IO ()
+dumpLine :: Int -> [S.TokenLine S.Chars] -> IO ()
 dumpLine clseq ls = putJudges $ map (judgeLine clseq) ls
 
-dumpToken :: Bool -> S.TokenLine String -> IO ()
+dumpToken :: Bool -> S.TokenLine S.Chars -> IO ()
 dumpToken omit (B.CodeLine ln _ toks) =
     do putNewline
        putJudges $ map (judgeToken ln) toks'
@@ -183,7 +183,7 @@ descDict = B.CommentDoc [desc, js] where
              , "{| /clause-type is one of cluase types."
              , "   /token-type is one of token types. |}" ]
 
-judgeClauseType :: C.Clause String -> D.JudgeC
+judgeClauseType :: C.Clause S.Chars -> D.JudgeC
 judgeClauseType c = T.affirm "CLAUSE-TYPE" args where
     args = [ "clause-type" // D.pText $ C.clauseTypeText c ]
 

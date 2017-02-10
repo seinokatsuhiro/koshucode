@@ -120,19 +120,19 @@ scanLineInClause form change sc = section change text sc where
     text _ = sc
 
 -- | Section for @koshu-text-assert@ command.
-scanTextAssert :: Scanner String
+scanTextAssert :: (O.Textual t) => Scanner t
 scanTextAssert change sc = section change text sc where
-    cp = B.getCP sc
-    raw = S.TText cp S.TextRaw
+    cp = B.scanCp sc
+    raw c = S.TText cp S.TextRaw (O.charT c)
 
     text ccs@(O.cut -> O.Jp c cs)
         | S.isSpace c  = S.clipUpdate  sc $ S.clipSpace cp ccs
         | c == '|'     = S.clipUpdate  sc $ S.clipBar cp cs
         | c == ':'     = B.codeChange (scanLineInClause S.TextRaw change)
-                           $ B.codeScanSave $ S.clipUpdate sc (cs, raw [c])
+                           $ B.codeScanSave $ S.clipUpdate sc (cs, raw c)
         | otherwise    = case S.clipSymbol cp (B.scanCache sc) ccs of
                            (ws', _, P.TRaw s) | O.tIsEmpty s ->
-                               S.clipUpdateC sc (ws', cs, raw [c])
+                               S.clipUpdateC sc (ws', cs, raw c)
                            sym -> S.clipUpdateC sc sym
     text _ = sc
 
