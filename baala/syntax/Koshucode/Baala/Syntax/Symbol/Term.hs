@@ -18,7 +18,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
     enslash,
     stringTermNames,
     termNameString, termPathString,
-    termNameContent,
+    termNameChars, termNameContent,
     termNameSign, termNameAltSign,
     orderingTermName,
 
@@ -32,8 +32,9 @@ module Koshucode.Baala.Syntax.Symbol.Term
     termsP, termsN, termsPN,
   ) where
 
-import qualified Data.String                as S
-import qualified Koshucode.Baala.Overture   as O
+import qualified Data.String                           as St
+import qualified Koshucode.Baala.Overture              as O
+import qualified Koshucode.Baala.Syntax.Symbol.Chars   as S
 
 
 -- ============================================  Term
@@ -63,10 +64,10 @@ term n c = (toTermName n, c)
 
 -- | Name of term, e.g., @\"size\"@ for the term name @\/size@.
 data TermName =
-    TermName Ordering String
+    TermName Ordering S.Chars
     deriving (Show, Eq, Ord)
 
-instance S.IsString TermName where
+instance St.IsString TermName where
     fromString = toTermName
 
 -- | Path of term names, e.g., term name @\/r\/x@
@@ -123,10 +124,10 @@ enslash n                               = '/' O.<:> n
 
 -- | Decode term name from string.
 textualTermName :: (O.Textual t) => t -> TermName
-textualTermName (O.cut  -> O.Jp '/' n)       = TermName EQ $ O.tString n
-textualTermName (O.cut2 -> O.Jp2 '+' '/' n)  = TermName GT $ O.tString n
-textualTermName (O.cut2 -> O.Jp2 '-' '/' n)  = TermName LT $ O.tString n
-textualTermName n                            = TermName EQ $ O.tString n
+textualTermName (O.cut  -> O.Jp '/' n)       = TermName EQ $ S.tChars n
+textualTermName (O.cut2 -> O.Jp2 '+' '/' n)  = TermName GT $ S.tChars n
+textualTermName (O.cut2 -> O.Jp2 '-' '/' n)  = TermName LT $ S.tChars n
+textualTermName n                            = TermName EQ $ S.tChars n
 
 -- | Convert string to multiple term names.
 --
@@ -142,9 +143,19 @@ stringTermNames = fmap toTermName . words
 --   "/size"
 --
 termNameString :: TermName -> String
-termNameString (TermName EQ n) = enslash n
-termNameString (TermName GT n) = '+' O.<:> enslash n
-termNameString (TermName LT n) = '-' O.<:> enslash n
+termNameString (TermName EQ n) = enslash (O.tString n)
+termNameString (TermName GT n) = '+' O.<:> enslash (O.tString n)
+termNameString (TermName LT n) = '-' O.<:> enslash (O.tString n)
+
+-- | Encode term name into chars.
+--
+--   >>> termNameChars $ toTermName "/size"
+--   "/size"
+--
+termNameChars :: TermName -> S.Chars
+termNameChars (TermName EQ n) = enslash n
+termNameChars (TermName GT n) = '+' O.<:> enslash n
+termNameChars (TermName LT n) = '-' O.<:> enslash n
 
 -- | Extract internal name.
 --
@@ -152,7 +163,7 @@ termNameString (TermName LT n) = '-' O.<:> enslash n
 --   "size"
 --
 termNameContent :: TermName -> String
-termNameContent (TermName _ n) = n
+termNameContent (TermName _ n) = O.tString n
 
 -- | Encode term path into string.
 --

@@ -132,7 +132,7 @@ cMix sh c =
     case c of
       ContentCode  s   -> B.mix $ quote  (sh' s) s
       ContentText  s   -> B.mix $ qquote (sh' s) s
-      ContentTerm  s   -> B.mixString $ "'" O.++ S.termNameString s
+      ContentTerm  s   -> B.mix ('\'' O.<:> S.termNameChars s)
       ContentDec   n   -> B.mixString $ T.encodeDecimal n
       ContentClock t   -> B.mixEncode t
       ContentTime  t   -> B.mixEncode t

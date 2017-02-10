@@ -131,7 +131,7 @@ typeExplain ty =
 -- | Encode term types.
 typeTermMix :: Type -> B.MixText
 typeTermMix (TypeRel ts) = B.mixJoin1 $ map name ts where
-    name (n, _) = B.mix $ S.termNameString n
+    name (n, _) = B.mix $ S.termNameChars n
 typeTermMix _ = B.mixEmpty
 
 

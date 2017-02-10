@@ -68,7 +68,7 @@ contentJson :: (A.ToJSON c, D.CContent c) => c -> A.Value
 contentJson c
     | D.isCode    c = A.toJSON    $ D.gCode c
     | D.isText    c = A.toJSON    $ D.gText c
-    | D.isTerm    c = A.toJSON    $ S.termNameString $ D.gTerm c
+    | D.isTerm    c = A.toJSON    $ S.termNameChars $ D.gTerm c
     | D.isDec     c = A.toJSON    $ T.decimalDouble $ D.gDec c
     | D.isClock   c = unimpl      $ D.gClock c
     | D.isTime    c = unimpl      $ D.gTime c

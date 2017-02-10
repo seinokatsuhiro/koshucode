@@ -32,7 +32,7 @@ contentStringMix :: (D.CContent c) => c -> B.MixText
 contentStringMix c
     | D.isCode   c  = B.mix $ D.gCode c
     | D.isText   c  = B.mix $ D.gText c
-    | D.isTerm   c  = B.mixString $ S.termNameString $ D.gTerm c
+    | D.isTerm   c  = B.mix $ S.termNameChars $ D.gTerm c
     | D.isDec    c  = B.mixString $ T.encodeDecimalCompact $ D.gDec c
     | D.isClock  c  = B.mixEncode $ D.gClock c
     | D.isTime   c  = B.mixEncode $ D.gTime c

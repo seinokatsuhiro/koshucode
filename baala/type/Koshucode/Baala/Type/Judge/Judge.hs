@@ -249,7 +249,7 @@ judgeBreak = B.crlf4 120
 --   MixText "/foo"
 --
 termNameToMix :: S.TermName -> B.MixText
-termNameToMix n = B.mixString $ S.termNameString n
+termNameToMix = B.mix . S.termNameChars
 
 -- | Encode term list with one-space separator.
 termsToMix1 :: (O.Textual t, B.MixEncode c) => B.TransText t -> [S.Term c] -> B.MixText
