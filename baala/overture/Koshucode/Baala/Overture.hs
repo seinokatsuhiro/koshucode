@@ -18,7 +18,7 @@ module Koshucode.Baala.Overture
 import Koshucode.Baala.Overture.Cache
 import Koshucode.Baala.Overture.Index
 import Koshucode.Baala.Overture.Infix
-import Koshucode.Baala.Overture.List
+import Koshucode.Baala.Overture.List hiding (ListLike)
 import Koshucode.Baala.Overture.Misc
 import Koshucode.Baala.Overture.Shorthand
 import Koshucode.Baala.Overture.Some
