@@ -429,11 +429,11 @@ mixBuild lb mx bld = mixBuildBody (auto $ B.breakWidth lb) hard bld mx where
 mixBuildBody :: Auto -> Hard -> Bld -> MixText -> Bld
 mixBuildBody auto hard = (<<) where
     bld << MixAppend x y   = bld << x << y
-    bld << MixBs b         = cat bld (bsWidth b)       $ B.byteString b
-    bld << MixBz b         = cat bld (bzWidth b)       $ B.lazyByteString b
-    bld << MixTx t         = cat bld (txWidth t)       $ Tx.encodeUtf8Builder t
-    bld << MixTz t         = cat bld (tzWidth t)       $ Tz.encodeUtf8Builder t
-    bld << MixString s     = cat bld (O.stringWidth s) $ B.stringUtf8 s
+    bld << MixBs b         = cat bld (bsWidth b)   $ B.byteString b
+    bld << MixBz b         = cat bld (bzWidth b)   $ B.lazyByteString b
+    bld << MixTx t         = cat bld (O.csWidth t) $ Tx.encodeUtf8Builder t
+    bld << MixTz t         = cat bld (O.csWidth t) $ Tz.encodeUtf8Builder t
+    bld << MixString s     = cat bld (O.csWidth s) $ B.stringUtf8 s
     bld << MixSpace s'     = space bld s'
     bld << MixNewline b    = nl b bld
     bld << MixEmpty        = bld
@@ -458,12 +458,6 @@ bsWidth = Bs.length
 bzWidth :: Bz.ByteString -> Int
 bzWidth = fromInteger . toInteger . Bz.length
 
-txWidth :: Tx.Text -> Int
-txWidth = Tx.length
-
-tzWidth :: Tz.Text -> Int
-tzWidth = fromInteger . toInteger . Tz.length
-
 
 -- --------------------------------------------  LineBreak
 
@@ -471,5 +465,5 @@ continueBuilder :: B.LineBreak -> B.Builder
 continueBuilder B.LineBreak { B.breakContinue = nl } = B.stringUtf8 nl
 
 indentBuilder :: B.LineBreak -> (B.Builder, Int)
-indentBuilder B.LineBreak { B.breakIndent = i } = (B.stringUtf8 i, O.stringWidth i)
+indentBuilder B.LineBreak { B.breakIndent = i } = (B.stringUtf8 i, O.csWidth i)
 

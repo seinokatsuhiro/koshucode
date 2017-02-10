@@ -15,7 +15,7 @@ module Koshucode.Baala.Overture.Text.Utility
     -- * Padding
     padBegin, padEnd, 
     padBeginWith, padEndWith,
-    stringWidth,
+    csWidth,
     addSpace,
 
     -- * Code point
@@ -133,16 +133,16 @@ padEnd = padEndWith ' '
 --
 padBeginWith :: (O.Textual t) => Char -> Int -> t -> t
 padBeginWith p n t = O.charsT rest p O.++ t where
-    rest = max 0 (n - stringWidth t)
+    rest = max 0 (n - csWidth t)
 
 -- | Add given character to the right.
 padEndWith :: (O.Textual t) => Char -> Int -> t -> t
 padEndWith p n t = t O.++ O.charsT rest p where
-    rest = max 0 (n - stringWidth t)
+    rest = max 0 (n - csWidth t)
 
--- | Calculate width of string.
-stringWidth :: (O.Textual t) => t -> Int
-stringWidth = sum . O.tList charWidth
+-- | Calculate width of text.
+csWidth :: (O.Textual t) => t -> Int
+csWidth = sum . O.tList charWidth
 
 -- | Character width.
 charWidth :: Char -> Int
