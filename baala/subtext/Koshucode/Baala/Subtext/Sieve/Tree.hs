@@ -46,7 +46,7 @@ sivTrees = B.codeTrees bracket B.BracketNone where
     bracket _              = B.BracketNone
 
 -- | Sieve expression.
-type SivExpr = S.CharExpr
+type SivExpr = S.CharExpr String
 
 -- | Convert to sieve expression.
 class ToSivExpr a where

@@ -30,7 +30,7 @@ ropsAppliedSubtext = Rop.rops "applied"
 -- --------------------------------------------  Operator
 
 -- | Type of subtext parameters.
-type SubtextPara = (K.TermName, [T.NameDepth], T.CharMatch, Bool)
+type SubtextPara = (K.TermName, [T.NameDepth], T.CharMatch String, Bool)
 
 -- | __subtext \/P E__
 --
@@ -137,16 +137,16 @@ parseBundle = bundle where
                  [[P.LRaw n], x] -> Right (n, x)
                  _               -> unknownSyntax xs
 
-    step2 :: [String] -> (String, [K.Tree]) -> K.Ab (String, T.CharExpr)
+    step2 :: [String] -> (String, [K.Tree]) -> K.Ab (String, T.CharExpr String)
     step2 ns (n, x) = do e <- parseSubtext ns x
                          Right (n, e)
 
 -- | Parse token trees into subtext expression.
-parseSubtext :: [String] -> [K.Tree] -> K.Ab T.CharExpr
+parseSubtext :: [String] -> [K.Tree] -> K.Ab (T.CharExpr String)
 parseSubtext ns = trees False where
 
     -- Trees
-    trees :: Bool -> [K.Tree] -> K.Ab T.CharExpr
+    trees :: Bool -> [K.Tree] -> K.Ab (T.CharExpr String)
     trees False xs              = opTop xs
     trees True (P.LRaw n : xs)  = pre n xs
     trees True [P.LTerm n, x]   = Right . T.sub n =<< tree x  -- /N E
@@ -156,17 +156,17 @@ parseSubtext ns = trees False where
     trees True  xs              = unknownSyntax $ show xs
 
     -- Leaf or branch
-    tree :: K.Tree -> K.Ab T.CharExpr
+    tree :: K.Tree -> K.Ab (T.CharExpr String)
     tree (P.L x)      = leaf x
     tree (P.B g xs)   = branch g xs
     tree x            = unknownSyntax x
 
-    leaf :: K.Token -> K.Ab T.CharExpr
+    leaf :: K.Token -> K.Ab (T.CharExpr String)
     leaf (P.TQq t)    = Right $ T.equal t     -- "LITERAL"
     leaf (P.TRaw n)   = pre n []
     leaf x            = unknownSyntax x
 
-    branch :: K.BracketType -> [K.Tree] -> K.Ab T.CharExpr
+    branch :: K.BracketType -> [K.Tree] -> K.Ab (T.CharExpr String)
     branch K.BracketGroup   = opTop            -- ( E )
     branch K.BracketSet     = bracket T.many   -- { E }
     branch K.BracketTie     = bracket T.many1  -- {- E -}
@@ -176,7 +176,7 @@ parseSubtext ns = trees False where
     bracket op xs = do e <- trees False xs
                        Right $ op e
 
-    times :: [K.Tree] -> [K.Tree] -> K.Ab T.CharExpr
+    times :: [K.Tree] -> [K.Tree] -> K.Ab (T.CharExpr String)
     times [ Empty   , To , Empty    ] = bracket (T.many)
     times [ P.LRaw a, To            ] = bracket (T.min (int a))
     times [ P.LRaw a, To , Empty    ] = bracket (T.min (int a))
@@ -195,7 +195,7 @@ parseSubtext ns = trees False where
     text x                     = unknownSyntax x
 
     -- Infix operators
-    opTop :: [K.Tree] -> K.Ab T.CharExpr
+    opTop :: [K.Tree] -> K.Ab (T.CharExpr String)
     opTop [P.BSet xs, P.BGroup m] = times m xs
     opTop xs = opAlt xs
     opAlt    = inf "|"   T.or    opSeq   -- E | E | E
@@ -273,16 +273,16 @@ parseSubtext ns = trees False where
     keyword (P.LRaw s)      = Right s
     keyword x               = unknownSyntax x
 
-koshuSymbol :: T.CharExpr
+koshuSymbol :: T.CharExpr String
 koshuSymbol = T.elem "koshu-symbol" K.isSymbolChar
 
-koshuGeneral :: T.CharExpr
+koshuGeneral :: T.CharExpr String
 koshuGeneral = T.elem "koshu-general" K.isGeneralChar
 
-koshuPlain :: T.CharExpr
+koshuPlain :: T.CharExpr String
 koshuPlain = T.elem "koshu-plain" K.isPlainChar
 
-koshuNumeric :: T.CharExpr
+koshuNumeric :: T.CharExpr String
 koshuNumeric = T.elem "koshu-numeric" K.isNumericChar
 
 

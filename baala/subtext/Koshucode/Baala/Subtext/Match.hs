@@ -26,8 +26,8 @@ import qualified Koshucode.Baala.Subtext.Para      as T
 --   When unmatched, 'Nothing' is returned.
 type GeneralMatch as a = as -> Maybe (MatchResult as a)
 
--- | Character sequence (string) version of 'GeneralMatch'.
-type CharMatch = GeneralMatch String Char
+-- | Character sequence version of 'GeneralMatch'.
+type CharMatch t = GeneralMatch t Char
 
 -- | Main and submatches.
 type MatchResult as a = (as, [T.Submatch as a])
