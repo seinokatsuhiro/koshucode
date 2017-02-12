@@ -1,17 +1,42 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | File path and content in lazy bytestring.
 
 module Koshucode.Baala.Base.IO.BzFile
-  ( BzFile (..),
+  ( -- * Type
+    Bytes, ToBytes (..),
+
+    -- * Read
+    BzFile (..),
     readBzFile,
     tryReadFile,
   ) where
 
-import qualified Control.Exception               as E
-import qualified Data.ByteString.Lazy            as Bz
-import qualified Koshucode.Baala.Overture        as O
-import qualified Koshucode.Baala.Base.Abort      as B
+import qualified Control.Exception                as E
+import qualified Data.ByteString.Lazy             as Bz
+import qualified Koshucode.Baala.Overture         as O
+import qualified Koshucode.Baala.Base.Abort       as B
+import qualified Koshucode.Baala.Base.Prelude     as B
+
+
+-- ============================================  Bytes
+
+-- | This implementation uses lazy bytestring as input code.
+type Bytes = O.Bz
+
+-- | Convert to bytes.
+class ToBytes a where
+    toBytes :: a -> Bytes
+
+instance ToBytes O.Bz where
+    toBytes = id
+
+instance ToBytes String where
+    toBytes = B.stringBz
+
+
+-- ============================================  Read
 
 -- | File path and content in lazy bytestring.
 --   The function 'readBzFile' creates:

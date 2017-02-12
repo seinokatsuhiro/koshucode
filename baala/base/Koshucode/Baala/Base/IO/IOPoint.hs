@@ -4,10 +4,7 @@
 -- | I/O point: file, standard input, direct text, etc.
 
 module Koshucode.Baala.Base.IO.IOPoint
-  ( -- * Input bytes
-    Bytes, ToBytes (..),
-
-    -- * Named handle
+  ( -- * Named handle
     NamedHandle (..),
 
     -- * I/O point
@@ -21,27 +18,12 @@ module Koshucode.Baala.Base.IO.IOPoint
     pathIxIO,
   ) where
 
-import qualified System.IO                     as IO
-import qualified Data.ByteString.Lazy          as Bz
-import qualified Koshucode.Baala.Overture      as O
-import qualified Koshucode.Baala.Base.List     as B
-import qualified Koshucode.Baala.Base.Prelude  as B
-
-
--- ============================================  Bytes
-
--- | This implementation uses lazy bytestring as input code.
-type Bytes = O.Bz
-
--- | Convert to bytes.
-class ToBytes a where
-    toBytes :: a -> Bytes
-
-instance ToBytes O.Bz where
-    toBytes = id
-
-instance ToBytes String where
-    toBytes = B.stringBz
+import qualified System.IO                       as IO
+import qualified Data.ByteString.Lazy            as Bz
+import qualified Koshucode.Baala.Overture        as O
+import qualified Koshucode.Baala.Base.List       as B
+import qualified Koshucode.Baala.Base.Prelude    as B
+import qualified Koshucode.Baala.Base.IO.BzFile  as B
 
 
 -- ============================================  Named handle
@@ -68,7 +50,7 @@ instance Ord NamedHandle where
 data IOPoint
     = IOPointFile   FilePath FilePath     -- ^ __1 Input/Output:__ Context directory and target path.
     | IOPointUri    O.IOPath              -- ^ __2 Input:__ Universal resource identifier.
-    | IOPointText   (Maybe String) Bytes  -- ^ __3 Input:__ Input bytes and its name.
+    | IOPointText   (Maybe String) B.Bytes  -- ^ __3 Input:__ Input bytes and its name.
     | IOPointCustom String O.Bz           -- ^ __4 Input:__ Custom I/O.
     | IOPointStdin  (Maybe String)        -- ^ __5 Input:__ The sandard input.
     | IOPointStdout (Maybe String)        -- ^ __6 Output:__ The sandard output.
@@ -118,7 +100,7 @@ isUri path = O.isPrefixOf "http://"  path
           || O.isPrefixOf "ftp://"   path
 
 -- | Create I/O points from using stdin, texts itself, filenames, and URIs.
-ioPointTogether :: Bool -> [Bytes] -> [FilePath] -> [IOPoint]
+ioPointTogether :: Bool -> [B.Bytes] -> [FilePath] -> [IOPoint]
 ioPointTogether stdin texts paths =
     let ts = IOPointText Nothing <$> texts
         ps = ioPoint <$> paths
@@ -158,8 +140,8 @@ instance O.GetIOPath IxIOPoint where
 --   >>> codeIxIO "abc"
 --   IxIOPoint {nioNumber = 0, nioPoint = IOPointText Nothing "abc"}
 --
-codeIxIO :: (ToBytes code) => code -> IxIOPoint
-codeIxIO = IxIOPoint 0 . IOPointText Nothing . toBytes
+codeIxIO :: (B.ToBytes code) => code -> IxIOPoint
+codeIxIO = IxIOPoint 0 . IOPointText Nothing . B.toBytes
 
 -- | Create input point from file path.
 pathIxIO :: FilePath -> IxIOPoint
