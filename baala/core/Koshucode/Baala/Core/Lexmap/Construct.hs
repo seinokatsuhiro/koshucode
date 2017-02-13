@@ -86,7 +86,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
             = lexmap eid sec ts                   -- group "( ... )"
         single [P.B _ _]
             = Msg.reqGroup                        -- unknown group
-        single (n@(P.LTerm _) : ts)
+        single (n@(P.LTermOrd _ _) : ts)
             = baseOf "add" $ n : [S.ttreeGroup ts] -- "/N E" means "add /N ( E )"
         single []
             = baseOf "id" []                      -- "| R | R" means "id | R | R"

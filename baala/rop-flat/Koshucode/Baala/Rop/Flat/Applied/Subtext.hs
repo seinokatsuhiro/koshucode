@@ -148,13 +148,13 @@ parseSubtext ns = trees False where
 
     -- Trees
     trees :: Bool -> [K.TTree t] -> K.Ab (T.CharExpr t)
-    trees False xs              = opTop xs
-    trees True (P.LRaw n : xs)  = pre n xs
-    trees True [P.LTerm n, x]   = Right . T.sub (K.tString n) =<< tree x  -- /N E
-    trees True [P.LTerm n]      = Right $ T.sub (K.tString n) T.what      -- /N
-    trees True []               = Right T.succ                -- ()
-    trees True [x]              = tree x
-    trees True  xs              = unknownSyntax $ show xs
+    trees False xs                 = opTop xs
+    trees True (P.LRaw n : xs)     = pre n xs
+    trees True [P.LTermOrd _ n, x] = Right . T.sub (K.tString n) =<< tree x  -- /N E
+    trees True [P.LTermOrd _ n]    = Right $ T.sub (K.tString n) T.what      -- /N
+    trees True []                  = Right T.succ                -- ()
+    trees True [x]                 = tree x
+    trees True  xs                 = unknownSyntax $ show xs
 
     -- Leaf or branch
     tree :: K.TTree t -> K.Ab (T.CharExpr t)

@@ -137,10 +137,10 @@ splitFilter ts = (filt', pat) where
 splitClassTerm :: (S.TextualTermName t) => [S.TTree t] -> B.Ab ([S.TTree t], S.SubtreeTerm)
 splitClassTerm ts0 = abSubtree ts0 $ loop [] ts0 where
     loop cs (P.LRaw c : ts)  = loop (c : cs) ts
-    loop cs (P.LTerm n : P.LRaw "seq" : ts)
-        = right cs (ts, S.SubtreeSeq (O.tString <$> reverse cs) (S.toTermName n))
-    loop cs (P.LTerm n : ts)
-        = right cs (ts, S.subtreeTexts (O.tString <$> reverse cs) (S.toTermName n))
+    loop cs (P.LTermOrd ord n : P.LRaw "seq" : ts)
+        = right cs (ts, S.SubtreeSeq (O.tString <$> reverse cs) (S.toTermNameOrd ord n))
+    loop cs (P.LTermOrd ord n : ts)
+        = right cs (ts, S.subtreeTexts (O.tString <$> reverse cs) (S.toTermNameOrd ord n))
     loop _ _ = Right (ts0, S.SubtreeNone)
 
     right cs result

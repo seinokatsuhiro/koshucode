@@ -112,7 +112,7 @@ treesContents cons cs = lt `mapM` S.divideTreesByBar cs where
 --      treesTie                 treesTie
 --
 treesTie :: (S.TextualTermName t, D.CContent c) => DecodeContent t c -> [S.TTree t] -> B.Ab c
-treesTie cons xs@(P.LTerm _ : _) = D.putTie O.# treesTerms cons xs
+treesTie cons xs@(P.LTermOrd _ _ : _) = D.putTie O.# treesTerms cons xs
 treesTie _ [] = D.putTie []
 treesTie _ [P.LRaw "words", P.LQq ws] = D.putList (D.pText <$> O.tWords ws)
 treesTie _ _ = Msg.adlib "unknown tie"
@@ -170,7 +170,7 @@ treesRel cons xs =
 -- | Split term names.
 treesTermNames :: (S.ToTermName t) => [S.TTree t] -> ([S.TermName], [S.TTree t])
 treesTermNames = terms [] where
-    terms ns (P.LTerm n : xs) = terms (S.toTermName n : ns) xs
+    terms ns (P.LTermOrd ord n : xs) = terms (S.toTermNameOrd ord n : ns) xs
     terms ns xs = (reverse ns, xs)
 
 -- | Decode specific number of contents.

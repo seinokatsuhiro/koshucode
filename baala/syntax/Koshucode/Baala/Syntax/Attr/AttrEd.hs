@@ -114,7 +114,7 @@ runAttrEd (B.Codic cp edit) attr = run where
     fill ps       []               = Right $ ps
 
 nestName :: (S.TextualTermName t) => B.AbMap [S.TTree t]
-nestName [P.LTerm n] = Right $ localNest $ S.toTermName n
+nestName [P.LTermOrd ord n] = Right $ localNest $ S.toTermNameOrd ord n
 nestName _ = Msg.adlib "require term name"
 
 localNest :: (O.Textual t) => S.TermName -> [S.TTree t]

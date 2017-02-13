@@ -12,6 +12,7 @@ module Koshucode.Baala.Syntax.Tree.Pattern
     pattern LQ, pattern LQq,
     pattern LSlot,
     pattern LTerm,
+    pattern LTermOrd,
 
     -- * Branch
     pattern B,
@@ -56,6 +57,9 @@ pattern LSlot n s <- L (S.TSlot _ n s)
 
 -- | Term leaf.
 pattern LTerm s <- L (P.Term s)
+
+-- | Term leaf with ordering.
+pattern LTermOrd o s <- L (P.TermOrd o s)
 
 -- ---------------------------------  Branch
 

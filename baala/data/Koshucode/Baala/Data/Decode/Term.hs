@@ -32,11 +32,12 @@ import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 -- ---------------------------------  Term name cache
 
 -- | Term name cache.
-type CacheT t = O.Cache t S.TermName
+type CacheT t = O.Cache (Ordering, t) S.TermName
 
 -- | Empty term name cache.
 cacheT :: (S.ToTermName t) => CacheT t
-cacheT = O.cache [] S.toTermName
+cacheT = O.cache [] to where
+    to (ord, n) = S.toTermNameOrd ord n
 
 -- ---------------------------------  Term name
 
@@ -57,7 +58,7 @@ treeFlatName = fmap snd . treeFlatNameCached cacheT
 
 -- | Cached version of 'treeFlatName'.
 treeFlatNameCached :: (Ord t) => CacheT t -> S.TTree t -> B.Ab (CacheT t, S.TermName)
-treeFlatNameCached cc (P.LTerm n) = Right $ O.cacheGet cc n
+treeFlatNameCached cc (P.LTermOrd ord n) = Right $ O.cacheGet cc (ord, n)
 treeFlatNameCached _  (P.L _)     = Msg.reqFlatName
 treeFlatNameCached _  _           = Msg.reqTermName
 
@@ -111,7 +112,7 @@ treesFlatNamePairs = loop where
 --
 treesNamesByColon :: (S.TextualTermName t) => [S.TTree t] -> B.Ab [[S.TermName]]
 treesNamesByColon = loop [] [] where
-    loop ret ns (P.LTerm n  : ts)  = loop ret (S.toTermName n : ns) ts
+    loop ret ns (P.LTermOrd ord n : ts) = loop ret (S.toTermNameOrd ord n : ns) ts
     loop ret ns (P.LRaw ":" : ts)  = loop (reverse ns : ret) [] ts
     loop ret ns []                 = Right $ reverse $ reverse ns : ret
     loop _ _ _                     = Msg.reqTermName
@@ -139,8 +140,8 @@ treesTerms = name where
 
 -- | Test token tree is term leaf.
 isTermLeaf :: O.Test (S.TTree t)
-isTermLeaf (P.LTerm _)   = True
-isTermLeaf _             = False
+isTermLeaf (P.LTermOrd _ _)  = True
+isTermLeaf _                 = False
 
 -- | Cached version of 'treesTerms'.
 treesTermsCached :: (S.ToTermName t) => CacheT t -> [S.TTree t] -> B.Ab (CacheT t, [S.Term [S.TTree t]])

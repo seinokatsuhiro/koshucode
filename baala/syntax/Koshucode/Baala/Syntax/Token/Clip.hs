@@ -248,7 +248,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
     term ns (O.cut -> O.Jp c cs)
         | isTerm c    = word ns cs
     term [n] cs
-        | not q       = case O.cacheGet wtab $ slash O.++ n of
+        | not q       = case O.cacheGet wtab n of
                           (wtab', n') -> (wtab', cs, [S.TTerm cp (ord slash) n'])
     term ns cs
         | q           = case ns of
@@ -259,6 +259,7 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
     termPath [t]      = [t]
     termPath ts       = [S.TClose cp "-)"] O.++ ts O.++ [S.TOpen cp "(-"]
 
+    ord "/"   = EQ
     ord "+/"  = GT
     ord "-/"  = LT
     ord _     = EQ

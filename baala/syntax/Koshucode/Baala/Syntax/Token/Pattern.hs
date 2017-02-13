@@ -17,6 +17,7 @@ module Koshucode.Baala.Syntax.Token.Pattern
 
     -- * Other token
     pattern Term,
+    pattern TermOrd,
   ) where
 
 import qualified Koshucode.Baala.Syntax.Token.Token  as S
@@ -50,4 +51,7 @@ pattern TLicense w <- T S.TextLicense w
 
 -- | Term token.
 pattern Term w <- S.TTerm _ _ w
+
+-- | Term token with ordering.
+pattern TermOrd o w <- S.TTerm _ o w
 
