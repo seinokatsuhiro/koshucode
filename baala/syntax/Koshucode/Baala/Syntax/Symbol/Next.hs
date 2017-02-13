@@ -42,28 +42,30 @@ nextSpace = loop 0 where
         | Ch.isSpace c   = loop (n + 1) cs
     loop n cs            = (cs, n)
 
--- | Get next double quoted text.
---   A single double quote ends text.
---   A double double quote does not end text,
---   but it is converted to double quote.
---
---   >>> nextQQ "abc\" def"
---   Right (" def","abc")
---
---   >>> nextQQ "abc\"\"def\" ghi"
---   Right (" ghi","abc\"def")
---
-nextQQ :: (O.Textual t) => AbNext t t
-nextQQ cs0 = loop O.zero cs0 where
-    loop n (O.cut -> O.Jp c cs)
-        | isQQ c      = qq n cs
-        | otherwise   = loop (n + 1) cs
-    loop _ _          = Msg.quotNotEnd
+{-| Get next double quoted text.
+    A single double quote ends text.
+    A double double quote does not end text,
+    but it is converted to double quote.
 
-    qq n (O.cut -> O.Jp c cs)
-        | isQQ c      = do (cs', s') <- nextQQ cs
-                           Right (cs', O.tTake (n + 1) cs0 O.++ s')
-    qq n cs           = Right (cs, O.tTake n cs0)
+    >>> nextQQ "abc\" def"
+    Right (" def","abc")
+
+    >>> nextQQ "abc\"\"def\" ghi"
+    Right (" ghi","abc\"def")
+    -}
+nextQQ :: (O.Textual t) => AbNext t t
+nextQQ = text where
+    text t = case O.span (not . isQQ) t of
+                (cnt, t1) -> do (t2, cont2) <- qq t1
+                                case O.tIsEmpty cont2 of
+                                  True  -> Right (t2, cnt)
+                                  False -> Right (t2, cnt O.++ cont2)
+    qq (O.cut -> O.Jp q t)
+        | isQQ q = case O.cut t of
+                     O.Jp q' t1 | isQQ q' -> do (t2, cnt) <- text t1
+                                                Right (t2, q O.<:> cnt)
+                     _ -> Right (t, O.tEmpty)
+    qq _ = Msg.quotNotEnd
 
 -- | Get next text before given delimiter.
 --
