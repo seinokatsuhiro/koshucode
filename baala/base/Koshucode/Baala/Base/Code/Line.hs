@@ -9,9 +9,9 @@
 module Koshucode.Baala.Base.Code.Line
   ( -- * Line
     ToLines (..),
-    dropBom,
+    bzDropBom, bsDropBom,
     bzLines,
-    linesCrlf, linesCrlfBz, linesCrlfNumbered,
+    linesCrlf, linesCrlfNumbered,
 
     -- * CodeLine
     LineNumber,
@@ -20,10 +20,11 @@ module Koshucode.Baala.Base.Code.Line
     lineIndentPair,
   ) where
 
+import qualified Data.ByteString                      as Bs
 import qualified Data.ByteString.Lazy                 as Bz
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base.Abort           as B
-import qualified Koshucode.Baala.Base.IO              as B
+import qualified Koshucode.Baala.Base.Prelude         as B
 
 
 -- ============================================  Line
@@ -48,23 +49,30 @@ instance ToLines O.Tx where
 instance ToLines O.Tz where
     toLines = csLines . O.tzT
 
--- | Remove UTF-8 BOM (EF BB BF in hexadecimal) from lazy bytestring.
---
---   >>> dropBom "\xEF\xBB\xBF|foo bar baz"
---   "|foo bar baz"
---
---   >>> dropBom "\xEF|foo bar baz"
---   "\239|foo bar baz"
---
-dropBom :: O.Bz -> O.Bz
-dropBom bz = case Bz.splitAt 3 bz of
+{-| Remove UTF-8 BOM (EF BB BF in hexadecimal) from lazy bytestring.
+
+    >>> bzDropBom "\xEF\xBB\xBF|foo bar baz"
+    "|foo bar baz"
+
+    >>> bzDropBom "\xEF|foo bar baz"
+    "\239|foo bar baz"
+    -}
+bzDropBom :: O.Bz -> O.Bz
+bzDropBom = dropBom Bz.splitAt
+
+{-| Remove UTF-8 BOM (EF BB BF in hexadecimal) from strict bytestring. -}
+bsDropBom :: O.Bs -> O.Bs
+bsDropBom = dropBom Bs.splitAt
+
+dropBom :: (Integral n, B.IsString a, Eq a) => (n -> a -> (a, a)) -> a -> a
+dropBom f bz = case f 3 bz of
                (bom, body) | "\xEF\xBB\xBF" == bom -> body
                            | otherwise             -> bz
 
 -- | Split lazy bytestring by newline character sequence.
 --   If bytestring begins with the UTF-8 BOM, this function drops it.
 bzLines :: O.Bz -> [O.Bz]
-bzLines = loop . dropBom where
+bzLines = loop . bzDropBom where
     loop bz | Bz.null bz  = []
             | otherwise   = case Bz.break crlf bz of
                               (ln, bz') -> ln : loop (strip bz')
@@ -111,12 +119,6 @@ linesCrlf = csLines
 {-# DEPRECATED linesCrlfNumbered "Consider 'bzLines'." #-}
 linesCrlfNumbered :: String -> [(LineNumber, String)]
 linesCrlfNumbered = zip [1..] . linesCrlf
-
--- | Split lazy bytestring by newline character sequence.
---   This function drops the BOM sequence.
-{-# DEPRECATED linesCrlfBz "Consider 'bzLines'." #-}
-linesCrlfBz :: (B.ToBytes code) => code -> [O.Bz]
-linesCrlfBz = bzLines . B.toBytes
 
 
 -- ============================================  CodeLine
