@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
@@ -26,49 +27,54 @@ import qualified Koshucode.Baala.Overture     as O
 --   "aaa" <lf> "bbb" <crlf> "ccc" <crlf> <crlf> "ddd"
 --
 angleQuote :: (O.Textual t) => t -> t
-angleQuote = openLoop where
-    openLoop = open . loop
+angleQuote = O.tJoinWith " " . angleList
 
-    loop (O.cut -> O.Jp c cs) =
-        case angleSplit c cs of
-          Nothing       -> c O.<:> loop cs
-          Just (w, cs2) -> "\" " O.++ w O.++ O.addSpace (openLoop cs2)
-    loop _ = "\""
+{-| Divdie text into angle (Left) and non-angle (Right) subtexts.
 
-    open (O.cut -> O.Jp '"' cs)  = O.trimBegin cs   -- omit closing double quote
-    open cs                       = '"' O.<:> cs    -- append opening double quote
+    >>> angleList "foo\r\nbar\n\n\"baz\""
+    ["\"foo\"", "<crlf>", "\"bar\"", "<lf>", "<lf>", "<qq>", "\"baz\"", "<qq>"]
+    -}
+angleList :: (O.Textual t) => t -> [t]
+angleList = loop where
+    loop t | O.tIsEmpty t = []
+           | otherwise    = case O.span nonAngle t of
+                              (a, b) | O.tIsEmpty b -> [non a]
+                                     | O.tIsEmpty a ->         angle b
+                                     | otherwise    -> non a : angle b
 
--- | Split angle keyword.
---
---   >>> let (c : cs) = "abc" in angleSplit c cs
---   Nothing
---
---   >>> let (c : cs) =  "\nabc" in angleSplit c cs
---   Just ("<lf>", "abc")
---
---   >>> let (c : cs) =  "\0abc" in angleSplit c cs
---   Just ("<U+0>", "abc")
---
-angleSplit :: (O.Textual t) => Char -> t -> Maybe (t, t)
-angleSplit c cs =
+    non t = '"' O.<:> (t O.++ "\"")
+
+    angle (O.cut -> O.Jp c t)
+        = case O.majorGeneralCategory c of
+            O.UnicodePunctuation -> punct c t
+            O.UnicodeOther       -> other c t
+            _                    -> char c t
+    angle _ = []
+
+    punct '"' t                = "<qq>" : loop t
+    punct c   t                = char c t
+
+    other '\r' t               = cr t
+    other '\n' t               = "<lf>"  : loop t
+    other '\t' t               = "<tab>" : loop t
+    other c    t               = char c t
+
+    cr (O.cut -> O.Jp '\n' t)  = "<crlf>" : loop t
+    cr t                       = "<cr>"   : loop t
+
+    char c t                   = angleChar c : loop t
+
+{-| Test non-angle character.
+
+    >>> nonAngle <$> "foo\r\nbar\"baz"
+    [True,True,True,False,False,True,True,True,False,True,True,True]
+    -}
+nonAngle :: Char -> Bool
+nonAngle c =
     case O.majorGeneralCategory c of
-      O.UnicodePunctuation -> punct c
-      O.UnicodeOther       -> other c
-      _                    -> Nothing
-    where
-      just w               = Just (w, cs)
-      just2 w cs2          = Just (w, cs2)
-
-      punct '"'            = just "<qq>"
-      punct _              = Nothing
-
-      other '\r'           = cr cs
-      other '\n'           = just "<lf>"
-      other '\t'           = just "<tab>"
-      other _              = just (angleChar c)
-
-      cr (O.cut -> O.Jp '\n' cs2)  = just2 "<crlf>" cs2
-      cr _                          = just "<cr>"
+      O.UnicodePunctuation -> c /= '"'
+      O.UnicodeOther       -> False
+      _                    -> True
 
 -- | Angle text of the Unicode code point.
 --
