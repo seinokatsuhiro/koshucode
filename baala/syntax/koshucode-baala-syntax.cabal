@@ -42,6 +42,14 @@ flag string-input
   description: Use string type for input code.
   default: False
 
+flag strict-text-input
+  description: Use strict text type for input code.
+  default: False
+
+flag lazy-text-input
+  description: Use lazy text type for input code.
+  default: True
+
 --extra-source-files:
 
 library
@@ -114,4 +122,8 @@ library
 
   if flag(string-input)
      cpp-options: -DSTRING_INPUT
+  if flag(strict-text-input)
+     cpp-options: -DSTRICT_TEXT_INPUT
+  if flag(lazy-text-input)
+     cpp-options: -DLAZY_TEXT_INPUT
 

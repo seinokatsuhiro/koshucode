@@ -14,7 +14,7 @@ module Koshucode.Baala.Syntax.Symbol.Chars
 import qualified Koshucode.Baala.Overture         as O
 
 
-#ifdef STRING_INPUT
+#if defined STRING_INPUT
 -- | Character sequence.
 type Chars = String
 
@@ -30,7 +30,7 @@ csT = O.stringT
 charsType :: Chars
 charsType = "string"
 
-#else
+#elif defined STRICT_TEXT_INPUT
 -- | Character sequence.
 type Chars = O.Tx
 
@@ -42,9 +42,25 @@ tChars = O.tTx
 csT :: (O.Textual t) => Chars -> t
 csT = O.txT
 
--- | Type of input. (@"text"@)
+-- | Type of input. (@"strict-text"@)
 charsType :: Chars
-charsType = "text"
+charsType = "strict-text"
+
+#elif defined LAZY_TEXT_INPUT
+-- | Character sequence.
+type Chars = O.Tz
+
+-- | Convert textual value to character sequence.
+tChars :: (O.Textual t) => t -> Chars
+tChars = O.tTz
+
+-- | Convert character sequence to textual value.
+csT :: (O.Textual t) => Chars -> t
+csT = O.tzT
+
+-- | Type of input. (@"lazy-text"@)
+charsType :: Chars
+charsType = "lazy-text"
 
 #endif
 
