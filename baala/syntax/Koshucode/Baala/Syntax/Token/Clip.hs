@@ -249,15 +249,19 @@ clipTerm q slash cp wtab cs0 = word [] cs0 where
         | isTerm c    = word ns cs
     term [n] cs
         | not q       = case O.cacheGet wtab $ slash O.++ n of
-                          (wtab', n') -> (wtab', cs, [S.TTerm cp n'])
+                          (wtab', n') -> (wtab', cs, [S.TTerm cp (ord slash) n'])
     term ns cs
         | q           = case ns of
                           [n] -> (wtab, cs, [S.TText cp S.TextTerm n])
                           _   -> (wtab, cs, [S.unknownToken cp cs0 Msg.expPlainSym])
-        | otherwise   = (wtab, cs, termPath (S.TTerm cp <$> ns))
+        | otherwise   = (wtab, cs, termPath (S.TTerm cp EQ <$> ns))
 
     termPath [t]      = [t]
     termPath ts       = [S.TClose cp "-)"] O.++ ts O.++ [S.TOpen cp "(-"]
+
+    ord "+/"  = GT
+    ord "-/"  = LT
+    ord _     = EQ
 
 -- ---------------------------------  Symbol
 

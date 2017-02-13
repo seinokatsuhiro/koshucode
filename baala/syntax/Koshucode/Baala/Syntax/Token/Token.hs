@@ -43,7 +43,7 @@ data TToken t
                 -- ^ __1 Textual:__ Text — @'code@, @"text"@, etc
     | TShort    (B.TCodePos t) t t
                 -- ^ __2 Textual:__ Prefixed shorten text — @short.proper@
-    | TTerm     (B.TCodePos t) t
+    | TTerm     (B.TCodePos t) Ordering t
                 -- ^ __3 Textual:__ Term name — @\/term@
 
     | TLocal    (B.TCodePos t) LocalRef Int [TToken t]
@@ -79,7 +79,7 @@ tokenFmap :: (t -> s) -> TToken t -> TToken s
 tokenFmap f = m where
     m (TText    cp form t)    = TText    (fmap f cp) form (f t)
     m (TShort   cp t1 t2)     = TShort   (fmap f cp) (f t1) (f t2)
-    m (TTerm    cp t)         = TTerm    (fmap f cp) (f t)
+    m (TTerm    cp ord t)     = TTerm    (fmap f cp) ord (f t)
     m (TLocal   cp ref n ts)  = TLocal   (fmap f cp) ref n (tokenFmap f <$> ts)
     m (TSlot    cp n t)       = TSlot    (fmap f cp) n (f t)
     m (TName    cp n)         = TName    (fmap f cp) n
@@ -93,7 +93,7 @@ tokenFmap f = m where
 instance SubtypeName (TToken t) where
      subtypeName (TText     _ _ _  ) = "text"
      subtypeName (TShort    _ _ _  ) = "short"
-     subtypeName (TTerm     _ _    ) = "term"
+     subtypeName (TTerm     _ _ _  ) = "term"
      subtypeName (TLocal    _ _ _ _) = "local"
      subtypeName (TSlot     _ _ _  ) = "slot"
      subtypeName (TOpen     _ _    ) = "open"
@@ -113,7 +113,7 @@ instance B.CsGetCP TToken where
 tokenCp :: TToken t -> B.TCodePos t
 tokenCp (TText    cp _ _)    = cp
 tokenCp (TShort   cp _ _)    = cp
-tokenCp (TTerm    cp _)      = cp
+tokenCp (TTerm    cp _ _)    = cp
 tokenCp (TLocal   cp _ _ _)  = cp
 tokenCp (TSlot    cp _ _)    = cp
 tokenCp (TOpen    cp _)      = cp

@@ -49,5 +49,5 @@ pattern TBar w <- T S.TextBar w
 pattern TLicense w <- T S.TextLicense w
 
 -- | Term token.
-pattern Term w <- S.TTerm _ w
+pattern Term w <- S.TTerm _ _ w
 

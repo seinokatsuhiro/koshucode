@@ -84,25 +84,31 @@ type TermPath = [TermName]
 -- 
 class (Ord a) => ToTermName a where
     toTermName :: a -> TermName
+    toTermNameOrd :: Ordering -> a -> TermName
 
 instance ToTermName TermName where
     toTermName = id
+    toTermNameOrd _ = id
 
 -- | Remove leading slash character.
 instance ToTermName String where
     toTermName = textualTermName
+    toTermNameOrd = textualTermNameOrd
 
 -- | Strict text.
 instance ToTermName O.Tx where
     toTermName = textualTermName
+    toTermNameOrd = textualTermNameOrd
 
 -- | Lazy text.
 instance ToTermName O.Tz where
     toTermName = textualTermName
+    toTermNameOrd = textualTermNameOrd
 
 -- | Integer term name.
 instance ToTermName Int where
     toTermName = toTermName . show
+    toTermNameOrd ord = toTermNameOrd ord . show
 
 -- | 'Textual' and 'ToTermName' values.
 class (O.Textual t, ToTermName t) => TextualTermName t
@@ -128,6 +134,9 @@ textualTermName (O.cut  -> O.Jp '/' n)       = TermName EQ $ S.tChars n
 textualTermName (O.cut2 -> O.Jp2 '+' '/' n)  = TermName GT $ S.tChars n
 textualTermName (O.cut2 -> O.Jp2 '-' '/' n)  = TermName LT $ S.tChars n
 textualTermName n                            = TermName EQ $ S.tChars n
+
+textualTermNameOrd :: (O.Textual t) => Ordering -> t -> TermName
+textualTermNameOrd ord n = TermName ord $ S.tChars n
 
 -- | Convert string to multiple term names.
 --

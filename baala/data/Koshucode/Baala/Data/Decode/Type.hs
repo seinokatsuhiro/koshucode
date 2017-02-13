@@ -60,7 +60,7 @@ treeInterpWord (B.TreeB _ _ _) = Msg.nothing
 treeInterpWord (B.TreeL x) =
     case x of
       S.TText _ _ w   -> Right $ T.InterpText $ O.tString w
-      S.TTerm _ n     -> Right $ T.InterpTerm $ S.toTermName n
+      S.TTerm _ _ n   -> Right $ T.InterpTerm $ S.toTermName n
       _               -> Msg.nothing
 
 
