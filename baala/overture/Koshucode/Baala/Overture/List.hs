@@ -8,17 +8,40 @@
 
 module Koshucode.Baala.Overture.List
  ( -- * List class
-   List,
-   L.ListLike (..),
+   List (..),
    (<:>),
-   cut, cut2, cut3,
+   cut2, cut3,
+   -- * List-like class.
+   L.ListLike (..),
  ) where
 
 import qualified Data.ListLike                        as L
+import qualified Data.Text                            as Tx
+import qualified Data.Text.Lazy                       as Tz
 import qualified Koshucode.Baala.Overture.Infix       as O
+import qualified Koshucode.Baala.Overture.Shorthand   as O
 
-{-| List class as synonym of 'L.ListLike'. -}
-type List es e = L.ListLike es e
+{-| List class. -}
+class (L.ListLike es e) => List es e | es -> e where
+
+    {-| Split first element and rest of list.
+
+        >>> cut "foo"
+        Just ('f',"oo")
+
+        >>> cut ""
+        Nothing
+        -}
+    cut :: es -> Maybe (e, es)
+    cut = L.uncons
+
+instance List [e] e where
+
+instance List O.Tx Char where
+    cut = Tx.uncons
+
+instance List O.Tz Char where
+    cut = Tz.uncons
 
 infixr 5 <:>
 
@@ -29,17 +52,6 @@ infixr 5 <:>
     -}
 (<:>) :: (List es e) => e -> es -> es
 (<:>) = L.cons
-
-{-| Split first element and rest of list.
-
-    >>> cut "foo"
-    Just ('f',"oo")
-
-    >>> cut ""
-    Nothing
-    -}
-cut :: (List es e) => es -> Maybe (e, es)
-cut = L.uncons
 
 {-| Split first two elements and rest of list.
 
