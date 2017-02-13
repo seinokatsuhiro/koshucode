@@ -414,8 +414,8 @@ instance Textual O.Tx where
     txT          = id
     tTz          = Tz.fromStrict
     tzT          = Tz.toStrict
-    bsT          = Tx.decodeUtf8With Err.lenientDecode
-    bzT          = bsT . Bz.toStrict
+    bsT          = bsDecode
+    bzT          = Tz.toStrict . bzDecode
 
 -- | Lazy text.
 instance Textual O.Tz where
@@ -438,8 +438,14 @@ instance Textual O.Tz where
     txT          = Tz.fromStrict
     tTz          = id
     tzT          = id
-    bsT          = bzT . Bz.fromStrict
-    bzT          = Tz.decodeUtf8With Err.lenientDecode
+    bsT          = bzDecode . Bz.fromStrict
+    bzT          = bzDecode
+
+bsDecode :: O.Bs -> O.Tx
+bsDecode = Tx.decodeUtf8With Err.lenientDecode
+
+bzDecode :: O.Bz -> O.Tz
+bzDecode = Tz.decodeUtf8With Err.lenientDecode
 
 -- | Convert textual something to string something.
 stringify :: (Functor f, Textual t) => f t -> f String
