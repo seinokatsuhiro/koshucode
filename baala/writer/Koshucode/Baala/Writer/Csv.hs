@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
@@ -76,8 +77,8 @@ csvSubs setting@XsvSetting { xsvSubSep = sub } cs =
     B.mixJoin (B.mix sub) (csvContent setting <$> cs)
 
 boolToMix :: Bool -> B.MixText
-boolToMix True  = B.mix "true"
-boolToMix False = B.mix "false"
+boolToMix True  = B.mixString "true"
+boolToMix False = B.mixString "false"
 
 -- --------------------------------------------  Setting
 
@@ -115,11 +116,8 @@ tabHeadSetting = tabSetting { xsvHead = True }
     "foo""bar"
     -}
 enquote :: (O.Textual t) => t -> t
-enquote str = '"' O.<:> q str where
-    q (O.cut -> O.Jp x xs)
-        | x == '"'  = '"' O.<:> '"' O.<:> q xs
-        | otherwise =             x O.<:> q xs
-    q _ = O.charT '"'
+enquote t = let t' = replace (== '"') "\"\"" t
+            in "\"" O.++ t' O.++ "\""
 
 {-| Convert control characters to space character.
 
@@ -130,9 +128,22 @@ enquote str = '"' O.<:> q str where
     foo  bar
     -}
 toSpace :: (O.Textual t) => t -> t
-toSpace (O.cut -> O.Jp x xs)
-    | Ch.isControl x    = ' ' O.<:> xs'
-    | otherwise         =   x O.<:> xs'
-    where xs' = toSpace xs
-toSpace xs = xs
+toSpace = replace Ch.isControl " "
+
+{-| Replace character in text.
+
+    >>> replace '.' "--" "foo.bar..baz."
+    "foo--bar----baz--"
+    -}
+replace :: (O.Textual t) => O.Test Char -> t -> t -> t
+replace from to = loop where
+    loop t = case O.span (not . from) t of
+               (a, b) | O.tIsEmpty b -> a
+                      | O.tIsEmpty a -> rep b
+                      | otherwise    -> a O.++ rep b
+
+    rep (O.cut -> O.Jp c t)
+        | from c      = to O.++ loop t
+        | otherwise   = c O.<:> loop t
+    rep t = t
 
