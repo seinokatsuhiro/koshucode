@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.210.0.0
+@version 0.213.0.0
 
 
 -- | Message list.
@@ -58,7 +58,7 @@ expect2Actual :: (Textual t) => t -> t -> t -> [t]
 module Koshucode.Baala.Data.Decode.Term
 
 -- | Term name cache.
-type CacheT t = Cache t TermName
+type CacheT t = Cache (Ordering, t) TermName
 
 -- | Empty term name cache.
 cacheT :: (ToTermName t) => CacheT t
@@ -400,6 +400,12 @@ gText :: CText c => c -> Chars
 pText :: (CText c, Textual t) => t -> c
 getText :: CText c => GetContent Chars c
 putText :: (CText c, Textual t) => t -> Ab c
+
+-- | Get single character of text content.
+getChar :: (CText c) => Ab c -> Ab Char
+
+-- | Text content of single character.
+pChar :: (CText c) => Char -> c
 
 -- | Create text or empty content.
 --   
@@ -788,19 +794,19 @@ type CopTree t = [TTree t] -> Ab (TTree t)
 copName :: Cop c -> BlankName
 
 -- | Name for non-binary operator.
-copNormal :: (Textual t) => t -> BlankName
+copNormal :: String -> BlankName
 
 -- | Name for program-generated operator.
-copInternal :: (Textual t) => t -> BlankName
+copInternal :: String -> BlankName
 
 -- | Name for prefix operator.
-copPrefix :: (Textual t) => t -> BlankName
+copPrefix :: String -> BlankName
 
 -- | Name for infix operator.
-copInfix :: (Textual t) => t -> BlankName
+copInfix :: String -> BlankName
 
 -- | Name for postfix operator.
-copPostfix :: (Textual t) => t -> BlankName
+copPostfix :: String -> BlankName
 
 -- | Set of content operators.
 data CopSet c
@@ -862,6 +868,9 @@ type CalcContent t c = TTree t -> Ab c
 
 -- | Decode content from string.
 stringContent :: (CContent c) => String -> Ab c
+
+-- | Decode content from chars.
+charsContent :: (CContent c) => Chars -> Ab c
 
 -- | Decode content from token tree.
 treeContent :: (TextualTermName t, CContent c) => DecodeContent t c
@@ -1119,6 +1128,9 @@ the :: Content -> Content
 --   Right (ContentRel (Rel { relHead = ..., relBody = ... }))
 --   </pre>
 stringC :: String -> Ab Content
+
+-- | Decode the Baala content from chars.
+charsC :: Chars -> Ab Content
 instance GHC.Show.Show Koshucode.Baala.Data.Content.Content
 instance GHC.Classes.Eq Koshucode.Baala.Data.Content.Content
 instance GHC.Classes.Ord Koshucode.Baala.Data.Content.Content

@@ -8,7 +8,7 @@
 --   alternative, and repetitive expressions. It collects submatches and
 --   switch matching expression among multiple expressions.
 @package koshucode-baala-subtext
-@version 0.210.0.0
+@version 0.213.0.0
 
 
 -- | Token for sieve pattern.
@@ -117,276 +117,276 @@ instance GHC.Show.Show Koshucode.Baala.Subtext.MinMax.MinMax
 module Koshucode.Baala.Subtext.Expr
 
 -- | Subtext match expression.
-data Expr a
+data Expr as a
 
 -- | Recursive expression
-ERec :: (ExprRec a) -> Expr a
+ERec :: (ExprRec as a) -> Expr as a
 
 -- | Non-recursive expression
-EBase :: (ExprBase a) -> Expr a
+EBase :: (ExprBase as a) -> Expr as a
 
 -- | Recursive expression.
-data ExprRec a
+data ExprRec as a
 
 -- | Alternative match
-EOr :: [Expr a] -> ExprRec a
+EOr :: [Expr as a] -> ExprRec as a
 
 -- | Sequential match
-ESeq :: [Expr a] -> ExprRec a
+ESeq :: [Expr as a] -> ExprRec as a
 
 -- | Additional condition
-EAnd :: [Expr a] -> ExprRec a
+EAnd :: [Expr as a] -> ExprRec as a
 
 -- | Inverted condition
-ENot :: (Expr a) -> ExprRec a
+ENot :: (Expr as a) -> ExprRec as a
 
 -- | Repetitive match
-ERep :: MinMax -> (Expr a) -> ExprRec a
+ERep :: MinMax -> (Expr as a) -> ExprRec as a
 
 -- | Find last match
-ELast :: (Expr a) -> ExprRec a
+ELast :: (Expr as a) -> ExprRec as a
 
 -- | Submatch
-ESub :: Name -> (Expr a) -> ExprRec a
+ESub :: Name -> (Expr as a) -> ExprRec as a
 
 -- | Modification matcher
-EAs :: (FnAs a) -> (Expr a) -> ExprRec a
+EAs :: (FnAs as a) -> (Expr as a) -> ExprRec as a
 
 -- | Change gathering setting
-EGath :: Bool -> (Expr a) -> ExprRec a
+EGath :: Bool -> (Expr as a) -> ExprRec as a
 
 -- | Non-recursive expression.
-data ExprBase a
+data ExprBase as a
 
 -- | Element matcher
-EElem :: (FnElem a) -> ExprBase a
+EElem :: (FnElem a) -> ExprBase as a
 
 -- | Spanning (multi-element) matcher
-ESpan :: (FnSpan a) -> ExprBase a
+ESpan :: (FnSpan as a) -> ExprBase as a
 
 -- | Inter-element matcher
-EInter :: (FnInter a) -> ExprBase a
+EInter :: (FnInter a) -> ExprBase as a
 
 -- | Change to other expression
-EChange :: Name -> ExprBase a
+EChange :: Name -> ExprBase as a
 
 -- | Immediate match/unmatch
-EAlways :: Bool -> ExprBase a
+EAlways :: Bool -> ExprBase as a
 
 -- | Context-dependent match
-EWhat :: ExprBase a
+EWhat :: ExprBase as a
 
 -- | Function type for element matcher.
 type FnElem a = Fn a Bool
 
 -- | Function type for spanning matcher.
-type FnSpan a = Fn [a] (Maybe ([a], [a]))
+type FnSpan as a = Fn as (Maybe (as, as))
 
 -- | Function type for inter-element matcher.
 type FnInter a = Fn2 (Maybe a) (Maybe a) Bool
 
 -- | Function type for modification matcher.
-type FnAs a = Fn [a] [a]
-instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Expr.Expr a)
-instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Expr.Expr a)
-instance GHC.Show.Show (Koshucode.Baala.Subtext.Expr.Expr a)
-instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Expr.ExprRec a)
-instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Expr.ExprRec a)
-instance GHC.Show.Show (Koshucode.Baala.Subtext.Expr.ExprRec a)
-instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Expr.ExprBase a)
-instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Expr.ExprBase a)
-instance GHC.Show.Show (Koshucode.Baala.Subtext.Expr.ExprBase a)
+type FnAs as a = Fn as as
+instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Expr.Expr as a)
+instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Expr.Expr as a)
+instance GHC.Show.Show (Koshucode.Baala.Subtext.Expr.Expr as a)
+instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Expr.ExprRec as a)
+instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Expr.ExprRec as a)
+instance GHC.Show.Show (Koshucode.Baala.Subtext.Expr.ExprRec as a)
+instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Expr.ExprBase as a)
+instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Expr.ExprBase as a)
+instance GHC.Show.Show (Koshucode.Baala.Subtext.Expr.ExprBase as a)
 
 
 -- | Basic operators.
 module Koshucode.Baala.Subtext.Operator.Basic
 
 -- | Element match.
-elem :: Name -> (a -> Bool) -> Expr a
+elem :: Name -> (a -> Bool) -> Expr as a
 
 -- | Match any element.
-any :: Expr a
+any :: Expr as a
 
 -- | Match exactly the given element.
-eq :: (Eq a) => a -> Expr a
+eq :: (Eq a) => a -> Expr as a
 
 -- | Match element range.
-to :: (Ord a) => a -> a -> Expr a
+to :: (Ord a) => a -> a -> Expr as a
 
 -- | Match element in the given list.
-list :: (Eq a) => [a] -> Expr a
+list :: (Eq a) => [a] -> Expr as a
 
 -- | Spanning match.
-span :: Name -> ([a] -> Maybe ([a], [a])) -> Expr a
+span :: Name -> (as -> Maybe (as, as)) -> Expr as a
 
 -- | Match exactly the given sequence.
-equal :: (Eq a) => [a] -> Expr a
+equal :: (List as a, Eq a) => as -> Expr as a
 
 -- | Inter-element match.
-inter :: Name -> (Maybe a -> Maybe a -> Bool) -> Expr a
+inter :: Name -> (Maybe a -> Maybe a -> Bool) -> Expr as a
 
 -- | Match at the beginning of sequence.
-begin :: Expr a
+begin :: Expr as a
 
 -- | Match at the end of sequence.
-end :: Expr a
+end :: Expr as a
 
 -- | Match immediately.
-succ :: Expr a
+succ :: Expr as a
 
 -- | Unmatch immediately.
-fail :: Expr a
+fail :: Expr as a
 
 -- | Context-dependent match.
-what :: Expr a
+what :: Expr as a
 
 -- | Change to other matcher.
-change :: Name -> Expr a
+change :: Name -> Expr as a
 
 
 -- | Combinations and variations.
 module Koshucode.Baala.Subtext.Operator.Combine
 
 -- | Alternative match.
-or :: [Expr a] -> Expr a
+or :: [Expr as a] -> Expr as a
 
 -- | Sequential match.
-seq :: [Expr a] -> Expr a
+seq :: [Expr as a] -> Expr as a
 
 -- | Additional condition.
-and :: [Expr a] -> Expr a
+and :: [Expr as a] -> Expr as a
 
 -- | Inverted condition. If expression is zero-repeatable, stirp off the
 --   repeatition operator, because zero-repetition can be matched any
 --   input.
-not :: Expr a -> Expr a
+not :: Expr as a -> Expr as a
 
 -- | Find last match.
-last :: Expr a -> Expr a
+last :: Expr as a -> Expr as a
 
 -- | Any character except for given pattern.
-anyNot :: Expr a -> Expr a
+anyNot :: Expr as a -> Expr as a
 
 -- | Match but stay.
-stay :: Expr a -> Expr a
+stay :: Expr as a -> Expr as a
 
 -- | Turn off gathering match.
-skip :: Expr a -> Expr a
+skip :: Expr as a -> Expr as a
 
 -- | Turn on gathering match.
-gather :: Expr a -> Expr a
+gather :: Expr as a -> Expr as a
 
 -- | Named submatch.
-sub :: Name -> Expr a -> Expr a
+sub :: Name -> Expr as a -> Expr as a
 
 -- | Named submatch.
-(#) :: Name -> Expr a -> Expr a
+(#) :: Name -> Expr as a -> Expr as a
 
 -- | Match with modification.
-as :: FnAs a -> Expr a -> Expr a
+as :: FnAs as a -> Expr as a -> Expr as a
 
 -- | Replace to given sequence.
-asConst :: [a] -> Expr a -> Expr a
+asConst :: (List as a) => as -> Expr as a -> Expr as a
 
 -- | Add segment to the beginning of matched sequence.
-asPrepend :: [a] -> Expr a -> Expr a
+asPrepend :: (List as a) => as -> Expr as a -> Expr as a
 
 -- | Add segment to the end of matched sequence.
-asAppend :: [a] -> Expr a -> Expr a
+asAppend :: (List as a) => as -> Expr as a -> Expr as a
 
 -- | Add segments to the beginning and end of matched sequence.
-asWrap :: [a] -> [a] -> Expr a -> Expr a
+asWrap :: (List as a) => as -> as -> Expr as a -> Expr as a
 
 
 -- | Repetitive operators.
 module Koshucode.Baala.Subtext.Operator.Repeat
 
 -- | Repetition with min-max parameter.
-repeat :: MinMax -> Expr a -> Expr a
+repeat :: MinMax -> Expr as a -> Expr as a
 
 -- | Extract min-max parameter.
-repeatTimes :: Expr a -> Maybe MinMax
+repeatTimes :: Expr as a -> Maybe MinMax
 
 -- | Extract internal expression.
-repeatExpr :: Expr a -> Maybe (Expr a)
+repeatExpr :: Expr as a -> Maybe (Expr as a)
 
 -- | Repetition with lower bound.
-min :: Int -> Expr a -> Expr a
+min :: Int -> Expr as a -> Expr as a
 
 -- | Repetition upper bound.
-max :: Int -> Expr a -> Expr a
+max :: Int -> Expr as a -> Expr as a
 
 -- | Repetition with lower and upper bound.
-minMax :: Int -> Int -> Expr a -> Expr a
+minMax :: Int -> Int -> Expr as a -> Expr as a
 
 -- | Match zero or more times.
-many :: Expr a -> Expr a
+many :: Expr as a -> Expr as a
 
 -- | Match one or more times.
-many1 :: Expr a -> Expr a
+many1 :: Expr as a -> Expr as a
 
 -- | Match zero or one times.
-maybe :: Expr a -> Expr a
+maybe :: Expr as a -> Expr as a
 
 -- | Many of any.
-anySeq :: Expr a
+anySeq :: Expr as a
 
 -- | Match before given expression.
-before :: Expr a -> Expr a
+before :: Expr as a -> Expr as a
 
 -- | X-separated values.
-sep :: Expr a -> Expr a -> Expr a
+sep :: Expr as a -> Expr as a -> Expr as a
 
 
 -- | Operators for text match.
 module Koshucode.Baala.Subtext.Operator.Char
 
 -- | Subtext expression for character input.
-type CharExpr = Expr Char
+type CharExpr t = Expr t Char
 
 -- | Match some character in a list of characters.
-char :: [Char] -> CharExpr
+char :: [Char] -> CharExpr t
 
 -- | Match some word in a list of words from space-separated string.
-word :: String -> CharExpr
+word :: (Textual t) => t -> CharExpr t
 
 -- | Match space character.
-space :: CharExpr
+space :: CharExpr t
 
 -- | Match zero-or-more space characters.
-spaces :: CharExpr
+spaces :: CharExpr t
 
 -- | Match one-or-more space characters.
-spaces1 :: CharExpr
+spaces1 :: CharExpr t
 
 -- | Match digit characters.
-digit :: CharExpr
+digit :: CharExpr t
 
 -- | Match letter characters.
-letter :: CharExpr
+letter :: CharExpr t
 
 -- | Match first 128 characters of Unicode character set.
-ascii :: CharExpr
+ascii :: CharExpr t
 
 -- | Match first 256 characters of Unicode character set.
-latin1 :: CharExpr
+latin1 :: CharExpr t
 
 -- | Test unicode general category with category set.
-categorySet :: Set GeneralCategory -> CharExpr
+categorySet :: Set GeneralCategory -> CharExpr t
 
 -- | Test unicode general category with category list.
-categoryList :: [GeneralCategory] -> CharExpr
+categoryList :: [GeneralCategory] -> CharExpr t
 
 -- | Test unicode general category with short names. The argument string is
 --   space-separated names. If unknown name is given, returns the name in
 --   <a>Left</a> data.
-category :: String -> Either String CharExpr
+category :: String -> Either String (CharExpr t)
 
 -- | Convert matched text into lower case.
-asLower :: CharExpr -> CharExpr
+asLower :: (Textual t) => CharExpr t -> CharExpr t
 
 -- | Convert matched text into upper case.
-asUpper :: CharExpr -> CharExpr
+asUpper :: (Textual t) => CharExpr t -> CharExpr t
 
 
 -- | Match operators.
@@ -397,14 +397,14 @@ module Koshucode.Baala.Subtext.Operator
 module Koshucode.Baala.Subtext.Bundle
 
 -- | Bundle of named expressions.
-data Bundle a
-Bundle :: [(Name, Expr a)] -> Expr a -> [NameDepth] -> Bundle a
-[bundleExpr] :: Bundle a -> [(Name, Expr a)]
-[bundleStart] :: Bundle a -> Expr a
-[bundleSubmatch] :: Bundle a -> [NameDepth]
+data Bundle as a
+Bundle :: [(Name, Expr as a)] -> Expr as a -> [NameDepth] -> Bundle as a
+[bundleExpr] :: Bundle as a -> [(Name, Expr as a)]
+[bundleStart] :: Bundle as a -> Expr as a
+[bundleSubmatch] :: Bundle as a -> [NameDepth]
 
 -- | Map version of expression bundle.
-type BundleMap a = Map Name (Expr a)
+type BundleMap as a = Map Name (Expr as a)
 
 -- | Submatch name and its depth level. Depth is incremented when entering
 --   repeatable expressions. Submatch of non-zero depth is collected in
@@ -412,54 +412,54 @@ type BundleMap a = Map Name (Expr a)
 type NameDepth = (Name, Int)
 
 -- | Create bundle of subtext expressions.
-bundle :: [(Name, Expr a)] -> Bundle a
+bundle :: [(Name, Expr as a)] -> Bundle as a
 
 -- | The start expression of bundle.
-startExpr :: [(Name, Expr a)] -> Expr a
-instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Bundle.Bundle a)
-instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Bundle.Bundle a)
-instance GHC.Show.Show (Koshucode.Baala.Subtext.Bundle.Bundle a)
+startExpr :: [(Name, Expr as a)] -> Expr as a
+instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Bundle.Bundle as a)
+instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Bundle.Bundle as a)
+instance GHC.Show.Show (Koshucode.Baala.Subtext.Bundle.Bundle as a)
 
 
 -- | Matching parameter.
 module Koshucode.Baala.Subtext.Para
 
 -- | Matching parameter.
-data Para a
-Para :: BundleMap a -> [Submatch a] -> Bool -> Expr a -> Int -> [a] -> Maybe a -> [a] -> Para a
+data Para as a
+Para :: BundleMap as a -> [Submatch as a] -> Bool -> Expr as a -> Int -> as -> Maybe a -> as -> Para as a
 
 -- | Expression bundle
-[paraBundle] :: Para a -> BundleMap a
+[paraBundle] :: Para as a -> BundleMap as a
 
 -- | Submatches.
-[paraRawSubs] :: Para a -> [Submatch a]
+[paraRawSubs] :: Para as a -> [Submatch as a]
 
 -- | Gather or skip match result
-[paraGather] :: Para a -> Bool
+[paraGather] :: Para as a -> Bool
 
 -- | Match expression
-[paraExpr] :: Para a -> Expr a
+[paraExpr] :: Para as a -> Expr as a
 
 -- | Position on input sequence
-[paraPos] :: Para a -> Int
+[paraPos] :: Para as a -> Int
 
 -- | Input sequence
-[paraInput] :: Para a -> [a]
+[paraInput] :: Para as a -> as
 
 -- | Previous element
-[paraPrev] :: Para a -> Maybe a
+[paraPrev] :: Para as a -> Maybe a
 
 -- | Match result
-[paraRawOutput] :: Para a -> [a]
+[paraRawOutput] :: Para as a -> as
 
 -- | Submatch result, its name and matched sequence.
-type Submatch a = (Name, [a])
+type Submatch as a = (Name, as)
 
 -- | Create matching parameter from expression bundle and input sequence.
-createPara :: Bundle a -> [a] -> Para a
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Subtext.Para.Para a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Subtext.Para.Para a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Subtext.Para.Para a)
+createPara :: (List as a) => Bundle as a -> as -> Para as a
+instance (GHC.Classes.Ord as, GHC.Classes.Ord a) => GHC.Classes.Ord (Koshucode.Baala.Subtext.Para.Para as a)
+instance (GHC.Classes.Eq as, GHC.Classes.Eq a) => GHC.Classes.Eq (Koshucode.Baala.Subtext.Para.Para as a)
+instance (GHC.Show.Show as, GHC.Show.Show a) => GHC.Show.Show (Koshucode.Baala.Subtext.Para.Para as a)
 
 
 -- | Matching procedure.
@@ -467,19 +467,19 @@ module Koshucode.Baala.Subtext.Match
 
 -- | Function from input sequence to match result. When unmatched,
 --   <a>Nothing</a> is returned.
-type GeneralMatch a = [a] -> Maybe (MatchResult a)
+type GeneralMatch as a = as -> Maybe (MatchResult as a)
 
--- | Character sequence (string) version of <a>GeneralMatch</a>.
-type CharMatch = GeneralMatch Char
+-- | Character sequence version of <a>GeneralMatch</a>.
+type CharMatch t = GeneralMatch t Char
 
 -- | Main and submatches.
-type MatchResult a = ([a], [Submatch a])
+type MatchResult as a = (as, [Submatch as a])
 
 -- | Apply match expression to input sequence.
-matchExpr :: (Show a) => Expr a -> GeneralMatch a
+matchExpr :: (List as a, Show a) => Expr as a -> GeneralMatch as a
 
 -- | Apply expression bundle to input sequence.
-matchBundle :: (Show a) => Bundle a -> GeneralMatch a
+matchBundle :: (List as a, Show a) => Bundle as a -> GeneralMatch as a
 
 
 -- | Token tree for sieve pattern.
@@ -505,7 +505,7 @@ type SivTree t = CodeTree SivBracket SivToken t
 sivTrees :: [SivToken t] -> Ab [SivTree t]
 
 -- | Sieve expression.
-type SivExpr = CharExpr
+type SivExpr = CharExpr String
 
 -- | Convert to sieve expression.
 class ToSivExpr a

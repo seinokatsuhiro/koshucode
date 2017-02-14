@@ -8,7 +8,7 @@
 --   in the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-cop
-@version 0.210.0.0
+@version 0.213.0.0
 
 
 -- | Replace sublists.
@@ -16,7 +16,7 @@ module Koshucode.Baala.Cop.Replace
 
 -- | Type of replace function, <i>from</i> → <i>to</i> → <i>xs</i> →
 --   <i>ys</i>.
-type Replace a = [a] -> [a] -> [a] -> [a]
+type Replace t = t -> t -> t -> t
 
 -- | Replace all occurrences.
 --   
@@ -34,7 +34,7 @@ type Replace a = [a] -> [a] -> [a] -> [a]
 --   &gt;&gt;&gt; replaceAll "" "BR" "abracadabra"
 --   "abracadabra"
 --   </pre>
-replaceAll :: (Eq a) => Replace a
+replaceAll :: (Textual t) => Replace t
 
 -- | Replace first occurrence.
 --   
@@ -52,7 +52,7 @@ replaceAll :: (Eq a) => Replace a
 --   &gt;&gt;&gt; replaceFirst "" "BR" "abracadabra"
 --   "abracadabra"
 --   </pre>
-replaceFirst :: (Eq a) => Replace a
+replaceFirst :: (Textual t) => Replace t
 
 -- | Replace last occurrence.
 --   
@@ -70,7 +70,7 @@ replaceFirst :: (Eq a) => Replace a
 --   &gt;&gt;&gt; replaceLast "" "BR" "abracadabra"
 --   "abracadabra"
 --   </pre>
-replaceLast :: (Eq a) => [a] -> [a] -> [a] -> [a]
+replaceLast :: (Textual t) => Replace t
 
 -- | Replace occurrence at the beginning.
 --   
@@ -88,7 +88,7 @@ replaceLast :: (Eq a) => [a] -> [a] -> [a] -> [a]
 --   &gt;&gt;&gt; replaceBegin "" "BR" "abracadabra"
 --   "abracadabra"
 --   </pre>
-replaceBegin :: (Eq a) => Replace a
+replaceBegin :: (Textual t) => Replace t
 
 -- | Replace occurrence at the end.
 --   
@@ -106,7 +106,7 @@ replaceBegin :: (Eq a) => Replace a
 --   &gt;&gt;&gt; replaceEnd "" "BR" "abracadabra"
 --   "abracadabra"
 --   </pre>
-replaceEnd :: (Eq a) => Replace a
+replaceEnd :: (Textual t) => Replace t
 
 
 -- | Helper functions to construct content expressions.
@@ -169,7 +169,7 @@ copSiv :: (CContent c) => Bool -> CopCalc c
 --   <li><i>pad-end <i>CHAR</i> <i>SIZE</i> <i>TEXT</i></i> Pad <i>CHAR</i>
 --   to end of <i>TEXT</i> upto <i>SIZE</i>.</li>
 --   </ul>
-copPad :: (CContent c) => (Char -> Int -> StringMap) -> CopCalc c
+copPad :: (CContent c) => (Char -> Int -> CharsMap) -> CopCalc c
 
 -- | <ul>
 --   <li><i>suffix <i>LIST</i></i> Add unique suffixes to text elements of
@@ -501,7 +501,7 @@ module Koshucode.Baala.Cop.Bundle
 baalaCops :: (CContent c) => [Cop c]
 
 -- | Height table.
-baalaInfix :: [Named InfixHeight]
+baalaInfix :: [(Chars, InfixHeight)]
 
 
 -- | Term-content operators.

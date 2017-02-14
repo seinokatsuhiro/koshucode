@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-subtext-0.210.0.0: A text matching library</p
+      >koshucode-baala-subtext-0.213.0.0: A text matching library</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,7 +40,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ><th
 	    >Safe Haskell</th
 	    ><td
-	    >Safe</td
+	    >None</td
 	    ></tr
 	  ><tr
 	  ><th
@@ -83,13 +83,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Bool</a
 	    >) -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:any"
 	    >any</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:eq"
 	    >eq</a
@@ -97,7 +97,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Eq</a
 	    > a =&gt; a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:to"
 	    >to</a
@@ -105,7 +105,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Ord</a
 	    > a =&gt; a -&gt; a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:list"
 	    >list</a
@@ -113,25 +113,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Eq</a
 	    > a =&gt; [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:span"
 	    >span</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Name-String.html#t:Name"
 	    >Name</a
-	    > -&gt; ([a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > -&gt; (as -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > ([a], [a])) -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    > (as, as)) -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:equal"
 	    >equal</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-List.html#t:List"
+	    >List</a
+	    > as a, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
 	    >Eq</a
-	    > a =&gt; [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    > a) =&gt; as -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:inter"
 	    >inter</a
@@ -145,37 +147,37 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Bool</a
 	    >) -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:begin"
 	    >begin</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:end"
 	    >end</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:succ"
 	    >succ</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:fail"
 	    >fail</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:what"
 	    >what</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ><li class="src short"
 	  ><a href="#v:change"
 	    >change</a
@@ -183,7 +185,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Name</a
 	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a</li
+	    > as a</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -199,7 +201,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Bool</a
 	    >) -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#elem');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#elem');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -213,7 +215,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >any</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#any');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#any');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -229,7 +231,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Eq</a
 	    > a =&gt; a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#eq');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#eq');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -245,7 +247,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Ord</a
 	    > a =&gt; a -&gt; a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#to');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#to');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -261,7 +263,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Eq</a
 	    > a =&gt; [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#list');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#list');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -275,11 +277,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >span</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Name-String.html#t:Name"
 	    >Name</a
-	    > -&gt; ([a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > -&gt; (as -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > ([a], [a])) -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    > (as, as)) -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#span');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#span');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -291,11 +293,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><p class="src"
 	  ><a name="v:equal" class="def"
 	    >equal</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-List.html#t:List"
+	    >List</a
+	    > as a, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
 	    >Eq</a
-	    > a =&gt; [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    > a) =&gt; as -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#equal');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#equal');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -317,7 +321,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Bool</a
 	    >) -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#inter');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#inter');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -331,7 +335,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >begin</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#begin');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#begin');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -345,7 +349,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >end</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#end');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#end');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -359,7 +363,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >succ</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#succ');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#succ');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -373,7 +377,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >fail</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#fail');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#fail');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -387,7 +391,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >what</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#what');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#what');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -403,7 +407,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Name</a
 	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#change');" href="javascript:void(0);" class="link"
+	    > as a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Basic.html#change');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

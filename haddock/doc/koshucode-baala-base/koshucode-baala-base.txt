@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.210.0.0
+@version 0.213.0.0
 
 
 -- | Suffix and prefix.
@@ -20,7 +20,7 @@ module Koshucode.Baala.Base.Text.Suffix
 --   &gt;&gt;&gt; unprefix (`elem` "0123456789") '-' "12-foo"
 --   "foo"
 --   </pre>
-unprefix :: Test Char -> Char -> StringMap
+unprefix :: (Textual t) => Test Char -> Char -> t -> t
 
 -- | Remove delimiter-characters suffix.
 --   
@@ -28,7 +28,7 @@ unprefix :: Test Char -> Char -> StringMap
 --   &gt;&gt;&gt; unsuffix (`elem` "0123456789") '-' "foo-12"
 --   "foo"
 --   </pre>
-unsuffix :: Test Char -> Char -> StringMap
+unsuffix :: (Textual t) => Test Char -> Char -> t -> t
 
 -- | Make names unique by adding integer suffixes.
 --   
@@ -36,7 +36,7 @@ unsuffix :: Test Char -> Char -> StringMap
 --   &gt;&gt;&gt; uniqueNames '-' $ words "a b b c"
 --   ["a", "b-1", "b-2", "c"]
 --   </pre>
-uniqueNames :: Char -> Map [String]
+uniqueNames :: (Textual t) => Char -> Map [t]
 
 
 -- | Text table
@@ -271,11 +271,6 @@ foldM :: (Foldable t, Monad m) => (b -> a -> m b) -> b -> t a -> m b
 --   <a>True</a>, and <a>empty</a> if <tt>b</tt> is <a>False</a>.
 guard :: Alternative f => Bool -> f ()
 
--- | Evaluate each monadic action in the structure from left to right, and
---   collect the results. For a version that ignores the results see
---   <a>sequence_</a>.
-sequence :: Traversable t => forall (m :: * -> *) a. Monad m => t (m a) -> m (t a)
-
 -- | The reverse of <a>when</a>.
 unless :: Applicative f => Bool -> f () -> f ()
 
@@ -309,51 +304,6 @@ def :: Default a => a
 --   (<a>intersperse</a> xs xss))</tt>. It inserts the list <tt>xs</tt> in
 --   between the lists in <tt>xss</tt> and concatenates the result.
 intercalate :: [a] -> [[a]] -> [a]
-
--- | The <a>intersect</a> function takes the list intersection of two
---   lists. For example,
---   
---   <pre>
---   [1,2,3,4] `intersect` [2,4,6,8] == [2,4]
---   </pre>
---   
---   If the first list contains duplicates, so will the result.
---   
---   <pre>
---   [1,2,2,3,4] `intersect` [6,4,4,2] == [2,2,4]
---   </pre>
---   
---   It is a special case of <a>intersectBy</a>, which allows the
---   programmer to supply their own equality test. If the element is found
---   in both the first and the second list, the element from the first list
---   will be used.
-intersect :: Eq a => [a] -> [a] -> [a]
-
--- | The <a>isPrefixOf</a> function takes two lists and returns <a>True</a>
---   iff the first list is a prefix of the second.
-isPrefixOf :: Eq a => [a] -> [a] -> Bool
-
--- | The <a>isInfixOf</a> function takes two lists and returns <a>True</a>
---   iff the first list is contained, wholly and intact, anywhere within
---   the second.
---   
---   Example:
---   
---   <pre>
---   isInfixOf "Haskell" "I really like Haskell." == True
---   isInfixOf "Ial" "I really like Haskell." == False
---   </pre>
-isInfixOf :: Eq a => [a] -> [a] -> Bool
-
--- | The <a>isSuffixOf</a> function takes two lists and returns <a>True</a>
---   iff the first list is a suffix of the second. The second list must be
---   finite.
-isSuffixOf :: Eq a => [a] -> [a] -> Bool
-
--- | The <a>sort</a> function implements a stable sorting algorithm. It is
---   a special case of <a>sortBy</a>, which allows the programmer to supply
---   their own comparison function.
-sort :: Ord a => [a] -> [a]
 
 -- | The <a>transpose</a> function transposes the rows and columns of its
 --   argument. For example,
@@ -2102,6 +2052,11 @@ class GetCodePos a where getCP a = headNull def $ getCPs a
 getCPs :: GetCodePos a => a -> [CodePos]
 getCP :: GetCodePos a => a -> CodePos
 
+-- | Type which has code positions.
+class CsGetCP a where csGetCP a = headNull def $ csGetCPs a
+csGetCPs :: (CsGetCP a, Textual t) => a t -> [TCodePos t]
+csGetCP :: (CsGetCP a, Textual t) => a t -> TCodePos t
+
 -- | Value with code string.
 data Codic a
 Codic :: [CodePos] -> a -> Codic a
@@ -2399,103 +2354,6 @@ instance GHC.Classes.Eq Koshucode.Baala.Base.Abort.Reason.AbortReason
 instance GHC.Show.Show Koshucode.Baala.Base.Abort.Reason.AbortReason
 
 
--- | I/O point: file, standard input, direct text, etc.
-module Koshucode.Baala.Base.IO.IOPoint
-
--- | This implementation uses lazy bytestring as input code.
-type Bytes = Bz
-
--- | Convert to bytes.
-class ToBytes a
-toBytes :: ToBytes a => a -> Bytes
-
--- | Named I/O handle.
-data NamedHandle
-NamedHandle :: String -> Handle -> NamedHandle
-
--- | Name of handle
-[handleName] :: NamedHandle -> String
-
--- | I/O handle
-[handle] :: NamedHandle -> Handle
-
--- | I/O point: file, standard input, direct text, etc.
-data IOPoint
-
--- | <b>1 Input/Output:</b> Context directory and target path.
-IOPointFile :: FilePath -> FilePath -> IOPoint
-
--- | <b>2 Input:</b> Universal resource identifier.
-IOPointUri :: IOPath -> IOPoint
-
--- | <b>3 Input:</b> Input bytes and its name.
-IOPointText :: (Maybe String) -> Bytes -> IOPoint
-
--- | <b>4 Input:</b> Custom I/O.
-IOPointCustom :: String -> Bz -> IOPoint
-
--- | <b>5 Input:</b> The sandard input.
-IOPointStdin :: (Maybe String) -> IOPoint
-
--- | <b>6 Output:</b> The sandard output.
-IOPointStdout :: (Maybe String) -> IOPoint
-
--- | <b>7 Output:</b> Output handler.
-IOPointOutput :: NamedHandle -> IOPoint
-
--- | Name of I/O point, i.e., <tt>"file"</tt>, <tt>"uri"</tt>,
---   <tt>"text"</tt>, <tt>"stdin"</tt>, or <tt>"stdout"</tt>.
-ioPointType :: IOPoint -> String
-
--- | Name of I/O point.
-ioPointText :: IOPoint -> String
-
--- | Create I/O Point.
-ioPoint :: IOPath -> IOPoint
-
--- | Add context directory.
-ioPointDir :: FilePath -> Map IOPoint
-
--- | Create I/O points from using stdin, texts itself, filenames, and URIs.
-ioPointTogether :: Bool -> [Bytes] -> [FilePath] -> [IOPoint]
-
--- | Indexed I/O point.
-data IxIOPoint
-IxIOPoint :: Ix -> IOPoint -> IxIOPoint
-
--- | Index (0 for unindexed, &gt; 0 for indexed)
-[nioNumber] :: IxIOPoint -> Ix
-
--- | I/O point
-[nioPoint] :: IxIOPoint -> IOPoint
-
--- | Create input point for given lazy bytestring.
---   
---   <pre>
---   &gt;&gt;&gt; codeIxIO "abc"
---   IxIOPoint {nioNumber = 0, nioPoint = IOPointText Nothing "abc"}
---   </pre>
-codeIxIO :: (ToBytes code) => code -> IxIOPoint
-
--- | Create input point from file path.
-pathIxIO :: FilePath -> IxIOPoint
-instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
-instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.IOPoint
-instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.IOPoint
-instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.IOPoint
-instance Koshucode.Baala.Base.IO.IOPoint.ToBytes Koshucode.Baala.Overture.Shorthand.Bz
-instance Koshucode.Baala.Base.IO.IOPoint.ToBytes GHC.Base.String
-instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.NamedHandle
-instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.NamedHandle
-instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.NamedHandle
-instance Koshucode.Baala.Overture.Misc.GetIOPath Koshucode.Baala.Base.IO.IOPoint.IOPoint
-instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
-instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
-instance Data.Default.Class.Default Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
-instance Koshucode.Baala.Overture.Index.GetIx Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
-instance Koshucode.Baala.Overture.Misc.GetIOPath Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
-
-
 -- | Dots pattern.
 module Koshucode.Baala.Base.Text.Dots
 
@@ -2769,6 +2627,108 @@ instance GHC.Classes.Eq b => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Bracket.B
 instance GHC.Show.Show b => GHC.Show.Show (Koshucode.Baala.Base.Code.Bracket.Bracket b)
 
 
+-- | Text lines delimited by carriage returns or line feeds.
+module Koshucode.Baala.Base.Code.Line
+
+-- | Split input into textual lines.
+--   
+--   <pre>
+--   &gt;&gt;&gt; toLines "aaa\nbbb\r\nccc\n\nddd\n" :: [String]
+--   ["aaa", "bbb", "ccc", "", "ddd"]
+--   </pre>
+class ToLines i
+toLines :: (ToLines i, Textual t) => i -> [t]
+
+-- | Remove UTF-8 BOM (EF BB BF in hexadecimal) from lazy bytestring.
+--   
+--   <pre>
+--   &gt;&gt;&gt; bzDropBom "\xEF\xBB\xBF|foo bar baz"
+--   "|foo bar baz"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; bzDropBom "\xEF|foo bar baz"
+--   "\239|foo bar baz"
+--   </pre>
+bzDropBom :: Bz -> Bz
+
+-- | Remove UTF-8 BOM (EF BB BF in hexadecimal) from strict bytestring.
+bsDropBom :: Bs -> Bs
+
+-- | Split lazy bytestring by newline character sequence. If bytestring
+--   begins with the UTF-8 BOM, this function drops it.
+bzLines :: Bz -> [Bz]
+
+-- | Split string into lines.
+
+-- | <i>Deprecated: Consider <a>bzLines</a>.</i>
+linesCrlf :: String -> [String]
+
+-- | Line number and its content.
+
+-- | <i>Deprecated: Consider <a>bzLines</a>.</i>
+linesCrlfNumbered :: String -> [(LineNumber, String)]
+
+-- | Line number.
+type LineNumber = Int
+
+-- | Tokens in line.
+data CodeLine k t
+CodeLine :: LineNumber -> t -> [k t] -> CodeLine k t
+
+-- | Line number, from 1.
+[lineNumber] :: CodeLine k t -> LineNumber
+
+-- | Line content without newline.
+[lineContent] :: CodeLine k t -> t
+
+-- | Tokens in the line.
+[lineTokens] :: CodeLine k t -> [k t]
+
+-- | Type for indent size.
+type IndentSize = Int
+
+-- | Calculate indent of line and pairing it.
+lineIndentPair :: (k t -> IndentSize) -> CodeLine k t -> (IndentSize, CodeLine k t)
+instance (GHC.Classes.Ord t, GHC.Classes.Ord (k t)) => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Line.CodeLine k t)
+instance (GHC.Classes.Eq t, GHC.Classes.Eq (k t)) => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Line.CodeLine k t)
+instance (GHC.Show.Show t, GHC.Show.Show (k t)) => GHC.Show.Show (Koshucode.Baala.Base.Code.Line.CodeLine k t)
+instance Koshucode.Baala.Base.Code.Line.ToLines Koshucode.Baala.Overture.Shorthand.Bz
+instance Koshucode.Baala.Base.Code.Line.ToLines GHC.Base.String
+instance Koshucode.Baala.Base.Code.Line.ToLines Koshucode.Baala.Overture.Shorthand.Tx
+instance Koshucode.Baala.Base.Code.Line.ToLines Koshucode.Baala.Overture.Shorthand.Tz
+instance GHC.Base.Functor k => GHC.Base.Functor (Koshucode.Baala.Base.Code.Line.CodeLine k)
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (k t) => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Line.CodeLine k t)
+
+
+-- | This module provides a container for tokens. No tokens in Koshucode
+--   are in a extent of multiple lines. <tt>CodeLine</tt> includes whole
+--   tokens in a line. You can represent tokenized source code as a list of
+--   <tt>CodeLine</tt>.
+module Koshucode.Baala.Base.Code.Clause
+
+-- | Tokens in clause.
+data CodeClause k t
+CodeClause :: [CodeLine k t] -> [k t] -> CodeClause k t
+
+-- | Source lines of clause
+[clauseLines] :: CodeClause k t -> [CodeLine k t]
+
+-- | Source tokens of clause
+[clauseTokens] :: CodeClause k t -> [k t]
+
+-- | Split lines into clause based on indent size.
+--   
+--   <pre>
+--   &gt;&gt;&gt; splitClause [(0, "a"), (2, "b"), (0, "c"), (1, "d")]
+--   (["a","b"], [(0,"c"),(1,"d")])
+--   </pre>
+splitClause :: Gather [(IndentSize, a)] [a]
+instance (GHC.Show.Show t, GHC.Show.Show (k t)) => GHC.Show.Show (Koshucode.Baala.Base.Code.Clause.CodeClause k t)
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (k t) => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Clause.CodeClause k t)
+instance Data.Default.Class.Default (Koshucode.Baala.Base.Code.Clause.CodeClause t a)
+
+
 -- | Tree structure.
 module Koshucode.Baala.Base.Code.Tree
 
@@ -2953,6 +2913,13 @@ type InfixTree b a = CodeTree' b (InfixHeight, a)
 -- | File path and content in lazy bytestring.
 module Koshucode.Baala.Base.IO.BzFile
 
+-- | This implementation uses lazy bytestring as input code.
+type Bytes = Bz
+
+-- | Convert to bytes.
+class ToBytes a
+toBytes :: ToBytes a => a -> Bytes
+
 -- | File path and content in lazy bytestring. The function
 --   <a>readBzFile</a> creates:
 --   
@@ -2980,122 +2947,100 @@ readBzFile :: FilePath -> IO BzFile
 -- | Read file content as lazy bytestring.
 tryReadFile :: (Exception e) => FilePath -> IO (Either e Bz)
 instance GHC.Show.Show Koshucode.Baala.Base.IO.BzFile.BzFile
+instance Koshucode.Baala.Base.IO.BzFile.ToBytes Koshucode.Baala.Overture.Shorthand.Bz
+instance Koshucode.Baala.Base.IO.BzFile.ToBytes GHC.Base.String
+
+
+-- | I/O point: file, standard input, direct text, etc.
+module Koshucode.Baala.Base.IO.IOPoint
+
+-- | Named I/O handle.
+data NamedHandle
+NamedHandle :: String -> Handle -> NamedHandle
+
+-- | Name of handle
+[handleName] :: NamedHandle -> String
+
+-- | I/O handle
+[handle] :: NamedHandle -> Handle
+
+-- | I/O point: file, standard input, direct text, etc.
+data IOPoint
+
+-- | <b>1 Input/Output:</b> Context directory and target path.
+IOPointFile :: FilePath -> FilePath -> IOPoint
+
+-- | <b>2 Input:</b> Universal resource identifier.
+IOPointUri :: IOPath -> IOPoint
+
+-- | <b>3 Input:</b> Input bytes and its name.
+IOPointText :: (Maybe String) -> Bytes -> IOPoint
+
+-- | <b>4 Input:</b> Custom I/O.
+IOPointCustom :: String -> Bz -> IOPoint
+
+-- | <b>5 Input:</b> The sandard input.
+IOPointStdin :: (Maybe String) -> IOPoint
+
+-- | <b>6 Output:</b> The sandard output.
+IOPointStdout :: (Maybe String) -> IOPoint
+
+-- | <b>7 Output:</b> Output handler.
+IOPointOutput :: NamedHandle -> IOPoint
+
+-- | Name of I/O point, i.e., <tt>"file"</tt>, <tt>"uri"</tt>,
+--   <tt>"text"</tt>, <tt>"stdin"</tt>, or <tt>"stdout"</tt>.
+ioPointType :: IOPoint -> String
+
+-- | Name of I/O point.
+ioPointText :: IOPoint -> String
+
+-- | Create I/O Point.
+ioPoint :: IOPath -> IOPoint
+
+-- | Add context directory.
+ioPointDir :: FilePath -> Map IOPoint
+
+-- | Create I/O points from using stdin, texts itself, filenames, and URIs.
+ioPointTogether :: Bool -> [Bytes] -> [FilePath] -> [IOPoint]
+
+-- | Indexed I/O point.
+data IxIOPoint
+IxIOPoint :: Ix -> IOPoint -> IxIOPoint
+
+-- | Index (0 for unindexed, &gt; 0 for indexed)
+[nioNumber] :: IxIOPoint -> Ix
+
+-- | I/O point
+[nioPoint] :: IxIOPoint -> IOPoint
+
+-- | Create input point for given lazy bytestring.
+--   
+--   <pre>
+--   &gt;&gt;&gt; codeIxIO "abc"
+--   IxIOPoint {nioNumber = 0, nioPoint = IOPointText Nothing "abc"}
+--   </pre>
+codeIxIO :: (ToBytes code) => code -> IxIOPoint
+
+-- | Create input point from file path.
+pathIxIO :: FilePath -> IxIOPoint
+instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
+instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.IOPoint
+instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.IOPoint
+instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.IOPoint
+instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.NamedHandle
+instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.NamedHandle
+instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.NamedHandle
+instance Koshucode.Baala.Overture.Misc.GetIOPath Koshucode.Baala.Base.IO.IOPoint.IOPoint
+instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
+instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
+instance Data.Default.Class.Default Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
+instance Koshucode.Baala.Overture.Index.GetIx Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
+instance Koshucode.Baala.Overture.Misc.GetIOPath Koshucode.Baala.Base.IO.IOPoint.IxIOPoint
 
 
 -- | I/O related modules.
 module Koshucode.Baala.Base.IO
-
-
--- | Text lines delimited by carriage returns or line feeds.
-module Koshucode.Baala.Base.Code.Line
-
--- | Split input into textual lines.
---   
---   <pre>
---   &gt;&gt;&gt; toLines "aaa\nbbb\r\nccc\n\nddd\n" :: [String]
---   ["aaa", "bbb", "ccc", "", "ddd"]
---   </pre>
-class ToLines i
-toLines :: (ToLines i, Textual t) => i -> [t]
-
--- | Remove UTF-8 BOM (EF BB BF in hexadecimal) from lazy bytestring.
---   
---   <pre>
---   &gt;&gt;&gt; dropBom "\xEF\xBB\xBF|foo bar baz"
---   "|foo bar baz"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; dropBom "\xEF|foo bar baz"
---   "\239|foo bar baz"
---   </pre>
-dropBom :: Bz -> Bz
-
--- | Split lazy bytestring by newline character sequence. If bytestring
---   begins with the UTF-8 BOM, this function drops it.
-bzLines :: Bz -> [Bz]
-
--- | Split <i>textual-value-#1</i> into lines. The result texts do not
---   contain carriage returns (<tt>\r</tt>) and line feeds (<tt>\n</tt>).
---   
---   <pre>
---   &gt;&gt;&gt; textualLines "aaa\nbbb\r\nccc\n\nddd\n"
---   ["aaa", "bbb", "ccc", "", "ddd"]
---   </pre>
-textualLines :: (Textual t) => t -> [t]
-
--- | Split string into lines.
-
--- | <i>Deprecated: Consider <a>bzLines</a>.</i>
-linesCrlf :: String -> [String]
-
--- | Split lazy bytestring by newline character sequence. This function
---   drops the BOM sequence.
-
--- | <i>Deprecated: Consider <a>bzLines</a>.</i>
-linesCrlfBz :: (ToBytes code) => code -> [Bz]
-
--- | Line number and its content.
-
--- | <i>Deprecated: Consider <a>bzLines</a>.</i>
-linesCrlfNumbered :: String -> [(LineNumber, String)]
-
--- | Line number.
-type LineNumber = Int
-
--- | Tokens in line.
-data CodeLine k t
-CodeLine :: LineNumber -> t -> [k t] -> CodeLine k t
-
--- | Line number, from 1.
-[lineNumber] :: CodeLine k t -> LineNumber
-
--- | Line content without newline.
-[lineContent] :: CodeLine k t -> t
-
--- | Tokens in the line.
-[lineTokens] :: CodeLine k t -> [k t]
-
--- | Type for indent size.
-type IndentSize = Int
-
--- | Calculate indent of line and pairing it.
-lineIndentPair :: (k t -> IndentSize) -> CodeLine k t -> (IndentSize, CodeLine k t)
-instance (GHC.Classes.Ord t, GHC.Classes.Ord (k t)) => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Line.CodeLine k t)
-instance (GHC.Classes.Eq t, GHC.Classes.Eq (k t)) => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Line.CodeLine k t)
-instance (GHC.Show.Show t, GHC.Show.Show (k t)) => GHC.Show.Show (Koshucode.Baala.Base.Code.Line.CodeLine k t)
-instance Koshucode.Baala.Base.Code.Line.ToLines Koshucode.Baala.Overture.Shorthand.Bz
-instance Koshucode.Baala.Base.Code.Line.ToLines GHC.Base.String
-instance GHC.Base.Functor k => GHC.Base.Functor (Koshucode.Baala.Base.Code.Line.CodeLine k)
-instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (k t) => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Line.CodeLine k t)
-
-
--- | This module provides a container for tokens. No tokens in Koshucode
---   are in a extent of multiple lines. <tt>CodeLine</tt> includes whole
---   tokens in a line. You can represent tokenized source code as a list of
---   <tt>CodeLine</tt>.
-module Koshucode.Baala.Base.Code.Clause
-
--- | Tokens in clause.
-data CodeClause k t
-CodeClause :: [CodeLine k t] -> [k t] -> CodeClause k t
-
--- | Source lines of clause
-[clauseLines] :: CodeClause k t -> [CodeLine k t]
-
--- | Source tokens of clause
-[clauseTokens] :: CodeClause k t -> [k t]
-
--- | Split lines into clause based on indent size.
---   
---   <pre>
---   &gt;&gt;&gt; splitClause [(0, "a"), (2, "b"), (0, "c"), (1, "d")]
---   (["a","b"], [(0,"c"),(1,"d")])
---   </pre>
-splitClause :: Gather [(IndentSize, a)] [a]
-instance (GHC.Show.Show t, GHC.Show.Show (k t)) => GHC.Show.Show (Koshucode.Baala.Base.Code.Clause.CodeClause k t)
-instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (k t) => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Clause.CodeClause k t)
-instance Data.Default.Class.Default (Koshucode.Baala.Base.Code.Clause.CodeClause t a)
 
 
 -- | Code scanner.

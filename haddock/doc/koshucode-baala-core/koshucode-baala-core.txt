@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.210.0.0
+@version 0.213.0.0
 
 
 -- | Result of relational calculation.
@@ -16,15 +16,15 @@ module Koshucode.Baala.Core.Relmap.Result
 
 -- | Result of calculation.
 data Result c
-Result :: ResultWriter c -> Bool -> Bool -> Int -> Int -> [InputPoint String] -> IOPoint -> [[String]] -> [[String]] -> [ShortResultChunks c] -> [ShortResultChunks c] -> [JudgeClass] -> Result c
+Result :: ResultWriter c -> Bool -> Bool -> Int -> Int -> [InputPoint Chars] -> IOPoint -> [[Chars]] -> [[String]] -> [ShortResultChunks c] -> [ShortResultChunks c] -> [JudgeClass] -> Result c
 [resultWriter] :: Result c -> ResultWriter c
 [resultPrintHead] :: Result c -> Bool
 [resultPrintFoot] :: Result c -> Bool
 [resultGutter] :: Result c -> Int
 [resultMeasure] :: Result c -> Int
-[resultInput] :: Result c -> [InputPoint String]
+[resultInput] :: Result c -> [InputPoint Chars]
 [resultOutput] :: Result c -> IOPoint
-[resultEcho] :: Result c -> [[String]]
+[resultEcho] :: Result c -> [[Chars]]
 [resultLicense] :: Result c -> [[String]]
 [resultViolated] :: Result c -> [ShortResultChunks c]
 [resultNormal] :: Result c -> [ShortResultChunks c]
@@ -199,6 +199,7 @@ instance GHC.Classes.Ord Koshucode.Baala.Core.Lexmap.Lexmap.LexmapType
 instance GHC.Classes.Eq Koshucode.Baala.Core.Lexmap.Lexmap.LexmapType
 instance GHC.Show.Show Koshucode.Baala.Core.Lexmap.Lexmap.LexmapType
 instance Koshucode.Baala.Overture.Text.Textual.Textual t => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Core.Lexmap.Lexmap.TLexmap t)
+instance Koshucode.Baala.Base.Abort.CodePos.CsGetCP Koshucode.Baala.Core.Lexmap.Lexmap.TLexmap
 instance Koshucode.Baala.Overture.Text.Textual.Textual t => Data.Default.Class.Default (Koshucode.Baala.Core.Lexmap.Lexmap.TLexmap t)
 
 
@@ -641,7 +642,7 @@ module Koshucode.Baala.Core.Relmap.Rop
 
 -- | Implementation of relmap operator.
 data Rop' h c
-Rop :: RopName -> RopGroup -> AttrLayout -> AttrParaze String -> RopCons' h c -> Rop' h c
+Rop :: RopName -> RopGroup -> AttrLayout -> AttrParaze Chars -> RopCons' h c -> Rop' h c
 
 -- | Operator name
 [ropName] :: Rop' h c -> RopName
@@ -653,7 +654,7 @@ Rop :: RopName -> RopGroup -> AttrLayout -> AttrParaze String -> RopCons' h c ->
 [ropAttr] :: Rop' h c -> AttrLayout
 
 -- | Attribute parameterizer
-[ropParaze] :: Rop' h c -> AttrParaze String
+[ropParaze] :: Rop' h c -> AttrParaze Chars
 
 -- | Constructor of operator
 [ropCons] :: Rop' h c -> RopCons' h c
@@ -801,7 +802,7 @@ globalRopsAdd :: [Rop' h c] -> Map (Global' h c)
 globalCops :: Global' h c -> [Cop c]
 
 -- | List of settings of infix operators.
-globalInfix :: Global' h c -> [Named InfixHeight]
+globalInfix :: Global' h c -> [(Chars, InfixHeight)]
 
 -- | Abort with command line.
 globalAbort :: Global' h c -> AbortReason -> IO a
@@ -883,7 +884,7 @@ module Koshucode.Baala.Core.Assert.Assert
 -- | Affirming or denying relation. It consists of logical quality,
 --   judgement pattern, and relmap. See also <a>Judge</a>
 data Assert' h c
-Assert :: SecNo -> AssertType -> JudgeClass -> [Token] -> TTreePara String -> Maybe (Relmap' h c) -> RelmapLinkTable' h c -> Assert' h c
+Assert :: SecNo -> AssertType -> JudgeClass -> [Token] -> TTreePara Chars -> Maybe (Relmap' h c) -> RelmapLinkTable' h c -> Assert' h c
 
 -- | Section number
 [assSection] :: Assert' h c -> SecNo
@@ -896,7 +897,7 @@ Assert :: SecNo -> AssertType -> JudgeClass -> [Token] -> TTreePara String -> Ma
 
 -- | Source token list
 [assToken] :: Assert' h c -> [Token]
-[assPara] :: Assert' h c -> TTreePara String
+[assPara] :: Assert' h c -> TTreePara Chars
 
 -- | Relmap
 [assRelmap] :: Assert' h c -> Maybe (Relmap' h c)
@@ -1096,7 +1097,7 @@ resIncluded :: Resource c -> [IxIOPoint]
 resInput :: Resource c -> [IOPoint]
 
 -- | All input points.
-resInputPoint :: Resource c -> [InputPoint String]
+resInputPoint :: Resource c -> [InputPoint Chars]
 
 -- | List of all judgement classes.
 resClass :: Resource c -> [JudgeClass]
@@ -1111,7 +1112,7 @@ resMessagesAdd :: [String] -> Map (Resource c)
 type InputQueue = (Queue (InputPoint Chars), [IxIOPoint])
 
 -- | Add input to todo-part of input queue.
-resQueueTodo :: InputPoint String -> Map (Resource c)
+resQueueTodo :: InputPoint Chars -> Map (Resource c)
 
 -- | Add input to done-part of input queue.
 resQueueDone :: IxIOPoint -> Map (Resource c)

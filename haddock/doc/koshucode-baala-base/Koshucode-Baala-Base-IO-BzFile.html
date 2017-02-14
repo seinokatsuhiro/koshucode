@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.210.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.213.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -52,6 +52,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	><p class="caption"
 	>Koshucode.Baala.Base.IO.BzFile</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Type</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Read</a
+	    ></li
+	  ></ul
+	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
@@ -65,6 +79,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Bytes"
+	    >Bytes</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Shorthand.html#t:Bz"
+	    >Bz</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:ToBytes"
+	    >ToBytes</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:toBytes"
+		>toBytes</a
+		> :: a -&gt; <a href="Koshucode-Baala-Base-IO-BzFile.html#t:Bytes"
+		>Bytes</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
 	    > <a href="#t:BzFile"
@@ -123,8 +161,90 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Type</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Bytes" class="def"
+	    >Bytes</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Shorthand.html#t:Bz"
+	    >Bz</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html#Bytes');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This implementation uses lazy bytestring as input code.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:ToBytes" class="def"
+	    >ToBytes</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html#ToBytes');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert to bytes.</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:toBytes" class="def"
+	      >toBytes</a
+	      > :: a -&gt; <a href="Koshucode-Baala-Base-IO-BzFile.html#t:Bytes"
+	      >Bytes</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html#toBytes');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ToBytes" class="caption collapser" onclick="toggleSection('i:ToBytes')"
+	    >Instances</p
+	    ><div id="section.i:ToBytes" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-IO-BzFile.html#t:ToBytes"
+		      >ToBytes</a
+		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html#line-35');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-IO-BzFile.html#t:ToBytes"
+		      >ToBytes</a
+		      > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Shorthand.html#t:Bz"
+		      >Bz</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html#line-32');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Read</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -238,7 +358,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		      > <a href="Koshucode-Baala-Base-IO-BzFile.html#t:BzFile"
 		      >BzFile</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html#line-26');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html#line-51');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"

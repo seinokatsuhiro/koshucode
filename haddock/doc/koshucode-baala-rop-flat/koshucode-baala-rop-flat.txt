@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.210.0.0
+@version 0.213.0.0
 
 
 -- | Fundamental operators in relational algebra.
@@ -131,7 +131,7 @@ module Koshucode.Baala.Rop.Flat.Applied.Subtext
 ropsAppliedSubtext :: (CContent c) => [Rop c]
 
 -- | Type of subtext parameters.
-type SubtextPara = (TermName, [NameDepth], CharMatch, Bool)
+type SubtextPara t = (TermName, [NameDepth], CharMatch t, Bool)
 
 -- | <b>subtext /P E</b>
 --   
@@ -147,10 +147,10 @@ type SubtextPara = (TermName, [NameDepth], CharMatch, Bool)
 consSubtext :: (CContent c) => RopCons c
 
 -- | Create <tt>subtext</tt> relmap.
-relmapSubtext :: (CContent c) => Intmed c -> SubtextPara -> Relmap c
+relmapSubtext :: (CContent c) => Intmed c -> SubtextPara Chars -> Relmap c
 
 -- | Create <tt>subtext</tt> relkit.
-relkitSubtext :: (CContent c) => SubtextPara -> Maybe Head -> Ab (Relkit c)
+relkitSubtext :: (CContent c) => SubtextPara Chars -> Maybe Head -> Ab (Relkit c)
 
 
 -- | Partial-order scale.

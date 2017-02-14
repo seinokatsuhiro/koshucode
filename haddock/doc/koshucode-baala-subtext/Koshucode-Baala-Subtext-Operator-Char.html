@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-subtext-0.210.0.0: A text matching library</p
+      >koshucode-baala-subtext-0.213.0.0: A text matching library</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,7 +40,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ><th
 	    >Safe Haskell</th
 	    ><td
-	    >Safe</td
+	    >None</td
 	    ></tr
 	  ><tr
 	  ><th
@@ -91,9 +91,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >type</span
 	    > <a href="#t:CharExpr"
 	    >CharExpr</a
-	    > = <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    > t = <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > t <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    ></li
 	  ><li class="src short"
@@ -103,57 +103,57 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Char</a
 	    >] -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:word"
 	    >word</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:space"
 	    >space</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:spaces"
 	    >spaces</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:spaces1"
 	    >spaces1</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:digit"
 	    >digit</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:letter"
 	    >letter</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:ascii"
 	    >ascii</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:latin1"
 	    >latin1</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:categorySet"
 	    >categorySet</a
@@ -163,7 +163,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >GeneralCategory</a
 	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:categoryList"
 	    >categoryList</a
@@ -171,7 +171,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >GeneralCategory</a
 	    >] -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:category"
 	    >category</a
@@ -181,25 +181,29 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Either</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > (<a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t)</li
 	  ><li class="src short"
 	  ><a href="#v:asLower"
 	    >asLower</a
-	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > t -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ><li class="src short"
 	  ><a href="#v:asUpper"
 	    >asUpper</a
-	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > t -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    ></li
+	    > t</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -211,9 +215,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >type</span
 	    > <a name="t:CharExpr" class="def"
 	    >CharExpr</a
-	    > = <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    > t = <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > t <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#CharExpr');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -233,7 +237,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Char</a
 	    >] -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#char');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#char');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -245,11 +249,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><p class="src"
 	  ><a name="v:word" class="def"
 	    >word</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; t -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#word');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#word');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -263,7 +267,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >space</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#space');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#space');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -277,7 +281,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >spaces</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#spaces');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#spaces');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -291,7 +295,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >spaces1</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#spaces1');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#spaces1');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -305,7 +309,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >digit</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#digit');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#digit');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -319,7 +323,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >letter</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#letter');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#letter');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -333,7 +337,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >ascii</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#ascii');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#ascii');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -347,7 +351,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >latin1</a
 	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#latin1');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#latin1');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -367,7 +371,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >GeneralCategory</a
 	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#categorySet');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#categorySet');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -383,7 +387,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >GeneralCategory</a
 	    >] -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#categoryList');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#categoryList');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -401,9 +405,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Either</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > (<a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#category');" href="javascript:void(0);" class="link"
+	    > t) <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#category');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -423,11 +427,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><p class="src"
 	  ><a name="v:asLower" class="def"
 	    >asLower</a
-	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > t -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#asLower');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#asLower');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -439,11 +445,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><p class="src"
 	  ><a name="v:asUpper" class="def"
 	    >asUpper</a
-	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    > t -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
 	    >CharExpr</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#asUpper');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#asUpper');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

@@ -6,7 +6,29 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.210.0.0
+@version 0.213.0.0
+
+
+-- | Character sequence.
+module Koshucode.Baala.Syntax.Symbol.Chars
+
+-- | Character sequence.
+type Chars = Tz
+
+-- | Mapping from chars to chars.
+type CharsMap = Map Chars
+
+-- | Convert textual value to character sequence.
+tChars :: (Textual t) => t -> Chars
+
+-- | Convert character sequence to textual value.
+csT :: (Textual t) => Chars -> t
+
+-- | Convert string to character sequence.
+stringChars :: String -> Chars
+
+-- | Type of input. (<tt>"lazy-text"</tt>)
+charsType :: Chars
 
 
 -- | Term types and related functions.
@@ -53,6 +75,7 @@ type TermPath = [TermName]
 --   </pre>
 class (Ord a) => ToTermName a
 toTermName :: ToTermName a => a -> TermName
+toTermNameOrd :: ToTermName a => Ordering -> a -> TermName
 
 -- | <tt>Textual</tt> and <a>ToTermName</a> values.
 class (Textual t, ToTermName t) => TextualTermName t
@@ -64,11 +87,6 @@ class (Textual t, ToTermName t) => TextualTermName t
 --   ["/foo", "/bar", "+/baz", "-/qux"]
 --   </pre>
 enslash :: (Textual t) => Map t
-
--- | Decode term name from string.
-
--- | <i>Deprecated: Use <a>toTermName</a> instead.</i>
-textualTermName :: (Textual t) => t -> TermName
 
 -- | Convert string to multiple term names.
 --   
@@ -93,6 +111,14 @@ termNameString :: TermName -> String
 --   "/r/x"
 --   </pre>
 termPathString :: TermPath -> String
+
+-- | Encode term name into chars.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termNameChars $ toTermName "/size"
+--   "/size"
+--   </pre>
+termNameChars :: TermName -> Chars
 
 -- | Extract internal name.
 --   
@@ -910,7 +936,17 @@ shortListM :: (Monad m) => [Short t (m a)] -> m [Short t a]
 shortGroup :: (Eq t) => [Short t a] -> [Short t [a]]
 
 -- | String shortener.
-shortText :: [ShortDef String] -> TransText String
+--   
+--   <pre>
+--   &gt;&gt;&gt; shortText [("f", "foo/bar/")] "foo/bar/baz"
+--   Just "f.baz"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; shortText [("f", "foo/bar/")] "foo/baz"
+--   Nothing
+--   </pre>
+shortText :: (Textual t) => [ShortDef t] -> TransText t
 instance (GHC.Classes.Eq t, GHC.Classes.Eq a) => GHC.Classes.Eq (Koshucode.Baala.Syntax.Symbol.Short.Short t a)
 instance (GHC.Classes.Ord a, Koshucode.Baala.Overture.Text.Textual.Textual t) => GHC.Classes.Ord (Koshucode.Baala.Syntax.Symbol.Short.Short t a)
 instance (GHC.Show.Show a, Koshucode.Baala.Overture.Text.Textual.Textual t) => GHC.Show.Show (Koshucode.Baala.Syntax.Symbol.Short.Short t a)
@@ -919,6 +955,37 @@ instance GHC.Base.Functor (Koshucode.Baala.Syntax.Symbol.Short.Short t)
 
 -- | Symbols
 module Koshucode.Baala.Syntax.Symbol
+
+
+-- | Attribute name.
+module Koshucode.Baala.Syntax.Attr.AttrName
+
+-- | Attribute name of relmap.
+data AttrName
+
+-- | Normal attribute
+AttrNormal :: Chars -> AttrName
+
+-- | Attribute for submap
+AttrRelmapNormal :: Chars -> AttrName
+
+-- | Attribute for submap with local relation references
+AttrRelmapLocal :: Chars -> AttrName
+
+-- | Test attribute name is for subrelmap.
+isAttrNameRelmap :: AttrName -> Bool
+
+-- | String part of attribute names.
+attrNameText :: AttrName -> Chars
+
+-- | Attribute string with hyphen.
+attrNameCode :: AttrName -> Chars
+
+-- | Constant for attribute name <tt>@trunk</tt>.
+attrNameTrunk :: AttrName
+instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.AttrName.AttrName
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.AttrName.AttrName
+instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.AttrName.AttrName
 
 
 -- | Subtree.
@@ -1172,21 +1239,6 @@ module Koshucode.Baala.Syntax.Token.Token
 class SubtypeName a
 subtypeName :: SubtypeName a => a -> String
 
--- | Character sequence.
-type Chars = String
-
--- | Mapping from chars to chars.
-type CharsMap = Map Chars
-
--- | Convert textual value to character sequence.
-tChars :: (Textual t) => t -> Chars
-
--- | Convert character sequence to textual value.
-csT :: (Textual t) => Chars -> t
-
--- | Convert string to character sequence.
-stringChars :: String -> Chars
-
 -- | String token.
 type Token = TToken Chars
 
@@ -1200,7 +1252,7 @@ TText :: (TCodePos t) -> TextForm -> t -> TToken t
 TShort :: (TCodePos t) -> t -> t -> TToken t
 
 -- | <b>3 Textual:</b> Term name — <tt>/term</tt>
-TTerm :: (TCodePos t) -> t -> TToken t
+TTerm :: (TCodePos t) -> Ordering -> t -> TToken t
 
 -- | <b>4 Symbolic:</b> Local name — <tt>^r</tt>, <tt>^/r</tt>
 TLocal :: (TCodePos t) -> LocalRef -> Int -> [TToken t] -> TToken t
@@ -1298,6 +1350,7 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Base.Functor Koshucode.Baala.Syntax.Token.Token.TToken
 instance Koshucode.Baala.Syntax.Token.Token.SubtypeName (Koshucode.Baala.Syntax.Token.Token.TToken t)
 instance Koshucode.Baala.Overture.Text.Textual.Textual t => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Syntax.Token.Token.TToken t)
+instance Koshucode.Baala.Base.Abort.CodePos.CsGetCP Koshucode.Baala.Syntax.Token.Token.TToken
 instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.TextForm
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.LocalRef
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.BlankName
@@ -1326,6 +1379,8 @@ module Koshucode.Baala.Syntax.Token.Pattern
 -- | License text.
 
 -- | Term token.
+
+-- | Term token with ordering.
 
 
 -- | Token utilities.
@@ -1561,7 +1616,7 @@ scanLicense :: (Textual t) => Scanner t
 scanLine :: (Textual t) => TextForm -> Scanner t
 
 -- | Section for <tt>koshu-text-assert</tt> command.
-scanTextAssert :: Scanner String
+scanTextAssert :: (Textual t) => Scanner t
 
 
 -- | Tokenizer for relational section.
@@ -1587,7 +1642,7 @@ tokenLinesBy :: (ToLines i, TextualTermName t) => Scanner t -> IxIOPoint -> i ->
 tokenLines :: (ToLines i, TextualTermName t) => IxIOPoint -> i -> [TokenLine t]
 
 -- | Tokenize lazy bytestring.
-tokenLinesTextAssert :: (ToLines i) => IxIOPoint -> i -> [TokenLine String]
+tokenLinesTextAssert :: (ToLines i, TextualTermName t) => IxIOPoint -> i -> [TokenLine t]
 
 -- | Read token lines from file.
 readTokenLines :: (TextualTermName t) => FilePath -> IOAb [TokenLine t]
@@ -1724,37 +1779,6 @@ clausePrint :: [String] -> IO ()
 module Koshucode.Baala.Syntax.Token
 
 
--- | Attribute name.
-module Koshucode.Baala.Syntax.Attr.AttrName
-
--- | Attribute name of relmap.
-data AttrName
-
--- | Normal attribute
-AttrNormal :: Chars -> AttrName
-
--- | Attribute for submap
-AttrRelmapNormal :: Chars -> AttrName
-
--- | Attribute for submap with local relation references
-AttrRelmapLocal :: Chars -> AttrName
-
--- | Test attribute name is for subrelmap.
-isAttrNameRelmap :: AttrName -> Bool
-
--- | String part of attribute names.
-attrNameText :: AttrName -> Chars
-
--- | Attribute string with hyphen.
-attrNameCode :: AttrName -> Chars
-
--- | Constant for attribute name <tt>@trunk</tt>.
-attrNameTrunk :: AttrName
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.AttrName.AttrName
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.AttrName.AttrName
-instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.AttrName.AttrName
-
-
 -- | Bracket type.
 module Koshucode.Baala.Syntax.Tree.Bracket
 
@@ -1882,6 +1906,8 @@ module Koshucode.Baala.Syntax.Tree.Pattern
 -- | Slot leaf.
 
 -- | Term leaf.
+
+-- | Term leaf with ordering.
 
 -- | Token branch.
 

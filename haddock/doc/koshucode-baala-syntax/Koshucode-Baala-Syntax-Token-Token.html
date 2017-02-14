@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.210.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.213.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -62,26 +62,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Chars</a
-	    ></li
-	  ><li
-	  ><a href="#g:3"
 	    >Token</a
 	    ></li
 	  ><li
-	  ><a href="#g:4"
+	  ><a href="#g:3"
 	    >Subtype</a
 	    ><ul
 	    ><li
-	      ><a href="#g:5"
+	      ><a href="#g:4"
 		>Text</a
 		></li
 	      ><li
-	      ><a href="#g:6"
+	      ><a href="#g:5"
 		>Local</a
 		></li
 	      ><li
-	      ><a href="#g:7"
+	      ><a href="#g:6"
 		>Blank</a
 		></li
 	      ></ul
@@ -119,53 +115,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:Chars"
-	    >Chars</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:CharsMap"
-	    >CharsMap</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
-	    >Chars</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:tChars"
-	    >tChars</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
-	    >Textual</a
-	    > t =&gt; t -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
-	    >Chars</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:csT"
-	    >csT</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
-	    >Textual</a
-	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
-	    >Chars</a
-	    > -&gt; t</li
-	  ><li class="src short"
-	  ><a href="#v:stringChars"
-	    >stringChars</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
-	    >Chars</a
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
 	    > <a href="#t:Token"
 	    >Token</a
 	    > = <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
 	    >TToken</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
+	    > <a href="Koshucode-Baala-Syntax-Symbol-Chars.html#t:Chars"
 	    >Chars</a
 	    ></li
 	  ><li class="src short"
@@ -193,7 +147,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		>TTerm</a
 		> (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
 		>TCodePos</a
-		> t) t</li
+		> t) <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+		>Ordering</a
+		> t</li
 	      ><li
 	      >| <a href="#v:TLocal"
 		>TLocal</a
@@ -427,7 +383,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 		      >BlankName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-223');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-197');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -447,7 +403,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
 		      >TextForm</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-179');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-153');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -467,7 +423,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
 		      >TToken</a
 		      > t)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-122');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-93');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -484,90 +440,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Chars</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Chars" class="def"
-	    >Chars</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#Chars');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Character sequence.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:CharsMap" class="def"
-	    >CharsMap</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
-	    >Chars</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#CharsMap');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Mapping from chars to chars.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:tChars" class="def"
-	    >tChars</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
-	    >Textual</a
-	    > t =&gt; t -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
-	    >Chars</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#tChars');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Convert textual value to character sequence.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:csT" class="def"
-	    >csT</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
-	    >Textual</a
-	    > t =&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
-	    >Chars</a
-	    > -&gt; t <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#csT');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Convert character sequence to textual value.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:stringChars" class="def"
-	    >stringChars</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
-	    >Chars</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#stringChars');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Convert string to character sequence.</p
-	    ></div
-	  ></div
-	><h1 id="g:3"
 	>Token</h1
 	><div class="top"
 	><p class="src"
@@ -577,7 +449,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Token</a
 	    > = <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
 	    >TToken</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Chars"
+	    > <a href="Koshucode-Baala-Syntax-Symbol-Chars.html#t:Chars"
 	    >Chars</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#Token');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -646,7 +518,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  >TTerm</a
 		  > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:TCodePos"
 		  >TCodePos</a
-		  > t) t</td
+		  > t) <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+		  >Ordering</a
+		  > t</td
 		><td class="doc"
 		><p
 		  ><strong
@@ -831,7 +705,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
 		      >TToken</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-104');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-75');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:CsGetCP"
+		      >CsGetCP</a
+		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
+		      >TToken</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-109');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -889,7 +777,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
 		      >TToken</a
 		      > t)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-102');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-73');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -905,7 +793,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
 		      >TToken</a
 		      > t)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-102');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-73');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -921,7 +809,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
 		      >TToken</a
 		      > t)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-102');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-73');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -937,7 +825,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
 		      >TToken</a
 		      > t)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-135');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-106');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -951,7 +839,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Token-Token.html#t:TToken"
 		      >TToken</a
 		      > t)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-122');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-93');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -1017,9 +905,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Create unknown token.</p
 	    ></div
 	  ></div
-	><h1 id="g:4"
+	><h1 id="g:3"
 	>Subtype</h1
-	><h2 id="g:5"
+	><h2 id="g:4"
 	>Text</h2
 	><div class="top"
 	><p class="src"
@@ -1165,7 +1053,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
 		      >TextForm</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-176');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-150');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1179,7 +1067,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
 		      >TextForm</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-176');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-150');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1193,7 +1081,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
 		      >TextForm</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-176');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-150');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1207,7 +1095,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
 		      >TextForm</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-179');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-153');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -1223,7 +1111,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ></div
 	    ></div
 	  ></div
-	><h2 id="g:6"
+	><h2 id="g:5"
 	>Local</h2
 	><div class="top"
 	><p class="src"
@@ -1285,7 +1173,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:LocalRef"
 		      >LocalRef</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-196');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-170');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1299,7 +1187,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:LocalRef"
 		      >LocalRef</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-196');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-170');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1313,7 +1201,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:LocalRef"
 		      >LocalRef</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-196');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-170');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1327,7 +1215,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:LocalRef"
 		      >LocalRef</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-199');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-173');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -1339,7 +1227,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ></div
 	    ></div
 	  ></div
-	><h2 id="g:7"
+	><h2 id="g:6"
 	>Blank</h2
 	><div class="top"
 	><p class="src"
@@ -1423,7 +1311,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 		      >BlankName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-213');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-187');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1437,7 +1325,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 		      >BlankName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-213');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-187');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1451,7 +1339,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 		      >BlankName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-213');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-187');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1465,7 +1353,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 		      >BlankName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-215');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-189');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1479,7 +1367,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:BlankName"
 		      >BlankName</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-223');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Token.html#line-197');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"

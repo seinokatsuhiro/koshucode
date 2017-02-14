@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.210.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.213.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -145,15 +145,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><a href="#v:shortText"
 	    >shortText</a
-	    > :: [<a href="Koshucode-Baala-Syntax-Symbol-Short.html#t:ShortDef"
+	    > :: <span class="keyword"
+	    >forall</span
+	    > t. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; [<a href="Koshucode-Baala-Syntax-Symbol-Short.html#t:ShortDef"
 	    >ShortDef</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:TransText"
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:TransText"
 	    >TransText</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    ></li
+	    > t</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -377,20 +377,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:shortText" class="def"
 	    >shortText</a
-	    > :: [<a href="Koshucode-Baala-Syntax-Symbol-Short.html#t:ShortDef"
+	    > :: <span class="keyword"
+	    >forall</span
+	    > t. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Text-Textual.html#t:Textual"
+	    >Textual</a
+	    > t =&gt; [<a href="Koshucode-Baala-Syntax-Symbol-Short.html#t:ShortDef"
 	    >ShortDef</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:TransText"
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:TransText"
 	    >TransText</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Short.html#shortText');" href="javascript:void(0);" class="link"
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Short.html#shortText');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >String shortener.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>shortText [(&quot;f&quot;, &quot;foo/bar/&quot;)] &quot;foo/bar/baz&quot;
+</code
+		></strong
+	      >Just &quot;f.baz&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>shortText [(&quot;f&quot;, &quot;foo/bar/&quot;)] &quot;foo/baz&quot;
+</code
+		></strong
+	      >Nothing
+</pre
 	    ></div
 	  ></div
 	></div
