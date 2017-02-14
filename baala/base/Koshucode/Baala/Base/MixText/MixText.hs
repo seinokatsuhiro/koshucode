@@ -41,7 +41,7 @@ module Koshucode.Baala.Base.MixText.MixText
     -- ** Mix I/O
     putMix, putMixLn,
     hPutMix, hPutMixLn,
-    putMixLines, hPutMixLines,
+    putMixLines, hPutMixes, hPutMixLines,
     writeMix, outputMix,
   ) where
 
@@ -269,6 +269,7 @@ mixLine :: MixText -> MixText
 mixLine = (<> mixHard)
 
 -- | Append line break to each mix texts.
+--   Consider 'putMixLines' to avoid staging whole text.
 mixLines :: [MixText] -> MixText
 mixLines = mconcat . map mixLine
 
@@ -378,7 +379,11 @@ putMixLines lb = hPutMixLines lb IO.stdout
 
 -- | Print mix text lines to the given output handler.
 hPutMixLines :: B.LineBreak -> IO.Handle -> [MixText] -> IO ()
-hPutMixLines lb h = hPutMix lb h . mixLines
+hPutMixLines lb h ms = hPutMixLn lb h O.<#!> ms
+
+-- | Print mix texts to the given output handler.
+hPutMixes :: B.LineBreak -> IO.Handle -> [MixText] -> IO ()
+hPutMixes lb h ms = hPutMix lb h O.<#!> ms
 
 -- | Write mix text to a file.
 writeMix :: B.LineBreak -> FilePath -> MixText -> IO ()
