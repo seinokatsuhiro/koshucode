@@ -44,8 +44,8 @@ hPutJudgesWith h result status js =
        return status
 
 -- | Edit judgements to mix text.
-judgesMixes :: forall c.
-    C.Result c -> (T.Judge c -> B.MixText) -> JudgeCount -> [T.Judge c] -> [Either JudgeCount B.MixText]
+judgesMixes :: forall a c. (T.GetClass a) =>
+    C.Result c -> (a -> B.MixText) -> JudgeCount -> [a] -> [Either JudgeCount B.MixText]
 judgesMixes result mixer (c0, tab0) = loop c0 tab0 where
     loop c tab (j : js) = mixing c tab j js
     loop c tab [] =
