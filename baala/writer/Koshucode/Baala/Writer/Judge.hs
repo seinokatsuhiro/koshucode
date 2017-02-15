@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -45,21 +46,20 @@ hPutJudgesWith h result status js =
 -- | Edit judgements to mix text.
 judgesMixes :: forall c.
     C.Result c -> (T.Judge c -> B.MixText) -> JudgeCount -> [T.Judge c] -> [Either JudgeCount B.MixText]
-judgesMixes result mixer = loop where
-    loop cnt (j : js) = case put cnt j of
-                          (cnt', mix) -> Right mix : loop cnt' js
-    loop cnt@(c, _) [] =
+judgesMixes result mixer (c0, tab0) = loop c0 tab0 where
+    loop c tab (j : js) = mixing c tab j js
+    loop c tab [] =
         let mix = (B.mixHard `when` (c > 0)) O.++ B.mixLine (total c)
-        in [Right mix, Left cnt]
+        in [Right mix, Left (c, tab)]
 
-    put :: JudgeCount -> T.Judge c -> (JudgeCount, B.MixText)
-    put (c, tab) j =
-        let tab' = Ms.alter inc (T.getClass j) tab
-            mix  = gutterMix c O.++ B.mixLine (mixer j)
-        in ((c + 1, tab'), mix)
+    mixing c tab j js =
+        let !c'   = c + 1
+            !tab' = Ms.alter inc (T.getClass j) tab
+            mix   = gutterMix c $ B.mixLine (mixer j)
+        in Right mix : loop c' tab' js
 
-    gutterMix c | mod5 c && c > 0  = B.mixLine (progress c `when` mod25 c)
-                | otherwise        = B.mixEmpty
+    gutterMix c m | mod5 c && c > 0  = B.mixLine (progress c `when` mod25 c) O.++ m
+                  | otherwise        = m
 
     mod25 n       = n `mod` measure == 0
     mod5  n       = n `mod` gutter  == 0
