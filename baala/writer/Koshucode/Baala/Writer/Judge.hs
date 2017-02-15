@@ -6,6 +6,7 @@
 module Koshucode.Baala.Writer.Judge
   ( -- * Writer
     putJudges, putJudgesWith, hPutJudgesWith,
+    judgesMixes,
     judgesCountMix,
     -- * Counter
     JudgeCount, JudgeCountMix,
@@ -43,6 +44,40 @@ hPutJudgesWith h result status js =
        return status
 
 -- | Edit judgements to mix text.
+judgesMixes :: forall c.
+    C.Result c -> (T.Judge c -> B.MixText) -> JudgeCount -> [T.Judge c] -> [Either JudgeCount B.MixText]
+judgesMixes result mixer = loop where
+    loop cnt (j : js) = case put cnt j of
+                          (cnt', mix) -> Right mix : loop cnt' js
+    loop cnt@(c, _) [] =
+        let mix = (B.mixHard `when` (c > 0)) <> B.mixLine (total c)
+        in [Right mix, Left cnt]
+
+    put :: JudgeCount -> T.Judge c -> (JudgeCount, B.MixText)
+    put (c, tab) j =
+        let tab' = Map.alter inc (T.getClass j) tab
+            mix  = gutterMix c <> B.mixLine (mixer j)
+        in ((c + 1, tab'), mix)
+
+    gutterMix c | mod5 c && c > 0  = B.mixLine (progress c `when` mod25 c)
+                | otherwise        = B.mixEmpty
+
+    mod25 n       = n `mod` measure == 0
+    mod5  n       = n `mod` gutter  == 0
+    gutter        = C.resultGutter  result
+    measure       = C.resultMeasure result
+
+    total    n    = B.mixLine (B.mixString "*** " <> B.mixString (count n))
+    progress n    = B.mixLine (B.mixString "*** " <> B.mixShow n)
+
+    inc (Nothing) = Just 1
+    inc (Just n)  = Just $ n + 1
+
+when :: (Monoid a) => a -> Bool -> a
+when a True  = a
+when _ False = mempty
+
+-- | Edit judgements to mix text.
 judgesCountMix :: forall c.
     C.Result c -> (T.Judge c -> B.MixText) -> [T.Judge c] -> O.Map JudgeCountMix
 judgesCountMix result writer = loop where
@@ -73,10 +108,6 @@ judgesCountMix result writer = loop where
     inc (Nothing) = Just 1
     inc (Just n)  = Just $ n + 1
 
-when :: (Monoid a) => a -> Bool -> a
-when a True  = a
-when _ False = mempty
-
 
 -- ----------------------  Counter
 
@@ -86,11 +117,13 @@ type JudgeCount = (Int, Map.Map S.JudgeClass Int)
 -- | Mix text and judgement counter.
 type JudgeCountMix = (B.MixText, Int, Map.Map S.JudgeClass Int)
 
--- | Zero counters.
---
---   >>> judgeCount $ words "A B C"
---   (0, fromList [("A",0), ("B",0), ("C",0)])
---
+{-| Zero counters.
+
+    === __Examples__
+
+    >>> judgeCount $ words "A B C"
+    (0, fromList [("A",0), ("B",0), ("C",0)])
+    -}
 judgeCount :: [S.JudgeClass] -> JudgeCount
 judgeCount ps = (0, Map.fromList $ zip ps $ repeat 0)
 
@@ -98,17 +131,19 @@ judgeCount ps = (0, Map.fromList $ zip ps $ repeat 0)
 judgeCountMix :: [S.JudgeClass] -> JudgeCountMix
 judgeCountMix ps = (B.mixEmpty, 0, Map.fromList $ zip ps $ repeat 0)
 
--- | Generate judgement counter comment.
---
---  >>> B.putMix B.crlfBreak $ judgeSummary (O.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
---  **
---  **  SUMMARY
---  **       3 judges on A
---  **       6 judges on B
---  **       1 judge  on C
---  **      10 judges in total
---  **
---
+{-| Generate judgement counter comment.
+
+    === __Examples__
+
+    >>> B.putMix B.crlfBreak $ judgeSummary (O.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
+    **
+    **  SUMMARY
+    **       3 judges on A
+    **       6 judges on B
+    **       1 judge  on C
+    **      10 judges in total
+    **
+    -}
 judgeSummary :: B.ExitCode -> JudgeCount -> B.MixText
 judgeSummary status (_, tab) = B.mixLines (B.mix <$> B.texts sumDoc) where
     label | status == B.ExitSuccess = "SUMMARY"
