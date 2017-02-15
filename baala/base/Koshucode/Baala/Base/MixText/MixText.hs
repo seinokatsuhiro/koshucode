@@ -45,7 +45,6 @@ module Koshucode.Baala.Base.MixText.MixText
     writeMix, outputMix,
   ) where
 
-import Data.Monoid ((<>))
 import qualified Control.Exception                            as E
 import qualified Numeric                                      as N
 import qualified Data.ByteString                              as Bs
@@ -123,7 +122,7 @@ mixTz = MixTz
 
 -- | Create mix text from string.
 --
---   >>> mixString "abc" <> mixString "def"
+--   >>> mixString "abc" O.++ mixString "def"
 --   MixText "abcdef"
 --
 mixString :: String -> MixText
@@ -153,7 +152,7 @@ mixRight c n mx = mixString $ O.padBeginWith c n $ mixToStringDef mx
 
 -- | Create mix text of given-length spaces.
 --
---   >>> mixString "|" <> mixSpace 4 <> mixString "|"
+--   >>> mixString "|" O.++ mixSpace 4 O.++ mixString "|"
 --   MixText "|    |"
 --
 mixSpace :: Int -> MixText
@@ -165,7 +164,7 @@ mixSpace = MixSpace
 --   MixText "a b"
 --
 mixSep :: MixText -> MixText -> MixText
-mixSep l r = l <> mix1 <> r
+mixSep l r = l O.++ mix1 O.++ r
 
 -- | Infix mix space.
 --
@@ -173,7 +172,7 @@ mixSep l r = l <> mix1 <> r
 --   MixText "a  b"
 --
 mixSep2 :: MixText -> MixText -> MixText
-mixSep2 l r = l <> mix2 <> r
+mixSep2 l r = l O.++ mix2 O.++ r
 
 -- | Empty space.
 mix0 :: MixText
@@ -223,7 +222,7 @@ mixHex = mixNum N.showHex
 
 mixNum :: (Integral n, Show n) => (n -> ShowS) -> n -> MixText
 mixNum f n | n >= 0    = mixString (f n "")
-           | otherwise = mixChar '-' <> mixString (f (abs n) "")
+           | otherwise = mixChar '-' O.++ mixString (f (abs n) "")
 
 -- | Zero-padding decimal number.
 --
@@ -243,7 +242,7 @@ mixDecZero = mixNumZero mixDec
 --
 mixNumZero :: (Integral n, Show n) => (n -> MixText) -> Int -> n -> MixText
 mixNumZero f w n | n >= 0     = mixRight '0' w (f n)
-                 | otherwise  = mixChar '-' <> mixRight '0' (w - 1) (f $ abs n)
+                 | otherwise  = mixChar '-' O.++ mixRight '0' (w - 1) (f $ abs n)
 
 -- | Sign of number or space.
 --
@@ -266,7 +265,7 @@ mixSign n = case compare n 0 of
 
 -- | Append line break.
 mixLine :: MixText -> MixText
-mixLine = (<> mixHard)
+mixLine = (O.++ mixHard)
 
 -- | Append line break to each mix texts.
 --   Consider 'putMixLines' to avoid staging whole text.
@@ -293,7 +292,7 @@ mixBlock = MixBlock
 
 -- | Map function to mix texts directly in mix block.
 --
---   >>> let m1 = mixBlock [mixString "cd", mixString "ef" <> mixBlock [mixString "g"]]
+--   >>> let m1 = mixBlock [mixString "cd", mixString "ef" O.++ mixBlock [mixString "g"]]
 --   >>> let m2 = mixBlock [mixString "ab", m1]
 --
 --   >>> m2
@@ -302,7 +301,7 @@ mixBlock = MixBlock
 --   >>> mixBlockMap mixLine m2
 --   MixText "ab\r\ncd\r\nefg\r\n"
 --
---   >>> mixBlockMap (\x -> mixString "[" <> x <> mixString "]") m2
+--   >>> mixBlockMap (\x -> mixString "[" O.++ x O.++ mixString "]") m2
 --   MixText "[ab][cd][efg]"
 --
 mixBlockMap :: (MixText -> MixText) -> MixText -> MixText
@@ -419,13 +418,13 @@ bsSpaces n = Bs.replicate n 32
 
 mixBuild :: B.LineBreak -> MixText -> Bld -> Bld
 mixBuild lb mx bld = mixBuildBody (auto $ B.breakWidth lb) hard bld mx where
-    auto (Nothing) (b,_,s) _  b2  = Bw (b <> space s <> b2) 0
+    auto (Nothing) (b,_,s) _  b2  = Bw (b O.++ space s O.++ b2) 0
     auto (Just wd) (b,w,s) w2 b2
-        | w + s + w2 > wd         = Br (b <> nl <> ind <> b2) (indw + w2)
-        | otherwise               = Bw (b <> space s   <> b2) (w + s + w2)
+        | w + s + w2 > wd         = Br (b O.++ nl O.++ ind O.++ b2) (indw + w2)
+        | otherwise               = Bw (b O.++ space s     O.++ b2) (w + s + w2)
 
     hard (Br b 0)                 = Bw (b) 0
-    hard (b, _, _)                = Bw (b <> nl) 0
+    hard (b, _, _)                = Bw (b O.++ nl) 0
 
     nl           = continueBuilder lb
     (ind, indw)  = indentBuilder   lb
@@ -446,7 +445,7 @@ mixBuildBody auto hard = (<<) where
     bld << MixBreak lb x   = mixBuild lb x bld
 
     cat bld@(b, w, s) w2 b2
-        | s < 0            = Bw (b <> b2) (w + w2)
+        | s < 0            = Bw (b O.++ b2) (w + w2)
         | otherwise        = auto bld w2 b2
 
     space (b, w, s) s'     = (b, w, max s s')

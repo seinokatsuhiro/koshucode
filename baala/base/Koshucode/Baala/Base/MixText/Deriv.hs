@@ -8,7 +8,7 @@ module Koshucode.Baala.Base.MixText.Deriv
     mixJudge,
   ) where
 
-import Data.Monoid ((<>))
+import qualified Koshucode.Baala.Overture                     as O
 import qualified Koshucode.Baala.Base.MixText.MixText         as B
 import qualified Koshucode.Baala.Base.MixText.MixClass        as B
 
@@ -31,7 +31,7 @@ mixTab = B.mixChar '\t'
 mixJoin :: (B.Mix a, B.Mix b) => a -> [b] -> B.MixText
 mixJoin sep = loop where
     loop [] = B.mixEmpty
-    loop (m:ms) = B.mix m <> B.mix sep <> loop ms
+    loop (m:ms) = B.mix m O.++ B.mix sep O.++ loop ms
 
 -- | Concatenate terms of content.
 --
@@ -53,5 +53,5 @@ mixTermName n = B.mixString ('/' : n)
 --
 {-# DEPRECATED mixJudge "Use 'judgeMix2' instead." #-}
 mixJudge :: (B.Mix sep, B.Mix cl, B.Mix c) => sep -> cl -> [(String, c)] -> B.MixText
-mixJudge sep cl ts = B.mixString "|-- " <> B.mix cl <> B.mix sep <> mixTerms sep ts
+mixJudge sep cl ts = B.mixString "|-- " O.++ B.mix cl O.++ B.mix sep O.++ mixTerms sep ts
 

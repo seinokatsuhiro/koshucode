@@ -13,7 +13,6 @@ module Koshucode.Baala.Writer.Judge
     judgeCount, judgeCountMix, judgeSummary,
   ) where
 
-import Data.Monoid ((<>))
 import qualified Data.Map                            as Map
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.System              as O
@@ -50,13 +49,13 @@ judgesMixes result mixer = loop where
     loop cnt (j : js) = case put cnt j of
                           (cnt', mix) -> Right mix : loop cnt' js
     loop cnt@(c, _) [] =
-        let mix = (B.mixHard `when` (c > 0)) <> B.mixLine (total c)
+        let mix = (B.mixHard `when` (c > 0)) O.++ B.mixLine (total c)
         in [Right mix, Left cnt]
 
     put :: JudgeCount -> T.Judge c -> (JudgeCount, B.MixText)
     put (c, tab) j =
         let tab' = Map.alter inc (T.getClass j) tab
-            mix  = gutterMix c <> B.mixLine (mixer j)
+            mix  = gutterMix c O.++ B.mixLine (mixer j)
         in ((c + 1, tab'), mix)
 
     gutterMix c | mod5 c && c > 0  = B.mixLine (progress c `when` mod25 c)
@@ -67,8 +66,8 @@ judgesMixes result mixer = loop where
     gutter        = C.resultGutter  result
     measure       = C.resultMeasure result
 
-    total    n    = B.mixLine (B.mixString "*** " <> B.mixString (count n))
-    progress n    = B.mixLine (B.mixString "*** " <> B.mixShow n)
+    total    n    = B.mixLine (B.mixString "*** " O.++ B.mixString (count n))
+    progress n    = B.mixLine (B.mixString "*** " O.++ B.mixShow n)
 
     inc (Nothing) = Just 1
     inc (Just n)  = Just $ n + 1
@@ -83,16 +82,16 @@ judgesCountMix :: forall c.
 judgesCountMix result writer = loop where
     loop (j : js) cnt  = loop js $ put j cnt
     loop [] (mx, c, tab) =
-        let mx' = (B.mixHard `when` (c > 0)) <> B.mixLine (total c)
-        in (mx <> mx', c, tab)
+        let mx' = (B.mixHard `when` (c > 0)) O.++ B.mixLine (total c)
+        in (mx O.++ mx', c, tab)
 
     put :: T.Judge c -> O.Map JudgeCountMix
     put judge (mx, c, tab) =
         let c'   = c + 1
             cls  = T.getClass judge
-            mx'  = gutterMix c <> B.mixLine (writer judge)
+            mx'  = gutterMix c O.++ B.mixLine (writer judge)
             tab' = Map.alter inc cls tab
-        in (mx <> mx', c', tab')
+        in (mx O.++ mx', c', tab')
 
     gutterMix c | mod5 c && c > 0  = B.mixLine (progress c `when` mod25 c)
                 | otherwise        = B.mixEmpty
@@ -102,8 +101,8 @@ judgesCountMix result writer = loop where
     gutter        = C.resultGutter  result
     measure       = C.resultMeasure result
 
-    total    n    = B.mixLine (B.mixString "*** " <> B.mixString (count n))
-    progress n    = B.mixLine (B.mixString "*** " <> B.mixShow n)
+    total    n    = B.mixLine (B.mixString "*** " O.++ B.mixString (count n))
+    progress n    = B.mixLine (B.mixString "*** " O.++ B.mixShow n)
 
     inc (Nothing) = Just 1
     inc (Just n)  = Just $ n + 1

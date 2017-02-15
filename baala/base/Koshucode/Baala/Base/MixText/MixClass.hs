@@ -14,11 +14,11 @@ module Koshucode.Baala.Base.MixText.MixClass
     mixInfix,
   ) where
 
-import Data.Monoid ((<>))
 import qualified Data.ByteString                         as Bs
 import qualified Data.ByteString.Lazy                    as Bz
 import qualified Data.Text                               as Tx
 import qualified Data.Text.Lazy                          as Tz
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base.MixText.MixText    as B
 
 
@@ -78,22 +78,22 @@ instance Mix (Maybe B.MixText) where
 
 -- | Enclose mix text with open and close bracket.
 mixBracket :: (Mix m) => (m, m) -> B.MixText -> B.MixText
-mixBracket (open, close) body = mix open <> body <> mix close
+mixBracket (open, close) body = mix open O.++ body O.++ mix close
 
 -- | Enclose mix text with bracket and space.
 mixBracketS :: (Mix m) => (m, m) -> B.MixText -> B.MixText
-mixBracketS (open, close) = mixBracket (mix open <> B.mix1, B.mix1 <> mix close)
+mixBracketS (open, close) = mixBracket (mix open O.++ B.mix1, B.mix1 O.++ mix close)
 
 -- | Concatenate mix texts with delimiter.
 mixJoin :: (Mix m) => m -> [B.MixText] -> B.MixText
 mixJoin delim = loop where
     loop (x : xs) | null xs   = x
-                  | otherwise = x <> mix delim <> loop xs
+                  | otherwise = x O.++ mix delim O.++ loop xs
     loop []                   = B.mixEmpty
 
 -- | Concatenate mix texts with delimiter and space.
 mixJoinS :: (Mix m) => m -> [B.MixText] -> B.MixText
-mixJoinS delim = mixJoin (B.mix1 <> mix delim <> B.mix1)
+mixJoinS delim = mixJoin (B.mix1 O.++ mix delim O.++ B.mix1)
 
 -- | Join with one space.
 mixJoin1 :: [B.MixText] -> B.MixText
@@ -109,5 +109,5 @@ mixJoinBar = mixJoinS "|"
 --   MixText "12-34"
 --
 mixInfix :: (Mix m) => m -> B.MixText -> B.MixText -> B.MixText
-mixInfix inf l r = l <> mix inf <> r
+mixInfix inf l r = l O.++ mix inf O.++ r
 
