@@ -41,7 +41,8 @@ module Koshucode.Baala.Base.MixText.MixText
     -- ** Mix I/O
     putMix, putMixLn,
     hPutMix, hPutMixLn,
-    putMixLines, hPutMixes, hPutMixLines,
+    putMixLines, hPutMixLines,
+    hPutMixes, hPutMixRights,
     writeMix, outputMix,
   ) where
 
@@ -380,9 +381,18 @@ putMixLines lb = hPutMixLines lb IO.stdout
 hPutMixLines :: B.LineBreak -> IO.Handle -> [MixText] -> IO ()
 hPutMixLines lb h ms = hPutMixLn lb h O.<#!> ms
 
--- | Print mix texts to the given output handler.
+{-| Print mix texts to the given output handler. -}
 hPutMixes :: B.LineBreak -> IO.Handle -> [MixText] -> IO ()
 hPutMixes lb h ms = hPutMix lb h O.<#!> ms
+
+{-| Print 'Right'-part mix texts and collect 'Left'-part values. -}
+hPutMixRights :: B.LineBreak -> IO.Handle -> [Either a MixText] -> IO [a]
+hPutMixRights lb h = loop where
+    loop (Right mix : ms) = do hPutMix lb h mix
+                               loop ms
+    loop (Left a : ms)    = do as <- loop ms
+                               return (a : as)
+    loop [] = return []
 
 -- | Write mix text to a file.
 writeMix :: B.LineBreak -> FilePath -> MixText -> IO ()

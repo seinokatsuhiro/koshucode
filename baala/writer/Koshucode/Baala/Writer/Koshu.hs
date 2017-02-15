@@ -10,7 +10,6 @@ module Koshucode.Baala.Writer.Koshu
   ) where
 
 import qualified Control.Monad                       as M
-import qualified Data.Either                         as Ei
 import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
@@ -109,7 +108,7 @@ hPutShort h def =
       width :: Int
       width = maximum $ map (length . fst) def
 
--- | Output result chunk.
+{-| Output result chunk. -}
 hPutChunks
     :: (B.MixEncode c)
     => (B.LineBreak, T.EncodeJudge S.Chars c) -> IO.Handle -> C.Result c -> B.TransText S.Chars
@@ -117,15 +116,11 @@ hPutChunks
 hPutChunks (lb, encode) h result sh = loop where
     loop [] cnt                            = return cnt
     loop (C.ResultJudge js : xs) jc@(_, tab)  =
-        case W.judgesMixes result (encode sh) (0, tab) js of
-          ls -> do B.hPutMixes lb h $ Ei.rights ls
-                   case Ei.lefts ls of
-                     jc' : _ -> loop xs jc'
-                     _       -> loop xs jc
-        -- case W.judgesCountMix result (encode sh) js (B.mixEmpty, 0, tab) of
-        --   (mx, cnt', tab') -> do B.hPutMix lb h mx
-        --                          loop xs (cnt', tab')
-
+        do let ls = W.judgesMixes result (encode sh) (0, tab) js
+           lefts <- B.hPutMixRights lb h ls
+           case lefts of
+             jc' : _ -> loop xs jc'
+             _       -> loop xs jc
     loop (C.ResultNote [] : xs) cnt        = loop xs cnt
     loop (C.ResultNote ls : xs) cnt        = do hPutNote h ls
                                                 loop xs cnt
