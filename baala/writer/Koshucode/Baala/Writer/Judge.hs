@@ -13,7 +13,7 @@ module Koshucode.Baala.Writer.Judge
     judgeCount, judgeCountMix, judgeSummary,
   ) where
 
-import qualified Data.Map                            as Map
+import qualified Data.Map.Strict                     as Ms
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.System              as O
 import qualified Koshucode.Baala.Base                as B
@@ -54,7 +54,7 @@ judgesMixes result mixer = loop where
 
     put :: JudgeCount -> T.Judge c -> (JudgeCount, B.MixText)
     put (c, tab) j =
-        let tab' = Map.alter inc (T.getClass j) tab
+        let tab' = Ms.alter inc (T.getClass j) tab
             mix  = gutterMix c O.++ B.mixLine (mixer j)
         in ((c + 1, tab'), mix)
 
@@ -90,7 +90,7 @@ judgesCountMix result writer = loop where
         let c'   = c + 1
             cls  = T.getClass judge
             mx'  = gutterMix c O.++ B.mixLine (writer judge)
-            tab' = Map.alter inc cls tab
+            tab' = Ms.alter inc cls tab
         in (mx O.++ mx', c', tab')
 
     gutterMix c | mod5 c && c > 0  = B.mixLine (progress c `when` mod25 c)
@@ -111,10 +111,10 @@ judgesCountMix result writer = loop where
 -- ----------------------  Counter
 
 -- | Total and per-judgement counter.
-type JudgeCount = (Int, Map.Map S.JudgeClass Int)
+type JudgeCount = (Int, Ms.Map S.JudgeClass Int)
 
 -- | Mix text and judgement counter.
-type JudgeCountMix = (B.MixText, Int, Map.Map S.JudgeClass Int)
+type JudgeCountMix = (B.MixText, Int, Ms.Map S.JudgeClass Int)
 
 {-| Zero counters.
 
@@ -124,17 +124,17 @@ type JudgeCountMix = (B.MixText, Int, Map.Map S.JudgeClass Int)
     (0, fromList [("A",0), ("B",0), ("C",0)])
     -}
 judgeCount :: [S.JudgeClass] -> JudgeCount
-judgeCount ps = (0, Map.fromList $ zip ps $ repeat 0)
+judgeCount ps = (0, Ms.fromList $ zip ps $ repeat 0)
 
 -- | Empty and zero counters.
 judgeCountMix :: [S.JudgeClass] -> JudgeCountMix
-judgeCountMix ps = (B.mixEmpty, 0, Map.fromList $ zip ps $ repeat 0)
+judgeCountMix ps = (B.mixEmpty, 0, Ms.fromList $ zip ps $ repeat 0)
 
 {-| Generate judgement counter comment.
 
     === __Examples__
 
-    >>> B.putMix B.crlfBreak $ judgeSummary (O.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
+    >>> B.putMix B.crlfBreak $ judgeSummary (O.exitCode 0) (10, Ms.fromList [("A", 3), ("B", 6), ("C", 1)])
     **
     **  SUMMARY
     **       3 judges on A
@@ -150,12 +150,12 @@ judgeSummary status (_, tab) = B.mixLines (B.mix <$> B.texts sumDoc) where
 
     sumDoc              = B.CommentDoc [sumSec]
     sumSec              = B.CommentSec label $ sumLines ++ [total]
-    sumLines            = map sumLine $ Map.assocs tab
+    sumLines            = map sumLine $ Ms.assocs tab
     sumLine (p, n)      = countPad n ++ " on " ++ p
     total               = countPad (sumOf tab) ++ " in total"
 
-    sumOf :: Map.Map a Int -> Int
-    sumOf = Map.foldr (+) 0
+    sumOf :: Ms.Map a Int -> Int
+    sumOf = Ms.foldr (+) 0
 
     countPad = O.padBegin 11 . count
 
