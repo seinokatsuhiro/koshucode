@@ -2,3 +2,5 @@ dist/
 sandbox/
 .cabal-sandbox/
 cabal.sandbox.config
+debug.cabal
+debug.k
