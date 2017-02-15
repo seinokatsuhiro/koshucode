@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
@@ -58,35 +59,47 @@ import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 -- >            ................ Unknown
 
 data Symbol t
-    = SymbolCommon   t     -- ^ __1.__ General-plain-numeric symbol
-                           --
-                           --   >>> nextSymbol "1"
-                           --   ("", SymbolCommon "1")
+    = SymbolCommon   t     {- ^ __1.__ General-plain-numeric symbol
 
-    | SymbolPlain    t     -- ^ __2.__ Plain (include general) symbol
-                           --
-                           --   >>> nextSymbol "a"
-                           --   ("", SymbolPlain "a")
+                                === __Example__
+                           
+                                >>> nextSymbol "1"
+                                ("", SymbolCommon "1") -}
 
-    | SymbolNumeric  t     -- ^ __3.__ Numeric (include general) symbol
-                           --
-                           --   >>> nextSymbol "+"
-                           --   ("", SymbolNumeric "+")
+    | SymbolPlain    t     {- ^ __2.__ Plain (include general) symbol
 
-    | SymbolGeneral  t     -- ^ __4.__ General (not plain nor numeric) symbol
-                           --
-                           --   >>> nextSymbol "="
-                           --   ("", SymbolGeneral "=")
+                                === __Example__
+                           
+                                >>> nextSymbol "a"
+                                ("", SymbolPlain "a") -}
 
-    | SymbolShort    t t   -- ^ __5.__ Short symbol (Plain @"."@ Plain)
-                           --
-                           --   >>> nextSymbol "a.xxx"
-                           --   ("", SymbolShort "a" "xxx")
+    | SymbolNumeric  t     {- ^ __3.__ Numeric (include general) symbol
 
-    | SymbolUnknown  t     -- ^ __6.__ Unknown symbol
-                           --
-                           --   >>> nextSymbol "a+"
-                           --   ("", SymbolUnknown "a+")
+                                === __Example__
+                           
+                                >>> nextSymbol "+"
+                                ("", SymbolNumeric "+") -}
+
+    | SymbolGeneral  t     {- ^ __4.__ General (not plain nor numeric) symbol
+
+                                === __Example__
+                           
+                                >>> nextSymbol "="
+                                ("", SymbolGeneral "=") -}
+
+    | SymbolShort    t t   {- ^ __5.__ Short symbol (Plain @"."@ Plain)
+
+                                === __Example__
+                           
+                                >>> nextSymbol "a.xxx"
+                                ("", SymbolShort "a" "xxx") -}
+
+    | SymbolUnknown  t     {- ^ __6.__ Unknown symbol
+
+                                === __Example__
+                           
+                                >>> nextSymbol "a+"
+                                ("", SymbolUnknown "a+") -}
 
       deriving (Show, Eq, Ord)
 
@@ -189,7 +202,7 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
         | isCharG   c     = symbolG   n' cs
         | isCharN   c     = symbolN   n' cs
         | isSymbolChar c  = symbolUnk n' cs
-        where n' = n + 1
+        where !n' = n + 1
     symbolGpn n cs        = done n cs SymbolCommon
 
     -- General and Plain
@@ -198,7 +211,7 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
         | isCharGp' c     = symbolGp  n' cs
         | isCharG   c     = symbolG   n' cs
         | isSymbolChar c  = symbolUnk n' cs
-        where n' = n + 1
+        where !n' = n + 1
     symbolGp n cs         = done n cs SymbolPlain
 
     -- General and Numeric
@@ -207,7 +220,7 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
         | isCharG   c     = symbolG   n' cs
         | isCharN   c     = symbolN   n' cs
         | isSymbolChar c  = symbolUnk n' cs
-        where n' = n + 1
+        where !n' = n + 1
     symbolGn n cs         = done n cs SymbolNumeric
 
     -- General
@@ -221,7 +234,7 @@ nextSymbol cs0 = symbolGpn O.zero cs0 where
     symbolN n (O.cut -> O.Jp c cs)
         | isCharN' c      = symbolN   n' cs
         | isSymbolChar c  = symbolUnk n' cs
-        where n' = n + 1
+        where !n' = n + 1
     symbolN n cs          = done n cs SymbolNumeric
 
     -- Unknown symbol
@@ -237,7 +250,7 @@ shortBody pre cs0 = short O.zero cs0 where
     short n (O.cut -> O.Jp c cs)
         | isCharGp' c     = short n' cs
         | isSymbolChar c  = symbolUnk n' cs
-        where n' = n + 1
+        where !n' = n + 1
     short n cs            = done n cs $ SymbolShort pre
 
     -- Unknown symbol
