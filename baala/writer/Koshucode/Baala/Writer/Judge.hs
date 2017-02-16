@@ -9,6 +9,7 @@ module Koshucode.Baala.Writer.Judge
     putJudges, putJudgesWith, hPutJudgesWith,
     judgesMixes,
     judgesCountMix,
+
     -- * Counter
     JudgeCount, JudgeCountMix,
     judgeCount, judgeCountMix, judgeSummary,
@@ -25,25 +26,27 @@ import qualified Koshucode.Baala.Core                as C
 
 -- ----------------------  Writer
 
--- | Print list of judgements.
+{-| Print list of judgements. -}
 putJudges :: (Show c, B.MixEncode c) => [T.Judge c] -> IO ()
 putJudges js =
     do _ <- putJudgesWith (O.exitCode 0) js
        return ()
 
--- | `B.stdout` version of `hPutJudgesWith`.
+{-| `B.stdout` version of `hPutJudgesWith`. -}
 putJudgesWith :: (Show c, B.MixEncode c) => B.ExitCode -> [T.Judge c] -> IO B.ExitCode
 putJudgesWith = hPutJudgesWith B.stdout B.def
 
--- | Print list of judges.
+{-| Print list of judges. -}
 hPutJudgesWith :: (B.MixEncode c) => C.ResultWriterJudge c
 hPutJudgesWith h result status js =
-    do let (mx, cnt, tab) = judgesCountMix result B.mixEncode js $ judgeCountMix []
-       B.hPutMix T.judgeBreak h mx
-       B.hPutMix B.crlfBreak h $ judgeSummary status (cnt, tab)
+    do let ls = judgesMixes result B.mixEncode (judgeCount []) js
+       lefts <- B.hPutMixRights T.judgeBreak h ls
+       case lefts of
+         cnt : _ -> B.hPutMix B.crlfBreak h $ judgeSummary status cnt
+         _       -> return ()
        return status
 
--- | Edit judgements to mix text.
+{-| Edit judgements to mix text. -}
 judgesMixes :: forall a c. (T.GetClass a) =>
     C.Result c -> (a -> B.MixText) -> JudgeCount -> [a] -> [Either JudgeCount B.MixText]
 judgesMixes result mixer (c0, tab0) = loop c0 tab0 where
@@ -77,6 +80,7 @@ when a True  = a
 when _ False = mempty
 
 -- | Edit judgements to mix text.
+{-# DEPRECATED judgesCountMix "Use 'judgesMixes' instead." #-}
 judgesCountMix :: forall c.
     C.Result c -> (T.Judge c -> B.MixText) -> [T.Judge c] -> O.Map JudgeCountMix
 judgesCountMix result writer = loop where
@@ -114,6 +118,7 @@ judgesCountMix result writer = loop where
 type JudgeCount = (Int, Ms.Map S.JudgeClass Int)
 
 -- | Mix text and judgement counter.
+{-# DEPRECATED JudgeCountMix "Use 'JudgeCount' instead." #-}
 type JudgeCountMix = (B.MixText, Int, Ms.Map S.JudgeClass Int)
 
 {-| Zero counters.
