@@ -57,7 +57,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    185 judges
+**    184 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.CodePos"        /import "Data.List"
@@ -189,23 +189,22 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Message"              /import "Koshucode.Baala.Base.Abort.Message"
 |-- IMPORT  /module "Koshucode.Baala.Base.Message"              /import "Koshucode.Baala.Base.Code.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.MixText.Deriv"        /import "Data.Monoid"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.Deriv"        /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.Deriv"        /import "Koshucode.Baala.Base.MixText.MixText"
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.Deriv"        /import "Koshucode.Baala.Base.MixText.MixClass"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.LineBreak"    /import "Data.Default"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Data.Monoid"
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Data.ByteString"
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Data.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Data.Text.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Koshucode.Baala.Base.MixText.MixText"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixEncode"    /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixEncode"    /import "Koshucode.Baala.Base.MixText.MixText"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.Monoid"
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Control.Exception"
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Numeric"
 |-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.ByteString"
@@ -951,7 +950,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    73 judges
+**    76 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Cache"            /import "Data.Map.Strict"
@@ -992,6 +991,10 @@
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Integer"     /import "Numeric"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Integer"     /import "Koshucode.Baala.Overture.List"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Integer"     /import "Koshucode.Baala.Overture.Text.Textual"
+
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Span"        /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Span"        /import "Data.Text.Internal"
+|-- IMPORT  /module "Koshucode.Baala.Overture.Text.Span"        /import "Data.Text.Unsafe"
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Textual"     /import "Data.List"
@@ -2004,7 +2007,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    49 judges
+**    48 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Data.Char"
@@ -2038,8 +2041,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "Koshucode.Baala.Core"
 
-|-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Data.Monoid"
-|-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Data.Map"
+|-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Data.Map.Strict"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.System"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Base"

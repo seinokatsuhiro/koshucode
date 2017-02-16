@@ -36,8 +36,8 @@
     ] [ 0 | "Class" | [ ] ] [ 7 | "Import" | [ "Overture" ] ] [ 7 | "Pair" | [ "Overture" ] ] [ 8 | "Queue" | [ ] ] =}
 
 |-- DIR-RANK  /dir-rank 9  /dir "Koshucode.Baala.Base.MixText"  /base-rank {= /rank /base /import-dir [ 0 | "LineBreak"
-    | [ ] ] [ 7 | "MixText" | [ "Overture" ] ] [ 8 | "MixClass" | [ ] ] [ 8 | "MixEncode" | [ "Overture" ] ] [ 9 |
-    "Deriv" | [ ] ] =}
+    | [ ] ] [ 7 | "MixText" | [ "Overture" ] ] [ 8 | "MixClass" | [ "Overture" ] ] [ 8 | "MixEncode" | [ "Overture" ] ]
+    [ 9 | "Deriv" | [ "Overture" ] ] =}
 |-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Base.List"  /base-rank {= /rank /base /import-dir [ 0 | "Split" | [ ]
     ] [ 7 | "Assoc" | [ "Overture" ] ] [ 7 | "List" | [ "Overture" ] ] [ 7 | "Select" | [ "Overture" ] ] [ 7 | "Set" | [
     "Overture" ] ] [ 8 | "Picker" | [ "Overture" ] ] [ 10 | "Order" | [ "Overture" | "Prelude" ] ] =}
@@ -271,9 +271,9 @@ TABLE : DIR-RANK
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
                                                  0     "LineBreak"          [ ]
                                                  7     "MixText"            [ "Overture" ]
-                                                 8     "MixClass"           [ ]
+                                                 8     "MixClass"           [ "Overture" ]
                                                  8     "MixEncode"          [ "Overture" ]
-                                                 9     "Deriv"              [ ]
+                                                 9     "Deriv"              [ "Overture" ]
                                                  
   10        "Koshucode.Baala.Base.List"          /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
