@@ -14,10 +14,11 @@ module Koshucode.Baala.Rop.Cox.Type.Clock
     consToClock, relmapToClock, relkitToClock,
   ) where
 
-import qualified Koshucode.Baala.DataPlus          as K
-import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Rop.Base          as Rop
-import qualified Koshucode.Baala.Rop.Base.Message  as Msg
+import qualified Koshucode.Baala.DataPlus               as K
+import qualified Koshucode.Baala.Core                   as C
+import qualified Koshucode.Baala.Rop.Base               as Rop
+import qualified Koshucode.Baala.Rop.Base.Message       as Msg
+import qualified Koshucode.Baala.Rop.Cox.Type.Utility   as Rop
 
 -- | Implementation of relational operators.
 ropsTypeClock :: (K.CContent c) => [C.Rop c]
@@ -124,25 +125,16 @@ consOfClock med =
      Right $ relmapOfClock med (cops, content, [sign, day, hour, minute, sec])
 
 -- | Create @of-clockt@ relmap.
-relmapOfClock :: (K.CContent c) =>
-  C.Intmed c -> (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.Relmap c
+relmapOfClock :: (K.CContent c) => C.Intmed c -> Rop.OfParam c -> C.Relmap c
 relmapOfClock med = C.relmapFlow med . relkitOfClock
 
 -- | Create @of-clock@ relkit.
-relkitOfClock :: (K.CContent c) =>
-  (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.RelkitFlow c
-relkitOfClock _ Nothing = C.relkitUnfixed
-relkitOfClock (cops, cox, ns) (Just he1) = kit where
-    ns'    = K.catMaybes ns
-    pk     = K.termPicker ns' he1
-    he2    = ns' `K.headAppend` he1
-    kit    = Rop.newCheck pk $ Right $ C.relkitLineAb False he2 f
-    f cs1  = do clock <- K.getClock $ K.calcCox cops he1 cs1 cox
-                let cs2 = K.zipMaybe2 ns $ clockContents clock
-                Right $ cs2 ++ cs1
+relkitOfClock :: (K.CContent c) => Rop.OfParam c -> C.RelkitFlow c
+relkitOfClock = Rop.relkitOfX K.getClock clockContents
 
-clockContents :: (K.CContent c) => K.Clock -> [c]
-clockContents clock = [sign, day, hour, minute, sec] where
+clockContents :: (K.CContent c) => K.Ab K.Clock -> [c]
+clockContents (Left _) = [K.empty, K.empty, K.empty, K.empty, K.empty]
+clockContents (Right clock) = [sign, day, hour, minute, sec] where
     sign          = K.pInt $ K.clockSign clock
     day           = K.pInteger d
     hour          = K.maybeEmpty K.pInt h

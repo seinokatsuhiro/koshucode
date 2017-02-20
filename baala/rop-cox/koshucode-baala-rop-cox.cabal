@@ -60,6 +60,7 @@ library
         Koshucode.Baala.Rop.Cox.Type.Dec
         Koshucode.Baala.Rop.Cox.Type.Text
         Koshucode.Baala.Rop.Cox.Type.Time
+        Koshucode.Baala.Rop.Cox.Type.Utility
 
   -- Modules included in this library but not exported.
   --other-modules:       

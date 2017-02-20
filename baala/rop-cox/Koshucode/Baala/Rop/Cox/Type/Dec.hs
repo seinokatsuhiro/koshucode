@@ -13,11 +13,12 @@ module Koshucode.Baala.Rop.Cox.Type.Dec
     relmapToDecReplace, relkitToDecReplace,
   ) where
 
-import qualified Data.Ratio                        as R
-import qualified Koshucode.Baala.DataPlus          as K
-import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Rop.Base          as Rop
-import qualified Koshucode.Baala.Rop.Base.Message  as Msg
+import qualified Data.Ratio                             as R
+import qualified Koshucode.Baala.DataPlus               as K
+import qualified Koshucode.Baala.Core                   as C
+import qualified Koshucode.Baala.Rop.Base               as Rop
+import qualified Koshucode.Baala.Rop.Base.Message       as Msg
+import qualified Koshucode.Baala.Rop.Cox.Type.Utility   as Rop
 
 -- | Implementation of relational operators.
 ropsTypeDec :: (K.CContent c) => [C.Rop c]
@@ -52,23 +53,16 @@ consOfDec med =
      Right $ relmapOfDec med (cops, content, [sign, fracle, num, denom])
 
 -- | Create @of-dect@ relmap.
-relmapOfDec :: (K.CContent c) =>
-  C.Intmed c -> (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.Relmap c
+relmapOfDec :: (K.CContent c) => C.Intmed c -> Rop.OfParam c -> C.Relmap c
 relmapOfDec med = C.relmapFlow med . relkitOfDec
 
 -- | Create @of-dec@ relkit.
-relkitOfDec :: (K.CContent c) =>
-  (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.RelkitFlow c
-relkitOfDec _ Nothing = C.relkitUnfixed
-relkitOfDec (cops, cox, ns) (Just he1) = Right kit2 where
-      he2       = K.catMaybes ns `K.headAppend` he1
-      kit2      = C.relkitLineAb False he2 flow
-      flow cs1  = do dec <- K.getDec $ K.calcCox cops he1 cs1 cox
-                     let cs2 = K.zipMaybe2 ns $ decContents dec
-                     Right $ cs2 ++ cs1
+relkitOfDec :: (K.CContent c) => Rop.OfParam c -> C.RelkitFlow c
+relkitOfDec = Rop.relkitOfX K.getDec decContents
 
-decContents :: (K.CDec c) => K.Decimal -> [c]
-decContents dec = [sign, fracle, num, denom] where
+decContents :: (K.CContent c) => K.Ab K.Decimal -> [c]
+decContents (Left _) = [K.empty, K.empty, K.empty, K.empty]
+decContents (Right dec) = [sign, fracle, num, denom] where
     sign    = K.pDec $ signum dec
     fracle  = K.pInt $ K.decimalFracle dec
     num     = K.pInteger $ abs $ R.numerator ratio
