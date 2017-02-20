@@ -6,6 +6,7 @@ module Koshucode.Baala.Type.Time.Time
   ( -- * Time type
     Time (..), Zone,
     timePrecision,
+    timeClock,
 
     -- * Create time
     dTime, dcTime, dczTime,
@@ -67,6 +68,12 @@ timePrecision (TimeYmdc  _ c)    = T.clockPrecision c
 timePrecision (TimeYmd   d)      = T.datePrecision d
 timePrecision (TimeYw    _)      = "week"
 timePrecision (TimeYm    _)      = "month"
+
+{-| Extract clock part of time. -}
+timeClock :: Time -> Maybe T.Clock
+timeClock (TimeYmdcz _ c _)  = Just c
+timeClock (TimeYmdc  _ c)    = Just c
+timeClock _                  = Nothing
 
 
 -- ----------------------  Encode

@@ -6,6 +6,7 @@ module Koshucode.Baala.Data.Class.Content
   ( -- * Generic content
     CContent (..),
     toDec, toDecReplace,
+    toClockContent, toClockReplace,
     cTrimBoth, cTrimBegin, cTrimEnd,
     valueContent,
   ) where
@@ -80,6 +81,23 @@ toDecWith f c
                       True   -> D.pInt 1
                       False  -> D.pInt 0
     | otherwise   = f c
+
+{-| Convert some content to clock. -}
+toClockContent :: (CContent c) => O.Map c
+toClockContent = toClockWith id
+
+{-| Convert content to clock, or
+    replace inconvertible content to constanct clock. -}
+toClockReplace :: (CContent c) => c -> O.Map c
+toClockReplace rep = toClockWith $ const rep
+
+toClockWith :: (CContent c) => O.Map c -> O.Map c
+toClockWith f c
+    | D.isClock c  = c
+    | D.isTime c   = case T.timeClock $ D.gTime c of
+                       Just n  -> D.pClock n
+                       Nothing -> f c
+    | otherwise    = f c
 
 -- | Trim spaces of text content.
 --

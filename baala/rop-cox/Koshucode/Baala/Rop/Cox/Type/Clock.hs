@@ -10,11 +10,14 @@ module Koshucode.Baala.Rop.Cox.Type.Clock
     consOfClock, relmapOfClock, relkitOfClock,
     -- * alt-clock
     consAltClock, relmapAltClock, relkitAltClock,
+    -- * to-clock
+    consToClock, relmapToClock, relkitToClock,
   ) where
 
 import qualified Koshucode.Baala.DataPlus          as K
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Rop
+import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 -- | Implementation of relational operators.
 ropsTypeClock :: (K.CContent c) => [C.Rop c]
@@ -28,6 +31,9 @@ ropsTypeClock = Rop.rops "type"
     , consAltClock
       K.&  [ "alt-clock /P ... [-sign E] [-day E] [-hour E] [-min E] [-sec E]"
              K.& "-clock* . -sign? -day? -hour? -min? -sec? -let?" ]
+    , consToClock
+      K.&  [ "to-clock /P ... [-replace E]"
+             K.& "-term* . -replace?" ]
     ]
 
 
@@ -185,4 +191,60 @@ relkitAltClock (cops, ns, (day, hour, minute, sec)) (Just he1) = kit where
                 clocks <- (K.getClock . Right) K.<#> cs
                 let clocks' = (K.pClock . K.clockAlter d h m s) <$> clocks
                 Right (clocks' ++ K.cutTerms pk cs1)
+
+
+-- ----------------------  to-clock
+
+-- | [to-clock /\/P/ ...]
+--      Convert content of term /\/P/ ... to clock.
+--   [to-clock /\/P/ ... -replace /E/]
+--      Convert content of term /\/P/ ... to clock,
+--      or replace inconvertible content to /E/.
+--
+consToClock :: (K.CContent c) => C.RopCons c
+consToClock med =
+    do cops <- Rop.getLetR     med
+       ns   <- Rop.getTerms    med "-term"
+       rep' <- Rop.getMaybeCox med "-replace"
+       Right $ case rep' of
+         Nothing  -> relmapToClock med ns
+         Just rep -> relmapToClockReplace med (cops, ns, rep)
+
+-- | Create @to-clock@ relmap.
+relmapToClock :: (K.CContent c) => C.Intmed c -> [K.TermName] -> C.Relmap c
+relmapToClock med = C.relmapFlow med . relkitToClock
+
+-- | Create @to-clock@ relkit.
+relkitToClock :: (K.CContent c) => [K.TermName] -> C.RelkitFlow c
+relkitToClock _ Nothing = C.relkitUnfixed
+relkitToClock ns (Just he1)
+    | K.duplicated ns     = Msg.dupTerm ns
+    | K.newTermsExist pk  = Msg.newTerm pk he1
+    | otherwise           = Right kit
+    where
+      pk        = K.termPicker ns he1
+      he2       = K.headMap (K.forwardTerms pk) he1
+      kit       = C.relkitLine False he2 flow
+      flow cs1  = let cs = K.toClockContent <$> K.pickTerms pk cs1
+                  in cs ++ K.cutTerms pk cs1
+
+-- | Create @to-clock@ relmap with @-replace@ option.
+relmapToClockReplace :: (K.CContent c) => C.Intmed c -> (K.CopSet c, [K.TermName], K.Cox c) -> C.Relmap c
+relmapToClockReplace med = C.relmapFlow med . relkitToClockReplace
+
+-- | Create @to-clock@ relkit with @-replace@ option.
+relkitToClockReplace :: (K.CContent c) => (K.CopSet c, [K.TermName], K.Cox c) -> C.RelkitFlow c
+relkitToClockReplace _ Nothing = C.relkitUnfixed
+relkitToClockReplace (cops, ns, rep) (Just he1)
+    | K.duplicated ns     = Msg.dupTerm ns
+    | K.newTermsExist pk  = Msg.newTerm pk he1
+    | otherwise           = Right kit
+    where
+      pk        = K.termPicker ns he1
+      he2       = K.headMap (K.forwardTerms pk) he1
+      kit       = C.relkitLineAb False he2 flow
+      flow cs1  = do let run = K.calcCox cops he1 cs1
+                     cRep <- run rep
+                     let cs = K.toClockReplace cRep <$> K.pickTerms pk cs1
+                     Right $ cs ++ K.cutTerms pk cs1
 
