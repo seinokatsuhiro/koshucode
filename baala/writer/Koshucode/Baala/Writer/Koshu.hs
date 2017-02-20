@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -9,7 +10,6 @@ module Koshucode.Baala.Writer.Koshu
     resultKoshuTab,
   ) where
 
-import qualified Control.Monad                       as M
 import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
@@ -33,16 +33,19 @@ resultKoshuTab :: (B.MixEncode c) => C.ResultWriter c
 resultKoshuTab = C.ResultWriterChunk "koshu-tab" $ hPutKoshu (B.crlfBreak, T.judgeMixTab)
 
 hPutKoshu :: (B.MixEncode c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> C.ResultWriterChunk c
-hPutKoshu output h result status sh =
+hPutKoshu output@(lb, _) h result status sh =
     do -- head
        B.when (C.resultPrintHead result) $ hPutHead h result
        hPutLicense h result
        hPutEcho h result
        -- body
-       let cnt = W.judgeCount $ C.resultClass result
-       cnt' <- M.foldM (hPutShortChunk output h result) cnt sh
+       let !gutter  = C.resultGutter result
+           !measure = C.resultMeasure result
+           !foot    = C.resultPrintFoot result
+           !cnt     = W.judgeCount $ C.resultClass result
+       cnt' <- B.hPutMixEither lb h cnt (mixShortChunk output gutter measure O.<++> sh)
        -- foot
-       B.when (C.resultPrintFoot result) $ hPutFoot h status cnt'
+       B.when foot $ hPutFoot h status cnt'
        return status
 
 hPutHead :: IO.Handle -> C.Result c -> IO ()
@@ -87,51 +90,41 @@ hPutFoot h status cnt = B.hPutMix B.crlfBreak h $ W.judgeSummary status cnt
 
 -- ----------------------  Chunk
 
-hPutShortChunk
-    :: (B.MixEncode c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> IO.Handle -> C.Result c
-    -> W.JudgeCount -> C.ShortResultChunks c -> IO W.JudgeCount
-hPutShortChunk output h result cnt (S.Short _ def chunks) =
-    do hPutShort h def
-       hPutChunks output h result (S.shortText (t <$> def)) chunks cnt
-    where
-      t (a, b) = (O.stringT a, O.stringT b)
+mixShortChunk
+    :: (B.MixEncode c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> Int -> Int
+    -> C.ShortResultChunks c -> [W.JudgeCount -> [B.MixEither W.JudgeCount]]
+mixShortChunk output gutter measure (S.Short _ def chunks) = ms where
+    ms = short : mixChunks output gutter measure (S.shortText (t <$> def)) chunks
+    short cnt = mixShort def cnt
+    t (a, b) = (O.stringT a, O.stringT b)
 
-hPutShort :: IO.Handle -> [S.ShortDef String] -> IO ()
-hPutShort _ [] = return ()
-hPutShort h def =
-    do O.hPutLines h $ "short" : map shortLine def
-       O.hPutLn    h
-    where
-      shortLine :: (String, String) -> String
-      shortLine (a, b) = "  " ++ O.padEnd width a ++
-                         " "  ++ show b
-      width :: Int
-      width = maximum $ map (length . fst) def
+mixShort :: [S.ShortDef String] -> W.JudgeCount -> [B.MixEither W.JudgeCount]
+mixShort [] cnt = [Left cnt]
+mixShort def cnt = Left cnt : (ms O.++ [Right B.mixHard]) where
+    ms = (Right . B.mixLine) <$> (B.mix "short" : map shortLine def)
+    shortLine :: (String, String) -> B.MixText
+    shortLine (a, b) = B.mix "  " O.++ B.mix (O.padEnd width a) O.++
+                       B.mix " "  O.++ B.mixShow b
+    width :: Int
+    width = maximum $ map (length . fst) def
 
 {-| Output result chunk. -}
-hPutChunks
+mixChunks
     :: (B.MixEncode c)
-    => (B.LineBreak, T.EncodeJudge S.Chars c) -> IO.Handle -> C.Result c -> B.TransText S.Chars
-    -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
-hPutChunks (lb, encode) h result sh = loop where
-    loop [] cnt                            = return cnt
-    loop (C.ResultJudge js : xs) jc@(_, tab)  =
-        do let ls = W.judgesMixes result (encode sh) (0, tab) js
-           lefts <- B.hPutMixRights lb h ls
-           case lefts of
-             jc' : _ -> loop xs jc'
-             _       -> loop xs jc
-    loop (C.ResultNote [] : xs) cnt        = loop xs cnt
-    loop (C.ResultNote ls : xs) cnt        = do hPutNote h ls
-                                                loop xs cnt
-    loop (C.ResultRel _ _ : xs) cnt        = loop xs cnt
+    => (B.LineBreak, T.EncodeJudge S.Chars c) -> Int -> Int -> B.TransText S.Chars
+    -> [C.ResultChunk c] -> [W.JudgeCount -> [B.MixEither W.JudgeCount]]
+mixChunks (_, encode) gutter measure sh = (rights <$>) where
+    rights (C.ResultJudge js) (_, tab) =
+        W.mixJudgesCount gutter measure (encode sh) js (0, tab)
+    rights (C.ResultNote []) cnt = [Left cnt]
+    rights (C.ResultNote ls) cnt = mixNote ls cnt
+    rights (C.ResultRel _ _) cnt = [Left cnt]
 
-hPutNote :: IO.Handle -> [String] -> IO ()
-hPutNote h ls =
-    do IO.hPutStrLn h "=== note"
-       O.hPutLn     h
-       O.hPutLines  h ls
-       O.hPutLn     h
-       IO.hPutStrLn h "=== rel"
-       O.hPutLn     h
-
+mixNote :: [String] -> W.JudgeCount -> [B.MixEither W.JudgeCount]
+mixNote ls cnt = Left cnt : notes where
+    notes = Right <$> [ B.mixLine $ B.mix "=== note"
+                      , B.mixHard
+                      , B.mixLines (B.mix <$> ls)
+                      , B.mixHard
+                      , B.mixLine $ B.mix "=== rel"
+                      , B.mixHard ]

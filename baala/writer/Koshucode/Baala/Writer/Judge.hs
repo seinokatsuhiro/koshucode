@@ -7,7 +7,7 @@
 module Koshucode.Baala.Writer.Judge
   ( -- * Writer
     putJudges, putJudgesWith, hPutJudgesWith,
-    judgesMixes,
+    mixJudgesCount,
     judgesCountMix,
 
     -- * Counter
@@ -39,17 +39,18 @@ putJudgesWith = hPutJudgesWith B.stdout B.def
 {-| Print list of judges. -}
 hPutJudgesWith :: (B.MixEncode c) => C.ResultWriterJudge c
 hPutJudgesWith h result status js =
-    do let ls = judgesMixes result B.mixEncode (judgeCount []) js
-       lefts <- B.hPutMixRights T.judgeBreak h ls
-       case lefts of
-         cnt : _ -> B.hPutMix B.crlfBreak h $ judgeSummary status cnt
-         _       -> return ()
+    do let !gutter  = C.resultGutter result
+           !measure = C.resultMeasure result
+           cnt      = (judgeCount [])
+           ls       = mixJudgesCount gutter measure B.mixEncode js
+       cnt' <- B.hPutMixEither T.judgeBreak h cnt [ls]
+       B.hPutMix B.crlfBreak h $ judgeSummary status cnt'
        return status
 
 {-| Edit judgements to mix text. -}
-judgesMixes :: forall a c. (T.GetClass a) =>
-    C.Result c -> (a -> B.MixText) -> JudgeCount -> [a] -> [Either JudgeCount B.MixText]
-judgesMixes result mixer (c0, tab0) = loop c0 tab0 where
+mixJudgesCount :: (T.GetClass a) =>
+    Int -> Int -> (a -> B.MixText) -> [a] -> JudgeCount -> [B.MixEither JudgeCount]
+mixJudgesCount gutter measure mixer xs (c0, tab0) = loop c0 tab0 xs where
     loop c tab (j : js) = mixing c tab j js
     loop c tab [] =
         let mix = (B.mixHard `when` (c > 0)) O.++ B.mixLine (total c)
@@ -66,9 +67,6 @@ judgesMixes result mixer (c0, tab0) = loop c0 tab0 where
 
     mod25 n       = n `mod` measure == 0
     mod5  n       = n `mod` gutter  == 0
-    gutter        = C.resultGutter  result
-    measure       = C.resultMeasure result
-
     total    n    = B.mixLine (B.mixString "*** " O.++ B.mixString (count n))
     progress n    = B.mixLine (B.mixString "*** " O.++ B.mixShow n)
 
@@ -80,7 +78,7 @@ when a True  = a
 when _ False = mempty
 
 -- | Edit judgements to mix text.
-{-# DEPRECATED judgesCountMix "Use 'judgesMixes' instead." #-}
+{-# DEPRECATED judgesCountMix "Use 'mixJudgesCount' instead." #-}
 judgesCountMix :: forall c.
     C.Result c -> (T.Judge c -> B.MixText) -> [T.Judge c] -> O.Map JudgeCountMix
 judgesCountMix result writer = loop where

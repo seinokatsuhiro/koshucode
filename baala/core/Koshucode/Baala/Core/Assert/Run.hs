@@ -89,6 +89,7 @@ optionProcess sh judgeOf pat option opt r1 =
        r3 <- optionRelmapAssert   opt    r2
        let js  = T.judgesFromRel (judgeOf showEmpty) pat r3
        comment <- optionComment sh pat opt r3
+       -- TODO: unify judge, rel, note
        Right [ C.ResultJudge js
              , C.ResultRel pat r3
              , C.ResultNote comment ]
