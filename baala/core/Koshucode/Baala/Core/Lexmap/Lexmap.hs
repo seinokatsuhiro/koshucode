@@ -58,7 +58,7 @@ instance (O.Textual t) => B.Default (TLexmap t) where
 type RopName = String
 
 -- | Attribute of relmap operation.
-lexAttrTree :: TLexmap t -> [S.AttrTree t]
+lexAttrTree :: TLexmap t -> [S.LocalSlot t]
 lexAttrTree = map (B.mapSnd head) . S.paraNameList . lexAttr
 
 -- | Name of relmap operator

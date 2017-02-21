@@ -6,7 +6,7 @@
 
 module Koshucode.Baala.Syntax.Attr.Slot
   ( GlobalSlot,
-    AttrTree,
+    LocalSlot,
     substSlot,
   ) where
 
@@ -22,16 +22,16 @@ import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 -- | Global slot name and its content.
 type GlobalSlot t = (String, [S.TTree t])
 
--- | Attribute name and its contents.
-type AttrTree t = (S.AttrName, [S.TTree t])
+-- | Local slot name and its content.
+type LocalSlot t = (S.AttrName, [S.TTree t])
 
 -- | Substitute slots by global and attribute slots.
-substSlot :: (O.Textual t) => [GlobalSlot t] -> [AttrTree t] -> B.AbMap [S.TTree t]
+substSlot :: (O.Textual t) => [GlobalSlot t] -> [LocalSlot t] -> B.AbMap [S.TTree t]
 substSlot global local = Right . concat O.#. mapM (substTree global local)
 
 {-| Substitute slots in tree. -}
 substTree :: forall t. (O.Textual t) =>
-    [GlobalSlot t] -> [AttrTree t] -> S.TTree t -> B.Ab [S.TTree t]
+    [GlobalSlot t] -> [LocalSlot t] -> S.TTree t -> B.Ab [S.TTree t]
 substTree global local tree = Msg.abSlot tree $ loop tree where
     loop (B.TreeB b y sub) = do sub' <- loop O.<#> sub
                                 Right [B.TreeB b y $ concat sub']
