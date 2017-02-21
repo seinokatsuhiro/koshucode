@@ -38,7 +38,7 @@ minusInput inputA inputB =
     do js <- minusInputJudge inputA inputB
        putStr . unlines . B.texts $ minusHead inputA inputB
        putStrLn ""
-       W.putJudgesWith (O.exitCode 0) js
+       W.putJudges js
        return $ O.exitCode 0
 
 -- | Read and calculate judges subtraction.
@@ -81,7 +81,7 @@ updateInput inputB inputC =
     do [textB, textC] <- L.readInputs [inputB, inputC]
        putStr . unlines . B.texts $ updateHead inputB inputC
        putStrLn ""
-       W.putJudgesWith (O.exitCode 0) $ L.readJudge textB `updateJudge` L.readJudge textC
+       W.putJudges $ L.readJudge textB `updateJudge` L.readJudge textC
        return $ O.exitCode 0
 
 -- | Apply change judges.

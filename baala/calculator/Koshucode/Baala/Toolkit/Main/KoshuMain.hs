@@ -202,6 +202,6 @@ putElems g ns =
        res3 <- B.abortLeft $ C.assembleRelmap res2
        putStrLn "-*- koshu -*-"
        putStrLn ""
-       W.putJudgesWith (O.exitCode 0) $ L.resourceElem res3
+       W.putJudges $ L.resourceElem res3
        return $ O.exitCode 0
 

@@ -6,7 +6,7 @@
 
 module Koshucode.Baala.Writer.Judge
   ( -- * Writer
-    putJudges, putJudgesWith, hPutJudgesWith,
+    putJudges, hPutJudges,
     mixJudgesCount,
     judgesCountMix,
 
@@ -28,15 +28,11 @@ import qualified Koshucode.Baala.Core                as C
 
 {-| Print list of judgements. -}
 putJudges :: (Show c, B.MixEncode c) => [T.Judge c] -> IO ()
-putJudges = putJudgesWith (O.exitCode 0)
+putJudges = hPutJudges B.stdout B.def (O.exitCode 0)
 
-{-| `B.stdout` version of `hPutJudgesWith`. -}
-putJudgesWith :: (Show c, B.MixEncode c) => B.ExitCode -> [T.Judge c] -> IO ()
-putJudgesWith = hPutJudgesWith B.stdout B.def
-
-{-| Print list of judges. -}
-hPutJudgesWith :: (B.MixEncode c) => C.ResultWriterJudge c
-hPutJudgesWith h result _ js =
+{-| Print list of judgements. -}
+hPutJudges :: (B.MixEncode c) => C.ResultWriterJudge c
+hPutJudges h result _ js =
     do let !gutter  = C.resultGutter result
            !measure = C.resultMeasure result
            !status  = C.resultStatus result
