@@ -34,13 +34,12 @@ resultJson :: (A.ToJSON c) => C.ResultWriter c
 resultJson = C.ResultWriterJudge "json" hPutJSON
 
 hPutJSON :: (A.ToJSON c) => C.ResultWriterJudge c
-hPutJSON _ _ status [] = return status
-hPutJSON h _ status (j1:js) =
+hPutJSON _ _ _ [] = return ()
+hPutJSON h _ _ (j1:js) =
     do IO.hPutStr h "[ "
        put j1
        mapM_ cput js
        IO.hPutStrLn h "]"
-       return status
     where
       put j  = do Byte.hPutStr h $ A.encode j
                   IO.hPutChar h '\n'
@@ -95,8 +94,8 @@ resultGeoJson :: (A.ToJSON c) => C.ResultWriter c
 resultGeoJson = C.ResultWriterJudge "geojson" hPutGeoJson
 
 hPutGeoJson :: (A.ToJSON c) => C.ResultWriterJudge c
-hPutGeoJson _ _ status [] = return status
-hPutGeoJson h _ status (j1:js) =
+hPutGeoJson _ _ _ [] = return ()
+hPutGeoJson h _ _ (j1:js) =
     do IO.hPutStrLn h "{ \"type\": \"FeatureCollection\""
        IO.hPutStrLn h ", \"crs\": {\"type\": \"name\", \"properties\": {\"name\": \"urn:ogc:def:crs:OGC:1.3:CRS84\"}}"
        IO.hPutStrLn h ", \"features\": ["
@@ -104,7 +103,6 @@ hPutGeoJson h _ status (j1:js) =
        put j1
        mapM_ cput js
        IO.hPutStrLn h "]}"
-       return status
     where
       put j  = do Byte.hPutStr h $ A.encode $ toGeoJSON j
                   IO.hPutChar h '\n'

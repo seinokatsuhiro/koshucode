@@ -7,8 +7,8 @@ module Koshucode.Baala.Core.Relmap.Result
   ( -- * Result
     Result (..),
     InputPoint (..),
-    ResultChunk (..),
     ShortResultChunks,
+    ResultChunk (..),
     --resultChunkJudges,
   
     -- * Writer
@@ -18,7 +18,7 @@ module Koshucode.Baala.Core.Relmap.Result
     ResultWriterChunk,
     ResultWriterJudge,
     resultDump,
-    putResult, hPutResult,
+    putResult,
   ) where
 
 import qualified System.IO                         as IO
@@ -33,18 +33,18 @@ import qualified Koshucode.Baala.Type              as T
 
 -- | Result of calculation.
 data Result c = Result
-    { resultWriter     :: ResultWriter c
-    , resultPrintHead  :: Bool
-    , resultPrintFoot  :: Bool
-    , resultGutter     :: Int
-    , resultMeasure    :: Int
-    , resultInput      :: [InputPoint S.Chars]
-    , resultOutput     :: B.IOPoint
-    , resultEcho       :: [[S.Chars]]
-    , resultLicense    :: [[String]]
-    , resultViolated   :: [ShortResultChunks c]
-    , resultNormal     :: [ShortResultChunks c]
-    , resultClass      :: [S.JudgeClass]
+    { resultWriter     :: ResultWriter c        -- ^ Writer
+    , resultPrintHead  :: Bool                  -- ^ Print header comment
+    , resultPrintFoot  :: Bool                  -- ^ Print fotter comment
+    , resultGutter     :: Int                   -- ^ Interval between gutters
+    , resultMeasure    :: Int                   -- ^ Interval between measure
+    , resultInput      :: [InputPoint S.Chars]  -- ^ Input points
+    , resultOutput     :: B.IOPoint             -- ^ Output point
+    , resultEcho       :: [[S.Chars]]           -- ^ Echo messages
+    , resultLicense    :: [[String]]            -- ^ License texts
+    , resultViolated   :: [ShortResultChunks c] -- ^ Vailated output
+    , resultNormal     :: [ShortResultChunks c] -- ^ Normal output
+    , resultClass      :: [S.JudgeClass]        -- ^ List of judgement classes
     } deriving (Show, Eq, Ord)
 
 -- | Input point of data resource.
@@ -68,6 +68,12 @@ instance (Show c) => B.Default (Result c) where
                  , resultNormal     = []
                  , resultClass      = [] }
 
+
+-- ----------------------  Chunk
+
+-- | Short block in result.
+type ShortResultChunks c = S.Short String [ResultChunk c]
+
 -- | Chunk of judgements.
 data ResultChunk c
     = ResultJudge  [T.Judge c]             -- ^ List of judges
@@ -75,23 +81,16 @@ data ResultChunk c
     | ResultNote   [String]                -- ^ Commentary note
       deriving (Show, Eq, Ord)
 
--- | Short block in result.
-type ShortResultChunks c = S.Short String [ResultChunk c]
-
 -- | Extract judgement list from result.
 resultChunkJudges :: ResultChunk c -> [T.Judge c]
 resultChunkJudges (ResultJudge js) = js
 resultChunkJudges _ = []
 
-shortChunkJudges :: [ShortResultChunks c] -> [T.Judge c]
-shortChunkJudges = concatMap resultChunkJudges . concatMap S.shortBody
-
 resultShortChunks :: Result c -> O.Eith [ShortResultChunks c]
 resultShortChunks Result {..}
-    | null violated = Right normal
-    | otherwise     = Left  violated
+    | null violated  = Right resultNormal
+    | otherwise      = Left  violated
     where
-      normal    = resultNormal
       violated  = S.shortTrim (filter hasJudge O.<$$> resultViolated)
 
       hasJudge :: ResultChunk c -> Bool
@@ -127,7 +126,7 @@ instance B.Name (ResultWriter c) where
     name (ResultWriterJudge n _) = n
 
 -- | Type of result writer function.
-type ResultWriterFrom d c = IO.Handle -> Result c -> B.ExitCode -> d -> IO B.ExitCode
+type ResultWriterFrom d c = IO.Handle -> Result c -> B.ExitCode -> d -> IO ()
 
 -- | Write result based on result itself.
 type ResultWriterRaw c = ResultWriterFrom () c
@@ -143,8 +142,7 @@ resultDump :: (Show c) => ResultWriter c
 resultDump = ResultWriterRaw "show" hPutShow
 
 hPutShow :: (Show c) => ResultWriterRaw c
-hPutShow h result status () = do IO.hPutStrLn h $ show result
-                                 return status
+hPutShow h result _ () = IO.hPutStrLn h $ show result
 
 -- | Print calculation result.
 putResult :: Result c -> IO B.ExitCode
@@ -162,8 +160,10 @@ putResult result =
 hPutResult :: IO.Handle -> Result c -> IO B.ExitCode
 hPutResult h result =
     case resultShortChunks result of
-      Right sh  -> hPutAllChunks h result (O.exitCode 0) sh
-      Left  sh  -> hPutAllChunks h result (O.exitCode 1) sh
+      Right sh  -> do hPutAllChunks h result (O.exitCode 0) sh
+                      return $ O.exitCode 0
+      Left  sh  -> do hPutAllChunks h result (O.exitCode 1) sh
+                      return $ O.exitCode 1
 
 hPutAllChunks :: ResultWriterChunk c
 hPutAllChunks h result status sh =
@@ -172,3 +172,6 @@ hPutAllChunks h result status sh =
          ResultWriterRaw   _ w  -> w h result status ()
          ResultWriterChunk _ w  -> w h result status sh
          ResultWriterJudge _ w  -> w h result status $ shortChunkJudges sh
+
+shortChunkJudges :: [ShortResultChunks c] -> [T.Judge c]
+shortChunkJudges = concatMap resultChunkJudges . concatMap S.shortBody

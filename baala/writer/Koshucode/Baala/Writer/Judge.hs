@@ -28,12 +28,10 @@ import qualified Koshucode.Baala.Core                as C
 
 {-| Print list of judgements. -}
 putJudges :: (Show c, B.MixEncode c) => [T.Judge c] -> IO ()
-putJudges js =
-    do _ <- putJudgesWith (O.exitCode 0) js
-       return ()
+putJudges = putJudgesWith (O.exitCode 0)
 
 {-| `B.stdout` version of `hPutJudgesWith`. -}
-putJudgesWith :: (Show c, B.MixEncode c) => B.ExitCode -> [T.Judge c] -> IO B.ExitCode
+putJudgesWith :: (Show c, B.MixEncode c) => B.ExitCode -> [T.Judge c] -> IO ()
 putJudgesWith = hPutJudgesWith B.stdout B.def
 
 {-| Print list of judges. -}
@@ -45,7 +43,6 @@ hPutJudgesWith h result status js =
            ls       = mixJudgesCount gutter measure B.mixEncode js
        cnt' <- B.hPutMixEither T.judgeBreak h cnt [ls]
        B.hPutMix B.crlfBreak h $ judgeSummary status cnt'
-       return status
 
 {-| Edit judgements to mix text. -}
 mixJudgesCount :: (T.GetClass a) =>

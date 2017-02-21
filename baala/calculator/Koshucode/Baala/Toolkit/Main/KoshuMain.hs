@@ -203,4 +203,5 @@ putElems g ns =
        putStrLn "-*- koshu -*-"
        putStrLn ""
        W.putJudgesWith (O.exitCode 0) $ L.resourceElem res3
+       return $ O.exitCode 0
 

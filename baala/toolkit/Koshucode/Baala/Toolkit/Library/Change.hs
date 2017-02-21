@@ -39,6 +39,7 @@ minusInput inputA inputB =
        putStr . unlines . B.texts $ minusHead inputA inputB
        putStrLn ""
        W.putJudgesWith (O.exitCode 0) js
+       return $ O.exitCode 0
 
 -- | Read and calculate judges subtraction.
 minusInputJudge :: L.Input -> L.Input -> IO [D.JudgeC]
@@ -81,6 +82,7 @@ updateInput inputB inputC =
        putStr . unlines . B.texts $ updateHead inputB inputC
        putStrLn ""
        W.putJudgesWith (O.exitCode 0) $ L.readJudge textB `updateJudge` L.readJudge textC
+       return $ O.exitCode 0
 
 -- | Apply change judges.
 updateJudge :: (Ord c) => [T.Judge c] -> [T.Judge c] -> [T.Judge c]

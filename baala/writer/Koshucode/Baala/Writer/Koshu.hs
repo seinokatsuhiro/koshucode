@@ -46,7 +46,6 @@ hPutKoshu output@(lb, _) h result status sh =
        cnt' <- B.hPutMixEither lb h cnt (mixShortChunk output gutter measure O.<++> sh)
        -- foot
        B.when foot $ hPutFoot h status cnt'
-       return status
 
 hPutHead :: IO.Handle -> C.Result c -> IO ()
 hPutHead h result =
