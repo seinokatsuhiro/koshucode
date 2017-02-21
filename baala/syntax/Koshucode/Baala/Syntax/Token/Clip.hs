@@ -201,8 +201,11 @@ symbolToken f w cp wtab cs =
 clipSlot :: (O.Textual t) => S.SlotType -> ClipToken t
 clipSlot ty cp cs =
     case S.nextSymbolPlain cs of
-      Right (cs', w) -> (cs', S.TSlot cp ty w)
       Left a         -> (O.tEmpty, S.TUnknown cp cs a)
+      Right (cs', w) -> (cs', case O.tInt w of
+                                Nothing -> S.TSlot cp ty w
+                                Just i | ty == S.SlotNamed -> S.TSlot cp (S.SlotNum i) w
+                                       | otherwise         -> S.TSlot cp ty w)
 
 -- ---------------------------------  Term
 

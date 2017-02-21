@@ -35,27 +35,28 @@ substTree :: forall t. (O.Textual t) =>
 substTree global local tree = Msg.abSlot tree $ loop tree where
     loop (B.TreeB b y sub) = do sub' <- loop O.<#> sub
                                 Right [B.TreeB b y $ concat sub']
-    loop (P.LSlot t name)  = case t of
-                               S.SlotPos    -> substPos    t name
-                               S.SlotNamed  -> substNamed  t name
-                               S.SlotGlobal -> substGlobal t name
+    loop (P.LSlot ty name) = case ty of
+                               S.SlotPos    -> substPos    ty name (O.tInt name)
+                               S.SlotNamed  -> substNamed  ty name
+                               S.SlotNum i  -> substNamed  ty name O.<||>
+                                               substPos    ty name (Just i)
+                               S.SlotGlobal -> substGlobal ty name
     loop t = Right [t]
 
-    substGlobal t name = subst t name global (O.tString name)
-    substNamed  t name = subst t name local  (S.AttrNormal $ S.tChars name)
-    substPos    t name = do ts <- subst t name local S.attrNameTrunk
-                            pos t ts name
-    subst t name assoc key =
+    substGlobal ty name   = subst ty name global (O.tString name)
+    substNamed  ty name   = subst ty name local  (S.AttrNormal $ S.tChars name)
+    substPos    ty name i = do ts <- subst ty name local S.attrNameTrunk
+                               pos ty ts i name
+
+    subst ty name assoc key =
         case lookup key assoc of
           Just ts -> Right ts
-          Nothing -> Msg.noSlotName t name
+          Nothing -> Msg.noSlotName ty name
 
     -- positional slot
-    pos :: S.SlotType -> [S.TTree t] -> t -> B.Ab [S.TTree t]
-    pos _  ts "all"  = Right ts
-    pos ty ts name   = case O.tInt name of
-                         Nothing -> Msg.noSlotName ty name
-                         Just i  -> case O.lookupIx i ts of
-                                      Nothing -> Msg.noSlotName ty name
-                                      Just t  -> Right [t]
-
+    pos :: S.SlotType -> [S.TTree t] -> Maybe Int -> t -> B.Ab [S.TTree t]
+    pos _  ts _ "all"        = Right ts
+    pos ty _  Nothing name   = Msg.noSlotName ty name
+    pos ty ts (Just i) name  = case O.lookupIx i ts of
+                                 Nothing -> Msg.noSlotName ty name
+                                 Just t  -> Right [t]

@@ -47,9 +47,10 @@ extraAttr = B.leftBecause "Extra attribute"
 -- | No slot content
 noSlotName :: (O.Textual t) => S.SlotType -> t -> B.Ab a
 noSlotName t name = B.leftLine "No slot content" $ detail t where
-    detail S.SlotPos    = "Positional parameter: "  O.++ O.tString name
-    detail S.SlotNamed  = "Named parameter -"       O.++ O.tString name
-    detail S.SlotGlobal = "Global slot @@"          O.++ O.tString name
+    detail S.SlotPos     = "Positional parameter: "       O.++ O.tString name
+    detail (S.SlotNum _) = "Named/positional parameter: " O.++ O.tString name
+    detail S.SlotNamed   = "Named parameter -"            O.++ O.tString name
+    detail S.SlotGlobal  = "Global slot @@"               O.++ O.tString name
 
 -- | No slot content
 noSlotIndex :: [String] -> Int -> B.Ab a

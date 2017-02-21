@@ -176,12 +176,14 @@ instance B.Name LocalRef where
 {-| Slot type. -}
 data SlotType
     = SlotPos       -- ^ Local positional slot
+    | SlotNum Int   -- ^ Local named/positional slot
     | SlotNamed     -- ^ Local named slot
     | SlotGlobal    -- ^ Global slot
       deriving (Show, Eq, Ord)
 
 instance SubtypeName SlotType where
     subtypeName SlotPos     = "positional"
+    subtypeName (SlotNum _) = "named/positional"
     subtypeName SlotNamed   = "named"
     subtypeName SlotGlobal  = "global"
 
