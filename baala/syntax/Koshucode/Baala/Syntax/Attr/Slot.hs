@@ -5,8 +5,8 @@
 -- | Slot substitution.
 
 module Koshucode.Baala.Syntax.Attr.Slot
-  ( AttrTree,
-    GlobalSlot,
+  ( GlobalSlot,
+    AttrTree,
     substSlot,
   ) where
 
@@ -19,46 +19,43 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S
 import qualified Koshucode.Baala.Syntax.Pattern         as P
 import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 
--- | Attribute name and its contents.
-type AttrTree t = (S.AttrName, [S.TTree t])
-
 -- | Global slot name and its content.
 type GlobalSlot t = (String, [S.TTree t])
 
+-- | Attribute name and its contents.
+type AttrTree t = (S.AttrName, [S.TTree t])
+
 -- | Substitute slots by global and attribute slots.
 substSlot :: (O.Textual t) => [GlobalSlot t] -> [AttrTree t] -> B.AbMap [S.TTree t]
-substSlot gslot attr = Right . concat O.#. mapM (substTree gslot attr)
+substSlot global local = Right . concat O.#. mapM (substTree global local)
 
+{-| Substitute slots in tree. -}
 substTree :: forall t. (O.Textual t) =>
     [GlobalSlot t] -> [AttrTree t] -> S.TTree t -> B.Ab [S.TTree t]
-substTree gslot attr tree = Msg.abSlot [tree] $ loop tree where
-    loop (B.TreeB p q sub) = do sub' <- mapM loop sub
-                                Right [B.TreeB p q $ concat sub']
-    loop (P.LSlot n name) =
-        case n of
-          S.SlotPos      -> replace n name S.attrNameTrunk attr (`pos` name)
-          S.SlotNamed    -> replace n name (S.AttrNormal $ S.tChars name) attr Right
-          S.SlotGlobal   -> replace n name (O.tString name) gslot Right
-    loop tk = Right [tk]
+substTree global local tree = Msg.abSlot tree $ loop tree where
+    loop (B.TreeB b y sub) = do sub' <- loop O.<#> sub
+                                Right [B.TreeB b y $ concat sub']
+    loop (P.LSlot t name)  = case t of
+                               S.SlotPos    -> substPos    t name
+                               S.SlotNamed  -> substNamed  t name
+                               S.SlotGlobal -> substGlobal t name
+    loop t = Right [t]
 
-    replace n name key assoc f =
+    substGlobal t name = subst t name global (O.tString name)
+    substNamed  t name = subst t name local  (S.AttrNormal $ S.tChars name)
+    substPos    t name = do ts <- subst t name local S.attrNameTrunk
+                            pos t ts name
+    subst t name assoc key =
         case lookup key assoc of
-          Just od -> f od
-          Nothing -> Msg.noSlotName n name
+          Just ts -> Right ts
+          Nothing -> Msg.noSlotName t name
 
-    pos :: [S.TTree t] -> t -> B.Ab [S.TTree t]
-    pos od "all" = Right od
-    pos od n     = case O.tInt n of
-                     Just i  -> Right . B.list1 O.# od `at` i
-                     Nothing -> Msg.noSlotName S.SlotPos n
-
-    at = substIndex $ unwords . map S.tokenContent . B.untree
-
-substIndex :: (a -> String) -> [a] -> Int -> B.Ab a
-substIndex toString xxs n = loop xxs n where
-    loop (x : _)  1 = Right x
-    loop (_ : xs) i = loop xs $ i - 1
-    loop _ _        = Msg.noSlotIndex (number $ map toString xxs) n
-    number xs = map pair $ zip [1 :: Int ..] xs
-    pair (i, x) = "@'" ++ show i ++ " = " ++ x
+    -- positional slot
+    pos :: S.SlotType -> [S.TTree t] -> t -> B.Ab [S.TTree t]
+    pos _  ts "all"  = Right ts
+    pos ty ts name   = case O.tInt name of
+                         Nothing -> Msg.noSlotName ty name
+                         Just i  -> case O.lookupIx i ts of
+                                      Nothing -> Msg.noSlotName ty name
+                                      Just t  -> Right [t]
 
