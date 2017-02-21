@@ -195,13 +195,13 @@ symbolToken f w cp wtab cs =
 
 -- | Clip slot name, like @\@foo@.
 --
---   >>> clipSlot 1 B.def "foo bar baz"
---   (" bar baz", TSlot /0.0.0/ 1 "foo")
+--   >>> clipSlot S.SlotPos B.def "foo bar baz"
+--   (" bar baz", TSlot /0.0.0/ SlotPos "foo")
 --
-clipSlot :: (O.Textual t) => Int -> ClipToken t
-clipSlot n cp cs =
+clipSlot :: (O.Textual t) => S.SlotType -> ClipToken t
+clipSlot ty cp cs =
     case S.nextSymbolPlain cs of
-      Right (cs', w) -> (cs', S.TSlot cp n w)
+      Right (cs', w) -> (cs', S.TSlot cp ty w)
       Left a         -> (O.tEmpty, S.TUnknown cp cs a)
 
 -- ---------------------------------  Term

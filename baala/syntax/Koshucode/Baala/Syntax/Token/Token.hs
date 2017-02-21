@@ -18,6 +18,9 @@ module Koshucode.Baala.Syntax.Token.Token
     TextForm (..),
     -- ** Local
     LocalRef (..),
+    -- ** Slot
+    SlotType (..),
+    slotPos,
     -- ** Blank
     BlankName (..),
   ) where
@@ -48,13 +51,8 @@ data TToken t
 
     | TLocal    (B.TCodePos t) LocalRef Int [TToken t]
                 -- ^ __4 Symbolic:__ Local name — @^r@, @^\/r@
-    | TSlot     (B.TCodePos t) Int t
-                -- ^ __5 Symbolic:__ Slot name.
-                --   'Int' represents slot level, i.e.,
-                --   0 for local positional slots,
-                --   1 for local named slots,
-                --   2 for global slots
-                --   —  @\@slot@, @\@\@global@
+    | TSlot     (B.TCodePos t) SlotType t
+                -- ^ __5 Symbolic:__ Slot name — @\@slot@, @\@\@global@
     | TName     (B.TCodePos t) BlankName
                 -- ^ __6 Symbolic:__ Blank name.
                 --   (This is only used in building content expression)
@@ -160,7 +158,6 @@ instance SubtypeName TextForm where
     subtypeName TextBar      = "bar"
     subtypeName TextLicense  = "license"
 
-
 -- ----------------------  Local
 
 -- | Local relation reference.
@@ -174,6 +171,25 @@ instance B.Name LocalRef where
     name (LocalNest   n) = S.termNameContent n
     name (LocalSymbol n) = n
 
+-- ----------------------  Slot
+
+{-| Slot type. -}
+data SlotType
+    = SlotPos       -- ^ Local positional slot
+    | SlotNamed     -- ^ Local named slot
+    | SlotGlobal    -- ^ Global slot
+      deriving (Show, Eq, Ord)
+
+instance SubtypeName SlotType where
+    subtypeName SlotPos     = "positional"
+    subtypeName SlotNamed   = "named"
+    subtypeName SlotGlobal  = "global"
+
+{-| Create slot type from number of at-signs. -}
+slotPos :: Int -> SlotType
+slotPos 0 = SlotPos
+slotPos 1 = SlotNamed
+slotPos _ = SlotGlobal
 
 -- ----------------------  Blank
 

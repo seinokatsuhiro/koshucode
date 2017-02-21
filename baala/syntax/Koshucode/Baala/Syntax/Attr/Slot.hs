@@ -34,11 +34,11 @@ substTree :: forall t. (O.Textual t) =>
 substTree gslot attr tree = Msg.abSlot [tree] $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
-    loop (P.LSlot n name)
-        | n == 0    = replace n name S.attrNameTrunk attr (`pos` name)
-        | n == 1    = replace n name (S.AttrNormal $ S.tChars name) attr Right
-        | n == 2    = replace n name (O.tString name) gslot Right
-        | otherwise = Msg.noSlotName n name
+    loop (P.LSlot n name) =
+        case n of
+          S.SlotPos      -> replace n name S.attrNameTrunk attr (`pos` name)
+          S.SlotNamed    -> replace n name (S.AttrNormal $ S.tChars name) attr Right
+          S.SlotGlobal   -> replace n name (O.tString name) gslot Right
     loop tk = Right [tk]
 
     replace n name key assoc f =
@@ -50,7 +50,7 @@ substTree gslot attr tree = Msg.abSlot [tree] $ loop tree where
     pos od "all" = Right od
     pos od n     = case O.tInt n of
                      Just i  -> Right . B.list1 O.# od `at` i
-                     Nothing -> Msg.noSlotName 0 n
+                     Nothing -> Msg.noSlotName S.SlotPos n
 
     at = substIndex $ unwords . map S.tokenContent . B.untree
 

@@ -165,8 +165,8 @@ clipAt :: (O.Textual t) => B.TCodePos t -> t -> Int -> S.ClipResult t
 clipAt cp = at where
     at (O.cut -> O.Jp c cs)
        n | c == '@'    = at cs $ n + 1
-         | c == '\''   = S.clipSlot 0 cp cs  -- positional
-    at cs n            = S.clipSlot n cp cs
+         | c == '\''   = S.clipSlot S.SlotPos cp cs
+    at cs n            = S.clipSlot (S.slotPos n) cp cs
 
 -- | Clip local reference token, like @^/g@.
 clipHat :: (S.TextualTermName t) => B.TCodePos t -> t -> S.ClipResult t

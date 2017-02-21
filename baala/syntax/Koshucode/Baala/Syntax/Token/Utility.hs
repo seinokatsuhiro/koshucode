@@ -60,19 +60,13 @@ tokenDetailTypeString tok =
       S.TShort    _ _ _    -> Nothing
       S.TTerm     _ _ _    -> Nothing
       S.TLocal    _ _ _ _  -> Nothing
-      S.TSlot     _ n _    -> Just $ slotTypeText n
+      S.TSlot     _ t _    -> Just $ S.subtypeName t
       S.TOpen     _ _      -> Nothing
       S.TClose    _ _      -> Nothing
       S.TSpace    _ _      -> Nothing
       S.TComment  _ _      -> Nothing
       S.TName     _ b      -> Just $ S.subtypeName b
       S.TUnknown  _ _ _    -> Nothing
-
-slotTypeText :: Int -> String
-slotTypeText 0   = "positional"
-slotTypeText 1   = "named"
-slotTypeText 2   = "global"
-slotTypeText _   = "unknown"
 
 -- | Get token parents from local token.
 tokenParents :: S.Token -> [S.Token]

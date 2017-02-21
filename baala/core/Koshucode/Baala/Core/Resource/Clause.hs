@@ -160,25 +160,26 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     dispatch :: [S.TToken t] -> (Clause t, ClauseHead t)
     dispatch (P.TBar (O.cut -> O.Jp '|' k) : xs)   -- Frege's judgement stroke
-                                    = clause   $ frege (lower k) xs
+                                = clause   $ frege (lower k) xs
     dispatch (P.TRaw name : P.TRaw is : body)
-        | isDelim is                = clause   $ CRelmap (O.tString name) body
+        | isDelim is            = clause   $ CRelmap (O.tString name) body
     dispatch (P.TRaw eq : _) | eq == "==="
-                                    = newSec
+                                = newSec
     dispatch (P.TRaw k : xs)
-        | k == "input"              = clause   $ CInput xs
-        | k == "include"            = clause   $ CInput xs
-        | k == "export"             = clause   $ expt xs
-        | k == "short"              = newShort $ short xs
-        | k == "about"              = newAbout xs
-        | k == "option"             = clause   $ COption xs
-        | k == "output"             = clause   $ COutput xs
-        | k == "echo"               = clause   $ CEcho src
-        | k == "****"               = clause   $ empty
-    dispatch (S.TSlot _ 2 n : xs)   = clause   $ CSlot (O.tString n) xs
-    dispatch []                     = clause   $ empty
-    dispatch [P.TLicense ln]        = clause   $ CLicense $ O.tString $ O.trimEnd ln
-    dispatch _                      = clause   $ CUnknown $ unkAtStart []
+        | k == "input"          = clause   $ CInput xs
+        | k == "include"        = clause   $ CInput xs
+        | k == "export"         = clause   $ expt xs
+        | k == "short"          = newShort $ short xs
+        | k == "about"          = newAbout xs
+        | k == "option"         = clause   $ COption xs
+        | k == "output"         = clause   $ COutput xs
+        | k == "echo"           = clause   $ CEcho src
+        | k == "****"           = clause   $ empty
+    dispatch (S.TSlot _ S.SlotGlobal n : xs)
+                                = clause   $ CSlot (O.tString n) xs
+    dispatch []                 = clause   $ empty
+    dispatch [P.TLicense ln]    = clause   $ CLicense $ O.tString $ O.trimEnd ln
+    dispatch _                  = clause   $ CUnknown $ unkAtStart []
 
     -- Return form
     clause :: ClauseBody t -> (Clause t, ClauseHead t)

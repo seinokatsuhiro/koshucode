@@ -204,7 +204,7 @@ judgesTokenType :: [D.JudgeC]
 judgesTokenType = map j cs where
     j x = judgeTokenType x
     cs  = [ S.TText     B.def S.TextRaw ""
-          , S.TSlot     B.def 0 ""
+          , S.TSlot     B.def S.SlotPos ""
           , S.TTerm     B.def EQ ""
           , S.TOpen     B.def ""
           , S.TClose    B.def ""
