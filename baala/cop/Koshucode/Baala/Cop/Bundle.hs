@@ -78,6 +78,7 @@ baalaInfix = htab where
 
         , 1 ! "*"
         , 1 ! "div"
+        , 1 ! "per"
         , 1 ! "quo"
         , 1 ! "rem"
 

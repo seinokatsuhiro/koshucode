@@ -4,8 +4,9 @@
 -- | Arithmetic content operators.
 
 module Koshucode.Baala.Cop.Arith
-  ( copsArith
-    -- $Operators
+  ( copsArith,
+    copPlus2, copMinus2, copMinus1,
+    copMul, copDiv,
   ) where
 
 import qualified Koshucode.Baala.Overture          as O
@@ -14,23 +15,6 @@ import qualified Koshucode.Baala.Type              as T
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
-
-
--- ----------------------
--- $Operators
---
---  [@+@]     Addition.
---
---  [@-@]     Subtruction.
---
---  [@*@]     Multipication.
---
---  [@quo@]   Quotient.
---
---  [@rem@]   Remainder.
---
---  [@abs@]   Absolute value.
---
 
 -- | Arithmetic content operators.
 copsArith :: (D.CContent c) => [D.Cop c]
@@ -109,11 +93,13 @@ copsArith =
     , D.CopCalc  (D.copNormal "*")      copMul
 
     , D.CopCalc  (D.copInfix  "div")    copDiv
+    , D.CopCalc  (D.copInfix  "per")    copDiv
     , D.CopCalc  (D.copInfix  "quo")    copQuo
     , D.CopCalc  (D.copInfix  "rem")    copRem
 
     , D.CopCalc  (D.copNormal "recip")  copRecip
     , D.CopCalc  (D.copNormal "div")    copDiv
+    , D.CopCalc  (D.copNormal "per")    copDiv
     , D.CopCalc  (D.copNormal "quo")    copQuo
     , D.CopCalc  (D.copNormal "rem")    copRem
     ]
@@ -229,6 +215,7 @@ copPlus pr xs = fmap D.pDec $ loop xs where
                       m' <- loop m
                       (T.decimalAdd pr) n' m'
 
+{-| [/X/ + /Y/]    Add /X/ and /Y/. -}
 copPlus2 :: (D.CContent c) => T.FracleSide -> D.CopCalc c
 copPlus2 pr [Right xc, Right yc]
     | D.isDec   xc && D.isDec   yc = D.putDec   =<< T.decimalAdd pr  (D.gDec   xc) (D.gDec   yc)
@@ -237,20 +224,12 @@ copPlus2 pr [Right xc, Right yc]
     | D.isClock xc && D.isTime  yc = D.putTime  =<< T.timeAddClock   (D.gClock xc) (D.gTime  yc)
 copPlus2 _ xs = Msg.badArg xs
 
+{-| [+ /X/]  Just /X/. -}
 copPlus1 :: (D.CContent c) => D.CopCalc c
 copPlus1 [Right x] | D.isDec x = Right x
 copPlus1 xs = Msg.badArg xs
 
-
--- --------------------------------------------  Multiply and divide
-
-copMul :: (Show c, D.CText c, D.CDec c) => D.CopCalc c
-copMul xs = fmap D.pDec $ loop xs where
-    loop [] = Right 1
-    loop (n : m) = do n' <- copDec n
-                      m' <- loop m
-                      T.decimalMul n' m'
-
+{-| [/X/ - /Y/]    Calculate /X/ minus /Y/. -}
 copMinus2 :: (D.CContent c) => T.FracleSide -> D.CopCalc c
 copMinus2 pr [Right xc, Right yc]
     | D.isDec   xc && D.isDec   yc = D.putDec   =<< T.decimalSub pr (D.gDec   xc) (D.gDec   yc)
@@ -258,15 +237,29 @@ copMinus2 pr [Right xc, Right yc]
     | D.isTime  xc && D.isTime  yc = D.putClock =<< T.timeDiff      (D.gTime  xc) (D.gTime  yc)
 copMinus2 _ xs = Msg.badArg xs
 
+{-| [- /X/]  Negate /X/. -}
 copMinus1 :: (D.CContent c) => D.CopCalc c
 copMinus1 [Right x] | D.isDec x = D.putDec $ negate $ D.gDec x
 copMinus1 xs = Msg.badArg xs
+
+
+-- --------------------------------------------  Multiply and divide
+
+{-| [/X/ * /Y/]  Multiply /X/ by /Y/. -}
+copMul :: (Show c, D.CText c, D.CDec c) => D.CopCalc c
+copMul xs = fmap D.pDec $ loop xs where
+    loop [] = Right 1
+    loop (n : m) = do n' <- copDec n
+                      m' <- loop m
+                      T.decimalMul n' m'
 
 copRecip :: (D.CText c, D.CDec c) => D.CopCalc c
 copRecip arg =
     do a <- getDec1 arg
        D.putDec $ recip a
 
+{-| [/X/ div /Y/]  Divide /X/ by /Y/.
+    [/X/ per /Y/]  Divide /X/ by /Y/. -}
 copDiv :: (D.CText c, D.CDec c) => D.CopCalc c
 copDiv arg =
     do (a, b) <- getDec2 arg
