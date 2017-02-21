@@ -36,9 +36,10 @@ putJudgesWith = hPutJudgesWith B.stdout B.def
 
 {-| Print list of judges. -}
 hPutJudgesWith :: (B.MixEncode c) => C.ResultWriterJudge c
-hPutJudgesWith h result status js =
+hPutJudgesWith h result _ js =
     do let !gutter  = C.resultGutter result
            !measure = C.resultMeasure result
+           !status  = C.resultStatus result
            cnt      = (judgeCount [])
            ls       = mixJudgesCount gutter measure B.mixEncode js
        cnt' <- B.hPutMixEither T.judgeBreak h cnt [ls]

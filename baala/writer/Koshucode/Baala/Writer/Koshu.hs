@@ -33,7 +33,7 @@ resultKoshuTab :: (B.MixEncode c) => C.ResultWriter c
 resultKoshuTab = C.ResultWriterChunk "koshu-tab" $ hPutKoshu (B.crlfBreak, T.judgeMixTab)
 
 hPutKoshu :: (B.MixEncode c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> C.ResultWriterChunk c
-hPutKoshu output@(lb, _) h result status sh =
+hPutKoshu output@(lb, _) h result _ sh =
     do -- head
        B.when (C.resultPrintHead result) $ hPutHead h result
        hPutLicense h result
@@ -42,6 +42,7 @@ hPutKoshu output@(lb, _) h result status sh =
        let !gutter  = C.resultGutter result
            !measure = C.resultMeasure result
            !foot    = C.resultPrintFoot result
+           !status  = C.resultStatus result
            !cnt     = W.judgeCount $ C.resultClass result
        cnt' <- B.hPutMixEither lb h cnt (mixShortChunk output gutter measure O.<++> sh)
        -- foot

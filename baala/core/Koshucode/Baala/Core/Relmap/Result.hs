@@ -45,6 +45,7 @@ data Result c = Result
     , resultViolated   :: [ShortResultChunks c] -- ^ Vailated output
     , resultNormal     :: [ShortResultChunks c] -- ^ Normal output
     , resultClass      :: [S.JudgeClass]        -- ^ List of judgement classes
+    , resultStatus     :: B.ExitCode            -- ^ Status code
     } deriving (Show, Eq, Ord)
 
 -- | Input point of data resource.
@@ -66,7 +67,8 @@ instance (Show c) => B.Default (Result c) where
                  , resultLicense    = []
                  , resultViolated   = []
                  , resultNormal     = []
-                 , resultClass      = [] }
+                 , resultClass      = []
+                 , resultStatus     = O.exitCode 0 }
 
 
 -- ----------------------  Chunk
@@ -161,9 +163,11 @@ hPutResult :: IO.Handle -> Result c -> IO B.ExitCode
 hPutResult h result =
     case resultShortChunks result of
       Right sh  -> do hPutAllChunks h result (O.exitCode 0) sh
-                      return $ O.exitCode 0
-      Left  sh  -> do hPutAllChunks h result (O.exitCode 1) sh
-                      return $ O.exitCode 1
+                      return $ resultStatus result
+      Left  sh  -> do let status  = O.exitCode 1
+                          result' = result { resultStatus = status }
+                      hPutAllChunks h result' status sh
+                      return status
 
 hPutAllChunks :: ResultWriterChunk c
 hPutAllChunks h result status sh =
