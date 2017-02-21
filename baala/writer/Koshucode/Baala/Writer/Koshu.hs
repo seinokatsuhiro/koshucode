@@ -33,7 +33,7 @@ resultKoshuTab :: (B.MixEncode c) => C.ResultWriter c
 resultKoshuTab = C.ResultWriterChunk "koshu-tab" $ hPutKoshu (B.crlfBreak, T.judgeMixTab)
 
 hPutKoshu :: (B.MixEncode c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> C.ResultWriterChunk c
-hPutKoshu output@(lb, _) h result _ sh =
+hPutKoshu output@(lb, _) h result sh =
     do -- head
        B.when (C.resultPrintHead result) $ hPutHead h result
        hPutLicense h result

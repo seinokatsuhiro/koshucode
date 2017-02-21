@@ -34,8 +34,8 @@ resultJson :: (A.ToJSON c) => C.ResultWriter c
 resultJson = C.ResultWriterJudge "json" hPutJSON
 
 hPutJSON :: (A.ToJSON c) => C.ResultWriterJudge c
-hPutJSON _ _ _ [] = return ()
-hPutJSON h _ _ (j1:js) =
+hPutJSON _ _ [] = return ()
+hPutJSON h _ (j1:js) =
     do IO.hPutStr h "[ "
        put j1
        mapM_ cput js
@@ -94,8 +94,8 @@ resultGeoJson :: (A.ToJSON c) => C.ResultWriter c
 resultGeoJson = C.ResultWriterJudge "geojson" hPutGeoJson
 
 hPutGeoJson :: (A.ToJSON c) => C.ResultWriterJudge c
-hPutGeoJson _ _ _ [] = return ()
-hPutGeoJson h _ _ (j1:js) =
+hPutGeoJson _ _ [] = return ()
+hPutGeoJson h _ (j1:js) =
     do IO.hPutStrLn h "{ \"type\": \"FeatureCollection\""
        IO.hPutStrLn h ", \"crs\": {\"type\": \"name\", \"properties\": {\"name\": \"urn:ogc:def:crs:OGC:1.3:CRS84\"}}"
        IO.hPutStrLn h ", \"features\": ["

@@ -128,7 +128,7 @@ instance B.Name (ResultWriter c) where
     name (ResultWriterJudge n _) = n
 
 -- | Type of result writer function.
-type ResultWriterFrom d c = IO.Handle -> Result c -> B.ExitCode -> d -> IO ()
+type ResultWriterFrom d c = IO.Handle -> Result c -> d -> IO ()
 
 -- | Write result based on result itself.
 type ResultWriterRaw c = ResultWriterFrom () c
@@ -144,7 +144,7 @@ resultDump :: (Show c) => ResultWriter c
 resultDump = ResultWriterRaw "show" hPutShow
 
 hPutShow :: (Show c) => ResultWriterRaw c
-hPutShow h result _ () = IO.hPutStrLn h $ show result
+hPutShow h result () = IO.hPutStrLn h $ show result
 
 -- | Print calculation result.
 putResult :: Result c -> IO B.ExitCode
@@ -162,20 +162,20 @@ putResult result =
 hPutResult :: IO.Handle -> Result c -> IO B.ExitCode
 hPutResult h result =
     case resultShortChunks result of
-      Right sh  -> do hPutAllChunks h result (O.exitCode 0) sh
+      Right sh  -> do hPutAllChunks h result sh
                       return $ resultStatus result
       Left  sh  -> do let status  = O.exitCode 1
                           result' = result { resultStatus = status }
-                      hPutAllChunks h result' status sh
+                      hPutAllChunks h result' sh
                       return status
 
 hPutAllChunks :: ResultWriterChunk c
-hPutAllChunks h result status sh =
+hPutAllChunks h result sh =
     do B.hSetKoshuOutput h
        case resultWriter result of
-         ResultWriterRaw   _ w  -> w h result status ()
-         ResultWriterChunk _ w  -> w h result status sh
-         ResultWriterJudge _ w  -> w h result status $ shortChunkJudges sh
+         ResultWriterRaw   _ w  -> w h result ()
+         ResultWriterChunk _ w  -> w h result sh
+         ResultWriterJudge _ w  -> w h result $ shortChunkJudges sh
 
 shortChunkJudges :: [ShortResultChunks c] -> [T.Judge c]
 shortChunkJudges = concatMap resultChunkJudges . concatMap S.shortBody

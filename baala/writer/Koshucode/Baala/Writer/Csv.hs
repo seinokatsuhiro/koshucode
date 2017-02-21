@@ -36,7 +36,7 @@ resultTsvHeading :: (D.CContent c) => C.ResultWriter c
 resultTsvHeading = C.ResultWriterChunk "tab-heading" $ hPutXsv tabHeadSetting
 
 hPutXsv :: forall c. (D.CContent c) => XsvSetting -> C.ResultWriterChunk c
-hPutXsv setting@XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } h _ _ sh =
+hPutXsv setting@XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } h _ sh =
     do let csv = concatMap toCsv chunks
        B.hPutMixLines B.crlfBreak h csv
     where

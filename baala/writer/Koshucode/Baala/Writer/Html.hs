@@ -83,7 +83,7 @@ resultHtmlCompact :: (D.CContent c) => C.ResultWriter c
 resultHtmlCompact  = C.ResultWriterChunk "html-compact"  (hPutHtml Hc.renderHtml)
 
 hPutHtml :: (D.CContent c) => (H.Html -> String) -> C.ResultWriterChunk c
-hPutHtml render h _ _ sh = hPutRel h render sh
+hPutHtml render h _ sh = hPutRel h render sh
 
 hPutRel :: (D.CContent c) => IO.Handle -> (H.Html -> String) -> [C.ShortResultChunks c] -> IO ()
 hPutRel h render sh = put O.<#!> chunks where

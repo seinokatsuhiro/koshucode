@@ -17,7 +17,6 @@ module Koshucode.Baala.Writer.Judge
 
 import qualified Data.Map.Strict                     as Ms
 import qualified Koshucode.Baala.Overture            as O
-import qualified Koshucode.Baala.System              as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Type                as T
@@ -28,11 +27,11 @@ import qualified Koshucode.Baala.Core                as C
 
 {-| Print list of judgements. -}
 putJudges :: (Show c, B.MixEncode c) => [T.Judge c] -> IO ()
-putJudges = hPutJudges B.stdout B.def (O.exitCode 0)
+putJudges = hPutJudges B.stdout B.def
 
 {-| Print list of judgements. -}
 hPutJudges :: (B.MixEncode c) => C.ResultWriterJudge c
-hPutJudges h result _ js =
+hPutJudges h result js =
     do let !gutter  = C.resultGutter result
            !measure = C.resultMeasure result
            !status  = C.resultStatus result
