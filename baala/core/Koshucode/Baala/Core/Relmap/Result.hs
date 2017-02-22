@@ -9,6 +9,7 @@ module Koshucode.Baala.Core.Relmap.Result
     InputPoint (..),
     ShortResultChunks,
     ResultChunk (..),
+    ResultOption (..),
     --resultChunkJudges,
   
     -- * Writer
@@ -78,10 +79,17 @@ type ShortResultChunks c = S.Short String [ResultChunk c]
 
 -- | Chunk of judgements.
 data ResultChunk c
-    = ResultJudge  [T.Judge c]             -- ^ List of judges
+    = ResultChunk  T.AssertType S.JudgeClass
+                   (T.Rel c) ResultOption  -- ^ General chunk
+    | ResultJudge  [T.Judge c]             -- ^ List of judges
     | ResultRel    S.JudgeClass (T.Rel c)  -- ^ Named relation instead of judges
     | ResultNote   [String]                -- ^ Commentary note
       deriving (Show, Eq, Ord)
+
+{-| Options of result data. -}
+data ResultOption = ResultOption {
+      resultShowEmpty :: Bool         -- ^ Show empty term
+    } deriving (Show, Eq, Ord)
 
 -- | Extract judgement list from result.
 resultChunkJudges :: ResultChunk c -> [T.Judge c]
@@ -93,11 +101,12 @@ resultShortChunks Result {..}
     | null violated  = Right resultNormal
     | otherwise      = Left  violated
     where
-      violated  = S.shortTrim (filter hasJudge O.<$$> resultViolated)
+      violated  = S.shortTrim (filter hasData O.<$$> resultViolated)
 
-      hasJudge :: ResultChunk c -> Bool
-      hasJudge (ResultJudge js)  = O.some js
-      hasJudge _                 = False
+hasData :: ResultChunk c -> Bool
+hasData (ResultChunk _ _ (T.Rel _ bo) _) = O.some bo
+hasData (ResultJudge js)  = O.some js
+hasData _                 = False
 
 
 -- ----------------------  Writer

@@ -38,15 +38,10 @@ runAssertDataset hook option (S.Short _ sh ass) =
     Right . concat O.# mapM each ass
     where
       each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
-      each a@(C.Assert _ typ pat _ opt (Just relmap) libs) =
-          Msg.abAssert [a] $ do
+      each a@(C.Assert _ ty cls _ opt (Just relmap) libs) =
+          Msg.abAssert a $ do
             r1 <- runRelmapViaRelkit hook libs relmap T.reldee
-            let judgeOf showEmpty = assert showEmpty typ
-            optionProcess sh judgeOf pat option opt r1
-
-      assert :: (D.CEmpty c) => Bool -> T.AssertType -> T.JudgeOf c
-      assert True  q p = T.assertAs q p
-      assert False q p = T.assertAs q p . D.cutEmpty
+            optionProcess sh ty cls option opt r1
 
 runRelmapViaRelkit :: (D.CContent c, T.SelectRel h, C.GetGlobal' h)
   => h c -> C.RelmapLinkTable' h c
@@ -77,21 +72,25 @@ optionType = S.paraSpec $ S.paraMin 0 . S.paraOpt
              ]
 
 optionProcess :: (Ord c, D.CRel c, B.MixEncode c)
-    => [S.ShortDef String] -> (Bool -> T.JudgeOf c) -> S.JudgeClass
+    => [S.ShortDef String] -> T.AssertType -> S.JudgeClass
     -> C.Option c -> C.TTreePara S.Chars
     -> T.Rel c -> B.Ab [C.ResultChunk c]
-optionProcess sh judgeOf pat option opt r1 =
+optionProcess sh ty cls option opt r1 =
     do case S.paraMatch optionType opt of
          Right _  -> Right ()
          Left u   -> Msg.unkOption (O.tString <$> u)
+
        showEmpty <- S.paraGetSwitch opt "empty"
+       let resultOpt = C.ResultOption {
+                         C.resultShowEmpty = showEmpty
+                       }
+
        r2 <- optionRelmapResource option r1
        r3 <- optionRelmapAssert   opt    r2
-       let js  = T.judgesFromRel (judgeOf showEmpty) pat r3
-       comment <- optionComment sh pat opt r3
+       comment <- optionComment sh cls opt r3
        -- TODO: unify judge, rel, note
-       Right [ C.ResultJudge js
-             , C.ResultRel pat r3
+       Right [ C.ResultChunk ty cls r3 resultOpt
+             , C.ResultRel cls r3
              , C.ResultNote comment ]
 
 optionRelmapResource :: (Ord c, D.CRel c) => C.Option c -> B.AbMap (T.Rel c)

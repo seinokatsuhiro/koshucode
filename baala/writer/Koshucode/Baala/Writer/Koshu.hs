@@ -15,24 +15,25 @@ import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Type                as T
 import qualified Koshucode.Baala.Syntax              as S
+import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core                as C
 import qualified Koshucode.Baala.Writer.Judge        as W
 
 -- | Koshucode writer.
-resultKoshu :: (B.MixEncode c) => C.ResultWriter c
+resultKoshu :: (D.CContent c) => C.ResultWriter c
 resultKoshu = resultKoshu2
 
 -- | Koshucode writer with two-space separator.
 --   This function uses 'D.judgeMix2'.
-resultKoshu2 :: (B.MixEncode c) => C.ResultWriter c
+resultKoshu2 :: (D.CContent c) => C.ResultWriter c
 resultKoshu2 = C.ResultWriterChunk "koshu-2" $ hPutKoshu (T.judgeBreak, T.judgeMix2)
 
 -- | Koshucode writer with tab separator.
 --   This function uses 'D.judgeMixTab'.
-resultKoshuTab :: (B.MixEncode c) => C.ResultWriter c
+resultKoshuTab :: (D.CContent c) => C.ResultWriter c
 resultKoshuTab = C.ResultWriterChunk "koshu-tab" $ hPutKoshu (B.crlfBreak, T.judgeMixTab)
 
-hPutKoshu :: (B.MixEncode c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> C.ResultWriterChunk c
+hPutKoshu :: (D.CContent c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> C.ResultWriterChunk c
 hPutKoshu output@(lb, _) h result sh =
     do -- head
        B.when (C.resultPrintHead result) $ hPutHead h result
@@ -91,7 +92,7 @@ hPutFoot h status cnt = B.hPutMix B.crlfBreak h $ W.judgeSummary status cnt
 -- ----------------------  Chunk
 
 mixShortChunk
-    :: (B.MixEncode c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> Int -> Int
+    :: (D.CContent c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> Int -> Int
     -> C.ShortResultChunks c -> [W.JudgeCount -> [B.MixEither W.JudgeCount]]
 mixShortChunk output gutter measure (S.Short _ def chunks) = ms where
     ms = short : mixChunks output gutter measure (S.shortText (t <$> def)) chunks
@@ -110,17 +111,20 @@ mixShort def cnt = Left cnt : (ms O.++ [Right B.mixHard]) where
 
 {-| Output result chunk. -}
 mixChunks
-    :: (B.MixEncode c)
+    :: (D.CContent c)
     => (B.LineBreak, T.EncodeJudge S.Chars c) -> Int -> Int -> B.TransText S.Chars
     -> [C.ResultChunk c] -> [W.JudgeCount -> [B.MixEither W.JudgeCount]]
 mixChunks (_, encode) gutter measure sh = (rights <$>) where
     rights (C.ResultJudge js) (_, tab) =
         W.mixJudgesCount gutter measure (encode sh) js (0, tab)
-    rights (C.ResultNote []) cnt = [Left cnt]
+    rights (C.ResultChunk ty cls r C.ResultOption { C.resultShowEmpty = e }) (_, tab) =
+        let js = T.judgesFromRel (assert e ty) cls r
+        in W.mixJudgesCount gutter measure (encode sh) js (0, tab)
     rights (C.ResultNote ls) cnt = mixNote ls cnt
-    rights (C.ResultRel _ _) cnt = [Left cnt]
+    rights _                 cnt = [Left cnt]
 
 mixNote :: [String] -> W.JudgeCount -> [B.MixEither W.JudgeCount]
+mixNote [] cnt = [Left cnt]
 mixNote ls cnt = Left cnt : notes where
     notes = Right <$> [ B.mixLine $ B.mix "=== note"
                       , B.mixHard
@@ -128,3 +132,8 @@ mixNote ls cnt = Left cnt : notes where
                       , B.mixHard
                       , B.mixLine $ B.mix "=== rel"
                       , B.mixHard ]
+
+assert :: (D.CEmpty c) => Bool -> T.AssertType -> T.JudgeOf c
+assert True  ty cls = T.assertAs ty cls
+assert False ty cls = T.assertAs ty cls . D.cutEmpty
+
