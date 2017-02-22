@@ -43,7 +43,7 @@ hPutXsv setting@XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } 
       chunks = concatMap S.shortBody sh
 
       toCsv :: C.ResultChunk c -> [B.MixText]
-      toCsv (C.ResultRel _ (T.Rel he bo)) = appendHead he (line <$> bo)
+      toCsv (C.ResultChunk _ _ (T.Rel he bo) _) = appendHead he (line <$> bo)
       toCsv _ = []
 
       join :: [B.MixText] -> B.MixText

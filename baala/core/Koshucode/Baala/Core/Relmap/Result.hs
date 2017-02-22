@@ -82,7 +82,6 @@ data ResultChunk c
     = ResultChunk  T.AssertType S.JudgeClass
                    (T.Rel c) ResultOption  -- ^ General chunk
     | ResultJudge  [T.Judge c]             -- ^ List of judges
-    | ResultRel    S.JudgeClass (T.Rel c)  -- ^ Named relation instead of judges
     | ResultNote   [String]                -- ^ Commentary note
       deriving (Show, Eq, Ord)
 

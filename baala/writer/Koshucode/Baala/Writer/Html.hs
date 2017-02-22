@@ -88,7 +88,7 @@ hPutHtml render h _ sh = hPutRel h render sh
 hPutRel :: (D.CContent c) => IO.Handle -> (H.Html -> String) -> [C.ShortResultChunks c] -> IO ()
 hPutRel h render sh = put O.<#!> chunks where
     chunks = concatMap S.shortBody sh
-    put (C.ResultRel cl r) = IO.hPutStrLn h $ render $ html cl r
+    put (C.ResultChunk _ cls r _) = IO.hPutStrLn h $ render $ html cls r
     put _                  = return ()
     html cl r = div_ "named-relation" $ do
                   H.p ! class_ "name" $ H.toMarkup cl

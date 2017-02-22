@@ -121,7 +121,6 @@ mixChunks (_, encode) gutter measure sh = (rights <$>) where
         let js = T.judgesFromRel (assert e ty) cls r
         in W.mixJudgesCount gutter measure (encode sh) js (0, tab)
     rights (C.ResultNote ls) cnt = mixNote ls cnt
-    rights _                 cnt = [Left cnt]
 
 mixNote :: [String] -> W.JudgeCount -> [B.MixEither W.JudgeCount]
 mixNote [] cnt = [Left cnt]

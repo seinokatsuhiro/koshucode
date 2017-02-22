@@ -88,9 +88,7 @@ optionProcess sh ty cls option opt r1 =
        r2 <- optionRelmapResource option r1
        r3 <- optionRelmapAssert   opt    r2
        comment <- optionComment sh cls opt r3
-       -- TODO: unify judge, rel, note
        Right [ C.ResultChunk ty cls r3 resultOpt
-             , C.ResultRel cls r3
              , C.ResultNote comment ]
 
 optionRelmapResource :: (Ord c, D.CRel c) => C.Option c -> B.AbMap (T.Rel c)
