@@ -24,8 +24,8 @@ import qualified Koshucode.Baala.Rop.Cox.Type.Utility   as Rop
 ropsTypeDec :: (K.CContent c) => [C.Rop c]
 ropsTypeDec = Rop.rops "type"
     [ consOfDec
-      K.& [ "of-dec E [-sign /N] [-fracle /N] [-num /N] [-denom /N]"
-            K.& "-content . -sign? -fracle? -num? -denom? -let?" ]
+      K.& [ "of-dec E [-sign /N] [-fracle /N] [-num /N] [-denom /N] [-int /N] [-frac /N]"
+            K.& "-content . -sign? -fracle? -num? -denom? -int? -frac? -let?" ]
     , consAltDec
       K.& [ "alt-dec /P [-fracle F]"
             K.& "-term . -fracle? -let?" ]
@@ -40,6 +40,8 @@ ropsTypeDec = Rop.rops "type"
 -- | [of-dec /E/ -fracle \/N]  Add term \/N as fracle (fraction length) of decimal number /E/.
 --   [of-dec /E/ -num \/N]     Add term \/N as numerator of decimal number /E/.
 --   [of-dec /E/ -denom \/N]   Add term \/N as denominator of decimal number /E/.
+--   [of-dec /E/ -int \/N]     Add term \/N as integral part of decimal number /E/.
+--   [of-dec /E/ -frac \/N]    Add term \/N as fractional part of decimal number /E/.
 --   [of-dec /E/ -sign \/N]    Add term \/N as sign of decimal number /E/, i.e., -1, 0, or 1.
 --
 consOfDec :: (K.CContent c) => C.RopCons c
@@ -50,7 +52,9 @@ consOfDec med =
      fracle   <- Rop.getMaybeTerm med "-fracle"
      num      <- Rop.getMaybeTerm med "-num"
      denom    <- Rop.getMaybeTerm med "-denom"
-     Right $ relmapOfDec med (cops, content, [sign, fracle, num, denom])
+     int      <- Rop.getMaybeTerm med "-int"
+     frac     <- Rop.getMaybeTerm med "-frac"
+     Right $ relmapOfDec med (cops, content, [sign, fracle, num, denom, int, frac])
 
 -- | Create @of-dect@ relmap.
 relmapOfDec :: (K.CContent c) => C.Intmed c -> Rop.OfParam c -> C.Relmap c
@@ -62,11 +66,16 @@ relkitOfDec = Rop.relkitOfX K.getDec decContents
 
 decContents :: (K.CContent c) => K.Ab K.Decimal -> [c]
 decContents (Left _) = [K.empty, K.empty, K.empty, K.empty]
-decContents (Right dec) = [sign, fracle, num, denom] where
+decContents (Right dec) = [sign, fracle, num, denom, int, frac] where
     sign    = K.pDec $ signum dec
-    fracle  = K.pInt $ K.decimalFracle dec
+    fracle  = K.pInt l
     num     = K.pInteger $ abs $ R.numerator ratio
     denom   = K.pInteger $ abs $ R.denominator ratio
+    int     = K.pDec $ K.realDecimal (min 0 l) i
+    frac    = K.pDec $ K.realDecimal l f
+
+    (i, f)  = properFraction ratio :: (K.DecimalInteger, K.DecimalRatio)
+    l       = K.decimalFracle dec
     ratio   = K.decimalRatio dec
 
 
