@@ -115,12 +115,10 @@ mixChunks
     => (B.LineBreak, T.EncodeJudge S.Chars c) -> Int -> Int -> B.TransText S.Chars
     -> [C.ResultChunk c] -> [W.JudgeCount -> [B.MixEither W.JudgeCount]]
 mixChunks (_, encode) gutter measure sh = (rights <$>) where
-    rights (C.ResultJudge js) (_, tab) =
-        W.mixJudgesCount gutter measure (encode sh) js (0, tab)
-    rights (C.ResultChunk ty cls r C.ResultOption { C.resultShowEmpty = e }) (_, tab) =
-        let js = T.judgesFromRel (assert e ty) cls r
-        in W.mixJudgesCount gutter measure (encode sh) js (0, tab)
     rights (C.ResultNote ls) cnt = mixNote ls cnt
+    rights chunk (_, tab) =
+        let js = C.resultChunkJudges chunk
+        in W.mixJudgesCount gutter measure (encode sh) js (0, tab)
 
 mixNote :: [String] -> W.JudgeCount -> [B.MixEither W.JudgeCount]
 mixNote [] cnt = [Left cnt]
@@ -131,8 +129,3 @@ mixNote ls cnt = Left cnt : notes where
                       , B.mixHard
                       , B.mixLine $ B.mix "=== rel"
                       , B.mixHard ]
-
-assert :: (D.CEmpty c) => Bool -> T.AssertType -> T.JudgeOf c
-assert True  ty cls = T.assertAs ty cls
-assert False ty cls = T.assertAs ty cls . D.cutEmpty
-

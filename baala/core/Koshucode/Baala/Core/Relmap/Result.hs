@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -7,10 +8,12 @@ module Koshucode.Baala.Core.Relmap.Result
   ( -- * Result
     Result (..),
     InputPoint (..),
+
+    -- * Chunk
     ShortResultChunks,
     ResultChunk (..),
     ResultOption (..),
-    --resultChunkJudges,
+    resultChunkJudges,
   
     -- * Writer
     ResultWriter (..),
@@ -28,6 +31,7 @@ import qualified Koshucode.Baala.System            as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Type              as T
+import qualified Koshucode.Baala.Data              as D
 
 
 -- ----------------------  Result
@@ -74,10 +78,10 @@ instance (Show c) => B.Default (Result c) where
 
 -- ----------------------  Chunk
 
--- | Short block in result.
+{-| Short block of result chunks. -}
 type ShortResultChunks c = S.Short String [ResultChunk c]
 
--- | Chunk of judgements.
+{-| Chunk of judgements. -}
 data ResultChunk c
     = ResultChunk  T.AssertType S.JudgeClass
                    (T.Rel c) ResultOption  -- ^ General chunk
@@ -90,22 +94,16 @@ data ResultOption = ResultOption {
       resultShowEmpty :: Bool         -- ^ Show empty term
     } deriving (Show, Eq, Ord)
 
--- | Extract judgement list from result.
-resultChunkJudges :: ResultChunk c -> [T.Judge c]
+{-| Extract judgement list from result. -}
+resultChunkJudges :: (D.CEmpty c) => ResultChunk c -> [T.Judge c]
+resultChunkJudges (ResultChunk ty cls r ResultOption { resultShowEmpty = e })
+    = T.judgesFromRel (assert e ty) cls r
 resultChunkJudges (ResultJudge js) = js
 resultChunkJudges _ = []
 
-resultShortChunks :: Result c -> O.Eith [ShortResultChunks c]
-resultShortChunks Result {..}
-    | null violated  = Right resultNormal
-    | otherwise      = Left  violated
-    where
-      violated  = S.shortTrim (filter hasData O.<$$> resultViolated)
-
-hasData :: ResultChunk c -> Bool
-hasData (ResultChunk _ _ (T.Rel _ bo) _) = O.some bo
-hasData (ResultJudge js)  = O.some js
-hasData _                 = False
+assert :: (D.CEmpty c) => Bool -> T.AssertType -> T.JudgeOf c
+assert True  ty cls = T.assertAs ty cls
+assert False ty cls = T.assertAs ty cls . D.cutEmpty
 
 
 -- ----------------------  Writer
@@ -155,7 +153,7 @@ hPutShow :: (Show c) => ResultWriterRaw c
 hPutShow h result () = IO.hPutStrLn h $ show result
 
 -- | Print calculation result.
-putResult :: Result c -> IO B.ExitCode
+putResult :: (D.CEmpty c) => Result c -> IO B.ExitCode
 putResult result =
     case resultOutput result of
       B.IOPointStdout _    -> hPutResult B.stdout result
@@ -167,17 +165,30 @@ putResult result =
       output -> B.bug $ "putResult " ++ show output
 
 -- | Print result of calculation, and return status.
-hPutResult :: IO.Handle -> Result c -> IO B.ExitCode
+hPutResult :: (D.CEmpty c) => IO.Handle -> Result c -> IO B.ExitCode
 hPutResult h result =
     case resultShortChunks result of
-      Right sh  -> do hPutAllChunks h result sh
-                      return $ resultStatus result
+      Right sh  -> do let !status = resultStatus result
+                      hPutAllChunks h result sh
+                      return status
       Left  sh  -> do let status  = O.exitCode 1
                           result' = result { resultStatus = status }
                       hPutAllChunks h result' sh
                       return status
 
-hPutAllChunks :: ResultWriterChunk c
+resultShortChunks :: Result c -> O.Eith [ShortResultChunks c]
+resultShortChunks Result {..}
+    | null violated  = Right resultNormal
+    | otherwise      = Left  violated
+    where
+      violated  = S.shortTrim (filter hasData O.<$$> resultViolated)
+
+hasData :: ResultChunk c -> Bool
+hasData (ResultChunk _ _ (T.Rel _ bo) _) = O.some bo
+hasData (ResultJudge js)  = O.some js
+hasData _                 = False
+
+hPutAllChunks :: (D.CEmpty c) => ResultWriterChunk c
 hPutAllChunks h result sh =
     do B.hSetKoshuOutput h
        case resultWriter result of
@@ -185,5 +196,6 @@ hPutAllChunks h result sh =
          ResultWriterChunk _ w  -> w h result sh
          ResultWriterJudge _ w  -> w h result $ shortChunkJudges sh
 
-shortChunkJudges :: [ShortResultChunks c] -> [T.Judge c]
+shortChunkJudges :: (D.CEmpty c) => [ShortResultChunks c] -> [T.Judge c]
 shortChunkJudges = concatMap resultChunkJudges . concatMap S.shortBody
+
