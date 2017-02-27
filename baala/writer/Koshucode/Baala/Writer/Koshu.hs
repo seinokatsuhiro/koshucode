@@ -35,20 +35,16 @@ resultKoshuTab = C.ResultWriterChunk "koshu-tab" $ hPutKoshu (B.crlfBreak, T.jud
 
 hPutKoshu :: (D.CContent c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> C.ResultWriterChunk c
 hPutKoshu output@(lb, _) h result sh =
-    do let port     = C.resultPortable  result
-           !gutter  = C.resultGutter    port
-           !measure = C.resultMeasure   port
-           !foot    = C.resultPrintFoot port
-           !status  = C.resultStatus    port
-           !cnt     = W.judgeCount $ C.resultClass result
+    do let port  = C.resultPortable result
+           !cnt  = W.judgeCount $ C.resultClass result
        -- head
        B.when (C.resultPrintHead port) $ hPutHead h result
        hPutLicense h result
        hPutEcho h result
        -- body
-       cnt' <- B.hPutMixEither lb h cnt (mixShortChunk output gutter measure O.<++> sh)
+       cnt' <- B.hPutMixEither lb h cnt (mixShortChunk output port O.<++> sh)
        -- foot
-       B.when foot $ hPutFoot h status cnt'
+       B.when (C.resultPrintFoot port) $ hPutFoot h (C.resultStatus port) cnt'
 
 hPutHead :: IO.Handle -> C.Result c -> IO ()
 hPutHead h result =
@@ -93,10 +89,10 @@ hPutFoot h status cnt = B.hPutMix B.crlfBreak h $ W.judgeSummary status cnt
 -- ----------------------  Chunk
 
 mixShortChunk
-    :: (D.CContent c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> Int -> Int
+    :: (D.CContent c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> C.ResultPortable
     -> C.ShortResultChunks c -> [W.JudgeCount -> [B.MixEither W.JudgeCount]]
-mixShortChunk output gutter measure (S.Short _ def chunks) = ms where
-    ms = short : mixChunks output gutter measure (S.shortText (t <$> def)) chunks
+mixShortChunk output p (S.Short _ def chunks) = ms where
+    ms = short : mixChunks output p (S.shortText (t <$> def)) chunks
     short cnt = mixShort def cnt
     t (a, b) = (O.stringT a, O.stringT b)
 
@@ -113,13 +109,13 @@ mixShort def cnt = Left cnt : (ms O.++ [Right B.mixHard]) where
 {-| Output result chunk. -}
 mixChunks
     :: (D.CContent c)
-    => (B.LineBreak, T.EncodeJudge S.Chars c) -> Int -> Int -> B.TransText S.Chars
+    => (B.LineBreak, T.EncodeJudge S.Chars c) -> C.ResultPortable -> B.TransText S.Chars
     -> [C.ResultChunk c] -> [W.JudgeCount -> [B.MixEither W.JudgeCount]]
-mixChunks (_, encode) gutter measure sh = (rights <$>) where
+mixChunks (_, encode) p sh = (rights <$>) where
     rights (C.ResultNote ls) cnt = mixNote ls cnt
     rights chunk (_, tab) =
         let js = C.resultChunkJudges chunk
-        in W.mixJudgesCount gutter measure (encode sh) js (0, tab)
+        in W.mixJudgesCount p (encode sh) js (0, tab)
 
 mixNote :: [String] -> W.JudgeCount -> [B.MixEither W.JudgeCount]
 mixNote [] cnt = [Left cnt]

@@ -31,19 +31,16 @@ putJudges = hPutJudges B.stdout B.def
 {-| Print list of judgements. -}
 hPutJudges :: (B.MixEncode c) => C.ResultWriterJudge c
 hPutJudges h result js =
-    do let port     = C.resultPortable result
-           !gutter  = C.resultGutter  port
-           !measure = C.resultMeasure port
-           !status  = C.resultStatus  port
-           cnt      = (judgeCount [])
-           ls       = mixJudgesCount gutter measure B.mixEncode js
+    do let port  = C.resultPortable result
+           cnt   = judgeCount []
+           ls    = mixJudgesCount port B.mixEncode js
        cnt' <- B.hPutMixEither T.judgeBreak h cnt [ls]
-       B.hPutMix B.crlfBreak h $ judgeSummary status cnt'
+       B.hPutMix B.crlfBreak h $ judgeSummary (C.resultStatus port) cnt'
 
 {-| Edit judgements to mix text. -}
 mixJudgesCount :: (T.GetClass a) =>
-    Int -> Int -> (a -> B.MixText) -> [a] -> JudgeCount -> [B.MixEither JudgeCount]
-mixJudgesCount gutter measure mixer xs (c0, tab0) = loop c0 tab0 xs where
+    C.ResultPortable -> (a -> B.MixText) -> [a] -> JudgeCount -> [B.MixEither JudgeCount]
+mixJudgesCount p mixer xs (c0, tab0) = loop c0 tab0 xs where
     loop c tab (j : js) = mixing c tab j js
     loop c tab [] =
         let mix = (B.mixHard `when` (c > 0)) O.++ B.mixLine (total c)
@@ -58,8 +55,8 @@ mixJudgesCount gutter measure mixer xs (c0, tab0) = loop c0 tab0 xs where
     gutterMix c m | mod5 c && c > 0  = B.mixLine (progress c `when` mod25 c) O.++ m
                   | otherwise        = m
 
-    mod25 n       = n `mod` measure == 0
-    mod5  n       = n `mod` gutter  == 0
+    mod25 n       = n `mod` C.resultMeasure p == 0
+    mod5  n       = n `mod` C.resultGutter  p == 0
     total    n    = B.mixLine (B.mixString "*** " O.++ B.mixString (count n))
     progress n    = B.mixLine (B.mixString "*** " O.++ B.mixShow n)
 
