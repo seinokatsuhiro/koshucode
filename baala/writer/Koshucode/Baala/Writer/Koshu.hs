@@ -35,16 +35,17 @@ resultKoshuTab = C.ResultWriterChunk "koshu-tab" $ hPutKoshu (B.crlfBreak, T.jud
 
 hPutKoshu :: (D.CContent c) => (B.LineBreak, T.EncodeJudge S.Chars c) -> C.ResultWriterChunk c
 hPutKoshu output@(lb, _) h result sh =
-    do -- head
-       B.when (C.resultPrintHead result) $ hPutHead h result
+    do let port     = C.resultPortable  result
+           !gutter  = C.resultGutter    port
+           !measure = C.resultMeasure   port
+           !foot    = C.resultPrintFoot port
+           !status  = C.resultStatus    port
+           !cnt     = W.judgeCount $ C.resultClass result
+       -- head
+       B.when (C.resultPrintHead port) $ hPutHead h result
        hPutLicense h result
        hPutEcho h result
        -- body
-       let !gutter  = C.resultGutter result
-           !measure = C.resultMeasure result
-           !foot    = C.resultPrintFoot result
-           !status  = C.resultStatus result
-           !cnt     = W.judgeCount $ C.resultClass result
        cnt' <- B.hPutMixEither lb h cnt (mixShortChunk output gutter measure O.<++> sh)
        -- foot
        B.when foot $ hPutFoot h status cnt'

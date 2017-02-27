@@ -7,6 +7,7 @@
 module Koshucode.Baala.Core.Relmap.Result
   ( -- * Result
     Result (..),
+    ResultPortable (..),
     InputPoint (..),
 
     -- * Chunk
@@ -36,13 +37,10 @@ import qualified Koshucode.Baala.Data              as D
 
 -- ----------------------  Result
 
--- | Result of calculation.
+{-| Result of calculation. -}
 data Result c = Result
     { resultWriter     :: ResultWriter c        -- ^ Writer
-    , resultPrintHead  :: Bool                  -- ^ Print header comment
-    , resultPrintFoot  :: Bool                  -- ^ Print fotter comment
-    , resultGutter     :: Int                   -- ^ Interval between gutters
-    , resultMeasure    :: Int                   -- ^ Interval between measure
+    , resultPortable   :: ResultPortable        -- ^ Portable property
     , resultInput      :: [InputPoint S.Chars]  -- ^ Input points
     , resultOutput     :: B.IOPoint             -- ^ Output point
     , resultEcho       :: [[S.Chars]]           -- ^ Echo messages
@@ -50,6 +48,14 @@ data Result c = Result
     , resultViolated   :: [ShortResultChunks c] -- ^ Vailated output
     , resultNormal     :: [ShortResultChunks c] -- ^ Normal output
     , resultClass      :: [S.JudgeClass]        -- ^ List of judgement classes
+    } deriving (Show, Eq, Ord)
+
+{-| Portable properties of calculation result. -}
+data ResultPortable = ResultPortable
+    { resultPrintHead  :: Bool                  -- ^ Print header comment
+    , resultPrintFoot  :: Bool                  -- ^ Print fotter comment
+    , resultGutter     :: Int                   -- ^ Interval between gutters
+    , resultMeasure    :: Int                   -- ^ Interval between measure
     , resultStatus     :: B.ExitCode            -- ^ Status code
     } deriving (Show, Eq, Ord)
 
@@ -62,18 +68,20 @@ data InputPoint t = InputPoint
 -- | Empty result.
 instance (Show c) => B.Default (Result c) where
     def = Result { resultWriter     = resultDump
-                 , resultPrintHead  = True
-                 , resultPrintFoot  = True
-                 , resultGutter     = 5
-                 , resultMeasure    = 25
+                 , resultPortable   = ResultPortable
+                                      { resultPrintHead  = True
+                                      , resultPrintFoot  = True
+                                      , resultGutter     = 5
+                                      , resultMeasure    = 25
+                                      , resultStatus     = O.exitCode 0
+                                      }
                  , resultInput      = []
                  , resultOutput     = B.IOPointStdout Nothing
                  , resultEcho       = []
                  , resultLicense    = []
                  , resultViolated   = []
                  , resultNormal     = []
-                 , resultClass      = []
-                 , resultStatus     = O.exitCode 0 }
+                 , resultClass      = [] }
 
 
 -- ----------------------  Chunk
@@ -168,11 +176,13 @@ putResult result =
 hPutResult :: (D.CEmpty c) => IO.Handle -> Result c -> IO B.ExitCode
 hPutResult h result =
     case resultShortChunks result of
-      Right sh  -> do let !status = resultStatus result
+      Right sh  -> do let !status = resultStatus $ resultPortable result
                       hPutAllChunks h result sh
                       return status
       Left  sh  -> do let status  = O.exitCode 1
-                          result' = result { resultStatus = status }
+                          result' = result { resultPortable =
+                                                 let non = resultPortable result
+                                                 in non { resultStatus = status }}
                       hPutAllChunks h result' sh
                       return status
 

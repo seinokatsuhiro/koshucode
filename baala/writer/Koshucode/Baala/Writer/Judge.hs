@@ -8,7 +8,6 @@ module Koshucode.Baala.Writer.Judge
   ( -- * Writer
     putJudges, hPutJudges,
     mixJudgesCount,
-    judgesCountMix,
 
     -- * Counter
     JudgeCount, JudgeCountMix,
@@ -32,9 +31,10 @@ putJudges = hPutJudges B.stdout B.def
 {-| Print list of judgements. -}
 hPutJudges :: (B.MixEncode c) => C.ResultWriterJudge c
 hPutJudges h result js =
-    do let !gutter  = C.resultGutter result
-           !measure = C.resultMeasure result
-           !status  = C.resultStatus result
+    do let port     = C.resultPortable result
+           !gutter  = C.resultGutter  port
+           !measure = C.resultMeasure port
+           !status  = C.resultStatus  port
            cnt      = (judgeCount [])
            ls       = mixJudgesCount gutter measure B.mixEncode js
        cnt' <- B.hPutMixEither T.judgeBreak h cnt [ls]
@@ -69,38 +69,6 @@ mixJudgesCount gutter measure mixer xs (c0, tab0) = loop c0 tab0 xs where
 when :: (Monoid a) => a -> Bool -> a
 when a True  = a
 when _ False = mempty
-
--- | Edit judgements to mix text.
-{-# DEPRECATED judgesCountMix "Use 'mixJudgesCount' instead." #-}
-judgesCountMix :: forall c.
-    C.Result c -> (T.Judge c -> B.MixText) -> [T.Judge c] -> O.Map JudgeCountMix
-judgesCountMix result writer = loop where
-    loop (j : js) cnt  = loop js $ put j cnt
-    loop [] (mx, c, tab) =
-        let mx' = (B.mixHard `when` (c > 0)) O.++ B.mixLine (total c)
-        in (mx O.++ mx', c, tab)
-
-    put :: T.Judge c -> O.Map JudgeCountMix
-    put judge (mx, c, tab) =
-        let c'   = c + 1
-            cls  = T.getClass judge
-            mx'  = gutterMix c O.++ B.mixLine (writer judge)
-            tab' = Ms.alter inc cls tab
-        in (mx O.++ mx', c', tab')
-
-    gutterMix c | mod5 c && c > 0  = B.mixLine (progress c `when` mod25 c)
-                | otherwise        = B.mixEmpty
-
-    mod25 n       = n `mod` measure == 0
-    mod5  n       = n `mod` gutter  == 0
-    gutter        = C.resultGutter  result
-    measure       = C.resultMeasure result
-
-    total    n    = B.mixLine (B.mixString "*** " O.++ B.mixString (count n))
-    progress n    = B.mixLine (B.mixString "*** " O.++ B.mixShow n)
-
-    inc (Nothing) = Just 1
-    inc (Just n)  = Just $ n + 1
 
 
 -- ----------------------  Counter
