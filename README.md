@@ -14,6 +14,11 @@ Koshucode is a notational system for people and computers
 who read, write, and calculate relational data.
 This notation widely improves the data literacy of all human beings.
 
+Koshucode can be regarded as a data calculation system
+correspond to the numerical calculation system
+consisting of the Hindu-Arabic numerals and
+the arithmetic operators developed in Europe.
+
 There are no released packages yet.
 Please download a zipped repository file from GitHub.
 Installation instructions are described
