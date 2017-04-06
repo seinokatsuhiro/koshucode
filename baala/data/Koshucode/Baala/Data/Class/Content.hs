@@ -74,6 +74,7 @@ toDecReplace rep = toDecWith $ const rep
 
 toDecWith :: (CContent c) => O.Map c -> O.Map c
 toDecWith f c
+    | D.isDec  c  = c
     | D.isText c  = case T.decodeDecimal $ D.gText c of
                       Right n  -> D.pDec n
                       Left _   -> f c
