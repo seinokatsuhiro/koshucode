@@ -59,7 +59,7 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base                      == 4.*
-       , aeson                     == 0.*
+       , aeson                     == 1.*
        , blaze-html                == 0.*
        , bytestring                == 0.*
        , containers                == 0.5.*
