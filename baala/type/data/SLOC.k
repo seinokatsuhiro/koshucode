@@ -7,10 +7,10 @@ about /package 'type
 |-- DIR  /code 484  /comment 425  /dir "type/Koshucode/Baala/Type/Decimal"
 |-- DIR  /code 203  /comment 148  /dir "type/Koshucode/Baala/Type/Judge"
 |-- DIR  /code 300  /comment 379  /dir "type/Koshucode/Baala/Type/Rel"
-|-- DIR  /code 732  /comment 665  /dir "type/Koshucode/Baala/Type/Time"
+|-- DIR  /code 737  /comment 667  /dir "type/Koshucode/Baala/Type/Time"
 |-- DIR  /code 102  /comment 156  /dir "type/Koshucode/Baala/Type/Type"
 
-|-- DIR-TOTAL  /code 2065  /comment 1954
+|-- DIR-TOTAL  /code 2070  /comment 1956
 
 |-- FILE  /code 12   /comment 5    /file "Type.hs"        /dir "type/Koshucode/Baala"
 |-- FILE  /code 12   /comment 6    /file "Decimal.hs"     /dir "type/Koshucode/Baala/Type"
@@ -35,10 +35,10 @@ about /package 'type
 |-- FILE  /code 44   /comment 38   /file "ClockCalc.hs"   /dir "type/Koshucode/Baala/Type/Time"
 |-- FILE  /code 138  /comment 171  /file "Date.hs"        /dir "type/Koshucode/Baala/Type/Time"
 |-- FILE  /code 149  /comment 124  /file "Parts.hs"       /dir "type/Koshucode/Baala/Type/Time"
-|-- FILE  /code 143  /comment 116  /file "Time.hs"        /dir "type/Koshucode/Baala/Type/Time"
+|-- FILE  /code 148  /comment 118  /file "Time.hs"        /dir "type/Koshucode/Baala/Type/Time"
 |-- FILE  /code 89   /comment 83   /file "TimeCalc.hs"    /dir "type/Koshucode/Baala/Type/Time"
 |-- FILE  /code 142  /comment 127  /file "Type.hs"        /dir "type/Koshucode/Baala/Type"
 |-- FILE  /code 69   /comment 135  /file "Genus.hs"       /dir "type/Koshucode/Baala/Type/Type"
 |-- FILE  /code 33   /comment 21   /file "Predefined.hs"  /dir "type/Koshucode/Baala/Type/Type"
 
-|-- FILE-TOTAL  /code 2065  /comment 1954
+|-- FILE-TOTAL  /code 2070  /comment 1956
