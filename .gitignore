@@ -1,6 +1,7 @@
 dist/
 sandbox/
 .cabal-sandbox/
+.stack-work/
 cabal.sandbox.config
 debug.cabal
 debug.k
