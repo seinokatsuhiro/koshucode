@@ -99,7 +99,7 @@ convert opts path
     where
       write parser = writeRdf opts $ readRdfGraph (parser Nothing Nothing) path
 
-type Graph = RDF.MGraph
+type Graph = RDF.TriplesList
 
 writeRdf :: [Option] -> IO Graph -> IO ()
 writeRdf opts graph =
