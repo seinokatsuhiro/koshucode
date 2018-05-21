@@ -28,7 +28,7 @@ type RelmapLinkTable' h c = [(C.Lexmap, C.Relmap' h c)]
 --   In constrast, generic relmaps do not.
 --   Specialized relmaps are also called relkits.
 --   This function returns relkit and extended table of relkits.
-relmapSpecialize :: forall h. forall c.
+relmapSpecialize :: forall h c.
     h c                      -- ^ Hook.
     -> RelmapLinkTable' h c  -- ^ Lexmap-to-relmap search table.
     -> C.RelkitTable c       -- ^ List of known relkits, i.e.,

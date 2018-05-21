@@ -66,7 +66,7 @@ type TermSize = TermMap Int
 maxTermSize :: T.RelText -> TermSize
 maxTermSize = termMap T.gMonoNest (O.csWidth . T.gMonoTerm) max
 
-termMap :: forall a. forall c.
+termMap :: forall a c.
     (c -> T.Rel c) -> (c -> a) -> (a -> a -> a) -> T.Rel c -> TermMap a
 termMap gRel from f (T.Rel he bo) = accum [] ts bo Map.empty where
 
